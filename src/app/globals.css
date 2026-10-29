@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0b1324;
+  --navy-800: #142238;
+  --gold: #ddb66a;
+  --ivory: #f8f4ec;
+  color-scheme: dark;
+}
+
+html {
+  background: var(--navy);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--navy);
+  color: var(--ivory);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+[dir='rtl'] body,
+[dir='rtl'] .font-display {
+  font-family: var(--font-arabic), Tahoma, sans-serif;
+}
+
+/* Gold focus ring everywhere a keyboard can land. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Headings focused by code (each new game step) are not keyboard targets and need no ring. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+::selection {
+  background: rgba(221, 182, 106, 0.35);
+}
+
+@layer components {
+  .container-cq {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-gold {
+    @apply btn bg-gold text-navy hover:bg-gold-soft;
+    box-shadow: 0 8px 30px -10px rgba(221, 182, 106, 0.6);
+  }
+  .btn-ghost {
+    @apply btn border border-gold/40 text-ivory hover:border-gold hover:bg-gold/10;
+  }
+  .card {
+    @apply rounded-2xl border border-white/10 bg-navy-800/80 shadow-card backdrop-blur;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-gold;
+  }
+  [dir='rtl'] .eyebrow {
+    @apply tracking-normal;
+  }
+  .field {
+    @apply min-h-[44px] w-full rounded-xl border border-white/15 bg-navy px-4 py-2.5 text-ivory placeholder:text-ivory-mute
+      focus:border-gold focus:outline-none;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-ivory-dim;
+  }
+  .gold-rule {
+    @apply h-px w-16 bg-gradient-to-r from-transparent via-gold to-transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #certificate,
+  #certificate * {
+    visibility: visible;
+  }
+  #certificate {
+    position: absolute;
+    inset: 0;
+    background: #fff !important;
+    color: #0b1324 !important;
+    border-color: #b8914a !important;
+  }
+}
