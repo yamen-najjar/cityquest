@@ -4,7 +4,10 @@ Tracking document for Phase 4. Same way of working as Phase 2: one feature branc
 reviewable commits, this document kept in sync, each milestone tested (unit + typecheck + build, live
 where it applies) and reviewed by a Sonnet agent before the next. **Design shown first** for the map UI.
 
-**Branch:** `phase-4-map` · **Status:** planning (awaiting scope confirmation) · **Started:** 2026-10-31
+**Branch:** `phase-4-map` · **Status:** M1 complete (MapLibre map) · **Started:** 2026-10-31
+
+**Scope (confirmed):** map + GPS first (QR later); demo gets approximate Heidelberg coordinates (still
+`simulated`, manual always available). Design mock approved before building.
 
 ## Goal (from the roadmap)
 
@@ -40,11 +43,20 @@ game keeps working offline, with manual confirmation always available.
 
 ## Milestones (proposed; adjusts to the scope answer)
 
-### M1 — MapLibre map (design shown first)
-- [ ] Add `maplibre-gl` dependency; a lazy `<RealMap>` component (style env + keyless fallback)
-- [ ] Render checkpoints + route + (optional) the player's position; wired into the `travel` stage for
-      real-coordinate adventures, stylised `DemoMap` kept for simulated ones
-- [ ] **Visual design shown and approved before wiring**
+### M1 — MapLibre map (complete)
+- [x] Design mock shown and approved first
+- [x] `maplibre-gl@4.7.1` (pinned); lazy `RealMap` component (its own chunk), style from
+      `NEXT_PUBLIC_MAP_STYLE_URL` with a keyless OSM raster fallback
+- [x] Renders numbered checkpoint pins (solved/current/upcoming), a dashed route line, fits bounds,
+      nav + attribution controls; a `userPosition` prop is ready for the M2 GPS marker
+- [x] Added approximate Heidelberg coordinates + `gps` verification to all 16 demo checkpoints (still
+      `simulated`); `ChapterView` shows `RealMap` when the checkpoint has coordinates, else the previous
+      `Map3D`/`DemoMap`
+- [x] Verified live (real Heidelberg tiles + pins render in the game); typecheck + 89 tests; build clean
+      (`maplibre-gl` stays in a lazy chunk, play page ~188 kB First Load)
+- [ ] Reviewer-agent pass (Sonnet) on the M1 diff
+- Note: the "I'm here" step is still manual in M1; GPS verification is M2. The map caption copy
+  ("stylised demo map") is now shown under a real street map — to be refined in M4's copy pass.
 
 ### M2 — GPS "I'm here"
 - [ ] Geolocation permission UX; distance-to-checkpoint check within a radius; manual fallback; clear

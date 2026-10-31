@@ -9,7 +9,7 @@ import type { Action, Progress } from '@/lib/engine/progress';
 import { prefersReducedMotion } from '../three/support';
 import { DemoMap } from './DemoMap';
 import { ItemIcon } from './ItemIcon';
-import { Artifact3D, Cutscene3D, Lock3D, Map3D } from './lazy';
+import { Artifact3D, Cutscene3D, Lock3D, Map3D, RealMap } from './lazy';
 import { CipherWheel } from './puzzles/CipherWheel';
 import { Deduction } from './puzzles/Deduction';
 import { Interrogation } from './puzzles/Interrogation';
@@ -187,7 +187,9 @@ export function ChapterView({
           <h2 id="cp-title" className="eyebrow">
             {t.checkpoint}
           </h2>
-          {three ? (
+          {chapter.checkpoint.coordinates ? (
+            <RealMap chapters={a.chapters} current={index} solved={p.solved} locale={locale} labels={{ title: t.map, note: t.mapNote, destination: t.destination, done: t.done }} />
+          ) : three ? (
             <Map3D chapters={a.chapters} current={index} solved={p.solved} locale={locale} labels={{ title: t.map, note: `${t.mapNote} ${t.threeD.drag}`, destination: t.destination, done: t.done }} />
           ) : (
             <DemoMap chapters={a.chapters} current={index} solved={p.solved} locale={locale} labels={{ title: t.map, note: t.mapNote, destination: t.destination, done: t.done }} />
