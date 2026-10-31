@@ -25,6 +25,30 @@ export const answerKeys: Record<string, AnswerKey> = {
     mirror: { accepted: ['stories', 'story', 'geschichten', 'geschichte', 'verhalen', 'verhaal', 'حكايات', 'حكاية', 'حكايا'] },
     verdict: { accepted: ['kehl+second-half', 'kehl+whole-letter'] },
   },
+  'het-duivelshuis': {
+    message: {
+      accepted: [
+        'devils', 'the devils', 'devil',
+        'duivels', 'de duivels', 'duivel', 'duivelshuis', 'het duivelshuis',
+        'teufel', 'die teufel', 'der teufel', 'teufelshaus',
+        'شياطين', 'الشياطين', 'شيطان',
+      ],
+    },
+    duivels: { accepted: ['middle'] },
+    sabelspoort: { accepted: ['eusebius'] },
+    carillon: { accepted: ['9472'] },
+    sonsbeek: {
+      accepted: [
+        'rhine', 'the rhine', 'to the rhine', 'to the rhine before midnight', 'river', 'the river', 'quay', 'the quay',
+        'rijn', 'de rijn', 'naar de rijn', 'naar de rijn voor middernacht', 'rivier', 'de rivier', 'rijnkade', 'kade',
+        'rhein', 'der rhein', 'zum rhein', 'kai', 'rheinkai', 'fluss', 'am fluss', 'zum fluss',
+        'نهر', 'النهر', 'نهر الراين', 'الراين', 'إلى نهر الراين', 'الرصيف',
+      ],
+    },
+    rijnkade: { accepted: ['1545'] },
+    archief: { accepted: ['iron-key'] },
+    aanklacht: { accepted: ['koster+whole-ledger', 'koster+ledger-left'] },
+  },
   'neckar-ring': {
     box: { accepted: ['369'] },
     whispers: {

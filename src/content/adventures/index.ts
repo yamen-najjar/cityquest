@@ -1,5 +1,6 @@
 import { localize } from '../translations';
 import type { Adventure, Authored, Scene } from '../types';
+import { hetDuivelshuis } from './het-duivelshuis';
 import { lostManuscript } from './lost-manuscript';
 import { neckarRing } from './neckar-ring';
 import { manuscriptScenes, ringScenes } from './scenes';
@@ -13,7 +14,7 @@ function withScenes(a: Authored<Adventure>, scenes: AuthoredScenes): Authored<Ad
 
 // Phase 2 replaces this list with a Supabase query; drafts stay out of every public page. The stories are
 // written in German, English and Arabic; localize() adds the languages kept in content/translations.
-const all: Adventure[] = [withScenes(lostManuscript, manuscriptScenes), withScenes(neckarRing, ringScenes)].map((a) => localize<Adventure>(a));
+const all: Adventure[] = [withScenes(lostManuscript, manuscriptScenes), withScenes(neckarRing, ringScenes), hetDuivelshuis].map((a) => localize<Adventure>(a));
 
 export const adventures = all.filter((a) => a.status === 'published');
 

@@ -209,7 +209,7 @@ const ar: Dictionary = {
     newItem: 'غرض جديد: {item}',
     achievement: 'إنجاز جديد: {name}',
     map: 'الخريطة',
-    mapNote: 'مواقع تجريبية تقريبية في هايدلبرغ — ليست مسارًا ممسوحًا.',
+    mapNote: 'مواقع تجريبية تقريبية — ليست مسارًا ممسوحًا.',
     destination: 'الوجهة',
     done: 'مكتمل',
     timer: 'الوقت',
@@ -372,6 +372,7 @@ const ar: Dictionary = {
     'mystery-solved': { name: 'اللغز محلول', text: 'أنهِ مغامرة.' },
     'no-hints': { name: 'بمفردك', text: 'أنهِ مغامرة دون أي تلميح.' },
     'heidelberg-explorer': { name: 'مستكشف هايدلبرغ', text: 'أنهِ مغامرة في هايدلبرغ.' },
+    'arnhem-explorer': { name: 'مستكشف أرنم', text: 'أنهِ مغامرة في أرنم.' },
   },
   legal: {
     placeholder: 'نص مؤقت',

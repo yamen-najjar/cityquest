@@ -220,7 +220,7 @@ const de: Dictionary = {
     newItem: 'Neuer Gegenstand: {item}',
     achievement: 'Erfolg freigeschaltet: {name}',
     map: 'Karte',
-    mapNote: 'Ungefähre Demo-Positionen in Heidelberg — keine vermessene Route.',
+    mapNote: 'Ungefähre Demo-Positionen — keine vermessene Route.',
     destination: 'Ziel',
     done: 'Erledigt',
     timer: 'Zeit',
@@ -383,6 +383,7 @@ const de: Dictionary = {
     'mystery-solved': { name: 'Fall gelöst', text: 'Schließe ein Abenteuer ab.' },
     'no-hints': { name: 'Ganz allein', text: 'Schließe ein Abenteuer ohne einen einzigen Hinweis ab.' },
     'heidelberg-explorer': { name: 'Heidelberg-Entdecker', text: 'Schließe ein Abenteuer in Heidelberg ab.' },
+    'arnhem-explorer': { name: 'Arnheim-Entdecker', text: 'Schließe ein Abenteuer in Arnheim ab.' },
   },
   legal: {
     placeholder: 'Platzhalter',
