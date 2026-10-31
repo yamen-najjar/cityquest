@@ -69,11 +69,12 @@ export function CheckpointArrival({
         const d = distanceMeters(here, coords!);
         setDistance(d);
         const tolerance = Math.min(pos.coords.accuracy || 0, 60);
-        setState(d <= radiusM + tolerance ? 'arrived' : 'far');
+        // Don't override an arrival already confirmed by a QR scan while this was in flight.
+        setState((s) => (s === 'arrived' ? s : d <= radiusM + tolerance ? 'arrived' : 'far'));
       },
       (err) => {
         clearTimeout(stallTimer.current);
-        setState(err.code === err.PERMISSION_DENIED ? 'off' : 'error');
+        setState((s) => (s === 'arrived' ? s : err.code === err.PERMISSION_DENIED ? 'off' : 'error'));
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
     );
@@ -94,6 +95,7 @@ export function CheckpointArrival({
         code={checkpoint.code!}
         t={t}
         onMatch={() => {
+          clearTimeout(stallTimer.current);
           setScanning(false);
           setState('arrived');
         }}
@@ -143,7 +145,7 @@ export function CheckpointArrival({
           </>
         )}
       </div>
-      {state !== 'arrived' && <p className="text-xs text-ivory-mute">{t.gpsNote}</p>}
+      {state !== 'arrived' && gpsAvailable && <p className="text-xs text-ivory-mute">{t.gpsNote}</p>}
     </div>
   );
 }

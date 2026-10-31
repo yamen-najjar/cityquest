@@ -4,11 +4,12 @@ import jsQR from 'jsqr';
 import type { Dictionary } from '@/i18n/dictionary';
 
 type Status = 'starting' | 'scanning' | 'denied' | 'nocamera';
+const MAX_SIDE = 640; // decode at most ~640px on the long side: enough for QR, far cheaper on phones.
 
 /**
  * Scans the checkpoint's QR code with the camera. The camera is requested only when this mounts (the
- * player tapped "Scan"), the stream is stopped on unmount, and nothing leaves the device — frames are
- * decoded locally and only a match (or cancel) is reported. Manual confirmation remains the fallback.
+ * player tapped "Scan"), the stream is stopped whenever scanning ends, and nothing leaves the device —
+ * frames are decoded locally and only a match (or cancel) is reported. Manual confirmation is the fallback.
  */
 export default function QrScanner({
   code,
@@ -33,20 +34,33 @@ export default function QrScanner({
   useEffect(() => {
     let cancelled = false;
 
+    function stopStream() {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      streamRef.current?.getTracks().forEach((tr) => tr.stop());
+      streamRef.current = null;
+      if (videoRef.current) videoRef.current.srcObject = null;
+    }
+
     function tick() {
       const video = videoRef.current;
       if (!video || matchedRef.current || cancelled) return;
       if (video.readyState >= video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
+        const scale = Math.min(1, MAX_SIDE / Math.max(video.videoWidth, video.videoHeight));
+        const w = Math.round(video.videoWidth * scale);
+        const h = Math.round(video.videoHeight * scale);
         const canvas = (canvasRef.current ??= document.createElement('canvas'));
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+        }
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         if (ctx) {
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const result = jsQR(img.data, img.width, img.height);
+          ctx.drawImage(video, 0, 0, w, h);
+          const img = ctx.getImageData(0, 0, w, h);
+          const result = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
           if (result && result.data.trim() === code) {
             matchedRef.current = true;
+            stopStream();
             onMatchRef.current();
             return;
           }
@@ -67,12 +81,20 @@ export default function QrScanner({
           return;
         }
         streamRef.current = stream;
+        // If the OS reclaims or revokes the camera, don't sit on a frozen frame.
+        stream.getVideoTracks()[0]?.addEventListener('ended', () => {
+          if (!cancelled) {
+            stopStream();
+            setStatus('nocamera');
+          }
+        });
         const video = videoRef.current!;
         video.srcObject = stream;
         await video.play();
         setStatus('scanning');
         tick();
       } catch (err) {
+        stopStream();
         setStatus((err as DOMException)?.name === 'NotAllowedError' ? 'denied' : 'nocamera');
       }
     }
@@ -80,8 +102,7 @@ export default function QrScanner({
     start();
     return () => {
       cancelled = true;
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      streamRef.current?.getTracks().forEach((tr) => tr.stop());
+      stopStream();
     };
   }, [code]);
 
@@ -98,7 +119,7 @@ export default function QrScanner({
       <p role="status" className="text-sm text-ivory-dim">
         {message}
       </p>
-      <button type="button" className="btn-ghost" onClick={onClose}>
+      <button type="button" className="btn-ghost" onClick={onClose} autoFocus>
         {t.qrCancel}
       </button>
     </div>

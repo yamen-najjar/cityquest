@@ -4,7 +4,7 @@ Tracking document for Phase 4. Same way of working as Phase 2: one feature branc
 reviewable commits, this document kept in sync, each milestone tested (unit + typecheck + build, live
 where it applies) and reviewed by a Sonnet agent before the next. **Design shown first** for the map UI.
 
-**Branch:** `phase-4-map` · **Status:** complete (map + GPS; QR deferred) · **Started:** 2026-10-31
+**Branch:** `phase-4-map` → `phase-4-qr` · **Status:** complete (map, GPS, QR) · **Started:** 2026-10-31
 
 **Scope (confirmed):** map + GPS first (QR later); demo gets approximate Heidelberg coordinates (still
 `simulated`, manual always available). Design mock approved before building.
@@ -115,8 +115,9 @@ MapLibre two-finger mobile hint is localised (mobile is the main platform); the 
 was dropped; the dead "fit to user position" line was removed (deliberately not following the player, so
 tiles are never fetched for their real location). 91 unit tests; build clean.
 
-**Phase 4 scope (map + GPS) is complete.** QR verification is deferred (the chosen scope was "map + GPS first"). When picked up it becomes a new
-milestone: camera permission on demand, scan matching the checkpoint code, manual fallback.
+**Phase 4 is complete: real map, GPS and QR checkpoint verification**, each with manual fallback. The
+remaining real-world work (keyed tile provider, real on-location coordinates/QR codes for paid
+adventures) lands at hosting time.
 
 ## Env vars (Phase 4)
 - `NEXT_PUBLIC_MAP_STYLE_URL` — MapLibre style URL (e.g. a MapTiler style with a domain-restricted key).
