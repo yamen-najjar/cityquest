@@ -409,4 +409,96 @@ export const nl: Record<string, string> = {
   "Baden-Württemberg, Germany": "Baden-Württemberg, Duitsland",
   "A city on the Neckar, between old-town lanes, the bridge and the castle hill. Our pilot city, where the first CityQuest adventure is being built.":
     "Een stad aan de Neckar, tussen de straatjes van de oude binnenstad, de brug en de kasteelheuvel. Onze proefstad, waar het eerste CityQuest-avontuur wordt gebouwd.",
+  // ---------------------------------------------------------------- The Devil's House Secret (Arnhem)
+  "The Devil’s House Secret": "Het Duivelshuis-geheim",
+  "A vanished archivist. A coded ledger. Stone devils that have kept silent for 500 years.":
+    "Een verdwenen archivaris. Een gecodeerd grootboek. Stenen duivels die al 500 jaar zwijgen.",
+  "City archivist Lena Verhoef has vanished, just after a restoration at Arnhem’s Devil’s House turned up a coded ledger. Her last message to you: a row of numbers. Decode it, question witnesses, read the Eusebius church bells and a signal across the Rhine — and stay ahead of “the Collector”. Eight chapters, for families and friends.":
+    "Stadsarchivaris Lena Verhoef is verdwenen, kort nadat een restauratie in het Arnhemse Duivelshuis een gecodeerd grootboek opleverde. Haar laatste bericht aan jou: een rij getallen. Ontcijfer ze, ondervraag getuigen, lees de klokken van de Eusebiuskerk en een signaal over de Rijn — en blijf de ‘Verzamelaar’ voor. Acht hoofdstukken, voor gezinnen en vrienden.",
+  "Arnhem city centre, at the Korenmarkt. The exact meeting point will be set once the route has been validated on foot.":
+    "Centrum van Arnhem, bij de Korenmarkt. Het precieze verzamelpunt wordt vastgelegd zodra de route te voet is gecontroleerd.",
+  "Eight chapters, eight kinds of puzzle: a number cipher, a logic riddle at the Devil’s House, a witness to question, the Eusebius church carillon, invisible writing in Sonsbeek park, a signal across the Rhine, an item from your inventory and an accusation with proof.":
+    "Acht hoofdstukken, acht soorten puzzels: een cijfercode, een logicaraadsel bij het Duivelshuis, een getuige om te ondervragen, het carillon van de Eusebiuskerk, onzichtbaar schrift in park Sonsbeek, een signaal over de Rijn, een voorwerp uit je inventaris en een beschuldiging met bewijs.",
+  "At the end you decide what becomes of the ledger.": "Aan het eind beslis jij wat er met het grootboek gebeurt.",
+  "Do I need to be in Arnhem?": "Moet ik hiervoor in Arnhem zijn?",
+  "From about 10, younger with adults. No violence, nothing scary — the “devils” are stone figures on a house façade.":
+    "Vanaf ongeveer 10 jaar, jonger met volwassenen erbij. Geen geweld, niets engs — de ‘duivels’ zijn stenen figuren op een huisgevel.",
+  "The Collector": "De Verzamelaar",
+  "Take a hint": "Neem een hint",
+  "Every hint brings the Collector closer.": "Elke hint brengt de Verzamelaar dichterbij.",
+  "The Collector is still on the other side of the city.": "De Verzamelaar is nog aan de andere kant van de stad.",
+  "The Collector has picked up your trail.": "De Verzamelaar heeft je spoor opgepikt.",
+  "You can hear his footsteps in the same lane now.": "Je hoort zijn voetstappen nu in dezelfde steeg.",
+  "The Collector is right at your heels.": "De Verzamelaar zit je dicht op de hielen.",
+  "Lena Verhoef": "Lena Verhoef",
+  "City archivist": "Stadsarchivaris",
+  "Has vanished and is anonymously sending you numbers. She knows something about the Devil’s House.":
+    "Is verdwenen en stuurt je anoniem getallen. Ze weet iets over het Duivelshuis.",
+  "Daan Koster": "Daan Koster",
+  "Antiques dealer, “the Collector”": "Antiekhandelaar, ‘de Verzamelaar’",
+  "Has already been at the Devil’s House and damaged the stone. He is after the same thing you are.":
+    "Is al bij het Duivelshuis geweest en heeft de steen beschadigd. Hij is op zoek naar hetzelfde als jij.",
+  "Half a ledger page": "Halve grootboekpagina",
+  "The right half of a page from Lena’s ledger. In the margin, a small devil’s head stamped in ink. The left half is missing.":
+    "De rechterhelft van een pagina uit Lena’s grootboek. In de kantlijn een klein duivelskopje als inktstempel. De linkerhelft ontbreekt.",
+  "Old iron key": "Oude ijzeren sleutel",
+  "Worked loose from the stone behind the middle devil. Scratched into it: “De middelste bewaart.” — “The middle one keeps it.”":
+    "Losgewrikt uit de steen achter de middelste duivel. Erin gekrast: ‘De middelste bewaart.’",
+  "It is just after eight at the Korenmarkt when your phone lights up. No sender.":
+    "Het is net acht uur geweest op de Korenmarkt als je telefoon oplicht. Geen afzender.",
+  "“I found something in the Devil’s House that someone has been hiding for 500 years. Now I am the one who has to disappear. Trust no collector. Follow the numbers.”":
+    "‘Ik heb in het Duivelshuis iets gevonden dat iemand al 500 jaar verbergt. Nu ben ik degene die moet verdwijnen. Vertrouw geen enkele verzamelaar. Volg de getallen.’",
+  "Below it, nothing but a row of numbers — and a tiny devil’s head stamped beside them.":
+    "Eronder niets dan een rij getallen — en een klein duivelskopje als stempel ernaast.",
+  "At the Korenmarkt": "Bij de Korenmarkt",
+  "4 · 5 · 22 · 9 · 12 · 19": "4 · 21 · 9 · 22 · 5 · 12 · 19",
+  "The first letter is D (4). It is the stone figures the house is named after.":
+    "De eerste letter is D (4). Het zijn de stenen figuren waar het huis naar is genoemd.",
+  "DEVILS.": "DUIVELS.",
+  "Devils. Of course — the Devil’s House, only a few lanes away. Tucked into the message as well: half a page from a ledger, stamped with the same devil’s head.":
+    "Duivels. Natuurlijk — het Duivelshuis, maar een paar straatjes verderop. In het bericht zit ook nog de halve pagina van een grootboek, met hetzelfde duivelsstempel.",
+  "Lena found something in the Devil’s House that has been hidden for 500 years.":
+    "Lena heeft in het Duivelshuis iets gevonden dat al 500 jaar verborgen is.",
+  "She warns: “Trust no collector.”": "Ze waarschuwt: ‘Vertrouw geen enkele verzamelaar.’",
+  "The Three Devils": "De drie duivels",
+  "The Devil’s House stands narrow and defiant between its neighbours. Above the door crouch three stone devils: left, middle, right.":
+    "Het Duivelshuis staat smal en koppig tussen zijn buren. Boven de deur hurken drie stenen duivels: links, midden, rechts.",
+  "Fresh scratch marks show that someone worked at the stone just before you — and gave up. Beneath each devil a sentence is carved. Lena wrote in the margin of her page: “Exactly one of the three tells the truth. Behind one of them lies the key.”":
+    "Verse krassporen laten zien dat iemand vlak voor jou aan de steen heeft gewerkt — en het opgaf. Onder elke duivel staat een zin gebeiteld. Lena schreef in de kantlijn van haar pagina: ‘Precies één van de drie spreekt de waarheid. Achter een van hen ligt de sleutel.’",
+  "At the Devil’s House": "Bij het Duivelshuis",
+  "Exactly one statement is true. Behind which devil is the key?": "Precies één uitspraak is waar. Achter welke duivel ligt de sleutel?",
+  "Left devil: “The key lies behind the right devil.”": "Linkerduivel: ‘De sleutel ligt achter de rechterduivel.’",
+  "Middle devil: “It does not lie behind me.”": "Middelste duivel: ‘Achter mij ligt hij niet.’",
+  "Right devil: “The left devil is lying.”": "Rechterduivel: ‘De linkerduivel liegt.’",
+  "Left devil": "Linkerduivel",
+  "Middle devil": "Middelste duivel",
+  "Right devil": "Rechterduivel",
+  "The left and right devils contradict each other: exactly one of the two tells the truth.":
+    "De linker- en rechterduivel spreken elkaar tegen: precies één van de twee spreekt de waarheid.",
+  "Then the middle devil’s statement must be false. What does that mean for his hiding place?":
+    "Dan moet de uitspraak van de middelste duivel onwaar zijn. Wat betekent dat voor zijn schuilplaats?",
+  "The middle devil.": "De middelste duivel.",
+  "You push against the middle devil and a stone gives way. Behind it: an old iron key, scratched with “De middelste bewaart”. Gravel crunches behind you — someone was close on your heels and is backing away.":
+    "Je duwt tegen de middelste duivel en een steen geeft mee. Erachter: een oude ijzeren sleutel, met daarin gekrast ‘De middelste bewaart’. Achter je knerpt het grind — iemand zat je dicht op de hielen en trekt zich terug.",
+  "An old key lay behind the middle devil.": "Achter de middelste duivel lag een oude sleutel.",
+  "Someone — “the Collector” — was at the stone just before you.": "Iemand — ‘de Verzamelaar’ — was vlak voor jou bij de steen.",
+  "“The ledger is no treasure list,” Lena will explain to you later. “It is a promise. Maarten van Rossum had the devils set on his house so that people would look away — and hid a register behind them: whoever had no roof in this city found one here.”":
+    "‘Het grootboek is geen schattenlijst,’ zal Lena je later uitleggen. ‘Het is een belofte. Maarten van Rossum liet de duivels op zijn huis zetten zodat mensen wegkeken — en verborg erachter een register: wie in deze stad geen dak had, vond er hier een.’",
+  "“The devils guard no gold. They guard the names of everyone Arnhem once took in.”":
+    "‘De duivels bewaken geen goud. Ze bewaken de namen van iedereen die Arnhem ooit heeft opgenomen.’",
+  "The Collector wanted to sell the register, page by page. You found it first.":
+    "De Verzamelaar wilde het register verkopen, pagina voor pagina. Jij vond het eerst.",
+  "The register lies before you again, whole. What do you do with it?":
+    "Het register ligt weer compleet voor je. Wat doe je ermee?",
+  "Hand it to the city archive": "Aan het stadsarchief geven",
+  "Lena places the register in the city archive’s display case, in plain sight. “A promise no one has to hide any more,” she says. The middle devil on the house almost seems to smile.":
+    "Lena legt het register in de vitrine van het stadsarchief, zichtbaar voor iedereen. ‘Een belofte die niemand meer hoeft te verbergen,’ zegt ze. De middelste duivel aan het huis lijkt bijna te glimlachen.",
+  "Read the first page aloud at the Korenmarkt": "De eerste pagina hardop voorlezen op de Korenmarkt",
+  "At the Korenmarkt you read out the first names aloud. Passers-by stop to listen. An older woman nods: the city once took in her great-grandfather. The story belongs to everyone again.":
+    "Op de Korenmarkt lees je de eerste namen hardop voor. Voorbijgangers blijven staan om te luisteren. Een oudere vrouw knikt: de stad nam ooit haar overgrootvader op. De geschiedenis is weer van iedereen.",
+  // ---------------------------------------------------------------- Cities (Arnhem)
+  "Arnhem": "Arnhem",
+  "Gelderland, Netherlands": "Gelderland, Nederland",
+  "A city on the Lower Rhine, between the Devil’s House, the Eusebius church and the hills of Sonsbeek park. The setting of our first Dutch detective adventure.":
+    "Een stad aan de Nederrijn, tussen het Duivelshuis, de Eusebiuskerk en de heuvels van park Sonsbeek. Het decor van ons eerste Nederlandse detectiveavontuur.",
 };

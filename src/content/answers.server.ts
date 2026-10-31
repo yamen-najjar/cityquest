@@ -25,6 +25,17 @@ export const answerKeys: Record<string, AnswerKey> = {
     mirror: { accepted: ['stories', 'story', 'geschichten', 'geschichte', 'verhalen', 'verhaal', 'حكايات', 'حكاية', 'حكايا'] },
     verdict: { accepted: ['kehl+second-half', 'kehl+whole-letter'] },
   },
+  'het-duivelshuis': {
+    message: {
+      accepted: [
+        'devils', 'the devils', 'devil',
+        'duivels', 'de duivels', 'duivel', 'duivelshuis', 'het duivelshuis',
+        'teufel', 'die teufel', 'der teufel', 'teufelshaus',
+        'شياطين', 'الشياطين', 'شيطان',
+      ],
+    },
+    duivels: { accepted: ['middle'] },
+  },
   'neckar-ring': {
     box: { accepted: ['369'] },
     whispers: {

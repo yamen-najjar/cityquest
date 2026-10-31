@@ -18,6 +18,20 @@ const authored: Authored<City>[] = [
     },
     center: { lat: 49.4093, lng: 8.6937 },
   },
+  {
+    slug: 'arnhem',
+    name: { de: 'Arnheim', en: 'Arnhem', ar: 'أرنم' },
+    region: { de: 'Gelderland, Niederlande', en: 'Gelderland, Netherlands', ar: 'غيلدرلاند، هولندا' },
+    country: 'NL',
+    status: 'available',
+    pilot: false,
+    intro: {
+      de: 'Eine Stadt am Nederrijn, zwischen dem Teufelshaus, der Eusebiuskirche und den Hügeln des Sonsbeek-Parks. Hier spielt unser erstes niederländisches Detektivabenteuer.',
+      en: 'A city on the Lower Rhine, between the Devil’s House, the Eusebius church and the hills of Sonsbeek park. The setting of our first Dutch detective adventure.',
+      ar: 'مدينة على نهر الراين السفلي، بين «بيت الشيطان» وكنيسة أوزيبيوس وتلال حديقة سونسبيك. مسرح أول مغامرة بوليسية هولندية لنا.',
+    },
+    center: { lat: 51.9806, lng: 5.9089 },
+  },
 ];
 
 export const cities: City[] = localize<City[]>(authored);

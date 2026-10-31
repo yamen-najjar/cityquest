@@ -25,7 +25,7 @@ export interface City {
   slug: string;
   name: Localized;
   region: Localized;
-  country: 'DE';
+  country: 'DE' | 'NL';
   status: 'available' | 'coming-soon';
   pilot: boolean;
   intro: Localized;
