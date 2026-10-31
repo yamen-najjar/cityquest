@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adventures } from '@/content/adventures';
 import { answerKeys } from '@/content/answers.server';
+import { getCity } from '@/content/cities';
 import { checkAnswer, resolveGuess } from '@/lib/engine/check.server';
 import { ALPHABETS, caesar } from '@/components/game/puzzles/CipherWheel';
 import { MORSE_DIGITS } from '@/components/game/puzzles/Morse';
@@ -96,8 +97,8 @@ describe('resolveGuess', () => {
 });
 
 describe('content', () => {
-  it('has two published adventures', () => {
-    expect(adventures.map((a) => a.slug)).toEqual(['lost-manuscript', 'neckar-ring']);
+  it('has the expected published adventures', () => {
+    expect(adventures.map((a) => a.slug)).toEqual(['lost-manuscript', 'neckar-ring', 'het-duivelshuis']);
   });
 
   for (const a of adventures) {
@@ -140,19 +141,18 @@ describe('content', () => {
         }
       });
 
-      it('every GPS checkpoint has valid, unique Heidelberg coordinates (Phase 4)', () => {
+      it('every GPS checkpoint has valid, unique coordinates near its city (Phase 4)', () => {
         const seen = new Set<string>();
+        const center = getCity(a.city)!.center;
         for (const c of a.chapters) {
           const cp = c.checkpoint;
           if (cp.verification.includes('gps')) {
             expect(cp.coordinates, c.id).toBeDefined();
             const { lat, lng } = cp.coordinates!;
             expect(Number.isFinite(lat) && Number.isFinite(lng), c.id).toBe(true);
-            // Heidelberg bounding box.
-            expect(lat, c.id).toBeGreaterThan(49.38);
-            expect(lat, c.id).toBeLessThan(49.44);
-            expect(lng, c.id).toBeGreaterThan(8.65);
-            expect(lng, c.id).toBeLessThan(8.75);
+            // Within a small box around the adventure's own city centre (roughly a walkable radius).
+            expect(Math.abs(lat - center.lat), c.id).toBeLessThan(0.06);
+            expect(Math.abs(lng - center.lng), c.id).toBeLessThan(0.06);
           }
           if (cp.coordinates) {
             const key = `${cp.coordinates.lat},${cp.coordinates.lng}`;

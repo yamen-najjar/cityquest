@@ -2,10 +2,15 @@
 
 Planned work, in rough order. Phase work has its own docs (`PHASE2.md`, `PHASE4.md`).
 
+## Done
+- **CI + more e2e tests** — GitHub Actions (typecheck + unit + build on every PR) and Playwright
+  coverage for the map/GPS flow. (PR #4)
+- **New adventure / content** — "Het Duivelshuis-geheim", a detective adventure in Arnhem (NL): eight
+  chapters, eight puzzle types, four languages, its own `arnhem-explorer` achievement and e2e. First Dutch
+  city; `City.country` widened to `'DE' | 'NL'`; the in-game map note is now city-agnostic. (PR #5/#6)
+
 ## Now
-- **CI + more e2e tests** — GitHub Actions (typecheck + unit + build on every PR) and more Playwright
-  coverage for the admin, map/GPS and auth flows.
-- **New adventure / content** — a new adventure (or city). Concept shown first before authoring.
+- Next adventure or city, when wanted — concept shown first before authoring, as always.
 
 ## Saved for later (chosen 2026-10-31)
 - **Accessibility (WCAG) + CSP** — a11y audit + fixes (keyboard, screen reader, contrast, RTL) and a real

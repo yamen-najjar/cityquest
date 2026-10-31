@@ -210,7 +210,7 @@ const nl: Dictionary = {
     newItem: 'Nieuw voorwerp: {item}',
     achievement: 'Prestatie ontgrendeld: {name}',
     map: 'Kaart',
-    mapNote: 'Benaderende demoposities in Heidelberg — geen opgemeten route.',
+    mapNote: 'Benaderende demoposities — geen opgemeten route.',
     destination: 'Bestemming',
     done: 'Klaar',
     timer: 'Tijd',
@@ -373,6 +373,7 @@ const nl: Dictionary = {
     'mystery-solved': { name: 'Mysterie opgelost', text: 'Voltooi een avontuur.' },
     'no-hints': { name: 'Helemaal zelf', text: 'Voltooi een avontuur zonder één enkele hint.' },
     'heidelberg-explorer': { name: 'Heidelberg-ontdekker', text: 'Voltooi een avontuur in Heidelberg.' },
+    'arnhem-explorer': { name: 'Arnhem-ontdekker', text: 'Voltooi een avontuur in Arnhem.' },
   },
   legal: {
     placeholder: 'Tijdelijke tekst',

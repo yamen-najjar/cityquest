@@ -35,6 +35,19 @@ export const answerKeys: Record<string, AnswerKey> = {
       ],
     },
     duivels: { accepted: ['middle'] },
+    sabelspoort: { accepted: ['eusebius'] },
+    carillon: { accepted: ['9472'] },
+    sonsbeek: {
+      accepted: [
+        'rhine', 'the rhine', 'to the rhine', 'river', 'the river',
+        'rijn', 'de rijn', 'naar de rijn', 'rivier', 'de rivier', 'rijnkade', 'kade',
+        'rhein', 'der rhein', 'zum rhein', 'fluss', 'am fluss', 'zum fluss',
+        'نهر', 'النهر', 'نهر الراين', 'الراين', 'إلى نهر الراين',
+      ],
+    },
+    rijnkade: { accepted: ['1545'] },
+    archief: { accepted: ['iron-key'] },
+    aanklacht: { accepted: ['koster+whole-ledger', 'koster+ledger-left'] },
   },
   'neckar-ring': {
     box: { accepted: ['369'] },

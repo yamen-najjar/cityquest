@@ -13,7 +13,7 @@ import type { Adventure, Authored } from '../types';
 export const hetDuivelshuis: Authored<Adventure> = {
   slug: 'het-duivelshuis',
   city: 'arnhem',
-  status: 'draft',
+  status: 'published',
   isDemo: true,
   art: 'night',
   title: { de: 'Das Geheimnis des Teufelshauses', en: 'The Devil’s House Secret', ar: 'سرّ بيت الشيطان' },
@@ -154,6 +154,27 @@ export const hetDuivelshuis: Authored<Adventure> = {
       role: { de: 'Antiquitätenhändler, „der Sammler“', en: 'Antiques dealer, “the Collector”', ar: 'تاجر تحف، «الجامع»' },
       notes: [
         { after: 'duivels', text: { de: 'War schon am Teufelshaus und hat den Stein beschädigt. Sucht dasselbe wie du.', en: 'Has already been at the Devil’s House and damaged the stone. He is after the same thing you are.', ar: 'كان عند بيت الشيطان وأتلف الحجر. يسعى إلى ما تسعى إليه.' } },
+        { after: 'aanklacht', text: { de: 'Hat die Archivtür aufgebrochen und wollte das Register Seite für Seite verkaufen.', en: 'Forced the archive door and meant to sell the register page by page.', ar: 'كسر باب الأرشيف وكان ينوي بيع السجلّ صفحةً صفحة.' } },
+      ],
+    },
+    {
+      id: 'bram',
+      voice: 'man',
+      appears: 'sabelspoort',
+      name: { de: 'Bram', en: 'Bram', ar: 'برام' },
+      role: { de: 'Straßenmusiker an der Sabelspoort', en: 'Street musician at the Sabelspoort', ar: 'عازف شوارع عند بوابة سابلسبورت' },
+      notes: [
+        { after: 'sabelspoort', text: { de: 'Sah Lena mit einer Ledermappe zur Eusebiuskirche eilen, gefolgt von einem Mann im Samtmantel.', en: 'Saw Lena hurry to the Eusebius church with a leather folder, followed by a man in a velvet coat.', ar: 'رأى لينا تُسرع إلى كنيسة أوزيبيوس ومعها حافظة جلدية، يتبعها رجل بمعطف مخملي.' } },
+      ],
+    },
+    {
+      id: 'devries',
+      voice: 'woman',
+      appears: 'archief',
+      name: { de: 'Saar de Vries', en: 'Saar de Vries', ar: 'سار دي فريس' },
+      role: { de: 'Kuratorin im Museum Arnheim', en: 'Curator at Museum Arnhem', ar: 'أمينة متحف أرنم' },
+      notes: [
+        { after: 'archief', text: { de: 'Ließ dich ins Archiv. Fand die mittlere Lade bereits aufgebrochen vor.', en: 'Let you into the archive. Found the middle drawer already forced open.', ar: 'أدخلتك إلى الأرشيف، ووجدت الدرج الأوسط مكسوراً من قبل.' } },
       ],
     },
   ],
@@ -180,7 +201,30 @@ export const hetDuivelshuis: Authored<Adventure> = {
         ar: 'انتُزع من الحجر خلف الشيطان الأوسط. محفور عليه: «De middelste bewaart» — «الأوسط يحفظه».',
       },
     },
+    {
+      id: 'ledger-left',
+      icon: 'page',
+      model: { kind: 'paper', art: 'lines', torn: true },
+      name: { de: 'Linke Hälfte der Hauptbuchseite', en: 'Left half of the ledger page', ar: 'النصف الأيسر من صفحة الدفتر' },
+      description: {
+        de: 'In der Glockenstube der Eusebiuskirche versteckt. Der Riss passt zu der Hälfte, die du schon hast.',
+        en: 'Hidden in the bell chamber of the Eusebius church. The tear matches the half you already hold.',
+        ar: 'مخبّأ في غرفة الأجراس بكنيسة أوزيبيوس. حافّة التمزق تطابق النصف الذي بحوزتك.',
+      },
+    },
+    {
+      id: 'whole-ledger',
+      icon: 'page',
+      model: { kind: 'paper', art: 'stamps' },
+      name: { de: 'Die ganze Hauptbuchseite', en: 'The whole ledger page', ar: 'صفحة الدفتر كاملة' },
+      description: {
+        de: 'Zusammengefügt: eine Liste von Namen unter dem Teufelsstempel — und am Rand die Kaufnotiz „D. Koster“.',
+        en: 'Put together: a list of names beneath the devil’s stamp — and in the margin a purchase note, “D. Koster”.',
+        ar: 'بعد جمع النصفين: قائمة أسماء تحت ختم الشيطان — وعلى الهامش ملاحظة شراء: «د. كوستر».',
+      },
+    },
   ],
+  combinations: [{ from: 'ledger-half+ledger-left', to: 'whole-ledger' }],
   chapters: [
     {
       id: 'message',
@@ -304,6 +348,315 @@ export const hetDuivelshuis: Authored<Adventure> = {
         { de: 'Jemand — „der Sammler“ — war kurz vor dir am Stein.', en: 'Someone — “the Collector” — was at the stone just before you.', ar: 'أحدهم — «الجامع» — كان عند الحجر قبلك بقليل.' },
       ],
       reward: 'iron-key',
+    },
+    {
+      id: 'sabelspoort',
+      title: { de: 'Der Zeuge an der Sabelspoort', en: 'The Witness at the Sabelspoort', ar: 'الشاهد عند بوابة سابلسبورت' },
+      story: {
+        de: [
+          'An der Sabelspoort, dem alten Stadttor, spielt ein Straßenmusiker. Er hat heute Abend alles gesehen, was durch das Tor kam.',
+          'Frag ihn aus. Irgendwo hier ist Lena an diesem Abend entlanggekommen — und jemand hinter ihr her.',
+        ],
+        en: [
+          'At the Sabelspoort, the old city gate, a street musician is playing. This evening he has seen everything that passed through the gate.',
+          'Question him. Lena came this way tonight — and someone was right behind her.',
+        ],
+        ar: [
+          'عند بوابة سابلسبورت، البوابة القديمة للمدينة، يعزف موسيقي الشارع. هذا المساء رأى كل من مرّ عبر البوابة.',
+          'استجوبه. مرّت لينا من هنا الليلة — وكان أحدهم خلفها مباشرة.',
+        ],
+      },
+      checkpoint: {
+        id: 'cp-sabelspoort',
+        name: { de: 'An der Sabelspoort', en: 'At the Sabelspoort', ar: 'عند بوابة سابلسبورت' },
+        simulated: true,
+        mapPosition: { x: 40, y: 62 },
+        verification: ['gps', 'qr', 'manual'],
+        coordinates: { lat: 51.9789, lng: 5.9129 },
+        code: 'cq-het-duivelshuis-3',
+      },
+      puzzle: {
+        type: 'interrogate',
+        prompt: { de: 'Wohin ging Lena? Befrage Bram und wähle dann.', en: 'Where did Lena go? Question Bram, then choose.', ar: 'إلى أين ذهبت لينا؟ استجوب برام ثم اختر.' },
+        interview: {
+          person: 'bram',
+          questions: [
+            {
+              id: 'folder',
+              q: { de: 'Hast du eine Frau mit einer Mappe gesehen?', en: 'Did you see a woman with a folder?', ar: 'هل رأيت امرأة تحمل حافظة؟' },
+              a: { de: 'Ja — eine Ledermappe, fest an sich gedrückt. Sie eilte die Stufen hinauf.', en: 'Yes — a leather folder, held tight. She hurried up the steps.', ar: 'نعم — حافظة جلدية تضمّها بقوة. صعدت الدرج مسرعةً.' },
+            },
+            {
+              id: 'followed',
+              q: { de: 'Wurde sie verfolgt?', en: 'Was she being followed?', ar: 'هل كان أحد يتبعها؟' },
+              a: { de: 'Ein Mann im Samtmantel hielt Abstand. Er roch nach alten Büchern.', en: 'A man in a velvet coat kept his distance. He smelled of old books.', ar: 'رجل بمعطف مخملي يبقى على مسافة. كانت تفوح منه رائحة الكتب القديمة.' },
+            },
+            {
+              id: 'where',
+              q: { de: 'Wo ging sie hinein?', en: 'Where did she go in?', ar: 'من أين دخلت؟' },
+              a: { de: 'In die große Kirche — die Eusebius. Sie hatte einen Schlüssel dabei.', en: 'Into the great church — the Eusebius. She had a key with her.', ar: 'إلى الكنيسة الكبيرة — أوزيبيوس. وكان معها مفتاح.' },
+            },
+          ],
+        },
+        choices: [
+          { id: 'eusebius', label: { de: 'Die Eusebiuskirche', en: 'The Eusebius church', ar: 'كنيسة أوزيبيوس' } },
+          { id: 'market', label: { de: 'Zurück zum Korenmarkt', en: 'Back to the Korenmarkt', ar: 'العودة إلى كورنمارخت' } },
+          { id: 'quay', label: { de: 'Hinunter zum Rhein', en: 'Down to the Rhine', ar: 'النزول إلى نهر الراين' } },
+        ],
+        hints: [
+          { de: 'Stell alle drei Fragen; Bram weiß mehr, als er zuerst sagt.', en: 'Ask all three questions; Bram knows more than he first says.', ar: 'اطرح الأسئلة الثلاثة؛ برام يعرف أكثر مما يقول أولاً.' },
+          { de: 'Sie trug einen Schlüssel und stieg Stufen in eine große Kirche hinauf.', en: 'She carried a key and climbed steps into a great church.', ar: 'كانت تحمل مفتاحاً وصعدت درجاً إلى كنيسة كبيرة.' },
+          { de: 'Die Eusebiuskirche.', en: 'The Eusebius church.', ar: 'كنيسة أوزيبيوس.' },
+        ],
+      },
+      success: {
+        de: 'Die Eusebiuskirche. Bram nickt: „Der Mann im Mantel ging ihr nach. Beeil dich.“ Hoch oben im Turm hängt das Glockenspiel.',
+        en: 'The Eusebius church. Bram nods: “The man in the coat went after her. Hurry.” High in the tower hangs the carillon.',
+        ar: 'كنيسة أوزيبيوس. يومئ برام: «الرجل ذو المعطف تبعها. أسرع». وفي أعلى البرج يتدلّى ناقوس الأجراس.',
+      },
+      clues: [
+        { de: 'Lena ging mit einem Schlüssel in die Eusebiuskirche.', en: 'Lena went into the Eusebius church with a key.', ar: 'دخلت لينا كنيسة أوزيبيوس ومعها مفتاح.' },
+        { de: 'Der Mann im Samtmantel — „der Sammler“ — folgte ihr.', en: 'The man in the velvet coat — “the Collector” — followed her.', ar: 'الرجل ذو المعطف المخملي — «الجامع» — تبعها.' },
+      ],
+    },
+    {
+      id: 'carillon',
+      title: { de: 'Das Glockenspiel', en: 'The Carillon', ar: 'ناقوس الأجراس' },
+      story: {
+        de: [
+          'Lenas Schlüssel passt in die Turmtür. Oben, in der Glockenstube, hängen vier Glocken, jede mit einer eingegossenen Zahl in römischen Ziffern.',
+          'An der Wand ein kleines Zahlenschloss, das eine Klappe sichert. Lena hat daneben gekritzelt: „Lies die Glocken.“',
+        ],
+        en: [
+          'Lena’s key fits the tower door. Up in the bell chamber hang four bells, each cast with a number in Roman numerals.',
+          'On the wall a small number lock secures a hatch. Lena has scribbled beside it: “Read the bells.”',
+        ],
+        ar: [
+          'مفتاح لينا يناسب باب البرج. وفي الأعلى، في غرفة الأجراس، تتدلّى أربعة أجراس، على كلٍّ منها رقم مصبوب بالأرقام الرومانية.',
+          'على الجدار قفل أرقام صغير يحمي كوّة. وقد خطّت لينا بجانبه: «اقرأ الأجراس».',
+        ],
+      },
+      checkpoint: {
+        id: 'cp-carillon',
+        name: { de: 'In der Glockenstube', en: 'In the bell chamber', ar: 'في غرفة الأجراس' },
+        simulated: true,
+        mapPosition: { x: 34, y: 50 },
+        verification: ['gps', 'qr', 'manual'],
+        coordinates: { lat: 51.9803, lng: 5.911 },
+        code: 'cq-het-duivelshuis-4',
+      },
+      puzzle: {
+        type: 'number-code',
+        prompt: { de: 'Lies die vier Glocken als Ziffern und gib den Code ein.', en: 'Read the four bells as digits and enter the code.', ar: 'اقرأ الأجراس الأربعة كأرقام وأدخل الرمز.' },
+        material: {
+          de: ['Die vier Glocken tragen je eine römische Ziffer:', 'IX · IV · VII · II', 'Lies sie von links nach rechts als Ziffern.'],
+          en: ['The four bells each bear a Roman numeral:', 'IX · IV · VII · II', 'Read them left to right, as digits.'],
+          ar: ['تحمل الأجراس الأربعة أرقاماً رومانية:', 'IX · IV · VII · II', 'اقرأها من اليسار إلى اليمين كأرقام.'],
+        },
+        input: 'numeric',
+        lock: { digits: 4 },
+        hints: [
+          { de: 'Römische Ziffern: I = 1, V = 5, X = 10.', en: 'Roman numerals: I = 1, V = 5, X = 10.', ar: 'الأرقام الرومانية: I = 1، V = 5، X = 10.' },
+          { de: 'IX = 9, IV = 4, VII = 7, II = 2.', en: 'IX = 9, IV = 4, VII = 7, II = 2.', ar: 'IX = 9، IV = 4، VII = 7، II = 2.' },
+          { de: 'Der Code ist 9472.', en: 'The code is 9472.', ar: 'الرمز هو 9472.' },
+        ],
+      },
+      success: {
+        de: 'Klick. Hinter der Klappe steckt die fehlende linke Hälfte von Lenas Hauptbuchseite. Der Riss passt genau zu deiner Hälfte.',
+        en: 'Click. Behind the hatch lies the missing left half of Lena’s ledger page. The tear fits your half exactly.',
+        ar: 'طَق. خلف الكوّة النصف الأيسر المفقود من صفحة دفتر لينا. حافّة التمزق تطابق نصفك تماماً.',
+      },
+      clues: [
+        { de: 'Die linke Hälfte der Hauptbuchseite lag in der Glockenstube.', en: 'The left half of the ledger page was in the bell chamber.', ar: 'كان النصف الأيسر من صفحة الدفتر في غرفة الأجراس.' },
+        { de: 'Füge in der Akte beide Hälften zusammen.', en: 'Put both halves together in the journal.', ar: 'اجمع النصفين معاً في الملف.' },
+      ],
+      reward: 'ledger-left',
+    },
+    {
+      id: 'sonsbeek',
+      title: { de: 'Der Wasserfall im Sonsbeek-Park', en: 'The Waterfall in Sonsbeek Park', ar: 'شلّال حديقة سونسبيك' },
+      story: {
+        de: [
+          'Im Sonsbeek-Park, neben dem Wasserfall unter der Weißen Villa, hat Lena auf einen glatten Stein geschrieben — mit einer Tinte, die nur im Streiflicht erscheint.',
+          'Halte deine Taschenlampe flach über den Stein. Die Schrift steht spiegelverkehrt, als läse man sie von hinten.',
+        ],
+        en: [
+          'In Sonsbeek park, beside the waterfall below the White Villa, Lena has written on a smooth stone — in an ink that only shows in raking light.',
+          'Hold your torch flat across the stone. The writing is mirrored, as if read from behind.',
+        ],
+        ar: [
+          'في حديقة سونسبيك، بجانب الشلّال تحت الفيلا البيضاء، كتبت لينا على حجر أملس — بحبر لا يظهر إلا في الضوء المائل.',
+          'سلّط ضوءك بشكل مائل على الحجر. الكتابة معكوسة، كأنها تُقرأ من الخلف.',
+        ],
+      },
+      checkpoint: {
+        id: 'cp-sonsbeek',
+        name: { de: 'Am Wasserfall', en: 'At the waterfall', ar: 'عند الشلّال' },
+        simulated: true,
+        mapPosition: { x: 70, y: 18 },
+        verification: ['gps', 'qr', 'manual'],
+        coordinates: { lat: 51.9897, lng: 5.902 },
+        code: 'cq-het-duivelshuis-5',
+      },
+      puzzle: {
+        type: 'reveal',
+        revealMirrored: true,
+        prompt: { de: 'Streiche mit dem Licht über den Stein. Wohin will der Sammler als Nächstes?', en: 'Sweep the light across the stone. Where is the Collector heading next?', ar: 'مرّر الضوء على الحجر. إلى أين يتجه الجامع تالياً؟' },
+        material: { de: ['Zum Rhein', 'vor Mitternacht'], en: ['To the Rhine', 'before midnight'], ar: ['إلى نهر الراين', 'قبل منتصف الليل'] },
+        input: 'text',
+        hints: [
+          { de: 'Fahre über die Mitte des Steins. Die Schrift ist spiegelverkehrt.', en: 'Move over the middle of the stone. The writing is mirrored.', ar: 'مرّر الضوء على وسط الحجر. الكتابة معكوسة.' },
+          { de: 'Es ist der Fluss, der im Süden an der Stadt entlangfließt.', en: 'It is the river that runs along the south of the city.', ar: 'إنه النهر الذي يجري جنوب المدينة.' },
+          { de: 'Zum Rhein.', en: 'To the Rhine.', ar: 'إلى نهر الراين.' },
+        ],
+      },
+      success: {
+        de: 'Zum Rhein, vor Mitternacht. Der Sammler will das Register heute Nacht aus der Stadt bringen — über das Wasser. Du musst vor ihm an der Kade sein.',
+        en: 'To the Rhine, before midnight. The Collector means to take the register out of the city tonight — across the water. You must reach the quay before him.',
+        ar: 'إلى نهر الراين، قبل منتصف الليل. ينوي الجامع إخراج السجلّ من المدينة الليلة — عبر الماء. عليك أن تسبقه إلى الرصيف.',
+      },
+      clues: [
+        { de: 'Der Sammler will heute Nacht zum Rhein, vor Mitternacht.', en: 'The Collector is heading to the Rhine tonight, before midnight.', ar: 'يتجه الجامع إلى نهر الراين الليلة، قبل منتصف الليل.' },
+      ],
+    },
+    {
+      id: 'rijnkade',
+      title: { de: 'Das Signal über den Rhein', en: 'The Signal Across the Rhine', ar: 'الإشارة عبر نهر الراين' },
+      story: {
+        de: [
+          'An der Rijnkade ist es still. Über dem Wasser, von einem Fenster am Museumshang, blinkt eine Lampe: kurz, lang, lang … kein Zufall.',
+          'Jemand sendet dir Ziffern. Sie öffnen die Seitentür des Museums, in dem das Archiv liegt.',
+        ],
+        en: [
+          'The Rhine quay is quiet. Across the water, from a window on the museum hill, a lamp is blinking: short, long, long… not by chance.',
+          'Someone is sending you digits. They open the side door of the museum where the archive is.',
+        ],
+        ar: [
+          'الرصيف على نهر الراين هادئ. وعبر الماء، من نافذة على تلّة المتحف، يومض مصباح: قصير، طويل، طويل… ليس صدفة.',
+          'أحدهم يرسل إليك أرقاماً. إنها تفتح الباب الجانبي للمتحف حيث يوجد الأرشيف.',
+        ],
+      },
+      checkpoint: {
+        id: 'cp-rijnkade',
+        name: { de: 'An der Rijnkade', en: 'On the Rhine quay', ar: 'على رصيف نهر الراين' },
+        simulated: true,
+        mapPosition: { x: 52, y: 80 },
+        verification: ['gps', 'qr', 'manual'],
+        coordinates: { lat: 51.9772, lng: 5.914 },
+        code: 'cq-het-duivelshuis-6',
+      },
+      puzzle: {
+        type: 'morse',
+        morse: '.---- ..... ....- .....',
+        prompt: { de: 'Lies die vier Ziffern aus dem Signal. Sie öffnen die Seitentür des Museums.', en: 'Read the four digits in the signal. They open the museum’s side door.', ar: 'اقرأ الأرقام الأربعة من الإشارة. إنها تفتح الباب الجانبي للمتحف.' },
+        input: 'numeric',
+        lock: { digits: 4 },
+        hints: [
+          { de: 'Jede Gruppe von fünf Blinkern ist eine Ziffer. Achte auf kurz und lang.', en: 'Each group of five flashes is one digit. Watch for short and long.', ar: 'كل مجموعة من خمس ومضات رقم واحد. انتبه للقصير والطويل.' },
+          { de: 'Die erste Ziffer ist 1: einmal kurz, viermal lang. Es ist das Baujahr des Teufelshauses.', en: 'The first digit is 1: one short, four long. It is the year the Devil’s House was built.', ar: 'الرقم الأول 1: ومضة قصيرة ثم أربع طويلة. إنه عام بناء بيت الشيطان.' },
+          { de: 'Der Code ist 1545.', en: 'The code is 1545.', ar: 'الرمز هو 1545.' },
+        ],
+      },
+      success: {
+        de: '1545 — das Jahr, in dem Maarten van Rossum sein Haus baute. Die Seitentür des Museums springt auf. Lena muss dir von drinnen signalisiert haben.',
+        en: '1545 — the year Maarten van Rossum built his house. The museum’s side door clicks open. Lena must have signalled you from inside.',
+        ar: '1545 — العام الذي بنى فيه مارتن فان روسوم بيته. ينفتح الباب الجانبي للمتحف. لا بد أن لينا أشارت إليك من الداخل.',
+      },
+      clues: [{ de: 'Das Signal kam aus dem Museum: Code 1545.', en: 'The signal came from the museum: code 1545.', ar: 'جاءت الإشارة من المتحف: الرمز 1545.' }],
+    },
+    {
+      id: 'archief',
+      title: { de: 'Die mittlere Lade', en: 'The Middle Drawer', ar: 'الدرج الأوسط' },
+      story: {
+        de: [
+          'Im Museum Arnheim empfängt dich die Kuratorin Saar de Vries, blass. „Jemand ist schon hier gewesen“, sagt sie. „Die mittlere Lade im Archivschrank ist aufgebrochen — aber nicht geöffnet.“',
+          'Die Lade ist aus Eisen, mit einem abgenutzten Schlüsselloch. Darüber, eingeritzt, dieselben Worte wie auf deinem Schlüssel: „De middelste bewaart.“',
+        ],
+        en: [
+          'At Museum Arnhem the curator Saar de Vries meets you, pale. “Someone has already been here,” she says. “The middle drawer of the archive cabinet was forced — but not opened.”',
+          'The drawer is iron, with a worn keyhole. Above it, scratched in, the same words as on your key: “De middelste bewaart.”',
+        ],
+        ar: [
+          'في متحف أرنم تستقبلك أمينة المتحف سار دي فريس، شاحبةً. «أحدهم كان هنا من قبل»، تقول. «الدرج الأوسط في خزانة الأرشيف كُسر — لكنه لم يُفتح».',
+          'الدرج من حديد، وثقب مفتاحه بالٍ. وفوقه، محفورة، الكلمات نفسها التي على مفتاحك: «De middelste bewaart».',
+        ],
+      },
+      checkpoint: {
+        id: 'cp-archief',
+        name: { de: 'Im Museumsarchiv', en: 'In the museum archive', ar: 'في أرشيف المتحف' },
+        simulated: true,
+        mapPosition: { x: 84, y: 34 },
+        verification: ['gps', 'qr', 'manual'],
+        coordinates: { lat: 51.9851, lng: 5.8942 },
+        code: 'cq-het-duivelshuis-7',
+      },
+      puzzle: {
+        type: 'item-use',
+        fromInventory: true,
+        prompt: { de: 'Welchen Gegenstand aus deinem Inventar steckst du in die mittlere Lade?', en: 'Which item from your inventory do you put into the middle drawer?', ar: 'أي غرض من حقيبتك تضعه في الدرج الأوسط؟' },
+        hints: [
+          { de: 'Die Lade ist aus Eisen, mit einem Schlüsselloch.', en: 'The drawer is iron, with a keyhole.', ar: 'الدرج من حديد، وفيه ثقب مفتاح.' },
+          { de: 'Hinter dem mittleren Teufel hast du genau dafür etwas gefunden.', en: 'Behind the middle devil you found something for exactly this.', ar: 'خلف الشيطان الأوسط وجدت شيئاً لهذا بالضبط.' },
+          { de: 'Der alte Eisenschlüssel.', en: 'The old iron key.', ar: 'المفتاح الحديدي القديم.' },
+        ],
+      },
+      success: {
+        de: 'Der Schlüssel dreht sich, und die Lade gleitet auf. Darin liegt das gebundene Register — vollständig. An der Kante klemmt ein Handschuh aus Samt. Der Sammler war hier und musste es zurücklassen.',
+        en: 'The key turns and the drawer slides open. Inside lies the bound register — complete. A velvet glove is caught on the edge. The Collector was here and had to leave it behind.',
+        ar: 'يدور المفتاح وينزلق الدرج مفتوحاً. في داخله السجلّ المجلّد — كاملاً. وعلى الحافة عَلِقت قفّاز مخملي. كان الجامع هنا واضطُرّ إلى تركه.',
+      },
+      clues: [
+        { de: 'Das Register lag unberührt in der mittleren Lade.', en: 'The register lay untouched in the middle drawer.', ar: 'كان السجلّ سليماً في الدرج الأوسط.' },
+        { de: 'Ein Samthandschuh verrät: Der Sammler war hier.', en: 'A velvet glove gives it away: the Collector was here.', ar: 'قفّاز مخملي يفضح الأمر: الجامع كان هنا.' },
+      ],
+    },
+    {
+      id: 'aanklacht',
+      title: { de: 'Die Anklage', en: 'The Accusation', ar: 'الاتهام' },
+      story: {
+        de: [
+          'Auf der Binnenplatz hinter dem Teufelshaus steht er: ein Mann im Samtmantel, ohne einen Handschuh. Lena tritt aus dem Schatten, die Ledermappe in der Hand.',
+          '„Du hast alles gesehen“, sagt sie zu dir. „Sag es ihm ins Gesicht. Wer hat das Archiv aufgebrochen — und womit beweist du es?“',
+        ],
+        en: [
+          'On the courtyard behind the Devil’s House he stands: a man in a velvet coat, missing one glove. Lena steps out of the shadow, the leather folder in her hand.',
+          '“You have seen everything,” she tells you. “Say it to his face. Who forced the archive — and what is your proof?”',
+        ],
+        ar: [
+          'في الفناء خلف بيت الشيطان يقف: رجل بمعطف مخملي، ينقصه قفّاز. تخرج لينا من الظل، والحافظة الجلدية في يدها.',
+          '«لقد رأيت كل شيء»، تقول لك. «قُلها في وجهه. من كسر الأرشيف — وما دليلك؟»',
+        ],
+      },
+      checkpoint: {
+        id: 'cp-binnenplaats',
+        name: { de: 'Die Binnenplatz', en: 'The courtyard', ar: 'الفناء' },
+        simulated: true,
+        mapPosition: { x: 30, y: 46 },
+        verification: ['gps', 'qr', 'manual'],
+        coordinates: { lat: 51.98, lng: 5.9116 },
+        code: 'cq-het-duivelshuis-8',
+      },
+      puzzle: {
+        type: 'deduction',
+        prompt: { de: 'Wer hat das Archiv aufgebrochen und dich verfolgt? Nenne die Person und lege den Beweis vor.', en: 'Who forced the archive and chased you? Name them and lay down the proof.', ar: 'من كسر الأرشيف ولاحقك؟ اذكر الشخص وقدّم الدليل.' },
+        choices: [
+          { id: 'koster', label: { de: 'Daan Koster', en: 'Daan Koster', ar: 'دان كوستر' } },
+          { id: 'devries', label: { de: 'Saar de Vries', en: 'Saar de Vries', ar: 'سار دي فريس' } },
+          { id: 'bram', label: { de: 'Bram', en: 'Bram', ar: 'برام' } },
+          { id: 'lena', label: { de: 'Lena Verhoef', en: 'Lena Verhoef', ar: 'لينا فرهوف' } },
+        ],
+        hints: [
+          { de: 'Wer war vor dir am Stein und roch nach alten Büchern?', en: 'Who was at the stone before you and smelled of old books?', ar: 'من كان عند الحجر قبلك وفاحت منه رائحة الكتب القديمة؟' },
+          { de: 'Der Beweis ist die Hauptbuchseite — füge in der Akte beide Hälften zusammen.', en: 'The proof is the ledger page — join its two halves in the journal.', ar: 'الدليل صفحة الدفتر — اجمع نصفيها في الملف.' },
+          { de: 'Daan Koster, mit der ganzen Hauptbuchseite.', en: 'Daan Koster, with the whole ledger page.', ar: 'دان كوستر، مع صفحة الدفتر كاملة.' },
+        ],
+      },
+      success: {
+        de: 'Koster. Sein fehlender Handschuh liegt im Archiv, sein Name steht am Rand des Registers. Er wollte es verkaufen. Als du die ganze Seite hochhältst, sinken ihm die Schultern.',
+        en: 'Koster. His missing glove is in the archive, his name is in the margin of the register. He meant to sell it. When you hold up the whole page, his shoulders drop.',
+        ar: 'كوستر. قفّازه المفقود في الأرشيف، واسمه على هامش السجلّ. أراد بيعه. وحين ترفع الصفحة كاملة، تهبط كتفاه.',
+      },
+      clues: [{ de: 'Koster hat das Archiv aufgebrochen; sein Name steht im Register.', en: 'Koster forced the archive; his name is in the register.', ar: 'كوستر كسر الأرشيف؛ واسمه في السجلّ.' }],
     },
   ],
   ending: {

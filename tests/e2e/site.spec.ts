@@ -35,7 +35,7 @@ test('navigation, search and filters work', async ({ page, isMobile }) => {
   await page.getByLabel('Theme').selectOption('treasure');
   await expect(page.getByText('No adventure matches these filters yet.')).toBeVisible();
   await page.getByRole('link', { name: 'Reset filters' }).click();
-  await expect(page.getByRole('status').filter({ hasText: 'result' })).toHaveText('2 result(s)');
+  await expect(page.getByRole('status').filter({ hasText: 'result' })).toHaveText('3 result(s)');
 
   if (isMobile) await page.getByRole('button', { name: 'Menu' }).click();
   await page.getByRole('navigation', { name: 'Main navigation' }).last().getByRole('link', { name: 'Cities' }).click();

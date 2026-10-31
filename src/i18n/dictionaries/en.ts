@@ -217,7 +217,7 @@ const en = {
     newItem: 'New item: {item}',
     achievement: 'Achievement unlocked: {name}',
     map: 'Map',
-    mapNote: 'Approximate demo positions in Heidelberg — not a surveyed route.',
+    mapNote: 'Approximate demo positions — not a surveyed route.',
     destination: 'Destination',
     done: 'Done',
     timer: 'Timer',
@@ -380,6 +380,7 @@ const en = {
     'mystery-solved': { name: 'Mystery solved', text: 'Finish an adventure.' },
     'no-hints': { name: 'On your own', text: 'Finish an adventure without a single hint.' },
     'heidelberg-explorer': { name: 'Heidelberg explorer', text: 'Finish an adventure in Heidelberg.' },
+    'arnhem-explorer': { name: 'Arnhem explorer', text: 'Finish an adventure in Arnhem.' },
   },
   legal: {
     placeholder: 'Placeholder',
