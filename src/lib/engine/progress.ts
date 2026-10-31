@@ -207,6 +207,8 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
     decision: p.decision ?? null,
     finishedAt: p.finishedAt ?? null,
     elapsedMs: p.elapsedMs ?? 0,
-    lastActiveAt: p.lastActiveAt ?? Date.now(),
+    // Guard against a non-finite value (corrupt or hand-edited remote data): a NaN here would make every
+    // merge comparison fall through, so clamp it to a usable timestamp.
+    lastActiveAt: Number.isFinite(p.lastActiveAt) ? (p.lastActiveAt as number) : Date.now(),
   };
 }

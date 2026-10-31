@@ -7,6 +7,7 @@ import { fmt, type Dictionary } from '@/i18n/dictionary';
 import { ACHIEVEMENTS, earned, type AchievementContext, type AchievementId } from '@/lib/engine/achievements';
 import { isFinished, xpFor, type Progress } from '@/lib/engine/progress';
 import { localProgressStore } from '@/lib/engine/storage';
+import { SYNCED_EVENT } from '@/lib/engine/sync';
 
 export interface DashboardAdventure {
   slug: string;
@@ -17,7 +18,13 @@ export interface DashboardAdventure {
 
 export function Dashboard({ locale, t, achievements, adventures }: { locale: Locale; t: Dictionary['dashboard']; achievements: Dictionary['achievements']; adventures: DashboardAdventure[] }) {
   const [saved, setSaved] = useState<Progress[] | null>(null);
-  useEffect(() => setSaved(localProgressStore.all()), []);
+  useEffect(() => {
+    const refresh = () => setSaved(localProgressStore.all());
+    refresh();
+    // A sign-in reconcile may pull in adventures played on other devices; reflect them live.
+    window.addEventListener(SYNCED_EVENT, refresh);
+    return () => window.removeEventListener(SYNCED_EVENT, refresh);
+  }, []);
 
   if (!saved) return <div className="min-h-[40vh]" aria-busy="true" />;
 

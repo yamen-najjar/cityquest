@@ -5,6 +5,7 @@ import { isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionary';
 
 // Every page except the game screen, which runs full-screen without the site chrome.
+// No session is read here on purpose: the header reads auth in the browser, so these pages stay static.
 export default async function SiteLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();

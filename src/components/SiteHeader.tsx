@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
+import { createClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { LogoMark } from './Logo';
 
@@ -13,10 +15,25 @@ export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['n
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [pathname]);
 
+  // Auth state is read in the browser so the site pages stay statically rendered (no per-request cookie
+  // read in the layout). The label updates live on sign-in and sign-out without a full navigation.
+  const [authed, setAuthed] = useState(false);
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    try {
+      const supabase = createClient();
+      const { data } = supabase.auth.onAuthStateChange((_event, session) => setAuthed(!!session));
+      return () => data.subscription.unsubscribe();
+    } catch {
+      /* leave signed-out */
+    }
+  }, []);
+
   const links = [
     { href: `/${locale}/cities`, label: nav.cities },
     { href: `/${locale}/adventures`, label: nav.adventures },
     { href: `/${locale}/dashboard`, label: nav.myAdventures },
+    { href: `/${locale}/account`, label: authed ? nav.account : nav.signIn },
   ];
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 

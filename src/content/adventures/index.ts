@@ -17,8 +17,16 @@ const all: Adventure[] = [withScenes(lostManuscript, manuscriptScenes), withScen
 
 export const adventures = all.filter((a) => a.status === 'published');
 
+/** Every adventure including drafts. For admin/server use only — never a public page. */
+export const allAdventures = all;
+
 export function getAdventure(slug: string): Adventure | undefined {
   return adventures.find((a) => a.slug === slug);
+}
+
+/** Look up any adventure including drafts. Admin preview only; public pages use getAdventure. */
+export function getAdventureAny(slug: string): Adventure | undefined {
+  return all.find((a) => a.slug === slug);
 }
 
 export function adventuresIn(city: string): Adventure[] {

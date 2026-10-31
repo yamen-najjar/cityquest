@@ -9,6 +9,8 @@ import { isMuted, playAmbience, setMuted, stopAmbience, stopSpeaking, unlockAudi
 import { contextOf, earned, type AchievementId } from '@/lib/engine/achievements';
 import { isFinished, newProgress, reduce, totalHints, type Action, type Progress } from '@/lib/engine/progress';
 import { localProgressStore as store } from '@/lib/engine/storage';
+import { isAtLeastAsFar } from '@/lib/engine/merge';
+import { pushLocalDebounced, remoteDelete, SYNCED_EVENT } from '@/lib/engine/sync';
 import { formatDuration } from '@/lib/format';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { LogoMark } from '../Logo';
@@ -71,10 +73,30 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
     }
   }, [loaded, onStart, a.slug]);
 
-  // Save after every change.
+  // Save after every change: instantly to this device, and mirrored up to the account when signed in.
   useEffect(() => {
-    if (p) store.save(p);
+    if (p) {
+      store.save(p);
+      pushLocalDebounced(p);
+    }
   }, [p]);
+
+  // When a reconcile updates this device's save, keep the screen in step. On the start / continue screen
+  // we adopt it outright; mid-game we adopt only if the account is strictly further, so an older account
+  // save can never throw away the game being played right now.
+  useEffect(() => {
+    const onSynced = () => {
+      const fresh = store.load(a.slug);
+      if (!fresh) return;
+      setP((prev) => {
+        if (!prev || onStart) return fresh;
+        const furtherThanNow = isAtLeastAsFar(fresh, prev) && !isAtLeastAsFar(prev, fresh);
+        return furtherThanNow ? fresh : prev;
+      });
+    };
+    window.addEventListener(SYNCED_EVENT, onSynced);
+    return () => window.removeEventListener(SYNCED_EVENT, onSynced);
+  }, [onStart, a.slug]);
 
   const dispatch = useCallback((action: Action) => {
     setP((prev) => (prev ? reduce(reduce(prev, { type: 'tick', now: Date.now() }), action) : prev));
@@ -140,6 +162,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
 
   const restart = () => {
     store.clear(a.slug);
+    void remoteDelete(a.slug); // also drop the account save, so the next reconcile cannot resurrect it
     earnedRef.current = null;
     setP(null);
     setConfirmRestart(false);

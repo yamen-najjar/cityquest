@@ -170,7 +170,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             {t.home.newsletterTitle}
           </h2>
           <p className="mt-2 text-ivory-dim">{t.home.newsletterText}</p>
-          <NewsletterForm t={t.home} />
+          <NewsletterForm t={t.home} locale={locale} />
         </div>
       </section>
     </>
