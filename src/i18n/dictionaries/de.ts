@@ -12,6 +12,8 @@ const de: Dictionary = {
     cities: 'Städte',
     adventures: 'Abenteuer',
     myAdventures: 'Meine Abenteuer',
+    signIn: 'Anmelden',
+    account: 'Konto',
     skip: 'Zum Inhalt springen',
     menu: 'Menü',
     close: 'Schließen',
@@ -21,7 +23,7 @@ const de: Dictionary = {
   prototype: {
     badge: 'Prototyp',
     banner:
-      'Prototyp: Das Demo-Abenteuer nutzt simulierte Kontrollpunkte und ist kostenlos. Konten und Käufe sind noch nicht verfügbar.',
+      'Prototyp: Das Demo-Abenteuer nutzt simulierte Kontrollpunkte und ist kostenlos. Käufe sind noch nicht verfügbar.',
   },
   home: {
     eyebrow: 'Outdoor-Mysterys · Heidelberg',
@@ -300,7 +302,7 @@ const de: Dictionary = {
   },
   dashboard: {
     title: 'Meine Abenteuer',
-    intro: 'Dein Fortschritt wird nur auf diesem Gerät gespeichert. Konten mit Synchronisierung folgen in einer späteren Phase.',
+    intro: 'Dein Fortschritt wird auf diesem Gerät gespeichert und mit deinem Konto zwischen deinen Geräten synchronisiert, sobald du angemeldet bist.',
     empty: 'Du hast noch kein Abenteuer begonnen.',
     start: 'Abenteuer finden',
     inProgress: 'Läuft',
@@ -311,6 +313,26 @@ const de: Dictionary = {
     totalXp: 'Erfahrung gesamt',
     achievements: 'Erfolge',
     locked: 'Noch nicht erreicht',
+  },
+  account: {
+    title: 'Dein Konto',
+    signInTitle: 'Anmelden',
+    signInText: 'Gib deine E-Mail-Adresse ein und wir senden dir einen einmaligen Anmeldelink. Kein Passwort nötig.',
+    emailLabel: 'E-Mail-Adresse',
+    emailPlaceholder: 'du@beispiel.de',
+    sendLink: 'Anmeldelink senden',
+    sending: 'Wird gesendet…',
+    sentTitle: 'Sieh in deinem Postfach nach',
+    sentText: 'Wir haben einen Anmeldelink an {email} gesendet. Öffne ihn auf diesem Gerät, um die Anmeldung abzuschließen.',
+    resend: 'Andere E-Mail-Adresse verwenden',
+    invalidEmail: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+    sendError: 'Der Link konnte nicht gesendet werden. Bitte versuche es erneut.',
+    signedInAs: 'Angemeldet als',
+    signOut: 'Abmelden',
+    signingOut: 'Wird abgemeldet…',
+    myAdventures: 'Meine Abenteuer',
+    syncNote: 'Dein Spielfortschritt wird in deinem Konto gespeichert und zwischen deinen Geräten synchronisiert.',
+    callbackError: 'Dieser Anmeldelink ist ungültig oder abgelaufen. Bitte fordere einen neuen an.',
   },
   achievements: {
     'first-clue': { name: 'Erste Spur', text: 'Löse dein erstes Kapitel.' },

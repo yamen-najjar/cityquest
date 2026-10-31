@@ -9,6 +9,7 @@ import { isMuted, playAmbience, setMuted, stopAmbience, stopSpeaking, unlockAudi
 import { contextOf, earned, type AchievementId } from '@/lib/engine/achievements';
 import { isFinished, newProgress, reduce, totalHints, type Action, type Progress } from '@/lib/engine/progress';
 import { localProgressStore as store } from '@/lib/engine/storage';
+import { pushLocalDebounced, SYNCED_EVENT } from '@/lib/engine/sync';
 import { formatDuration } from '@/lib/format';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { LogoMark } from '../Logo';
@@ -71,10 +72,25 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
     }
   }, [loaded, onStart, a.slug]);
 
-  // Save after every change.
+  // Save after every change: instantly to this device, and mirrored up to the account when signed in.
   useEffect(() => {
-    if (p) store.save(p);
+    if (p) {
+      store.save(p);
+      pushLocalDebounced(p);
+    }
   }, [p]);
+
+  // If a sign-in reconcile brings further account progress while the player is still on the start /
+  // continue screen, adopt it. We never overwrite a game already resumed in this session.
+  useEffect(() => {
+    if (!onStart) return;
+    const onSynced = () => {
+      const fresh = store.load(a.slug);
+      if (fresh) setP(fresh);
+    };
+    window.addEventListener(SYNCED_EVENT, onSynced);
+    return () => window.removeEventListener(SYNCED_EVENT, onSynced);
+  }, [onStart, a.slug]);
 
   const dispatch = useCallback((action: Action) => {
     setP((prev) => (prev ? reduce(reduce(prev, { type: 'tick', now: Date.now() }), action) : prev));

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Inter, Noto_Kufi_Arabic } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import '../globals.css';
+import { ProgressSync } from '@/components/ProgressSync';
 import { dirOf, isLocale, locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionary';
 import { alternates, ogLocale, siteUrl } from '@/lib/site';
@@ -52,6 +53,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
         <a href="#main" className="sr-only z-50 rounded-full bg-gold px-4 py-2 text-navy focus:not-sr-only focus:fixed focus:start-4 focus:top-4">
           {t.nav.skip}
         </a>
+        <ProgressSync />
         {children}
       </body>
     </html>

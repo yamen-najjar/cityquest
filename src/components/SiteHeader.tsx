@@ -8,7 +8,7 @@ import type { Dictionary } from '@/i18n/dictionary';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { LogoMark } from './Logo';
 
-export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['nav'] }) {
+export function SiteHeader({ locale, nav, authed }: { locale: Locale; nav: Dictionary['nav']; authed: boolean }) {
   const pathname = usePathname() ?? '';
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [pathname]);
@@ -17,6 +17,7 @@ export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['n
     { href: `/${locale}/cities`, label: nav.cities },
     { href: `/${locale}/adventures`, label: nav.adventures },
     { href: `/${locale}/dashboard`, label: nav.myAdventures },
+    { href: `/${locale}/account`, label: authed ? nav.account : nav.signIn },
   ];
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
