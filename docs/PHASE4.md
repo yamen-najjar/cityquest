@@ -83,9 +83,19 @@ reading latest props from refs in the `load` handler (only matters once GPS move
 ### M3 — QR (if in scope)
 - [ ] Camera scan matching the checkpoint code; permission on demand; manual fallback
 
-### M4 — Content + privacy + hardening
-- [ ] Demo coordinates (if chosen); Permissions-Policy opened; privacy copy updated (location used
-      on-device only, never stored); tests + Sonnet review
+### M4 — Content + privacy + copy (complete)
+- [x] Demo coordinates added (M1); Permissions-Policy opened to `geolocation=(self)` (M2)
+- [x] Privacy copy updated in all 4 locales: GPS location is used on-device only to measure distance,
+      never stored or sent; the map loads from OpenStreetMap, which receives the player's IP for tiles
+- [x] Copy pass: `mapNote` and `simulatedHelp` no longer claim "stylised/no real map" now that a real
+      map is shown (they now say "approximate demo positions"); the demo "not directions" safety banner
+      is kept (still accurate — approximate positions)
+- [x] MapLibre control strings (zoom, cooperative-gesture hint, attribution toggle) localised to de/nl/ar;
+      checkpoint markers carry a localised `aria-label` (`"3. Marktplatz"`) instead of "Map marker"
+- [ ] Reviewer-agent pass (Sonnet) on M2 + M4
+
+**QR verification is deferred** (the chosen scope was "map + GPS first"). When picked up it becomes a new
+milestone: camera permission on demand, scan matching the checkpoint code, manual fallback.
 
 ## Env vars (Phase 4)
 - `NEXT_PUBLIC_MAP_STYLE_URL` — MapLibre style URL (e.g. a MapTiler style with a domain-restricted key).

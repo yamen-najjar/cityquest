@@ -176,7 +176,7 @@ const en = {
     progress: 'Progress',
     checkpoint: 'Next checkpoint',
     simulated: 'Simulated checkpoint',
-    simulatedHelp: 'This demo checkpoint has no real location yet. Confirm to continue the story.',
+    simulatedHelp: 'The pin is an approximate demo location. Confirm to continue the story.',
     arrive: 'I am at the checkpoint',
     gpsHere: 'I’m here',
     gpsLocating: 'Locating you…',
@@ -212,7 +212,7 @@ const en = {
     newItem: 'New item: {item}',
     achievement: 'Achievement unlocked: {name}',
     map: 'Map',
-    mapNote: 'Stylised demo map. Positions are not real locations.',
+    mapNote: 'Approximate demo positions in Heidelberg — not a surveyed route.',
     destination: 'Destination',
     done: 'Done',
     timer: 'Timer',
@@ -387,7 +387,7 @@ const en = {
       },
       privacy: {
         title: 'Privacy policy (Datenschutzerklärung)',
-        body: 'When you play as a guest, progress is stored only in your browser on this device. If you create an account (via a one-time email sign-in link), we store your email, your game progress and which adventures you have access to, so your progress syncs across devices. If you subscribe to the newsletter, we store your email with your consent until you unsubscribe. No advertising trackers and no location data. You can download all your data or delete your account at any time from your account page. The full privacy policy under the GDPR will appear here before launch.',
+        body: 'When you play as a guest, progress is stored only in your browser on this device. If you create an account (via a one-time email sign-in link), we store your email, your game progress and which adventures you have access to, so your progress syncs across devices. If you subscribe to the newsletter, we store your email with your consent until you unsubscribe. No advertising trackers. When you use GPS to confirm a checkpoint, your location is used only on your device to measure the distance — it is never stored or sent to us; the map is loaded from OpenStreetMap, which receives your IP address to serve the tiles. You can download all your data or delete your account at any time from your account page. The full privacy policy under the GDPR will appear here before launch.',
       },
       terms: {
         title: 'Terms and conditions (AGB)',

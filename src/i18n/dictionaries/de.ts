@@ -179,7 +179,7 @@ const de: Dictionary = {
     progress: 'Fortschritt',
     checkpoint: 'Nächster Kontrollpunkt',
     simulated: 'Simulierter Kontrollpunkt',
-    simulatedHelp: 'Dieser Demo-Kontrollpunkt hat noch keinen echten Ort. Bestätige, um die Geschichte fortzusetzen.',
+    simulatedHelp: 'Die Markierung ist ein ungefährer Demo-Ort. Bestätige, um die Geschichte fortzusetzen.',
     arrive: 'Ich bin am Kontrollpunkt',
     gpsHere: 'Ich bin da',
     gpsLocating: 'Dein Standort wird ermittelt…',
@@ -215,7 +215,7 @@ const de: Dictionary = {
     newItem: 'Neuer Gegenstand: {item}',
     achievement: 'Erfolg freigeschaltet: {name}',
     map: 'Karte',
-    mapNote: 'Stilisierte Demo-Karte. Die Positionen sind keine echten Orte.',
+    mapNote: 'Ungefähre Demo-Positionen in Heidelberg — keine vermessene Route.',
     destination: 'Ziel',
     done: 'Erledigt',
     timer: 'Zeit',
@@ -390,7 +390,7 @@ const de: Dictionary = {
       },
       privacy: {
         title: 'Datenschutzerklärung',
-        body: 'Wenn du als Gast spielst, wird der Fortschritt nur in deinem Browser auf diesem Gerät gespeichert. Wenn du ein Konto erstellst (über einen einmaligen Anmeldelink per E-Mail), speichern wir deine E-Mail-Adresse, deinen Spielfortschritt und deine freigeschalteten Abenteuer, damit dein Fortschritt geräteübergreifend synchronisiert. Wenn du den Newsletter abonnierst, speichern wir deine E-Mail-Adresse mit deiner Einwilligung, bis du dich abmeldest. Keine Werbe-Tracker und keine Standortdaten. Auf deiner Kontoseite kannst du jederzeit alle deine Daten herunterladen oder dein Konto löschen. Die vollständige Datenschutzerklärung nach DSGVO erscheint hier vor dem Start.',
+        body: 'Wenn du als Gast spielst, wird der Fortschritt nur in deinem Browser auf diesem Gerät gespeichert. Wenn du ein Konto erstellst (über einen einmaligen Anmeldelink per E-Mail), speichern wir deine E-Mail-Adresse, deinen Spielfortschritt und deine freigeschalteten Abenteuer, damit dein Fortschritt geräteübergreifend synchronisiert. Wenn du den Newsletter abonnierst, speichern wir deine E-Mail-Adresse mit deiner Einwilligung, bis du dich abmeldest. Keine Werbe-Tracker. Wenn du einen Kontrollpunkt per GPS bestätigst, wird dein Standort nur auf deinem Gerät zur Entfernungsmessung verwendet — er wird nie gespeichert oder an uns gesendet; die Karte wird von OpenStreetMap geladen, das zur Auslieferung der Kacheln deine IP-Adresse erhält. Auf deiner Kontoseite kannst du jederzeit alle deine Daten herunterladen oder dein Konto löschen. Die vollständige Datenschutzerklärung nach DSGVO erscheint hier vor dem Start.',
       },
       terms: {
         title: 'Allgemeine Geschäftsbedingungen (AGB)',

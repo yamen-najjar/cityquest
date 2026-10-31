@@ -28,8 +28,36 @@ const OSM_STYLE: StyleSpecification = {
 type LatLng = { lat: number; lng: number };
 type Labels = { title: string; note: string; destination: string; done: string };
 
-function pin(n: number, state: 'solved' | 'current' | 'upcoming'): HTMLElement {
+// MapLibre's built-in control strings, in the player's language (English is the library default).
+const MAP_LOCALE: Record<Locale, Record<string, string>> = {
+  en: {},
+  de: {
+    'NavigationControl.ZoomIn': 'Vergrößern',
+    'NavigationControl.ZoomOut': 'Verkleinern',
+    'CooperativeGesturesHandler.WindowsHelpText': 'Mit Strg + Scrollen zoomen',
+    'CooperativeGesturesHandler.MacHelpText': 'Mit ⌘ + Scrollen zoomen',
+    'AttributionControl.ToggleAttribution': 'Quellenangabe umschalten',
+  },
+  nl: {
+    'NavigationControl.ZoomIn': 'Inzoomen',
+    'NavigationControl.ZoomOut': 'Uitzoomen',
+    'CooperativeGesturesHandler.WindowsHelpText': 'Gebruik Ctrl + scrollen om te zoomen',
+    'CooperativeGesturesHandler.MacHelpText': 'Gebruik ⌘ + scrollen om te zoomen',
+    'AttributionControl.ToggleAttribution': 'Bronvermelding tonen/verbergen',
+  },
+  ar: {
+    'NavigationControl.ZoomIn': 'تكبير',
+    'NavigationControl.ZoomOut': 'تصغير',
+    'CooperativeGesturesHandler.WindowsHelpText': 'استخدم Ctrl + التمرير للتكبير',
+    'CooperativeGesturesHandler.MacHelpText': 'استخدم ⌘ + التمرير للتكبير',
+    'AttributionControl.ToggleAttribution': 'إظهار/إخفاء الإسناد',
+  },
+};
+
+function pin(n: number, state: 'solved' | 'current' | 'upcoming', label: string): HTMLElement {
   const el = document.createElement('div');
+  el.setAttribute('role', 'img');
+  el.setAttribute('aria-label', label);
   // Uses the theme tokens defined on :root in globals.css where they exist; navy-600 has no token.
   const bg = state === 'solved' ? 'var(--gold)' : state === 'current' ? 'var(--ivory)' : '#273C5E';
   const fg = state === 'upcoming' ? 'var(--gold)' : 'var(--navy)';
@@ -66,7 +94,8 @@ export default function RealMap(props: {
     markersRef.current = located.map((x) => {
       const state = solved.includes(x.c.id) ? 'solved' : x.i === current ? 'current' : 'upcoming';
       const coord = x.c.checkpoint.coordinates!;
-      return new maplibregl.Marker({ element: pin(x.i + 1, state) }).setLngLat([coord.lng, coord.lat]).addTo(map);
+      const label = `${x.i + 1}. ${x.c.checkpoint.name[locale]}`;
+      return new maplibregl.Marker({ element: pin(x.i + 1, state, label) }).setLngLat([coord.lng, coord.lat]).addTo(map);
     });
   }
 
@@ -97,6 +126,7 @@ export default function RealMap(props: {
         zoom: 13,
         attributionControl: { compact: true },
         cooperativeGestures: true,
+        locale: MAP_LOCALE[locale],
       });
     } catch {
       setFailed(true);

@@ -169,7 +169,7 @@ const nl: Dictionary = {
     progress: 'Voortgang',
     checkpoint: 'Volgend controlepunt',
     simulated: 'Gesimuleerd controlepunt',
-    simulatedHelp: 'Dit democontrolepunt heeft nog geen echte locatie. Bevestig om het verhaal te vervolgen.',
+    simulatedHelp: 'De markering is een benaderende demolocatie. Bevestig om het verhaal te vervolgen.',
     arrive: 'Ik ben bij het controlepunt',
     gpsHere: 'Ik ben er',
     gpsLocating: 'Je locatie wordt bepaald…',
@@ -205,7 +205,7 @@ const nl: Dictionary = {
     newItem: 'Nieuw voorwerp: {item}',
     achievement: 'Prestatie ontgrendeld: {name}',
     map: 'Kaart',
-    mapNote: 'Gestileerde demokaart. De posities zijn geen echte plekken.',
+    mapNote: 'Benaderende demoposities in Heidelberg — geen opgemeten route.',
     destination: 'Bestemming',
     done: 'Klaar',
     timer: 'Tijd',
@@ -380,7 +380,7 @@ const nl: Dictionary = {
       },
       privacy: {
         title: 'Privacyverklaring (Datenschutzerklärung)',
-        body: 'Als je als gast speelt, wordt je voortgang alleen in je browser op dit toestel bewaard. Als je een account aanmaakt (via een eenmalige inloglink per e-mail) bewaren we je e-mailadres, je spelvoortgang en tot welke avonturen je toegang hebt, zodat je voortgang over toestellen synchroniseert. Als je je aanmeldt voor de nieuwsbrief bewaren we je e-mailadres met jouw toestemming totdat je je afmeldt. Geen advertentietrackers en geen locatiegegevens. Op je accountpagina kun je altijd al je gegevens downloaden of je account verwijderen. De volledige privacyverklaring volgens de AVG verschijnt hier vóór de lancering.',
+        body: 'Als je als gast speelt, wordt je voortgang alleen in je browser op dit toestel bewaard. Als je een account aanmaakt (via een eenmalige inloglink per e-mail) bewaren we je e-mailadres, je spelvoortgang en tot welke avonturen je toegang hebt, zodat je voortgang over toestellen synchroniseert. Als je je aanmeldt voor de nieuwsbrief bewaren we je e-mailadres met jouw toestemming totdat je je afmeldt. Geen advertentietrackers. Als je een controlepunt met GPS bevestigt, wordt je locatie alleen op je toestel gebruikt om de afstand te meten — ze wordt nooit opgeslagen of naar ons verstuurd; de kaart wordt geladen van OpenStreetMap, dat je IP-adres ontvangt om de tegels te leveren. Op je accountpagina kun je altijd al je gegevens downloaden of je account verwijderen. De volledige privacyverklaring volgens de AVG verschijnt hier vóór de lancering.',
       },
       terms: {
         title: 'Algemene voorwaarden (AGB)',
