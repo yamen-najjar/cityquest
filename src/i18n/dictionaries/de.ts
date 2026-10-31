@@ -81,8 +81,10 @@ const de: Dictionary = {
     newsletterLabel: 'E-Mail-Adresse',
     newsletterButton: 'Benachrichtigen',
     newsletterInvalid: 'Bitte gib eine gültige E-Mail-Adresse ein.',
-    newsletterNotice:
-      'Danke! Anmeldungen sind noch nicht geöffnet, deine Adresse wurde daher weder gespeichert noch versendet. Schau nach dem Start wieder vorbei.',
+    newsletterNotice: 'Fast geschafft — prüfe dein Postfach und bestätige deine E-Mail, um die Anmeldung abzuschließen.',
+    newsletterAlready: 'Du bist bereits angemeldet. Danke!',
+    newsletterUnavailable: 'Der Newsletter ist gerade nicht verfügbar. Bitte versuche es später erneut.',
+    newsletterError: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
   },
   cities: {
     title: 'Städte entdecken',
@@ -333,6 +335,26 @@ const de: Dictionary = {
     myAdventures: 'Meine Abenteuer',
     syncNote: 'Dein Spielfortschritt wird in deinem Konto gespeichert und zwischen deinen Geräten synchronisiert.',
     callbackError: 'Dieser Anmeldelink ist ungültig oder abgelaufen. Bitte fordere einen neuen an.',
+    dataTitle: 'Deine Daten',
+    exportData: 'Meine Daten herunterladen',
+    exportHint: 'Eine JSON-Kopie deines Kontos, Fortschritts, Zugangs und Newsletter-Status.',
+    deleteTitle: 'Konto löschen',
+    deleteText: 'Dies löscht dein Konto und den gesamten gespeicherten Fortschritt endgültig und kann nicht rückgängig gemacht werden.',
+    deleteConfirmLabel: 'Gib zur Bestätigung deine E-Mail-Adresse ein',
+    deleteButton: 'Mein Konto löschen',
+    deleting: 'Wird gelöscht…',
+    deleteMismatch: 'Das stimmt nicht mit deiner E-Mail-Adresse überein.',
+    deleteError: 'Dein Konto konnte nicht gelöscht werden. Bitte versuche es erneut.',
+  },
+  newsletter: {
+    confirmedTitle: 'Anmeldung bestätigt',
+    confirmedText: 'Danke! Du hörst von uns, sobald es losgeht.',
+    alreadyText: 'Deine Anmeldung war bereits bestätigt.',
+    unsubscribedTitle: 'Abgemeldet',
+    unsubscribedText: 'Du wurdest aus dem Newsletter entfernt. Schade, dass du gehst.',
+    invalidTitle: 'Link ungültig',
+    invalidText: 'Dieser Link ist ungültig oder abgelaufen. Bitte melde dich erneut an.',
+    backHome: 'Zurück zur Startseite',
   },
   achievements: {
     'first-clue': { name: 'Erste Spur', text: 'Löse dein erstes Kapitel.' },
@@ -353,7 +375,7 @@ const de: Dictionary = {
       },
       privacy: {
         title: 'Datenschutzerklärung',
-        body: 'In diesem Prototyp wird der Spielfortschritt ausschließlich im lokalen Speicher deines Browsers auf diesem Gerät abgelegt. Kein Konto, kein Tracking, keine Standortdaten. Die vollständige Datenschutzerklärung nach DSGVO erscheint hier vor dem Start.',
+        body: 'Wenn du als Gast spielst, wird der Fortschritt nur in deinem Browser auf diesem Gerät gespeichert. Wenn du ein Konto erstellst (über einen einmaligen Anmeldelink per E-Mail), speichern wir deine E-Mail-Adresse, deinen Spielfortschritt und deine freigeschalteten Abenteuer, damit dein Fortschritt geräteübergreifend synchronisiert. Wenn du den Newsletter abonnierst, speichern wir deine E-Mail-Adresse mit deiner Einwilligung, bis du dich abmeldest. Keine Werbe-Tracker und keine Standortdaten. Auf deiner Kontoseite kannst du jederzeit alle deine Daten herunterladen oder dein Konto löschen. Die vollständige Datenschutzerklärung nach DSGVO erscheint hier vor dem Start.',
       },
       terms: {
         title: 'Allgemeine Geschäftsbedingungen (AGB)',

@@ -71,8 +71,10 @@ const nl: Dictionary = {
     newsletterLabel: 'E-mailadres',
     newsletterButton: 'Houd me op de hoogte',
     newsletterInvalid: 'Vul een geldig e-mailadres in.',
-    newsletterNotice:
-      'Dank je wel. Aanmelden is nog niet mogelijk, dus je adres is niet opgeslagen en nergens naartoe gestuurd. Kom na de lancering nog eens terug.',
+    newsletterNotice: 'Bijna klaar — check je inbox en bevestig je e-mail om de aanmelding af te ronden.',
+    newsletterAlready: 'Je bent al aangemeld. Bedankt!',
+    newsletterUnavailable: 'De nieuwsbrief is nu niet beschikbaar. Probeer het later opnieuw.',
+    newsletterError: 'Er ging iets mis. Probeer het opnieuw.',
   },
   cities: {
     title: 'Ontdek steden',
@@ -323,6 +325,26 @@ const nl: Dictionary = {
     myAdventures: 'Mijn avonturen',
     syncNote: 'Je voortgang wordt opgeslagen in je account en gesynchroniseerd tussen je apparaten.',
     callbackError: 'Die inloglink is ongeldig of verlopen. Vraag een nieuwe aan.',
+    dataTitle: 'Jouw gegevens',
+    exportData: 'Mijn gegevens downloaden',
+    exportHint: 'Een JSON-kopie van je account, voortgang, toegang en nieuwsbriefstatus.',
+    deleteTitle: 'Account verwijderen',
+    deleteText: 'Dit verwijdert je account en alle opgeslagen voortgang definitief en kan niet ongedaan worden gemaakt.',
+    deleteConfirmLabel: 'Typ je e-mailadres ter bevestiging',
+    deleteButton: 'Mijn account verwijderen',
+    deleting: 'Bezig met verwijderen…',
+    deleteMismatch: 'Dat komt niet overeen met je e-mailadres.',
+    deleteError: 'Je account kon niet worden verwijderd. Probeer het opnieuw.',
+  },
+  newsletter: {
+    confirmedTitle: 'Aanmelding bevestigd',
+    confirmedText: 'Bedankt! Je hoort van ons zodra we live gaan.',
+    alreadyText: 'Je aanmelding was al bevestigd.',
+    unsubscribedTitle: 'Afgemeld',
+    unsubscribedText: 'Je bent uit de nieuwsbrief verwijderd. Jammer dat je gaat.',
+    invalidTitle: 'Link niet geldig',
+    invalidText: 'Deze link is ongeldig of verlopen. Meld je opnieuw aan.',
+    backHome: 'Terug naar home',
   },
   achievements: {
     'first-clue': { name: 'Eerste spoor', text: 'Los je eerste hoofdstuk op.' },
@@ -343,7 +365,7 @@ const nl: Dictionary = {
       },
       privacy: {
         title: 'Privacyverklaring (Datenschutzerklärung)',
-        body: 'In dit prototype wordt de spelvoortgang alleen in de lokale opslag van je browser op dit toestel bewaard. Geen account, geen tracking en geen locatiegegevens. De volledige privacyverklaring volgens de AVG verschijnt hier vóór de lancering.',
+        body: 'Als je als gast speelt, wordt je voortgang alleen in je browser op dit toestel bewaard. Als je een account aanmaakt (via een eenmalige inloglink per e-mail) bewaren we je e-mailadres, je spelvoortgang en tot welke avonturen je toegang hebt, zodat je voortgang over toestellen synchroniseert. Als je je aanmeldt voor de nieuwsbrief bewaren we je e-mailadres met jouw toestemming totdat je je afmeldt. Geen advertentietrackers en geen locatiegegevens. Op je accountpagina kun je altijd al je gegevens downloaden of je account verwijderen. De volledige privacyverklaring volgens de AVG verschijnt hier vóór de lancering.',
       },
       terms: {
         title: 'Algemene voorwaarden (AGB)',

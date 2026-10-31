@@ -78,8 +78,10 @@ const en = {
     newsletterLabel: 'Email address',
     newsletterButton: 'Notify me',
     newsletterInvalid: 'Please enter a valid email address.',
-    newsletterNotice:
-      'Thank you. Sign-ups are not open yet, so your address was not saved or sent anywhere. Please check back after launch.',
+    newsletterNotice: 'Almost there — check your inbox and confirm your email to finish subscribing.',
+    newsletterAlready: 'You are already subscribed. Thank you!',
+    newsletterUnavailable: 'The newsletter is not available right now. Please try again later.',
+    newsletterError: 'Something went wrong. Please try again.',
   },
   cities: {
     title: 'Explore cities',
@@ -330,6 +332,26 @@ const en = {
     myAdventures: 'My adventures',
     syncNote: 'Your game progress is saved to your account and synced across your devices.',
     callbackError: 'That sign-in link is invalid or has expired. Please request a new one.',
+    dataTitle: 'Your data',
+    exportData: 'Download my data',
+    exportHint: 'A JSON copy of your account, progress, access and newsletter status.',
+    deleteTitle: 'Delete account',
+    deleteText: 'This permanently deletes your account and all saved progress, and cannot be undone.',
+    deleteConfirmLabel: 'Type your email address to confirm',
+    deleteButton: 'Delete my account',
+    deleting: 'Deleting…',
+    deleteMismatch: 'That does not match your email address.',
+    deleteError: 'Your account could not be deleted. Please try again.',
+  },
+  newsletter: {
+    confirmedTitle: 'Subscription confirmed',
+    confirmedText: 'Thank you. You will hear from us about the launch.',
+    alreadyText: 'Your subscription was already confirmed.',
+    unsubscribedTitle: 'Unsubscribed',
+    unsubscribedText: 'You have been removed from the newsletter. Sorry to see you go.',
+    invalidTitle: 'Link not valid',
+    invalidText: 'This link is invalid or has expired. Please sign up again.',
+    backHome: 'Back to home',
   },
   achievements: {
     'first-clue': { name: 'First clue', text: 'Solve your first chapter.' },
@@ -350,7 +372,7 @@ const en = {
       },
       privacy: {
         title: 'Privacy policy (Datenschutzerklärung)',
-        body: 'In this prototype, game progress is stored only in your browser’s local storage on this device. No account, no tracking and no location data. The full privacy policy under the GDPR will appear here before launch.',
+        body: 'When you play as a guest, progress is stored only in your browser on this device. If you create an account (via a one-time email sign-in link), we store your email, your game progress and which adventures you have access to, so your progress syncs across devices. If you subscribe to the newsletter, we store your email with your consent until you unsubscribe. No advertising trackers and no location data. You can download all your data or delete your account at any time from your account page. The full privacy policy under the GDPR will appear here before launch.',
       },
       terms: {
         title: 'Terms and conditions (AGB)',

@@ -110,8 +110,14 @@ middleware forwards refreshed cookies; `getAdminUser` wrapped in `React.cache`; 
 email on error. **Deferred (documented):** making the publish toggle change the public catalogue (SSG →
 next deploy); an audit trail (who granted/revoked); preview of a *paid* adventure needs a self-grant.
 
-### M4 — GDPR + newsletter
-- [ ] Account deletion, data export, newsletter double opt-in
+### M4 — GDPR + newsletter (complete)
+- [x] Account deletion (`auth.admin.deleteUser`, cascade-verified: profiles/progress/entitlements/solves → 0; newsletter row removed by email) + a typed-email confirmation (D13)
+- [x] Data export: `/[locale]/account/export` returns the caller's own data as a JSON download
+- [x] Newsletter double opt-in (D14): `newsletter_subscribers` (RLS on, **no policies**, all privileges revoked — email is PII, service-role only); signup → pending + confirmation email → `/[locale]/newsletter?confirm=…` → confirmed; tokened unsubscribe
+- [x] Email via one `sendEmail` util — dev posts to local Mailpit, prod to a provider (`RESEND_API_KEY`); unconfigured → newsletter degrades gracefully, never 500s
+- [x] Admin newsletter screen (stats + subscribers + CSV export); privacy policy updated in all 4 locales to list what is collected + the export/deletion rights
+- [x] Verified live (signup → confirm end-to-end via Mailpit, export 200, deletion cascade, RLS: anon denied). 89 unit tests + i18n parity; typecheck clean
+- [ ] Reviewer-agent pass (Sonnet) on the M4 diff
 
 ## Env vars (Phase 2)
 
@@ -156,3 +162,9 @@ Already documented in `.env.example`. For local dev, `supabase start` prints the
   removes the trigger (admin is service-role-granted only; CLI bootstrap), mirrors email onto `profiles`,
   and tightens grants. Code switched to profiles-based reads, provenance-preserving grants, input
   validation, cached admin check. 89 unit tests; typecheck clean. **M3 complete.**
+- 2026-10-31 — M4 built and verified live: account deletion (cascade confirmed 1,1,1,1 → 0,0,0,0 via
+  `auth.admin.deleteUser`), JSON data export, newsletter double opt-in (migration `20261031133729`;
+  signup → Mailpit confirmation email → confirm page → status confirmed in the DB), `sendEmail` util
+  (Mailpit dev / provider prod), admin newsletter screen + CSV export, privacy copy updated (4 locales).
+  Newsletter table is PII-locked (RLS, no policies, privileges revoked; anon denied 42501). 89 unit
+  tests + i18n parity; typecheck clean. Reviewer pass next.

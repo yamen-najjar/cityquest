@@ -150,3 +150,23 @@ export async function revokeEntitlement(userId: string, adventure: string): Prom
   const { error } = await admin.from('entitlements').delete().eq('user_id', userId).eq('adventure', adventure);
   if (error) throw error;
 }
+
+export type Subscriber = { email: string; status: string; locale: string; consentAt: string; confirmedAt: string | null };
+export type NewsletterStats = { confirmed: number; pending: number; unsubscribed: number };
+
+export async function newsletterStats(): Promise<NewsletterStats> {
+  const admin = createAdminClient();
+  const one = (status: string) => admin.from('newsletter_subscribers').select('*', { count: 'exact', head: true }).eq('status', status);
+  const [confirmed, pending, unsubscribed] = await Promise.all([one('confirmed'), one('pending'), one('unsubscribed')]);
+  return { confirmed: confirmed.count ?? 0, pending: pending.count ?? 0, unsubscribed: unsubscribed.count ?? 0 };
+}
+
+export async function listSubscribers(): Promise<Subscriber[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from('newsletter_subscribers')
+    .select('email, status, locale, consent_at, confirmed_at')
+    .order('consent_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map((s) => ({ email: s.email, status: s.status, locale: s.locale, consentAt: s.consent_at, confirmedAt: s.confirmed_at }));
+}

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { SignInForm } from '@/components/auth/SignInForm';
 import { SignOutButton } from '@/components/auth/SignOutButton';
+import { DeleteAccount } from '@/components/account/DeleteAccount';
 import { SectionHeading } from '@/components/Section';
 import { isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionary';
@@ -49,18 +50,30 @@ export default async function AccountPage({ params, searchParams }: Props) {
         )}
 
         {user ? (
-          <div className="card p-8">
-            <p className="text-sm text-ivory-mute">{t.signedInAs}</p>
-            <p className="mt-1 break-all font-display text-xl text-gold" dir="ltr">
-              {user.email}
-            </p>
-            <p className="mt-4 text-sm text-ivory-dim">{t.syncNote}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link href={`/${locale}/dashboard`} className="btn-gold">
-                {t.myAdventures}
-              </Link>
-              <SignOutButton label={t.signOut} busyLabel={t.signingOut} />
+          <div className="flex flex-col gap-6">
+            <div className="card p-8">
+              <p className="text-sm text-ivory-mute">{t.signedInAs}</p>
+              <p className="mt-1 break-all font-display text-xl text-gold" dir="ltr">
+                {user.email}
+              </p>
+              <p className="mt-4 text-sm text-ivory-dim">{t.syncNote}</p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link href={`/${locale}/dashboard`} className="btn-gold">
+                  {t.myAdventures}
+                </Link>
+                <SignOutButton label={t.signOut} busyLabel={t.signingOut} />
+              </div>
             </div>
+
+            <div className="card p-6">
+              <h2 className="font-display text-lg text-ivory">{t.dataTitle}</h2>
+              <p className="mt-2 text-sm text-ivory-dim">{t.exportHint}</p>
+              <a href={`/${locale}/account/export`} className="btn-ghost mt-4">
+                {t.exportData}
+              </a>
+            </div>
+
+            <DeleteAccount locale={locale} email={user.email ?? ''} t={t} />
           </div>
         ) : (
           <SignInForm locale={locale} t={t} />

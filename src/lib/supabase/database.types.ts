@@ -65,6 +65,20 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"newsletter_subscribers": {
+                  Row: {
+                    "confirmed_at": string | null,"consent_at": string,"email": string,"locale": string,"source": string | null,"status": string,"token": string,"unsubscribed_at": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "confirmed_at"?: string | null,"consent_at"?: string,"email": string,"locale"?: string,"source"?: string | null,"status"?: string,"token"?: string,"unsubscribed_at"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "confirmed_at"?: string | null,"consent_at"?: string,"email"?: string,"locale"?: string,"source"?: string | null,"status"?: string,"token"?: string,"unsubscribed_at"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"profiles": {
                   Row: {
                     "created_at": string,"display_name": string | null,"email": string | null,"id": string,"locale": string,"updated_at": string
