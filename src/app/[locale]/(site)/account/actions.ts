@@ -16,7 +16,10 @@ export async function deleteAccountAction(): Promise<{ ok: boolean }> {
   if (!user) return { ok: false };
 
   const admin = createAdminClient();
-  if (user.email) await admin.from('newsletter_subscribers').delete().eq('email', user.email.toLowerCase());
+  // Delete the account first; only if that succeeds remove the newsletter row (which is keyed by email,
+  // not cascaded). This way a failed deletion never silently drops the newsletter subscription.
   const { error } = await admin.auth.admin.deleteUser(user.id);
-  return { ok: !error };
+  if (error) return { ok: false };
+  if (user.email) await admin.from('newsletter_subscribers').delete().eq('email', user.email.toLowerCase());
+  return { ok: true };
 }

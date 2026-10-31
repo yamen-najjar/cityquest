@@ -354,6 +354,10 @@ const de: Dictionary = {
     unsubscribedText: 'Du wurdest aus dem Newsletter entfernt. Schade, dass du gehst.',
     invalidTitle: 'Link ungültig',
     invalidText: 'Dieser Link ist ungültig oder abgelaufen. Bitte melde dich erneut an.',
+    confirmPrompt: 'Bestätige deine Anmeldung zum CityQuest-Newsletter.',
+    confirmCta: 'Anmeldung bestätigen',
+    unsubscribePrompt: 'Melde dich vom CityQuest-Newsletter ab.',
+    unsubscribeCta: 'Abmelden',
     backHome: 'Zurück zur Startseite',
   },
   achievements: {

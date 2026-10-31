@@ -343,6 +343,10 @@ const ar: Dictionary = {
     unsubscribedText: 'تمت إزالتك من النشرة البريدية. نأسف لمغادرتك.',
     invalidTitle: 'الرابط غير صالح',
     invalidText: 'هذا الرابط غير صالح أو منتهي الصلاحية. يرجى الاشتراك من جديد.',
+    confirmPrompt: 'أكِّد اشتراكك في نشرة CityQuest البريدية.',
+    confirmCta: 'تأكيد الاشتراك',
+    unsubscribePrompt: 'إلغاء اشتراكك في نشرة CityQuest البريدية.',
+    unsubscribeCta: 'إلغاء الاشتراك',
     backHome: 'العودة إلى الصفحة الرئيسية',
   },
   achievements: {

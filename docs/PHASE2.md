@@ -117,7 +117,19 @@ next deploy); an audit trail (who granted/revoked); preview of a *paid* adventur
 - [x] Email via one `sendEmail` util — dev posts to local Mailpit, prod to a provider (`RESEND_API_KEY`); unconfigured → newsletter degrades gracefully, never 500s
 - [x] Admin newsletter screen (stats + subscribers + CSV export); privacy policy updated in all 4 locales to list what is collected + the export/deletion rights
 - [x] Verified live (signup → confirm end-to-end via Mailpit, export 200, deletion cascade, RLS: anon denied). 89 unit tests + i18n parity; typecheck clean
-- [ ] Reviewer-agent pass (Sonnet) on the M4 diff
+- [x] Reviewer-agent pass (Sonnet) — no cross-user/PII exploit; fixes applied (below)
+
+**M4 review (Sonnet) — authz/RLS/PII sound; email-link design was the main risk. Fixed:** confirm/
+unsubscribe no longer mutate on link load — the page shows a button that POSTs (so an email scanner
+prefetching the link can't confirm or silently unsubscribe anyone), and the confirm email carries only
+the confirm link; confirm works only from a still-`pending`, non-expired (7-day) token, the token is
+**rotated** on every (re)subscribe and its index is now `unique`; confirm/unsubscribe URLs are built from
+the fixed `siteUrl`, not the request Host header, and interpolated values are HTML-escaped; CSV export
+neutralises spreadsheet formula injection; the subscriber list/CSV paginate past the 1000-row cap; a
+60-second per-address cooldown blocks rapid re-send/mail-bombing; `sendEmail` has a timeout and logs
+failures; deletion deletes the account first then the newsletter row, and the client now truly signs out
+(`signOutAndClear`). **Deferred (documented, as in M2):** per-IP rate limiting and a stale-`pending`
+purge; account deletion has no re-auth step (the typed-email confirm is client-side, by design).
 
 ## Env vars (Phase 2)
 
@@ -168,3 +180,10 @@ Already documented in `.env.example`. For local dev, `supabase start` prints the
   (Mailpit dev / provider prod), admin newsletter screen + CSV export, privacy copy updated (4 locales).
   Newsletter table is PII-locked (RLS, no policies, privileges revoked; anon denied 42501). 89 unit
   tests + i18n parity; typecheck clean. Reviewer pass next.
+- 2026-10-31 — M4 reviewed (Sonnet): authz/RLS/PII sound, no cross-user exploit. Hardened the email-link
+  flow — confirm/unsubscribe are now button POSTs (scanner-safe, verified: loading the link leaves the
+  row `pending`; the button confirms), tokens rotate + expire + unique index, URLs from `siteUrl` not the
+  Host header, CSV formula-injection guard, paginated subscriber export, per-address send cooldown,
+  `sendEmail` timeout/logging, delete-then-remove ordering + real sign-out. Migration
+  `20261031135526`. 89 unit tests + i18n parity; typecheck clean; re-verified live. **M4 complete — Phase
+  2 feature work done; ready to merge to main.**

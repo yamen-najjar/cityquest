@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { deleteAccountAction } from '@/app/[locale]/(site)/account/actions';
-import { clearAllLocalProgress } from '@/lib/engine/storage';
+import { signOutAndClear } from '@/lib/engine/sync';
 import type { Dictionary } from '@/i18n/dictionary';
 
 type Props = { locale: string; email: string; t: Dictionary['account'] };
@@ -22,11 +22,11 @@ export function DeleteAccount({ locale, email, t }: Props) {
       setState('error');
       return;
     }
-    // Account is gone server-side; wipe this device's local save and leave the account area.
+    // Account is gone server-side; clear the local session cookie and this device's save, then leave.
     try {
-      clearAllLocalProgress();
+      await signOutAndClear();
     } catch {
-      // Private window or blocked storage — nothing to clear.
+      // Private window / blocked storage / already-invalid session — nothing more to clear.
     }
     router.replace(`/${locale}`);
     router.refresh();

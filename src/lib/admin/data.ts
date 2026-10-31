@@ -163,10 +163,19 @@ export async function newsletterStats(): Promise<NewsletterStats> {
 
 export async function listSubscribers(): Promise<Subscriber[]> {
   const admin = createAdminClient();
-  const { data, error } = await admin
-    .from('newsletter_subscribers')
-    .select('email, status, locale, consent_at, confirmed_at')
-    .order('consent_at', { ascending: false });
-  if (error) throw error;
-  return (data ?? []).map((s) => ({ email: s.email, status: s.status, locale: s.locale, consentAt: s.consent_at, confirmedAt: s.confirmed_at }));
+  const page = 1000;
+  const out: Subscriber[] = [];
+  // Page through so the admin list and the CSV export are complete past the 1000-row API cap.
+  for (let from = 0; ; from += page) {
+    const { data, error } = await admin
+      .from('newsletter_subscribers')
+      .select('email, status, locale, consent_at, confirmed_at')
+      .order('consent_at', { ascending: false })
+      .range(from, from + page - 1);
+    if (error) throw error;
+    const rows = data ?? [];
+    out.push(...rows.map((s) => ({ email: s.email, status: s.status, locale: s.locale, consentAt: s.consent_at, confirmedAt: s.confirmed_at })));
+    if (rows.length < page) break;
+  }
+  return out;
 }

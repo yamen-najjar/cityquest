@@ -351,6 +351,10 @@ const en = {
     unsubscribedText: 'You have been removed from the newsletter. Sorry to see you go.',
     invalidTitle: 'Link not valid',
     invalidText: 'This link is invalid or has expired. Please sign up again.',
+    confirmPrompt: 'Confirm your subscription to the CityQuest newsletter.',
+    confirmCta: 'Confirm subscription',
+    unsubscribePrompt: 'Unsubscribe from the CityQuest newsletter.',
+    unsubscribeCta: 'Unsubscribe',
     backHome: 'Back to home',
   },
   achievements: {

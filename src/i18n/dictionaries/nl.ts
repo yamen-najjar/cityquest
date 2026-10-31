@@ -344,6 +344,10 @@ const nl: Dictionary = {
     unsubscribedText: 'Je bent uit de nieuwsbrief verwijderd. Jammer dat je gaat.',
     invalidTitle: 'Link niet geldig',
     invalidText: 'Deze link is ongeldig of verlopen. Meld je opnieuw aan.',
+    confirmPrompt: 'Bevestig je aanmelding voor de CityQuest-nieuwsbrief.',
+    confirmCta: 'Aanmelding bevestigen',
+    unsubscribePrompt: 'Meld je af voor de CityQuest-nieuwsbrief.',
+    unsubscribeCta: 'Afmelden',
     backHome: 'Terug naar home',
   },
   achievements: {

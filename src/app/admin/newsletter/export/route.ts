@@ -7,7 +7,12 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   await requireAdmin();
   const subscribers = await listSubscribers();
-  const esc = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
+  // Quote every field, and neutralise spreadsheet formula injection: a cell starting with = + - @ (or a
+  // control char) is prefixed with a single quote so Excel/Sheets treats it as text.
+  const esc = (v: string) => {
+    const s = /^[=+\-@\t\r]/.test(v) ? `'${v}` : v;
+    return `"${s.replace(/"/g, '""')}"`;
+  };
   const lines = [['email', 'status', 'locale', 'consent_at', 'confirmed_at'].join(',')];
   for (const s of subscribers) {
     lines.push([s.email, s.status, s.locale, s.consentAt, s.confirmedAt ?? ''].map(esc).join(','));
