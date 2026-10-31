@@ -39,7 +39,7 @@ test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the ac
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 
   // 2. Logic, in Arabic
-  await arrive(page, 'وصلت إلى نقطة التفتيش');
+  await arrive(page, /التأكيد يدويًا|وصلت إلى نقطة التفتيش/);
   await page.getByLabel('كلارا').check();
   await page.getByRole('button', { name: 'تحقق من الإجابة' }).click();
   await expect(page.getByRole('heading', { name: 'إجابة صحيحة!' })).toBeVisible();

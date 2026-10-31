@@ -33,7 +33,7 @@ async function signIn(page: import('@playwright/test').Page, request: APIRequest
   await expect(page).toHaveURL(/\/en\/account$/);
 }
 
-test('sign in with a magic link, then sign out', async ({ page, request }) => {
+test('sign in with a magic link, then sign out', { tag: '@backend' }, async ({ page, request }) => {
   const address = `e2e-auth-${Date.now()}@test.local`;
   await signIn(page, request, address);
 
@@ -46,7 +46,7 @@ test('sign in with a magic link, then sign out', async ({ page, request }) => {
   await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();
 });
 
-test('progress is mirrored to the account and restored on another device', async ({ page, request }) => {
+test('progress is mirrored to the account and restored on another device', { tag: '@backend' }, async ({ page, request }) => {
   const address = `e2e-sync-${Date.now()}@test.local`;
   await signIn(page, request, address);
 
