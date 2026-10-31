@@ -50,3 +50,20 @@ export const localProgressStore: ProgressStore = {
     return out;
   },
 };
+
+/**
+ * Remove every saved game from this browser. Used on sign-out so one player's saves never carry into the
+ * next account signed in on a shared device (they are safe in the account they were synced to).
+ */
+export function clearAllLocalProgress(): void {
+  try {
+    const keys: string[] = [];
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const key = window.localStorage.key(i);
+      if (key?.startsWith(PREFIX)) keys.push(key);
+    }
+    for (const key of keys) window.localStorage.removeItem(key);
+  } catch {
+    /* storage unavailable */
+  }
+}
