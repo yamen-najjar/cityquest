@@ -35,7 +35,7 @@ test('navigation, search and filters work', async ({ page, isMobile }) => {
   await page.getByLabel('Theme').selectOption('treasure');
   await expect(page.getByText('No adventure matches these filters yet.')).toBeVisible();
   await page.getByRole('link', { name: 'Reset filters' }).click();
-  await expect(page.getByRole('status').filter({ hasText: 'result' })).toHaveText('2 result(s)');
+  await expect(page.getByRole('status').filter({ hasText: 'result' })).toHaveText('3 result(s)');
 
   if (isMobile) await page.getByRole('button', { name: 'Menu' }).click();
   await page.getByRole('navigation', { name: 'Main navigation' }).last().getByRole('link', { name: 'Cities' }).click();
@@ -58,15 +58,17 @@ test('switching language keeps the page and its filters', async ({ page, isMobil
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Abenteuer');
 });
 
-test('the newsletter form validates and does not pretend to subscribe', async ({ page }) => {
+test('the newsletter form validates and reports a real status', async ({ page }) => {
   await page.goto('/en');
   const email = page.getByRole('textbox', { name: 'Email address' });
   await email.fill('not-an-email');
   await page.getByRole('button', { name: 'Notify me' }).click();
   await expect(page.getByText('Please enter a valid email address.')).toBeVisible();
+  // A valid address reports the truth: double opt-in ("check your inbox") when a backend is configured,
+  // or "not available" when it isn't (e.g. CI). It never fakes a subscription.
   await email.fill('player@example.com');
   await page.getByRole('button', { name: 'Notify me' }).click();
-  await expect(page.getByText('your address was not saved or sent anywhere')).toBeVisible();
+  await expect(page.getByText(/check your inbox|not available right now/i)).toBeVisible({ timeout: 15_000 });
 });
 
 test('unknown pages show the localised 404', async ({ page }) => {

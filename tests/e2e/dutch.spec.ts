@@ -8,7 +8,7 @@ test('the game in Dutch: the Dutch cipher, a Dutch answer and the journal', asyn
   await page.getByRole('button', { name: 'Start het avontuur' }).click();
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Het anonieme bericht');
-  await page.getByRole('button', { name: 'Ik ben bij het controlepunt' }).click();
+  await page.getByRole('button', { name: /Handmatig bevestigen|Ik ben bij het controlepunt/ }).click();
   // The number cipher spells the Dutch word TOREN.
   await expect(page.getByText('20 · 15 · 18 · 5 · 14')).toBeVisible();
   await page.getByRole('textbox', { name: 'Jouw antwoord' }).fill('toren');

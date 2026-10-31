@@ -264,7 +264,7 @@ export const lostManuscript: Authored<Adventure> = {
           'وتحتها لا شيء سوى سطر من الأرقام.',
         ],
       },
-      checkpoint: { id: 'cp-square', name: { de: 'Treffpunkt in der Altstadt', en: 'Old-town meeting point', ar: 'نقطة اللقاء في البلدة القديمة' }, simulated: true, mapPosition: { x: 14, y: 40 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-square', name: { de: 'Treffpunkt in der Altstadt', en: 'Old-town meeting point', ar: 'نقطة اللقاء في البلدة القديمة' }, simulated: true, mapPosition: { x: 14, y: 40 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4093, lng: 8.6937 }, code: 'cq-lost-manuscript-1' },
       puzzle: {
         type: 'cipher',
         prompt: {
@@ -308,7 +308,7 @@ export const lostManuscript: Authored<Adventure> = {
           'أحدهم أخذ مفتاح الأرشيف. يكتب VII: «واحد منهم فقط يقول الحقيقة».',
         ],
       },
-      checkpoint: { id: 'cp-tower', name: { de: 'Am Turm', en: 'At the tower', ar: 'عند البرج' }, simulated: true, mapPosition: { x: 30, y: 22 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-tower', name: { de: 'Am Turm', en: 'At the tower', ar: 'عند البرج' }, simulated: true, mapPosition: { x: 30, y: 22 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4098, lng: 8.698 }, code: 'cq-lost-manuscript-2' },
       puzzle: {
         type: 'logic',
         prompt: { de: 'Genau eine Aussage ist wahr. Wer hat den Schlüssel genommen?', en: 'Exactly one statement is true. Who took the key?', ar: 'عبارة واحدة فقط صحيحة. من أخذ المفتاح؟' },
@@ -356,7 +356,7 @@ export const lostManuscript: Authored<Adventure> = {
           'خزانة مقفلة بقفل من أربعة أرقام، لكنه يعرض رموزاً بدل الأرقام، هي نفسها المرسومة على رسالتك الممزقة.',
         ],
       },
-      checkpoint: { id: 'cp-workshop', name: { de: 'Die Werkstatt', en: 'The workshop', ar: 'الورشة' }, simulated: true, mapPosition: { x: 46, y: 38 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-workshop', name: { de: 'Die Werkstatt', en: 'The workshop', ar: 'الورشة' }, simulated: true, mapPosition: { x: 46, y: 38 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4107, lng: 8.7064 }, code: 'cq-lost-manuscript-3' },
       puzzle: {
         type: 'image',
         visual: 'symbol-equations',
@@ -401,7 +401,7 @@ export const lostManuscript: Authored<Adventure> = {
           'على المكتب ورقة نشّاف. ومن يكتب بالحبر ويجفّفه يترك عليها أثراً معكوساً لا يكاد يُرى.',
         ],
       },
-      checkpoint: { id: 'cp-study', name: { de: 'Kehls Arbeitszimmer', en: 'Kehl’s study', ar: 'مكتب كيل' }, simulated: true, mapPosition: { x: 58, y: 20 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-study', name: { de: 'Kehls Arbeitszimmer', en: 'Kehl’s study', ar: 'مكتب كيل' }, simulated: true, mapPosition: { x: 58, y: 20 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.412, lng: 8.7105 }, code: 'cq-lost-manuscript-4' },
       puzzle: {
         type: 'reveal',
         revealMirrored: true,
@@ -447,7 +447,7 @@ export const lostManuscript: Authored<Adventure> = {
           'لا ثقب مفتاح في الصندوق، بل نقش على غطائه: «لا معدن ولا ورق ممزق. وحده النور الذي يدلّ على الطريق يفتحني».',
         ],
       },
-      checkpoint: { id: 'cp-river', name: { de: 'Am Flussufer', en: 'On the riverbank', ar: 'على ضفة النهر' }, simulated: true, mapPosition: { x: 68, y: 64 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-river', name: { de: 'Am Flussufer', en: 'On the riverbank', ar: 'على ضفة النهر' }, simulated: true, mapPosition: { x: 68, y: 64 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4112, lng: 8.712 }, code: 'cq-lost-manuscript-5' },
       puzzle: {
         type: 'item-use',
         fromInventory: true,
@@ -485,7 +485,7 @@ export const lostManuscript: Authored<Adventure> = {
           'أحدهم يرسل إليك أرقاماً. والنافذة تابعة لأرشيف الفوانيس السبعة.',
         ],
       },
-      checkpoint: { id: 'cp-bank', name: { de: 'Gegenüber dem Archiv', en: 'Across from the archive', ar: 'مقابل الأرشيف' }, simulated: true, mapPosition: { x: 80, y: 50 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-bank', name: { de: 'Gegenüber dem Archiv', en: 'Across from the archive', ar: 'مقابل الأرشيف' }, simulated: true, mapPosition: { x: 80, y: 50 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4128, lng: 8.7107 }, code: 'cq-lost-manuscript-6' },
       puzzle: {
         type: 'morse',
         morse: '.---- ---.. ....- --...',
@@ -526,7 +526,7 @@ export const lostManuscript: Authored<Adventure> = {
           '«اقرأ الصفحة»، تقول. «عندها ستفهم لماذا جعلتُ المخطوطة تختفي».',
         ],
       },
-      checkpoint: { id: 'cp-archive', name: { de: 'Die Archivstufen', en: 'The archive steps', ar: 'درجات الأرشيف' }, simulated: true, mapPosition: { x: 88, y: 28 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-archive', name: { de: 'Die Archivstufen', en: 'The archive steps', ar: 'درجات الأرشيف' }, simulated: true, mapPosition: { x: 88, y: 28 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.411, lng: 8.716 }, code: 'cq-lost-manuscript-7' },
       puzzle: {
         type: 'text',
         prompt: { de: 'Die Buchstaben stehen in umgekehrter Reihenfolge. Welches Wort steht auf der Seite?', en: 'The letters are in reverse order. Which word is on the page?', ar: 'الحروف مكتوبة بترتيب معكوس. ما الكلمة المكتوبة على الصفحة؟' },
@@ -565,7 +565,7 @@ export const lostManuscript: Authored<Adventure> = {
           'تنظر إليك: «لقد رأيت كل ما لم أستطع رؤيته. من كان؟»',
         ],
       },
-      checkpoint: { id: 'cp-backdoor', name: { de: 'Die Hintertür des Archivs', en: 'The archive’s back door', ar: 'الباب الخلفي للأرشيف' }, simulated: true, mapPosition: { x: 92, y: 14 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-backdoor', name: { de: 'Die Hintertür des Archivs', en: 'The archive’s back door', ar: 'الباب الخلفي للأرشيف' }, simulated: true, mapPosition: { x: 92, y: 14 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4106, lng: 8.7156 }, code: 'cq-lost-manuscript-8' },
       puzzle: {
         type: 'deduction',
         prompt: {

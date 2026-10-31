@@ -19,12 +19,14 @@ describe('catalog filters', () => {
     const slugs = (f: Parameters<typeof filterAdventures>[1]) => filterAdventures(adventures, f).map((a) => a.slug);
     expect(slugs({ theme: 'mystery' })).toEqual(['lost-manuscript']);
     expect(slugs({ theme: 'escape' })).toEqual(['neckar-ring']);
+    expect(slugs({ theme: 'detective' })).toEqual(['het-duivelshuis']);
     expect(slugs({ theme: 'treasure' })).toEqual([]);
-    expect(slugs({ difficulty: 'medium', group: 'family' })).toEqual(['lost-manuscript']);
-    expect(slugs({ group: 'couples' })).toEqual(['lost-manuscript', 'neckar-ring']);
+    expect(slugs({ difficulty: 'medium', group: 'family' })).toEqual(['lost-manuscript', 'het-duivelshuis']);
+    expect(slugs({ group: 'couples' })).toEqual(['lost-manuscript', 'neckar-ring', 'het-duivelshuis']);
     expect(slugs({ group: 'corporate' })).toEqual([]);
-    expect(slugs({ duration: 'medium' })).toHaveLength(2);
+    expect(slugs({ duration: 'medium' })).toHaveLength(3);
     expect(slugs({ city: 'heidelberg' })).toHaveLength(2);
+    expect(slugs({ city: 'arnhem' })).toEqual(['het-duivelshuis']);
     expect(slugs({ city: 'berlin' })).toEqual([]);
   });
 

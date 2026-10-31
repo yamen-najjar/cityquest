@@ -9,7 +9,9 @@ export async function fresh(page: Page, path: string) {
   await page.reload();
 }
 
-export async function arrive(page: Page, label = 'I am at the checkpoint') {
+// Located checkpoints (Phase 4) show "Confirm manually" as the always-available fallback; a checkpoint
+// with no coordinates still shows "I am at the checkpoint". Match either by default.
+export async function arrive(page: Page, label: string | RegExp = /Confirm manually|I am at the checkpoint/) {
   await page.getByRole('button', { name: label }).click();
 }
 

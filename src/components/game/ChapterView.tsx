@@ -8,8 +8,9 @@ import { sfx, speak, stopSpeaking } from '@/lib/audio';
 import type { Action, Progress } from '@/lib/engine/progress';
 import { prefersReducedMotion } from '../three/support';
 import { DemoMap } from './DemoMap';
+import { CheckpointArrival } from './CheckpointArrival';
 import { ItemIcon } from './ItemIcon';
-import { Artifact3D, Cutscene3D, Lock3D, Map3D } from './lazy';
+import { Artifact3D, Cutscene3D, Lock3D, Map3D, RealMap } from './lazy';
 import { CipherWheel } from './puzzles/CipherWheel';
 import { Deduction } from './puzzles/Deduction';
 import { Interrogation } from './puzzles/Interrogation';
@@ -62,6 +63,7 @@ export function ChapterView({
   const [typing, setTyping] = useState(false);
   const [code, setCode] = useState('0'.repeat(digits));
   const [opening, setOpening] = useState(false);
+  const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
   const useLock = three && digits > 0 && !typing;
   const inspect3D = three && !!puzzle.model;
   const hintsShown = p.hintsUsed[chapter.id] ?? 0;
@@ -187,7 +189,9 @@ export function ChapterView({
           <h2 id="cp-title" className="eyebrow">
             {t.checkpoint}
           </h2>
-          {three ? (
+          {chapter.checkpoint.coordinates ? (
+            <RealMap chapters={a.chapters} current={index} solved={p.solved} locale={locale} labels={{ title: t.map, note: t.mapNote, destination: t.destination, done: t.done }} userPosition={userPosition} />
+          ) : three ? (
             <Map3D chapters={a.chapters} current={index} solved={p.solved} locale={locale} labels={{ title: t.map, note: `${t.mapNote} ${t.threeD.drag}`, destination: t.destination, done: t.done }} />
           ) : (
             <DemoMap chapters={a.chapters} current={index} solved={p.solved} locale={locale} labels={{ title: t.map, note: t.mapNote, destination: t.destination, done: t.done }} />
@@ -202,9 +206,13 @@ export function ChapterView({
               <span aria-hidden="true">⚠</span>
               {t.safety}
             </p>
-            <button type="button" className="btn-gold mt-5 w-full sm:w-auto" onClick={() => dispatch({ type: 'arrive' })}>
-              {t.arrive}
-            </button>
+            <CheckpointArrival
+              checkpoint={chapter.checkpoint}
+              locale={locale}
+              t={t}
+              onArrive={() => dispatch({ type: 'arrive' })}
+              onPosition={setUserPosition}
+            />
           </div>
         </section>
       )}

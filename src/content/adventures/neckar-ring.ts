@@ -272,7 +272,7 @@ export const neckarRing: Authored<Adventure> = {
           'ترتجف يداها وهي تتركه. على الصندوق قفل من ثلاثة أرقام، وتحته ورقة صفراء ملصقة.',
         ],
       },
-      checkpoint: { id: 'cp-shop', name: { de: 'Der Antiquitätenladen', en: 'The antique shop', ar: 'محل الأنتيكات' }, simulated: true, mapPosition: { x: 12, y: 30 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-shop', name: { de: 'Der Antiquitätenladen', en: 'The antique shop', ar: 'محل الأنتيكات' }, simulated: true, mapPosition: { x: 12, y: 30 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4093, lng: 8.6937 }, code: 'cq-neckar-ring-1' },
       puzzle: {
         type: 'number-code',
         prompt: {
@@ -322,7 +322,7 @@ export const neckarRing: Authored<Adventure> = {
           'في واجهة المحل المقابل ترى رجلاً طويلاً بمعطف رمادي يقف خلفك. تلتفت، فتجد الزقاق فارغاً.',
         ],
       },
-      checkpoint: { id: 'cp-wall', name: { de: 'Die beschriebene Mauer', en: 'The written wall', ar: 'الجدار المكتوب' }, simulated: true, mapPosition: { x: 26, y: 16 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-wall', name: { de: 'Die beschriebene Mauer', en: 'The written wall', ar: 'الجدار المكتوب' }, simulated: true, mapPosition: { x: 26, y: 16 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4138, lng: 8.6995 }, code: 'cq-neckar-ring-2' },
       puzzle: {
         type: 'reveal',
         revealMirrored: true,
@@ -375,7 +375,7 @@ export const neckarRing: Authored<Adventure> = {
           '«واحد آخر بالخاتم الفضي»، يتمتم. «ظننت أنني لن أراه مرة أخرى».',
         ],
       },
-      checkpoint: { id: 'cp-square', name: { de: 'Der Turmplatz', en: 'The tower square', ar: 'ساحة البرج' }, simulated: true, mapPosition: { x: 40, y: 30 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-square', name: { de: 'Der Turmplatz', en: 'The tower square', ar: 'ساحة البرج' }, simulated: true, mapPosition: { x: 40, y: 30 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4129, lng: 8.6945 }, code: 'cq-neckar-ring-3' },
       puzzle: {
         type: 'interrogate',
         interview: {
@@ -462,7 +462,7 @@ export const neckarRing: Authored<Adventure> = {
           'أمامك تتفرّع ثلاثة أزقة. وتتذكر كلام الحارس: ليس في الساحة أبداً، بل في النوافذ فقط.',
         ],
       },
-      checkpoint: { id: 'cp-lanes', name: { de: 'Die drei Gassen', en: 'The three lanes', ar: 'الأزقة الثلاثة' }, simulated: true, mapPosition: { x: 52, y: 44 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-lanes', name: { de: 'Die drei Gassen', en: 'The three lanes', ar: 'الأزقة الثلاثة' }, simulated: true, mapPosition: { x: 52, y: 44 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4118, lng: 8.7045 }, code: 'cq-neckar-ring-4' },
       puzzle: {
         type: 'logic',
         prompt: { de: 'Durch welche Gasse kann er dir nicht folgen?', en: 'Which lane can he not follow you through?', ar: 'عبر أي زقاق لا يستطيع أن يلحق بك؟' },
@@ -510,7 +510,7 @@ export const neckarRing: Authored<Adventure> = {
           'أربعة أشرطة من الورق بأطراف مهترئة. مجتمعةً تروي من أين جاء خاتمك.',
         ],
       },
-      checkpoint: { id: 'cp-workshop', name: { de: 'Miras Werkstatt', en: 'Mira’s workshop', ar: 'ورشة ميرا' }, simulated: true, mapPosition: { x: 62, y: 22 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-workshop', name: { de: 'Miras Werkstatt', en: 'Mira’s workshop', ar: 'ورشة ميرا' }, simulated: true, mapPosition: { x: 62, y: 22 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4118, lng: 8.7103 }, code: 'cq-neckar-ring-5' },
       puzzle: {
         type: 'order',
         prompt: {
@@ -558,7 +558,7 @@ export const neckarRing: Authored<Adventure> = {
           'في المرآة على الجدار يتحرك شيء رمادي، فترمي ميرا عليها قطعة قماش بسرعة.',
         ],
       },
-      checkpoint: { id: 'cp-bench', name: { de: 'Die Werkbank', en: 'The workbench', ar: 'طاولة العمل' }, simulated: true, mapPosition: { x: 70, y: 32 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-bench', name: { de: 'Die Werkbank', en: 'The workbench', ar: 'طاولة العمل' }, simulated: true, mapPosition: { x: 70, y: 32 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4128, lng: 8.7107 }, code: 'cq-neckar-ring-6' },
       puzzle: {
         type: 'cipher',
         prompt: {
@@ -600,7 +600,7 @@ export const neckarRing: Authored<Adventure> = {
           '«أبجدية مزاحة»، تقول ميرا وتضع على الطاولة عجلة شيفرة نحاسية. «كان صبيان الصاغة يستعملون مثل هذه العجلات، والمفتاح يُعدّ دائماً على الخاتم نفسه».',
         ],
       },
-      checkpoint: { id: 'cp-table', name: { de: 'Miras Tisch', en: 'Mira’s table', ar: 'طاولة ميرا' }, simulated: true, mapPosition: { x: 66, y: 12 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-table', name: { de: 'Miras Tisch', en: 'Mira’s table', ar: 'طاولة ميرا' }, simulated: true, mapPosition: { x: 66, y: 12 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.4155, lng: 8.706 }, code: 'cq-neckar-ring-7' },
       puzzle: {
         type: 'cipher-wheel',
         prompt: {
@@ -644,7 +644,7 @@ export const neckarRing: Authored<Adventure> = {
           '«اسم مقابل اسم»، يقول صوته من الماء. «قل لي اسم من يجب أن أعيده، وأثبت ذلك. أو ابقَ لي إلى الأبد».',
         ],
       },
-      checkpoint: { id: 'cp-bridge', name: { de: 'Die Brücke', en: 'The bridge', ar: 'الجسر' }, simulated: true, mapPosition: { x: 84, y: 62 }, verification: ['manual'] },
+      checkpoint: { id: 'cp-bridge', name: { de: 'Die Brücke', en: 'The bridge', ar: 'الجسر' }, simulated: true, mapPosition: { x: 84, y: 62 }, verification: ['gps', 'qr', 'manual'], coordinates: { lat: 49.414, lng: 8.711 }, code: 'cq-neckar-ring-8' },
       puzzle: {
         type: 'deduction',
         prompt: {

@@ -2,7 +2,7 @@ import type { Adventure, PuzzleType } from '@/content/types';
 import type { Progress } from './progress';
 import { isFinished, totalHints } from './progress';
 
-export type AchievementId = 'first-clue' | 'codebreaker' | 'clear-thinker' | 'mystery-solved' | 'no-hints' | 'heidelberg-explorer';
+export type AchievementId = 'first-clue' | 'codebreaker' | 'clear-thinker' | 'mystery-solved' | 'no-hints' | 'heidelberg-explorer' | 'arnhem-explorer';
 
 export const ACHIEVEMENTS: AchievementId[] = [
   'first-clue',
@@ -11,6 +11,7 @@ export const ACHIEVEMENTS: AchievementId[] = [
   'mystery-solved',
   'no-hints',
   'heidelberg-explorer',
+  'arnhem-explorer',
 ];
 
 /** What the rules need to know about an adventure; small enough to pass to the dashboard. */
@@ -39,6 +40,7 @@ export function earned(p: Progress, ctx: AchievementContext): AchievementId[] {
     out.push('mystery-solved');
     if (totalHints(p) === 0) out.push('no-hints');
     if (ctx.city === 'heidelberg') out.push('heidelberg-explorer');
+    if (ctx.city === 'arnhem') out.push('arnhem-explorer');
   }
   return out;
 }
