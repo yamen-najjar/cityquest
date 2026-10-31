@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { defaultLocale, isLocale, type Locale } from '@/i18n/config';
+import { refreshSession } from '@/lib/supabase/middleware';
 
 const COOKIE = 'cq_locale';
 
@@ -15,7 +16,7 @@ function preferred(req: NextRequest): Locale {
 }
 
 /** Every page lives under /de, /en or /ar; a path without one is sent to the visitor's language. */
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   const first = pathname.split('/')[1];
   if (isLocale(first)) {
@@ -24,6 +25,8 @@ export function middleware(req: NextRequest) {
     if (req.cookies.get(COOKIE)?.value !== first) {
       res.cookies.set(COOKIE, first, { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' });
     }
+    // Refresh the Supabase auth session on this same response (no-op for signed-out visitors).
+    await refreshSession(req, res);
     return res;
   }
   const url = req.nextUrl.clone();
