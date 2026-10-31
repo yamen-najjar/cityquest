@@ -37,10 +37,12 @@ test('The Devil’s House Secret: all eight chapters, the combined ledger, the a
   await correct(page);
   await next(page);
 
-  // 4. Number code — the four bells as Roman numerals: IX IV VII II = 9472. Then combine the two
-  // ledger halves in the journal to make the proof for the finale.
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('The Carillon');
+  // 4. Number code — the figures on the church no medieval mason could have carved (the dwarf, Tom Poes,
+  // the water bear, the virus): IX IV VII II = 9472. The real-world "True story" clue lands in the journal.
+  // Then combine the two ledger halves in the journal to make the proof for the finale.
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Strangers in Stone');
   await arrive(page);
+  await expect(page.getByText('Tom Poes, the white cat from the Dutch comic strip — IV')).toBeVisible();
   await setCode(page, '9472');
   await correct(page);
 

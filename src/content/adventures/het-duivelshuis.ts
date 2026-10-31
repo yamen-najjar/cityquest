@@ -7,6 +7,14 @@ import type { Adventure, Authored } from '../types';
 // the Sabelspoort, the Eusebius church, Sonsbeek park, the Rhine quay, Museum Arnhem) are real places,
 // used only as settings.
 //
+// One exception: chapter 4 ("Strangers in Stone") is built on the real figures on the Eusebius church.
+// The puzzle still works anywhere, because Lena's sketch describes the figures (her numerals are fiction),
+// and the "True story" clue only states what the church itself publishes
+// (https://eusebius.nl/over-de-eusebius/beelden-op-de-kerk/, checked 2026-10-31): Henk Vreeling's 1962
+// cartoon figures about 70 m up the tower, the dwarf with the face of a minister who opposed them, and
+// Arno Coenen's 2022 sculptures, among them a tardigrade and a coronavirus particle. Don't add claims
+// beyond that source without checking them.
+//
 // The eight checkpoints are simulated (approximate positions in Arnhem), so distanceKm and the walking
 // time are indicative until the route is validated on foot.
 
@@ -49,19 +57,19 @@ export const hetDuivelshuis: Authored<Adventure> = {
   },
   overview: {
     de: [
-      'Acht Kapitel, acht Rätselarten: eine Zahlenchiffre, ein Logikrätsel am Teufelshaus, ein Zeuge zum Befragen, das Glockenspiel der Eusebiuskirche, unsichtbare Schrift im Sonsbeek-Park, ein Signal über den Rhein, ein Fund aus dem Inventar und eine Anklage mit Beweis.',
+      'Acht Kapitel, acht Rätselarten: eine Zahlenchiffre, ein Logikrätsel am Teufelshaus, ein Zeuge zum Befragen, die Fremden aus Stein an der Eusebiuskirche, unsichtbare Schrift im Sonsbeek-Park, ein Signal über den Rhein, ein Fund aus dem Inventar und eine Anklage mit Beweis.',
       'Die Ermittlungsakte sammelt Spuren, Verdächtige und eure Notizen. Wer aufmerksam ist, entdeckt dort ein zusätzliches Beweisstück.',
       'Drei Schwierigkeitsstufen und Sterne für jedes Kapitel.',
       'Am Ende entscheidest du, was mit dem Hauptbuch geschieht.',
     ],
     en: [
-      'Eight chapters, eight kinds of puzzle: a number cipher, a logic riddle at the Devil’s House, a witness to question, the Eusebius church carillon, invisible writing in Sonsbeek park, a signal across the Rhine, an item from your inventory and an accusation with proof.',
+      'Eight chapters, eight kinds of puzzle: a number cipher, a logic riddle at the Devil’s House, a witness to question, the strangers in stone on the Eusebius church, invisible writing in Sonsbeek park, a signal across the Rhine, an item from your inventory and an accusation with proof.',
       'The case journal collects clues, suspects and your notes. Attentive players discover an extra piece of evidence there.',
       'Three difficulty levels and stars for every chapter.',
       'At the end you decide what becomes of the ledger.',
     ],
     ar: [
-      'ثمانية فصول وثمانية أنواع من الألغاز: شيفرة أرقام، ولغز منطقي عند بيت الشيطان، وشاهد تستجوبه، وأجراس كنيسة أوزيبيوس، وكتابة خفية في حديقة سونسبيك، وإشارة عبر نهر الراين، وغرض من حقيبتك، واتهام بالدليل.',
+      'ثمانية فصول وثمانية أنواع من الألغاز: شيفرة أرقام، ولغز منطقي عند بيت الشيطان، وشاهد تستجوبه، والغرباء الحجريون على كنيسة أوزيبيوس، وكتابة خفية في حديقة سونسبيك، وإشارة عبر نهر الراين، وغرض من حقيبتك، واتهام بالدليل.',
       'ملف القضية يجمع الأدلة والمشتبه بهم وملاحظاتك. ومن ينتبه يكتشف فيه دليلاً إضافياً.',
       'ثلاثة مستويات صعوبة ونجوم لكل فصل.',
       'في النهاية تقرر مصير الدفتر.',
@@ -421,19 +429,19 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'carillon',
-      title: { de: 'Das Glockenspiel', en: 'The Carillon', ar: 'أجراس البرج' },
+      title: { de: 'Fremde aus Stein', en: 'Strangers in Stone', ar: 'غرباء من حجر' },
       story: {
         de: [
-          'Die Turmtür ist nur angelehnt — Lena hat ihren Schlüssel im Schloss stecken lassen. Oben, in der Glockenstube, hängen vier Glocken, jede mit einer eingegossenen Zahl in römischen Ziffern.',
-          'An der Wand ein kleines Zahlenschloss, das eine Klappe sichert. Lena hat daneben gekritzelt: „Lies die Glocken.“',
+          'Die Turmtür ist nur angelehnt — Lena hat ihren Schlüssel im Schloss stecken lassen. Oben in der Glockenstube hängt das Glockenspiel still. An der Wand sichert ein kleines Zahlenschloss eine Klappe.',
+          'Daneben steckt Lenas Skizze: Figuren von den Mauern der Kirche, jede mit einer römischen Ziffer. Darunter: „Diesmal nicht die Glocken. Nur die Fremden zählen.“',
         ],
         en: [
-          'The tower door is ajar — Lena left her key in the lock. Up in the bell chamber hang four bells, each cast with a number in Roman numerals.',
-          'On the wall a small number lock secures a hatch. Lena has scribbled beside it: “Read the bells.”',
+          'The tower door is ajar — Lena left her key in the lock. Up in the bell chamber the carillon hangs silent. On the wall, a small number lock secures a hatch.',
+          'Pinned beside it is Lena’s sketch: figures from the church walls, each marked with a Roman numeral. Underneath: “Not the bells this time. Only the strangers count.”',
         ],
         ar: [
-          'باب البرج موارب — تركت لينا مفتاحها في القفل. وفي الأعلى، في غرفة الأجراس، تتدلّى أربعة أجراس، على كلٍّ منها رقم مصبوب بالأرقام الرومانية.',
-          'على الجدار قفل أرقام صغير يحمي كوّة. وقد خطّت لينا بجانبه: «اقرأ الأجراس».',
+          'باب البرج موارب — تركت لينا مفتاحها في القفل. وفي الأعلى، في غرفة الأجراس، تتدلّى الأجراس صامتة. وعلى الجدار قفل أرقام صغير يحمي كوّة.',
+          'وبجانبه رسمٌ ثبّتته لينا: تماثيل من جدران الكنيسة، بجانب كلٍّ منها رقم روماني. وتحته: «ليست الأجراس هذه المرة. الغرباء وحدهم يُحسبون».',
         ],
       },
       checkpoint: {
@@ -447,18 +455,61 @@ export const hetDuivelshuis: Authored<Adventure> = {
       },
       puzzle: {
         type: 'number-code',
-        prompt: { de: 'Lies die vier Glocken als Ziffern und gib den Code ein.', en: 'Read the four bells as digits and enter the code.', ar: 'اقرأ الأجراس الأربعة كأرقام وأدخل الرمز.' },
+        prompt: {
+          de: 'Welche Figuren hätte kein Steinmetz des Mittelalters meißeln können? Lies ihre Ziffern der Reihe nach als Zahlen und gib den Code ein.',
+          en: 'Which figures could no medieval mason have carved? Read their numerals in order, as digits, and enter the code.',
+          ar: 'أيّ التماثيل لم يكن بوسع نحّات من العصور الوسطى أن ينحتها؟ اقرأ أرقامها بالترتيب كأعداد، وأدخل الرمز.',
+        },
         material: {
-          de: ['Die vier Glocken tragen je eine römische Ziffer:', 'IX · IV · VII · II', 'Lies sie von links nach rechts als Ziffern.'],
-          en: ['The four bells each bear a Roman numeral:', 'IX · IV · VII · II', 'Read them left to right, as digits.'],
-          ar: ['تحمل الأجراس الأربعة أرقاماً رومانية:', 'IX · IV · VII · II', 'اقرأها من اليسار إلى اليمين كأرقام.'],
+          de: [
+            'Lenas Skizze, von oben nach unten:',
+            'Ein steinerner Löwe — III',
+            'Einer der sieben Zwerge aus Schneewittchen, wie im Disney-Film — IX',
+            'Ein Apostel mit einem Buch — VI',
+            'Tom Poes, die weiße Katze aus dem niederländischen Comic — IV',
+            'Ein gehörnter Wasserspeier — I',
+            'Ein Bärtierchen, ein mikroskopisch kleines Tier, stark vergrößert — VII',
+            'Ein Coronavirus-Teilchen, stark vergrößert — II',
+          ],
+          en: [
+            'Lena’s sketch, top to bottom:',
+            'A stone lion — III',
+            'One of Snow White’s seven dwarfs, as in the Disney film — IX',
+            'An apostle holding a book — VI',
+            'Tom Poes, the white cat from the Dutch comic strip — IV',
+            'A horned gargoyle — I',
+            'A water bear, a microscopic animal, greatly enlarged — VII',
+            'A coronavirus particle, greatly enlarged — II',
+          ],
+          ar: [
+            'رسم لينا، من الأعلى إلى الأسفل:',
+            'أسد من حجر — III',
+            'أحد أقزام بياض الثلج السبعة، كما في فيلم ديزني — IX',
+            'رسول يحمل كتاباً — VI',
+            'توم بوس، القطّ الأبيض من القصص المصوّرة الهولندية — IV',
+            'تمثال مزراب بقرنين — I',
+            'دبّ الماء، حيوان مجهري، مكبَّر جداً — VII',
+            'جسيم من فيروس كورونا، مكبَّر جداً — II',
+          ],
         },
         input: 'numeric',
         lock: { digits: 4 },
         hints: [
-          { de: 'Römische Ziffern: I = 1, V = 5, X = 10.', en: 'Roman numerals: I = 1, V = 5, X = 10.', ar: 'الأرقام الرومانية: I = 1، V = 5، X = 10.' },
-          { de: 'IX = 9, IV = 4, VII = 7, II = 2.', en: 'IX = 9, IV = 4, VII = 7, II = 2.', ar: 'IX = 9، IV = 4، VII = 7، II = 2.' },
-          { de: 'Der Code ist 9472.', en: 'The code is 9472.', ar: 'الرمز هو 9472.' },
+          {
+            de: 'Löwen, Apostel und gehörnte Fratzen kannten schon die Baumeister des Mittelalters. Was davon konnte damals niemand kennen?',
+            en: 'Lions, apostles and horned faces were known to medieval builders. Which figures show things nobody could have known back then?',
+            ar: 'الأسود والرسل والوجوه ذات القرون عرفها بنّاؤو العصور الوسطى. أيّ التماثيل تُظهر أشياء لم يكن أحد يعرفها آنذاك؟',
+          },
+          {
+            de: 'Zeichentrick- und Comicfiguren stammen aus dem 20. Jahrhundert, und ein Bärtierchen oder ein Virus sieht man nur unter dem Mikroskop. Römische Ziffern: I = 1, V = 5, X = 10.',
+            en: 'Cartoon and comic characters belong to the 20th century, and a water bear or a virus can only be seen under a microscope. Roman numerals: I = 1, V = 5, X = 10.',
+            ar: 'شخصيات الرسوم المتحركة والقصص المصوّرة من القرن العشرين، ودبّ الماء والفيروس لا يُريان إلا بالمجهر. الأرقام الرومانية: I = 1، V = 5، X = 10.',
+          },
+          {
+            de: 'Zwerg IX, Tom Poes IV, Bärtierchen VII, Virus II: Der Code ist 9472.',
+            en: 'Dwarf IX, Tom Poes IV, water bear VII, virus II: the code is 9472.',
+            ar: 'القزم IX، توم بوس IV، دبّ الماء VII، الفيروس II: الرمز هو 9472.',
+          },
         ],
       },
       success: {
@@ -469,6 +520,11 @@ export const hetDuivelshuis: Authored<Adventure> = {
       clues: [
         { de: 'Die linke Hälfte der Hauptbuchseite lag in der Glockenstube.', en: 'The left half of the ledger page was in the bell chamber.', ar: 'كان النصف الأيسر من صفحة الدفتر في غرفة الأجراس.' },
         { de: 'Füge in der Akte beide Hälften zusammen.', en: 'Put both halves together in the journal.', ar: 'اجمع النصفين معاً في الملف.' },
+        {
+          de: 'Wahre Geschichte: Diese Figuren gibt es wirklich. 1962 setzte der Bildhauer Henk Vreeling Comicfiguren wie Donald Duck, Micky Maus und Tom Poes in etwa 70 Meter Höhe an den Turm — und gab einem der Zwerge das Gesicht eines Pfarrers, der gegen die Idee war. 2022 kamen Steinfiguren des Künstlers Arno Coenen hinzu, darunter ein Bärtierchen und ein Coronavirus-Teilchen. Vom Boden aus braucht man ein Fernglas; die Glasbalkone des Turms kommen näher heran.',
+          en: 'True story: these figures really exist. In 1962 sculptor Henk Vreeling put cartoon characters such as Donald Duck, Mickey Mouse and Tom Poes about 70 metres up the tower — and gave one of the dwarfs the face of a minister who opposed the idea. In 2022 stone figures by artist Arno Coenen were added, including a water bear and a coronavirus particle. From the street you need binoculars; the tower’s glass balconies get closer.',
+          ar: 'قصة حقيقية: هذه التماثيل موجودة فعلاً. في عام 1962 وضع النحّات هنك فريلينغ شخصيات كرتونية مثل دونالد داك وميكي ماوس وتوم بوس على ارتفاع نحو 70 متراً في البرج — وأعطى أحد الأقزام وجه قسٍّ كان يعارض الفكرة. وفي عام 2022 أُضيفت تماثيل حجرية للفنان آرنو كونين، منها دبّ الماء وجسيم من فيروس كورونا. من الشارع تحتاج إلى منظار، أما شرفات البرج الزجاجية فتقرّبك منها.',
+        },
       ],
       reward: 'ledger-left',
     },
