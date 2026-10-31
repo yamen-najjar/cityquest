@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Checkpoint } from '@/content/types';
+import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 
 type LatLng = { lat: number; lng: number };
@@ -12,10 +13,17 @@ function distanceMeters(a: LatLng, b: LatLng): number {
   const toRad = (d: number) => (d * Math.PI) / 180;
   const dLat = toRad(b.lat - a.lat);
   const dLng = toRad(b.lng - a.lng);
-  const lat1 = toRad(a.lat);
-  const lat2 = toRad(b.lat);
-  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function formatDistance(m: number, locale: Locale): string {
+  const km = m >= 1000;
+  return new Intl.NumberFormat(locale, {
+    style: 'unit',
+    unit: km ? 'kilometer' : 'meter',
+    maximumFractionDigits: km ? 1 : 0,
+  }).format(km ? m / 1000 : Math.round(m));
 }
 
 /**
@@ -26,12 +34,14 @@ function distanceMeters(a: LatLng, b: LatLng): number {
  */
 export function CheckpointArrival({
   checkpoint,
+  locale,
   t,
   onArrive,
   onPosition,
   radiusM = 40,
 }: {
   checkpoint: Checkpoint;
+  locale: Locale;
   t: Dictionary['game'];
   onArrive: () => void;
   onPosition: (p: LatLng | null) => void;
@@ -42,21 +52,31 @@ export function CheckpointArrival({
     !!coords && checkpoint.verification.includes('gps') && typeof navigator !== 'undefined' && 'geolocation' in navigator;
   const [state, setState] = useState<GpsState>('idle');
   const [distance, setDistance] = useState<number | null>(null);
+  const stallTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  const fmtDist = (m: number) => (m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`);
+  useEffect(() => () => clearTimeout(stallTimer.current), []);
 
   function check() {
     setState('locating');
+    // If the permission prompt is ignored, the geolocation timeout never starts, so guard with our own.
+    clearTimeout(stallTimer.current);
+    stallTimer.current = setTimeout(() => setState((s) => (s === 'locating' ? 'error' : s)), 15000);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        clearTimeout(stallTimer.current);
         const here = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         onPosition(here);
         const d = distanceMeters(here, coords!);
         setDistance(d);
-        setState(d <= radiusM ? 'arrived' : 'far');
+        // Allow for the fix's own accuracy (capped), so a weak signal at the spot isn't read as "far".
+        const tolerance = Math.min(pos.coords.accuracy || 0, 60);
+        setState(d <= radiusM + tolerance ? 'arrived' : 'far');
       },
-      (err) => setState(err.code === err.PERMISSION_DENIED ? 'off' : 'error'),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
+      (err) => {
+        clearTimeout(stallTimer.current);
+        setState(err.code === err.PERMISSION_DENIED ? 'off' : 'error');
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
     );
   }
 
@@ -71,11 +91,10 @@ export function CheckpointArrival({
 
   const message =
     state === 'locating' ? { text: t.gpsLocating, tone: 'text-ivory-dim' }
-    : state === 'far' && distance != null ? { text: t.gpsFar.replace('{d}', fmtDist(distance)), tone: 'text-gold-soft' }
+    : state === 'far' && distance != null ? { text: t.gpsFar.replace('{d}', formatDistance(distance, locale)), tone: 'text-gold-soft' }
     : state === 'arrived' ? { text: t.gpsArrived, tone: 'text-success' }
     : state === 'off' ? { text: t.gpsOff, tone: 'text-danger' }
     : state === 'error' ? { text: t.gpsError, tone: 'text-danger' }
-    : checkpoint.simulated ? { text: t.gpsSimulatedNote, tone: 'text-ivory-mute' }
     : null;
 
   const primaryLabel =

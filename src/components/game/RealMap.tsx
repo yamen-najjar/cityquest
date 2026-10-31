@@ -36,6 +36,7 @@ const MAP_LOCALE: Record<Locale, Record<string, string>> = {
     'NavigationControl.ZoomOut': 'Verkleinern',
     'CooperativeGesturesHandler.WindowsHelpText': 'Mit Strg + Scrollen zoomen',
     'CooperativeGesturesHandler.MacHelpText': 'Mit ⌘ + Scrollen zoomen',
+    'CooperativeGesturesHandler.MobileHelpText': 'Mit zwei Fingern die Karte bewegen',
     'AttributionControl.ToggleAttribution': 'Quellenangabe umschalten',
   },
   nl: {
@@ -43,6 +44,7 @@ const MAP_LOCALE: Record<Locale, Record<string, string>> = {
     'NavigationControl.ZoomOut': 'Uitzoomen',
     'CooperativeGesturesHandler.WindowsHelpText': 'Gebruik Ctrl + scrollen om te zoomen',
     'CooperativeGesturesHandler.MacHelpText': 'Gebruik ⌘ + scrollen om te zoomen',
+    'CooperativeGesturesHandler.MobileHelpText': 'Gebruik twee vingers om de kaart te verplaatsen',
     'AttributionControl.ToggleAttribution': 'Bronvermelding tonen/verbergen',
   },
   ar: {
@@ -50,7 +52,8 @@ const MAP_LOCALE: Record<Locale, Record<string, string>> = {
     'NavigationControl.ZoomOut': 'تصغير',
     'CooperativeGesturesHandler.WindowsHelpText': 'استخدم Ctrl + التمرير للتكبير',
     'CooperativeGesturesHandler.MacHelpText': 'استخدم ⌘ + التمرير للتكبير',
-    'AttributionControl.ToggleAttribution': 'إظهار/إخفاء الإسناد',
+    'CooperativeGesturesHandler.MobileHelpText': 'استخدم إصبعين لتحريك الخريطة',
+    'AttributionControl.ToggleAttribution': 'إظهار/إخفاء المصدر',
   },
 };
 
@@ -95,7 +98,10 @@ export default function RealMap(props: {
       const state = solved.includes(x.c.id) ? 'solved' : x.i === current ? 'current' : 'upcoming';
       const coord = x.c.checkpoint.coordinates!;
       const label = `${x.i + 1}. ${x.c.checkpoint.name[locale]}`;
-      return new maplibregl.Marker({ element: pin(x.i + 1, state, label) }).setLngLat([coord.lng, coord.lat]).addTo(map);
+      const marker = new maplibregl.Marker({ element: pin(x.i + 1, state, label) }).setLngLat([coord.lng, coord.lat]).addTo(map);
+      // addTo() resets the element's aria-label to the default "Map marker"; set ours back afterwards.
+      marker.getElement().setAttribute('aria-label', label);
+      return marker;
     });
   }
 
@@ -104,7 +110,8 @@ export default function RealMap(props: {
     if (!map || located.length === 0) return;
     const b = new maplibregl.LngLatBounds();
     for (const x of located) b.extend([x.c.checkpoint.coordinates!.lng, x.c.checkpoint.coordinates!.lat]);
-    if (userPosition) b.extend([userPosition.lng, userPosition.lat]);
+    // Deliberately not fitting to the player's position: panning there would fetch tiles for their real
+    // location and so reveal it. The map stays on the adventure's checkpoints.
     map.fitBounds(b, { padding: 48, maxZoom: 16, duration: 0 });
   }
 
@@ -174,8 +181,13 @@ export default function RealMap(props: {
     }
     const el = userMarkerRef.current?.getElement() ?? document.createElement('div');
     el.style.cssText = 'width:16px;height:16px;border-radius:50%;background:#6FA8DC;border:2px solid #fff;box-shadow:0 0 0 6px rgba(111,168,220,.25)';
-    if (!userMarkerRef.current) userMarkerRef.current = new maplibregl.Marker({ element: el }).setLngLat([userPosition.lng, userPosition.lat]).addTo(map);
-    else userMarkerRef.current.setLngLat([userPosition.lng, userPosition.lat]);
+    if (!userMarkerRef.current) {
+      userMarkerRef.current = new maplibregl.Marker({ element: el }).setLngLat([userPosition.lng, userPosition.lat]).addTo(map);
+      // Decorative: the "you're here" status text announces the position, so hide the dot from SR.
+      userMarkerRef.current.getElement().setAttribute('aria-hidden', 'true');
+    } else {
+      userMarkerRef.current.setLngLat([userPosition.lng, userPosition.lat]);
+    }
   }, [userPosition]);
 
   // No WebGL / map failed to start: the stylised map keeps the game playable.

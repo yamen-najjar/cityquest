@@ -4,7 +4,7 @@ Tracking document for Phase 4. Same way of working as Phase 2: one feature branc
 reviewable commits, this document kept in sync, each milestone tested (unit + typecheck + build, live
 where it applies) and reviewed by a Sonnet agent before the next. **Design shown first** for the map UI.
 
-**Branch:** `phase-4-map` · **Status:** M1 complete (MapLibre map) · **Started:** 2026-10-31
+**Branch:** `phase-4-map` · **Status:** complete (map + GPS; QR deferred) · **Started:** 2026-10-31
 
 **Scope (confirmed):** map + GPS first (QR later); demo gets approximate Heidelberg coordinates (still
 `simulated`, manual always available). Design mock approved before building.
@@ -92,9 +92,20 @@ reading latest props from refs in the `load` handler (only matters once GPS move
       is kept (still accurate — approximate positions)
 - [x] MapLibre control strings (zoom, cooperative-gesture hint, attribution toggle) localised to de/nl/ar;
       checkpoint markers carry a localised `aria-label` (`"3. Marktplatz"`) instead of "Map marker"
-- [ ] Reviewer-agent pass (Sonnet) on M2 + M4
+- [x] Reviewer-agent pass (Sonnet) on M2 + M4 — no HIGH; privacy promise verified (no coordinates sent,
+      stored or logged). Fixes applied (below)
 
-**QR verification is deferred** (the chosen scope was "map + GPS first"). When picked up it becomes a new
+**M2/M4 review (Sonnet) — fixed:** the checkpoint-marker `aria-label`s were being overwritten by
+MapLibre's `addTo` (reset to "Map marker") — now set after `addTo`, so screen readers announce
+"1. The antique shop" etc. (verified live); the user dot is marked decorative. GPS `maximumAge` is now
+`0` so "Check again" always takes a fresh fix; the fix's accuracy is folded into the radius (a weak
+signal at the spot no longer reads "far"); a 15 s guard timer recovers the UI if the permission prompt is
+ignored; distances use `Intl.NumberFormat(locale)` ("423,4 km" in de/nl, Arabic numerals in ar); the
+MapLibre two-finger mobile hint is localised (mobile is the main platform); the redundant simulated-note
+was dropped; the dead "fit to user position" line was removed (deliberately not following the player, so
+tiles are never fetched for their real location). 91 unit tests; build clean.
+
+**Phase 4 scope (map + GPS) is complete.** QR verification is deferred (the chosen scope was "map + GPS first"). When picked up it becomes a new
 milestone: camera permission on demand, scan matching the checkpoint code, manual fallback.
 
 ## Env vars (Phase 4)

@@ -208,6 +208,7 @@ export function ChapterView({
             </p>
             <CheckpointArrival
               checkpoint={chapter.checkpoint}
+              locale={locale}
               t={t}
               onArrive={() => dispatch({ type: 'arrive' })}
               onPosition={setUserPosition}
