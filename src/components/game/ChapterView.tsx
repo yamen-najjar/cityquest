@@ -259,7 +259,7 @@ export function ChapterView({
                 )}
               </div>
             ) : (
-              puzzle.material && <Material lines={puzzle.material[locale]} type={puzzle.type} mirror={puzzle.visual === 'mirror'} />
+              puzzle.material && <Material lines={puzzle.material[locale]} type={puzzle.type} mirror={puzzle.visual === 'mirror'} rtl={locale === 'ar'} />
             )}
 
             {puzzle.visual === 'symbol-equations' && <SymbolEquations labels={t.symbols} />}
@@ -428,7 +428,7 @@ export function ChapterView({
  * reader would read mirrored writing plainly and give the answer away, so it is hidden from them; the
  * puzzle's hints lead to the answer instead.
  */
-function Material({ lines, type, mirror }: { lines: string[]; type: Chapter['puzzle']['type']; mirror: boolean }) {
+function Material({ lines, type, mirror, rtl }: { lines: string[]; type: Chapter['puzzle']['type']; mirror: boolean; rtl: boolean }) {
   if (mirror) {
     return (
       <div className="rounded-2xl border border-gold/25 bg-navy p-5 text-center" aria-hidden="true">
@@ -440,7 +440,7 @@ function Material({ lines, type, mirror }: { lines: string[]; type: Chapter['puz
       </div>
     );
   }
-  if (type === 'logic' || lines.some((l) => l.length > 28)) {
+  if (type === 'logic' || lines.some((l) => l.length > 28 && !NUMBER_CIPHER.test(l))) {
     return (
       <div className="space-y-2">
         {lines.map((line) => (
@@ -454,11 +454,44 @@ function Material({ lines, type, mirror }: { lines: string[]; type: Chapter['puz
   return (
     // No dir override: in Arabic the number cipher must lay out right to left like the word it spells.
     <div className="rounded-2xl border border-gold/25 bg-navy p-5 text-center">
-      {lines.map((line) => (
-        <p key={line} className="font-mono text-2xl tracking-[0.2em] text-gold sm:text-3xl">
-          {line}
-        </p>
-      ))}
+      {lines.map((line) =>
+        NUMBER_CIPHER.test(line) ? (
+          <NumberCipher key={line} line={line} rtl={rtl} />
+        ) : (
+          <p key={line} className="font-mono text-2xl tracking-[0.2em] text-gold sm:text-3xl">
+            {line}
+          </p>
+        ),
+      )}
+    </div>
+  );
+}
+
+const NUMBER_CIPHER = /^\d+( · \d+)+$/;
+
+/**
+ * A number cipher as one row of tiles. As plain text a long row wrapped on phones, and in Arabic the
+ * wrapped right-to-left lines (with a dot left dangling) made the order impossible to read. The tiles never
+ * wrap, follow the page direction, and an arrow shows where to start. Screen readers get the plain line.
+ */
+function NumberCipher({ line, rtl }: { line: string; rtl: boolean }) {
+  const numbers = line.split(' · ');
+  return (
+    <div>
+      <p className="sr-only">{line}</p>
+      <ol aria-hidden="true" className="flex w-full flex-nowrap justify-center gap-1 sm:gap-2">
+        {numbers.map((n, i) => (
+          <li
+            key={i}
+            className="min-w-0 max-w-[3.5rem] flex-1 rounded-lg border border-gold/30 bg-navy-800 py-2 font-mono text-lg text-gold sm:text-3xl"
+          >
+            {n}
+          </li>
+        ))}
+      </ol>
+      <p aria-hidden="true" className="mt-2 text-xl leading-none text-gold/60">
+        {rtl ? '←' : '→'}
+      </p>
     </div>
   );
 }
