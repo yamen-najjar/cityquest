@@ -89,8 +89,26 @@ ids satisfy the DB `chapter_id` check constraint; the paid path is wrapped in tr
 short code with unlimited guesses) — order gating stops skipping ahead but not this; deferred to Phase 3
 with the first purchasable adventure (D9). Dormant now (all adventures are demo).
 
-### M3 — Admin dashboard
-- [ ] Roles, admin-only area, draft/published, preview — **design shown first**
+### M3 — Admin dashboard (complete)
+Design shown first (mockup + `docs/PHASE2-M3-M4-plan.md`), Option 2 (operational console) chosen.
+- [x] `/admin`, English-only, own root layout, `robots:noindex`, server-gated (`requireAdmin` → 404 for non-admins)
+- [x] `admin_users` table (service-role-write-only); admin is granted **only** by the service role (D11)
+- [x] `adventure_state` overlay table; Overview, Players, Access (grant/revoke by email), Adventures (publish toggle + draft preview)
+- [x] All reads/writes via the service role in `lib/admin/data.ts`; server actions re-check `requireAdmin` and validate inputs
+- [x] Verified live (sign-in, every screen, grant + toggle writing the DB); 89 unit tests; typecheck + build
+- [x] Reviewer-agent pass (Sonnet) — findings fixed (see below)
+
+**M3 review (Sonnet) — no unconditional HIGH; the bootstrap path was the real risk. Fixed:** removed
+the promote-by-email signup trigger (a stranger could seize admin by pre-registering the owner's email
+with confirmations off, or an unconfirmed password account) — admin is now granted only by the service
+role (CLI/console), and `requireAdmin` also requires a confirmed email; replaced `auth.admin.listUsers()`
+(first-1000 cap → wrong counts and failed email lookups) with `profiles` (email mirrored on the profile),
+exact `count` headers, and email lookup by `profiles.email`; grant no longer overwrites an existing
+row's provenance (ignoreDuplicates); admin preview/list now use an unfiltered `allAdventures` so content
+drafts show; server actions validate slug/UUID; `revoke all … grant select` + `(select auth.uid())`;
+middleware forwards refreshed cookies; `getAdminUser` wrapped in `React.cache`; grant form keeps the
+email on error. **Deferred (documented):** making the publish toggle change the public catalogue (SSG →
+next deploy); an audit trail (who granted/revoked); preview of a *paid* adventure needs a self-grant.
 
 ### M4 — GDPR + newsletter
 - [ ] Account deletion, data export, newsletter double opt-in
@@ -131,3 +149,10 @@ Already documented in `.env.example`. For local dev, `supabase start` prints the
   into `server-only` `admin.ts`, added a DB-safe chapter-id invariant test, wrapped the paid path in
   try/catch → 503. Guess throttling on the current chapter accepted as a Phase 3 item (D9). 85 unit
   tests pass; grants/index re-verified live; typecheck + build clean. **M2 complete.**
+- 2026-10-31 — M3 built (Option 2, operational console) and verified live (admin sign-in, Overview,
+  Players, Access grant/revoke, Adventures publish toggle + draft preview). Migration `20261031122102`
+  (`admin_users` + `adventure_state`). Then a Sonnet review flagged the bootstrap-by-email trigger as a
+  takeover risk and the listUsers 1000-cap as a correctness bug; hardening migration `20261031124521`
+  removes the trigger (admin is service-role-granted only; CLI bootstrap), mirrors email onto `profiles`,
+  and tightens grants. Code switched to profiles-based reads, provenance-preserving grants, input
+  validation, cached admin check. 89 unit tests; typecheck clean. **M3 complete.**

@@ -22,14 +22,16 @@ export async function middleware(req: NextRequest) {
   // The admin console lives at /admin, outside the locale structure. Let it through (no locale
   // redirect) but still refresh the auth session so the admin check can read the signed-in user.
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
-    const res = NextResponse.next();
+    // Pass the request so refreshed auth cookies reach this request's Server Components, not just the
+    // browser — otherwise an admin request right after the token expires would 404 once, then work.
+    const res = NextResponse.next({ request: req });
     await refreshSession(req, res);
     return res;
   }
 
   const first = pathname.split('/')[1];
   if (isLocale(first)) {
-    const res = NextResponse.next();
+    const res = NextResponse.next({ request: req });
     // Remembers the last language chosen, so a bare link later opens in it. Not personal data.
     if (req.cookies.get(COOKIE)?.value !== first) {
       res.cookies.set(COOKIE, first, { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' });

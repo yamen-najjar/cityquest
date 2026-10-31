@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { GameClient } from '@/components/game/GameClient';
-import { getAdventure } from '@/content/adventures';
+import { getAdventureAny } from '@/content/adventures';
 import { getCity } from '@/content/cities';
 import { getDictionary } from '@/i18n/dictionary';
 import { requireAdmin } from '@/lib/admin/access';
@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic';
 export default async function AdminPreview({ params }: { params: Promise<{ slug: string }> }) {
   await requireAdmin();
   const { slug } = await params;
-  const a = getAdventure(slug);
+  const a = getAdventureAny(slug);
   if (!a) notFound();
   const t = getDictionary('en');
 

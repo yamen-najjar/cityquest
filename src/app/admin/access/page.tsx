@@ -11,7 +11,7 @@ const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('en', { day: '
 
 export default async function AdminAccess() {
   await requireAdmin();
-  const [entitlements] = await Promise.all([listEntitlements()]);
+  const entitlements = await listEntitlements();
   const options = adventures.map((a) => ({ slug: a.slug, title: a.title.en }));
   const titleOf = new Map(options.map((o) => [o.slug, o.title]));
 

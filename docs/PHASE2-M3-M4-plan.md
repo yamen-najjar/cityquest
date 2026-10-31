@@ -34,12 +34,19 @@ as a later phase if/when non-dev story editing is actually needed. The sections 
 - **D11 — admin identity via an `admin_users` table, never a column on `profiles`.** A `role` column on
   `profiles` could be self-elevated by a client (`profiles` has an owner-update policy for locale). An
   `admin_users(user_id)` table with **no client write policy** (service-role-only, exactly like
-  `entitlements`) means admin status can never be set from the browser. First admin is seeded via
-  migration/CLI.
+  `entitlements`) means admin status can never be set from the browser. Admin is granted **only** by the
+  service role. The first admin is seeded with a one-off CLI/SQL insert once the owner's account exists
+  and is confirmed (an earlier auto-promote-by-email signup trigger was removed in the M3 review — it let
+  a stranger seize admin by pre-registering the owner's email). Bootstrap command (run after the owner
+  has signed in):
+  `insert into public.admin_users (user_id) select id from auth.users where email = '<owner>' and email_confirmed_at is not null;`
+  `requireAdmin` additionally requires a confirmed email.
 - **D12 — the admin area is server-gated and invisible to non-admins.** Pages live at `/admin/*`
-  (outside `[locale]`, English-only, `robots: noindex`). Every admin page and action resolves
-  `getUser()` + `admin_users` membership (service role) server-side; a non-admin gets **404** (not 403),
-  so the area's existence isn't advertised. Middleware also blocks `/admin` without a session.
+  (outside `[locale]`, English-only, `robots: noindex`). Every admin page **and every server action**
+  resolves `getUser()` + `admin_users` membership (service role) server-side; a non-admin (signed out or
+  without a row) gets **404** (not 403). The gate is at the page/action level, not the middleware
+  (middleware only refreshes the session on `/admin`), because layouts don't re-render on client-side
+  navigation — so each page re-checks.
 - All admin **writes** use the service role in a server action / route handler. The browser never holds
   elevated rights.
 

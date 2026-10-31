@@ -14,9 +14,9 @@ export default async function AdminOverview() {
       <AdminHeader eyebrow="Dashboard" title="Overview" intro="Live figures from the database." />
       <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3.5">
         <Tile k="Players" v={stats.players} />
+        <Tile k="New (7 days)" v={stats.newThisWeek} d="magic-link sign-ups" tone="up" />
         <Tile k="Entitlements granted" v={stats.entitlements} d="manual, pre-Stripe" />
         <Tile k="Chapters solved" v={stats.solves.toLocaleString('en')} d="server-recorded" />
-        <Tile k="Sign-ins (7 days)" v={stats.signIns7d} d="magic-link" tone="up" />
       </div>
     </>
   );

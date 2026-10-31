@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { createAdminClient, isAdminConfigured } from '@/lib/supabase/admin';
@@ -8,14 +9,19 @@ import { createClient } from '@/lib/supabase/server';
 // read here with the service role (RLS lets a user read only their own row anyway). Admin status is
 // never derived from anything the client can set.
 
-/** The signed-in user if they are an admin, otherwise null. */
-export async function getAdminUser(): Promise<User | null> {
+/**
+ * The signed-in user if they are an admin, otherwise null. Wrapped in React.cache so the layout and the
+ * page in one request share a single getUser() + lookup rather than running it twice.
+ */
+export const getAdminUser = cache(async (): Promise<User | null> => {
   if (!isAdminConfigured()) return null;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return null;
+  // Require a confirmed email: admin is granted only to confirmed accounts (see the harden_admin
+  // migration), and this refuses any account that somehow is not.
+  if (!user || !user.email_confirmed_at) return null;
 
   const admin = createAdminClient();
   const { data, error } = await admin
@@ -25,7 +31,7 @@ export async function getAdminUser(): Promise<User | null> {
     .maybeSingle();
   if (error || !data) return null;
   return user;
-}
+});
 
 /**
  * Gate for every admin page and server action. A non-admin (signed out, or signed in without an

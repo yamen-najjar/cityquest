@@ -1,9 +1,15 @@
 'use client';
-import { useActionState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { grantAction } from '@/app/admin/access/actions';
 
 export function GrantForm({ adventures }: { adventures: { slug: string; title: string }[] }) {
   const [state, action, pending] = useActionState(grantAction, null);
+  // React 19 resets the form after an action; keep the email controlled so it survives an error.
+  const [email, setEmail] = useState('');
+  // Clear it once a grant succeeds; keep it on an error so it can be corrected.
+  useEffect(() => {
+    if (state?.ok) setEmail('');
+  }, [state]);
 
   return (
     <form action={action} className="flex flex-col gap-3 px-3 py-2">
@@ -11,7 +17,17 @@ export function GrantForm({ adventures }: { adventures: { slug: string; title: s
         <label htmlFor="g-email" className="mb-1.5 block text-[0.74rem] uppercase tracking-[0.06em] text-ivory-mute">
           Player email
         </label>
-        <input id="g-email" name="email" type="email" required placeholder="name@example.com" className="field" dir="ltr" />
+        <input
+          id="g-email"
+          name="email"
+          type="email"
+          required
+          placeholder="name@example.com"
+          className="field"
+          dir="ltr"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </div>
       <div>
         <label htmlFor="g-adv" className="mb-1.5 block text-[0.74rem] uppercase tracking-[0.06em] text-ivory-mute">
