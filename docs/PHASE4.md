@@ -1,0 +1,66 @@
+# Phase 4 — Real map, GPS & QR checkpoints
+
+Tracking document for Phase 4. Same way of working as Phase 2: one feature branch (`phase-4-map`), small
+reviewable commits, this document kept in sync, each milestone tested (unit + typecheck + build, live
+where it applies) and reviewed by a Sonnet agent before the next. **Design shown first** for the map UI.
+
+**Branch:** `phase-4-map` · **Status:** planning (awaiting scope confirmation) · **Started:** 2026-10-31
+
+## Goal (from the roadmap)
+
+Replace the stylised demo map with a real map (MapLibre), and let a player confirm they reached a
+checkpoint by **GPS** (and, in scope-permitting, **QR**) instead of only tapping "I'm here" — while the
+game keeps working offline, with manual confirmation always available.
+
+## What exists today
+- Game flow per chapter: `travel` → `puzzle` → `solved`. In `travel`, the chapter shows the checkpoint
+  and an **Arrive** button that just advances to the puzzle (manual only).
+- Checkpoints are `simulated: true` with a stylised `mapPosition` (not a street map) and **no real
+  coordinates**; `verification: ['manual']`. The content model already has the slots for Phase 4:
+  `coordinates?: {lat,lng}` and `verification: 'manual' | 'gps' | 'qr'`.
+- `next.config.mjs` blocks `geolocation` and `camera` (opened in Phase 4).
+- Env var `NEXT_PUBLIC_MAP_STYLE_URL` is already reserved for the map style.
+
+## Key technical decisions (proposed)
+
+| # | Decision | Why |
+|---|---|---|
+| D1 | **MapLibre GL JS** for the real map, loaded lazily (only on the game screen). Style from `NEXT_PUBLIC_MAP_STYLE_URL`; a **keyless raster fallback** (OpenStreetMap) when it's unset. | The roadmap + env var already target MapLibre. The fallback keeps dev, CI and fresh clones working with no key (mirrors Phase 2 D8 "boots unconfigured"); a hosted key (e.g. MapTiler) is a config change at launch. |
+| D2 | **GPS verification is client-side and on-device only.** The browser Geolocation API compares the player's position to the checkpoint coordinates within a radius (~40 m). Location is **never sent to the server or stored**. | Privacy by design (GDPR) — we promised no location data leaves the device. The check is purely local, so it also works offline. |
+| D3 | **Manual confirmation stays on every checkpoint** as the fallback (weak GPS, indoors, accessibility). GPS/QR only activate for checkpoints that have real coordinates and `gps`/`qr` in `verification`. | Matches the existing model ("'manual' is the fallback every checkpoint keeps"); a bad fix must never block a player. |
+| D4 | **Simulated checkpoints keep the stylised map + manual arrival.** | A simulated checkpoint has no real place to walk to; showing it on a street map would be misleading. |
+| D5 | **QR verification** (if in scope) scans a code with the camera that must match the checkpoint's expected value; the camera is requested only when the player taps "Scan". Manual stays as fallback. | Camera is sensitive; ask only on demand. |
+| D6 | Open `geolocation` (and `camera` for QR) to `self` in the Permissions-Policy; request the permission only when the player acts. | Least privilege; no silent prompts. |
+
+## Open decisions (need your pick) — see the questions asked alongside this doc
+1. **Scope:** Map + GPS now (QR as a later milestone), or Map + GPS + QR together?
+2. **Demo content:** add approximate Heidelberg coordinates to the demo adventures (still flagged
+   `simulated`, manual always available) so the real map + GPS are usable now — or keep the demo
+   stylised and activate GPS only for future real on-location adventures?
+
+## Milestones (proposed; adjusts to the scope answer)
+
+### M1 — MapLibre map (design shown first)
+- [ ] Add `maplibre-gl` dependency; a lazy `<RealMap>` component (style env + keyless fallback)
+- [ ] Render checkpoints + route + (optional) the player's position; wired into the `travel` stage for
+      real-coordinate adventures, stylised `DemoMap` kept for simulated ones
+- [ ] **Visual design shown and approved before wiring**
+
+### M2 — GPS "I'm here"
+- [ ] Geolocation permission UX; distance-to-checkpoint check within a radius; manual fallback; clear
+      errors (denied, timeout, too far, weak accuracy). On-device only (D2)
+
+### M3 — QR (if in scope)
+- [ ] Camera scan matching the checkpoint code; permission on demand; manual fallback
+
+### M4 — Content + privacy + hardening
+- [ ] Demo coordinates (if chosen); Permissions-Policy opened; privacy copy updated (location used
+      on-device only, never stored); tests + Sonnet review
+
+## Env vars (Phase 4)
+- `NEXT_PUBLIC_MAP_STYLE_URL` — MapLibre style URL (e.g. a MapTiler style with a domain-restricted key).
+  Unset → keyless OSM raster fallback. Already listed in `.env.example`.
+
+## Log
+- 2026-10-31 — Branch `phase-4-map` created off main (Phase 2 merged). Plan drafted; scope questions put
+  to the user; map design mock to follow before any building.
