@@ -6,7 +6,12 @@ import { SignOutButton } from '@/components/auth/SignOutButton';
 import { SectionHeading } from '@/components/Section';
 import { isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionary';
+import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { createClient } from '@/lib/supabase/server';
+import type { User } from '@supabase/supabase-js';
+
+// Reads the session cookie, so it must render per request, never from a prerendered shell.
+export const dynamic = 'force-dynamic';
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ error?: string }> };
 
@@ -22,13 +27,16 @@ export default async function AccountPage({ params, searchParams }: Props) {
   const { error } = await searchParams;
   const t = getDictionary(locale).account;
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Remember the language this account prefers. Owner-only by RLS; ignore failures (best effort).
-  if (user) await supabase.from('profiles').update({ locale }).eq('id', user.id);
+  let user: User | null = null;
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient();
+    user = (await supabase.auth.getUser()).data.user;
+    // Remember the language this account prefers, but only write when it actually changed (owner-only by RLS).
+    if (user) {
+      const { data: profile } = await supabase.from('profiles').select('locale').eq('id', user.id).maybeSingle();
+      if (profile && profile.locale !== locale) await supabase.from('profiles').update({ locale }).eq('id', user.id);
+    }
+  }
 
   return (
     <div className="container-cq py-14">

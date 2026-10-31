@@ -3,7 +3,7 @@
 Tracking document for Phase 2. Kept in sync with the code: every decision and every completed step is
 recorded here so the work stays auditable and reversible.
 
-**Branch:** `phase-2-backend` · **Status:** Milestone 1 in progress · **Started:** 2026-10-31
+**Branch:** `phase-2-backend` · **Status:** Milestone 1 complete (reviewed) · **Started:** 2026-10-31
 
 ## Goal (from the roadmap)
 
@@ -31,7 +31,9 @@ export (GDPR), newsletter with double opt-in.
 | D3 | Merge rule on login: keep the **furthest** progress per adventure | Prevents losing a guest game when signing in, and losing an account game when playing as guest first. "Furthest" = more solved chapters, then later `lastActiveAt`. |
 | D4 | Keep `ProgressStore` interface shape; add an async-capable sync layer beside it | The game screen keeps reading synchronously from local; sync is a separate concern, so GameClient barely changes. |
 | D5 | RLS on every table, owner-only by default; admin via a server-checked role | Least privilege. No table is readable/writable without a policy. Admin writes go through the service role on the server, never the browser. |
-| D6 | Magic-link (passwordless) email auth | Matches the roadmap; no password storage; lowest-friction for a consumer game. Local dev reads the link from the Supabase CLI mail catcher (Inbucket). |
+| D6 | Magic-link (passwordless) email auth | Matches the roadmap; no password storage; lowest-friction for a consumer game. Local dev reads the link from the Supabase CLI mail catcher (Mailpit). |
+| D7 | "Furthest wins" is also a **server-side** invariant (DB trigger `keep_furthest_progress`) | A client push can never regress account progress regardless of timing. The client merge rule and the DB trigger use the same ordering (finished > more solved > later lastActiveAt). Added after the M1 review found a last-write-wins data-loss path. |
+| D8 | The site must boot with Supabase **unconfigured** | `isSupabaseConfigured()` guards every Supabase entry point; with no env the app runs signed-out, offline-only, and never 500s (CI, preview deploys, fresh clones). |
 
 ## Milestones
 
@@ -42,12 +44,20 @@ export (GDPR), newsletter with double opt-in.
 - [x] Supabase clients: server, browser, middleware session refresh
 - [x] Env wiring (`.env.local`, `.env.example` already lists the keys)
 - [x] Merge logic for login reconcile (`lib/engine/merge.ts`) + unit tests (D3)
-- [ ] Auth: magic-link sign-in, callback route, sign-out, session in header
-- [ ] Profiles: row created on first sign-in, locale stored
-- [ ] Progress sync: background push/pull + login merge (D2/D3) wired into GameClient + Dashboard
-- [ ] "My adventures" (dashboard) reads account progress when signed in
-- [ ] Tests green: unit + typecheck + build; e2e
-- [ ] Reviewer-agent pass on the diff
+- [x] Auth: magic-link sign-in, callback route, sign-out, session in header
+- [x] Profiles: row created on first sign-in, locale stored (written only when it changes)
+- [x] Progress sync: background push/pull + login merge (D2/D3) wired into GameClient + Dashboard
+- [x] "My adventures" (dashboard) reads account progress when signed in
+- [x] Tests green: unit + typecheck + build; e2e (tests/e2e/auth.spec.ts)
+- [x] Reviewer-agent pass on the diff (Sonnet) — findings addressed, see log
+
+**M1 is complete.** Review fixes applied: server-enforced furthest-wins (D7), env-unconfigured guards
+(D8), push gated behind the first reconcile + reconcile re-reads local and only writes/pushes real
+changes, pull errors abort instead of overwriting, "start over" deletes the account save, sign-out clears
+local saves (shared-browser leak), open-redirect hardening in the callback, site pages static again (auth
+read in the browser), middleware propagates refreshed cookies, `getSession` instead of networked
+`getUser` for pushes, DB check constraints + function hygiene. Deferred to later (documented): progress is
+client-trusted — M2 entitlements/ranking must not trust `progress.data`.
 
 **Local stack note:** the project lives under `/Applications/...`, which Docker Desktop does not share by
 default, so the **Studio** container (and other non-essential services) are excluded at start. Essentials
@@ -84,3 +94,10 @@ Already documented in `.env.example`. For local dev, `supabase start` prints the
   migration applied and verified (RLS + policies + auth trigger), DB types generated, browser/server/
   middleware Supabase clients, `.env.local` wired, merge/reconcile logic + tests. Typecheck clean,
   66/66 unit tests pass.
+- 2026-10-31 — M1 auth + sync built and verified end-to-end in a browser (sign in via Mailpit link,
+  profile/locale written, progress pushed + pulled on a cleared device, sign out). Then a Sonnet reviewer
+  audited the diff and found a last-write-wins data-loss path, a no-env crash, a start-over/reconcile
+  resurrection, an open redirect, stale-reconcile overwrites, a shared-browser leak and an SSG regression.
+  All addressed (migration `20261031094501_harden_progress_sync`, env guards, sync rewrite, callback fix,
+  client-derived header auth). 71 unit tests pass; `tests/e2e/auth.spec.ts` (auth + sync) green on a
+  production build; typecheck + build clean. **M1 complete.**

@@ -71,4 +71,38 @@ describe('reconcile', () => {
     expect(reconcile([a1], [a2])[0]!.solved.length).toBe(8);
     expect(reconcile([a2], [a1])[0]!.solved.length).toBe(8);
   });
+
+  it('keeps the local save on an exact tie (local is applied last)', () => {
+    const local = save('a', 4, 500);
+    const remote = save('a', 4, 500);
+    expect(reconcile([local], [remote])[0]).toBe(local);
+  });
+
+  it('handles empty and duplicate inputs', () => {
+    expect(reconcile([], [])).toEqual([]);
+    expect(reconcile([save('a', 1, 1)], [])).toHaveLength(1);
+    // Two saves of the same adventure on one side: the further survives.
+    expect(reconcile([save('a', 2, 1), save('a', 5, 1)], [])[0]!.solved.length).toBe(5);
+  });
+});
+
+describe('edge cases', () => {
+  it('both finished: the more recently active wins, ties keep the first', () => {
+    expect(isAtLeastAsFar(finished('x', 200), finished('x', 100))).toBe(true);
+    expect(isAtLeastAsFar(finished('x', 100), finished('x', 200))).toBe(false);
+    expect(isAtLeastAsFar(finished('x', 100), finished('x', 100))).toBe(true);
+  });
+
+  it('equal solved but different stage falls through to activity time', () => {
+    const travel = { ...save('x', 3, 100), stage: 'travel' as const };
+    const solved = { ...save('x', 3, 400), stage: 'solved' as const };
+    expect(isAtLeastAsFar(solved, travel)).toBe(true);
+    expect(isAtLeastAsFar(travel, solved)).toBe(false);
+  });
+
+  it('an unfinished save with more solved chapters still loses to a finished one', () => {
+    // Defends the "finished beats unfinished" rule against hand-edited data.
+    const hacked = save('x', 20, 9999); // impossibly many solved, very recent
+    expect(isAtLeastAsFar(finished('x', 1), hacked)).toBe(true);
+  });
 });

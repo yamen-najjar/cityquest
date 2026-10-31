@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { signOutAndClear } from '@/lib/engine/sync';
 
 export function SignOutButton({ label, busyLabel, className }: { label: string; busyLabel: string; className?: string }) {
   const [busy, setBusy] = useState(false);
@@ -10,7 +10,8 @@ export function SignOutButton({ label, busyLabel, className }: { label: string; 
 
   async function signOut() {
     setBusy(true);
-    await createClient().auth.signOut();
+    // Signs out this device and clears local saves, so they never merge into the next account here.
+    await signOutAndClear();
     // Re-render the server component tree so the account page shows the signed-out view.
     router.refresh();
   }
