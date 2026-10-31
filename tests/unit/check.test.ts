@@ -118,6 +118,15 @@ describe('content', () => {
         }
       });
 
+      it('has DB-safe chapter ids (the solves gating depends on the chapter_id check constraint)', () => {
+        // Must match supabase/migrations/..._entitlements_and_solves.sql: ^[a-z0-9-]+$, max 64 chars.
+        // A chapter id that fails this would make recordSolve throw and soft-lock a paid player.
+        for (const c of a.chapters) {
+          expect(c.id, c.id).toMatch(/^[a-z0-9-]+$/);
+          expect(c.id.length, c.id).toBeLessThanOrEqual(64);
+        }
+      });
+
       it('uses at least six different puzzle types', () => {
         expect(new Set(a.chapters.map((c) => c.puzzle.type)).size).toBeGreaterThanOrEqual(6);
       });

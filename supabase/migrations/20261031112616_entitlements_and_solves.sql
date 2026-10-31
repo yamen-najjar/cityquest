@@ -29,6 +29,12 @@ create policy "entitlements: owner can read own"
   on public.entitlements for select
   using (auth.uid() = user_id);
 
+-- Defence in depth: RLS already blocks writes (no write policy exists), but Supabase grants anon and
+-- authenticated ALL privileges on new public tables by default, so RLS is the only barrier. Revoking
+-- the write privileges means a future stray `for all` policy (or RLS being disabled) cannot silently
+-- open the table to the browser. The service role keeps its own grants and is unaffected.
+revoke insert, update, delete on public.entitlements from anon, authenticated;
+
 -- ---------------------------------------------------------------------------------------------------
 -- solves: the server's own record of which chapters a player has actually solved. The answer-check
 -- route inserts a row here only when it has itself confirmed a correct answer, so "previous chapter
@@ -51,5 +57,7 @@ create policy "solves: owner can read own"
   on public.solves for select
   using (auth.uid() = user_id);
 
--- The gating query looks up a player's solved chapters for one adventure.
-create index solves_user_adventure_idx on public.solves (user_id, adventure);
+revoke insert, update, delete on public.solves from anon, authenticated;
+
+-- The gating query looks up a player's solved chapters for one adventure; the primary key
+-- (user_id, adventure, chapter_id) already serves that (user_id, adventure) prefix, so no extra index.

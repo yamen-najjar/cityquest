@@ -1,7 +1,6 @@
 import 'server-only';
 import type { Adventure } from '@/content/types';
-import { createAdminClient } from '@/lib/supabase/admin';
-import { isAdminConfigured } from '@/lib/supabase/config';
+import { createAdminClient, isAdminConfigured } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 
 // Authorisation for answering a paid (non-demo) adventure. Demo adventures are open and never reach
@@ -10,8 +9,11 @@ import { createClient } from '@/lib/supabase/server';
 // Two invariants, both read from the database, never from the client:
 //   1. The player owns the adventure (a row in `entitlements`).
 //   2. Every chapter before the one being answered is already solved (a row in `solves`), so a player
-//      cannot skip ahead or brute-force a later puzzle. `solves` is written only by recordSolve below,
-//      after the server has itself confirmed a correct answer — so progress.data is never trusted.
+//      cannot skip ahead to a later puzzle. `solves` is written only by recordSolve below, after the
+//      server has itself confirmed a correct answer — so progress.data is never trusted.
+//
+// Note: this stops skipping ahead, not unlimited guessing on the *current* chapter. Per-user guess
+// throttling is deferred to Phase 3 (D9), when a purchasable adventure actually exists.
 
 export type AuthzResult =
   | { ok: true; userId: string }
@@ -67,10 +69,19 @@ export async function authorizePaidAnswer(
   return { ok: true, userId: user.id };
 }
 
-/** Record that this user solved this chapter. Called only after the server confirmed the answer. */
-export async function recordSolve(userId: string, slug: string, chapterId: string): Promise<void> {
+/**
+ * Record that this user solved this chapter. Called only after the server confirmed the answer.
+ * Returns false if the write failed: the route must then NOT report success, or the client would
+ * advance to a chapter the gating can never unlock (a silent soft-lock).
+ */
+export async function recordSolve(userId: string, slug: string, chapterId: string): Promise<boolean> {
   const admin = createAdminClient();
-  await admin
+  const { error } = await admin
     .from('solves')
     .upsert({ user_id: userId, adventure: slug, chapter_id: chapterId }, { onConflict: 'user_id,adventure,chapter_id' });
+  if (error) {
+    console.error('recordSolve failed', { slug, chapterId, error: error.message });
+    return false;
+  }
+  return true;
 }

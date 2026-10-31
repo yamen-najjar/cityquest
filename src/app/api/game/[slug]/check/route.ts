@@ -23,11 +23,20 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
   }
 
   // Paid adventure: the caller must own it and have solved every earlier chapter, both verified in the
-  // database. Only then is the answer compared, and a correct one recorded server-side.
-  const authz = await authorizePaidAnswer(slug, guess.adventure, guess.chapterIndex);
-  if (!authz.ok) return NextResponse.json({ error: authz.error }, { status: authz.status });
+  // database. Only then is the answer compared, and a correct one recorded server-side. Any backend
+  // failure returns 503 rather than a wrong answer or an unrecorded "correct" (which would soft-lock
+  // the player at the next chapter), so this path is fail-closed.
+  try {
+    const authz = await authorizePaidAnswer(slug, guess.adventure, guess.chapterIndex);
+    if (!authz.ok) return NextResponse.json({ error: authz.error }, { status: authz.status });
 
-  const correct = matchesAnswer(guess.answer, guess.accepted);
-  if (correct) await recordSolve(authz.userId, slug, guess.chapterId);
-  return NextResponse.json({ correct }, noStore);
+    const correct = matchesAnswer(guess.answer, guess.accepted);
+    if (correct && !(await recordSolve(authz.userId, slug, guess.chapterId))) {
+      return NextResponse.json({ error: 'could not save progress' }, { status: 503 });
+    }
+    return NextResponse.json({ correct }, noStore);
+  } catch (err) {
+    console.error('paid answer check failed', { slug, chapterId: guess.chapterId, err });
+    return NextResponse.json({ error: 'check failed' }, { status: 503 });
+  }
 }

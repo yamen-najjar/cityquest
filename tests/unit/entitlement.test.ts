@@ -2,21 +2,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Adventure } from '@/content/types';
 
 // The gating logic in entitlement.server.ts is the valuable part: who may answer, and in what order.
-// It talks to Supabase, so here the three Supabase modules are mocked and the decision branches are
-// asserted directly — no live database needed. The paid path is also exercised end-to-end against the
-// real stack in tests/e2e (seeded there).
+// It talks to Supabase, so here the Supabase modules are mocked and the decision branches are asserted
+// directly — no live database needed. The RLS invariants it relies on are verified against the live
+// stack by hand (see docs/PHASE2.md); a full paid-flow e2e is deferred to Phase 3 (D9), when a real
+// purchasable adventure exists to run it against.
 
 let adminConfigured = true;
 let currentUser: { id: string } | null;
 let entitlementRow: { adventure: string } | null;
 let solvedRows: { chapter_id: string }[];
 let lastSolvesQueryIds: string[] | null;
+let solvesUpsertError: { message: string } | null;
 const upserts: { table: string; row: unknown; options: unknown }[] = [];
-
-vi.mock('@/lib/supabase/config', () => ({
-  isAdminConfigured: () => adminConfigured,
-  isSupabaseConfigured: () => true,
-}));
 
 vi.mock('@/lib/supabase/server', () => ({
   createClient: async () => ({
@@ -25,6 +22,7 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 
 vi.mock('@/lib/supabase/admin', () => ({
+  isAdminConfigured: () => adminConfigured,
   createAdminClient: () => ({
     from: (table: string) => {
       if (table === 'entitlements') {
@@ -48,7 +46,7 @@ vi.mock('@/lib/supabase/admin', () => ({
           }),
           upsert: async (row: unknown, options: unknown) => {
             upserts.push({ table, row, options });
-            return { error: null };
+            return { error: solvesUpsertError };
           },
         };
       }
@@ -68,6 +66,7 @@ beforeEach(() => {
   entitlementRow = { adventure: 'paid-tour' };
   solvedRows = [];
   lastSolvesQueryIds = null;
+  solvesUpsertError = null;
   upserts.length = 0;
 });
 
@@ -114,10 +113,15 @@ describe('authorizePaidAnswer', () => {
 });
 
 describe('recordSolve', () => {
-  it('upserts the solve keyed by (user, adventure, chapter)', async () => {
-    await recordSolve('u1', 'paid-tour', 'c1');
+  it('upserts the solve keyed by (user, adventure, chapter) and reports success', async () => {
+    expect(await recordSolve('u1', 'paid-tour', 'c1')).toBe(true);
     expect(upserts).toHaveLength(1);
     expect(upserts[0]!.row).toEqual({ user_id: 'u1', adventure: 'paid-tour', chapter_id: 'c1' });
     expect(upserts[0]!.options).toMatchObject({ onConflict: 'user_id,adventure,chapter_id' });
+  });
+
+  it('reports failure when the write errors, so the route can avoid a false "correct"', async () => {
+    solvesUpsertError = { message: 'boom' };
+    expect(await recordSolve('u1', 'paid-tour', 'c1')).toBe(false);
   });
 });

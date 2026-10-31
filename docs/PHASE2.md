@@ -3,7 +3,7 @@
 Tracking document for Phase 2. Kept in sync with the code: every decision and every completed step is
 recorded here so the work stays auditable and reversible.
 
-**Branch:** `phase-2-backend` · **Status:** Milestone 2 built (review pending) · **Started:** 2026-10-31
+**Branch:** `phase-2-backend` · **Status:** Milestone 2 complete (reviewed) · **Started:** 2026-10-31
 
 ## Goal (from the roadmap)
 
@@ -69,14 +69,25 @@ To get Studio too, add `/Applications/XAMPP/xamppfiles/htdocs` under Docker Desk
 → File Sharing, then `supabase start` with no excludes. Magic-link emails in dev: Mailpit at
 http://127.0.0.1:54324.
 
-### M2 — Entitlements (built, review pending)
+### M2 — Entitlements (complete)
 - [x] `entitlements` + `solves` tables + RLS (owner-read, no client writes; service-role-only writes) — migration `20261031112616_entitlements_and_solves`
 - [x] Server-enforced in the check route: demo = open; paid = own the adventure + every earlier chapter solved, both read from the DB (`lib/engine/entitlement.server.ts`), answer compared only after authorising
 - [x] Server-authoritative solve recording (D10): a solve is written only after the server confirms correctness; gating reads `solves`, never `progress.data`
 - [x] Service-role admin client (`lib/supabase/admin.ts`), `isAdminConfigured()` guard; paid checks fail closed with no backend
-- [x] Tests: 82 unit (resolveGuess + entitlement gating branches, Supabase mocked); RLS invariants verified live (anon cannot read/write either table, service role can, slug check constraint holds); typecheck + build clean, `play/[slug]` still SSG
-- [ ] Reviewer-agent pass (Sonnet) on the M2 diff
+- [x] Tests: 85 unit (resolveGuess + entitlement gating branches + record-failure + DB-safe chapter-id invariant, Supabase mocked); RLS invariants verified live (anon cannot read/write either table, service role can, slug check constraint holds); typecheck + build clean, `play/[slug]` still SSG
+- [x] Reviewer-agent pass (Sonnet) on the M2 diff — no HIGH/exploitable bypass; fixes applied (see below)
 - Deferred to Phase 3 (documented, D9): full per-chapter content *delivery* for paid adventures (not shipping later chapters to the browser) + an end-to-end paid-flow e2e, which needs a real purchasable (non-demo) adventure to exist first.
+
+**M2 review (Sonnet) — no HIGH, no exploitable gating/RLS bypass. Fixed:** the solve write now
+reports failure and the route returns 503 instead of a false `correct:true` (was a silent soft-lock
+risk); `revoke insert/update/delete` on both tables from anon/authenticated (defence-in-depth, so RLS
+is no longer the only barrier — verified the grants are gone); dropped the redundant
+`solves_user_adventure_idx` (the PK prefix serves it); moved `isAdminConfigured()` into the
+`server-only` `admin.ts` (out of browser-reachable `config.ts`); added a unit test asserting chapter
+ids satisfy the DB `chapter_id` check constraint; the paid path is wrapped in try/catch → 503.
+**Accepted/deferred:** per-user guess throttling on the *current* chapter (an owner can brute-force a
+short code with unlimited guesses) — order gating stops skipping ahead but not this; deferred to Phase 3
+with the first purchasable adventure (D9). Dormant now (all adventures are demo).
 
 ### M3 — Admin dashboard
 - [ ] Roles, admin-only area, draft/published, preview — **design shown first**
@@ -114,3 +125,9 @@ Already documented in `.env.example`. For local dev, `supabase start` prints the
   server confirms it. `check.server.ts` split into `resolveGuess` (pure) + `checkAnswer`; the check route
   branches demo (open, offline) vs paid (authorised). 82 unit tests pass; RLS invariants verified live;
   build keeps `play/[slug]` SSG. Reviewer pass next.
+- 2026-10-31 — M2 reviewed (Sonnet): no HIGH, no exploitable gating/RLS bypass. Applied fixes — solve
+  write reports failure → route returns 503 (was a silent soft-lock), `revoke` writes from
+  anon/authenticated on both tables (verified), dropped the redundant index, moved `isAdminConfigured`
+  into `server-only` `admin.ts`, added a DB-safe chapter-id invariant test, wrapped the paid path in
+  try/catch → 503. Guess throttling on the current chapter accepted as a Phase 3 item (D9). 85 unit
+  tests pass; grants/index re-verified live; typecheck + build clean. **M2 complete.**
