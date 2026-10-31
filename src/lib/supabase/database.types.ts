@@ -23,7 +23,35 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "entitlements": {
+            "admin_users": {
+                  Row: {
+                    "added_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "added_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "added_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"adventure_state": {
+                  Row: {
+                    "available": boolean,"price_cents": number | null,"slug": string,"status": string,"tier": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "available"?: boolean,"price_cents"?: number | null,"slug": string,"status"?: string,"tier"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "available"?: boolean,"price_cents"?: number | null,"slug"?: string,"status"?: string,"tier"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"entitlements": {
                   Row: {
                     "adventure": string,"granted_at": string,"source": string,"user_id": string
                   }

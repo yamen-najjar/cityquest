@@ -18,6 +18,15 @@ function preferred(req: NextRequest): Locale {
 /** Every page lives under /de, /en or /ar; a path without one is sent to the visitor's language. */
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
+
+  // The admin console lives at /admin, outside the locale structure. Let it through (no locale
+  // redirect) but still refresh the auth session so the admin check can read the signed-in user.
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    const res = NextResponse.next();
+    await refreshSession(req, res);
+    return res;
+  }
+
   const first = pathname.split('/')[1];
   if (isLocale(first)) {
     const res = NextResponse.next();
