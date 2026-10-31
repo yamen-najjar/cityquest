@@ -54,9 +54,19 @@ game keeps working offline, with manual confirmation always available.
       `Map3D`/`DemoMap`
 - [x] Verified live (real Heidelberg tiles + pins render in the game); typecheck + 89 tests; build clean
       (`maplibre-gl` stays in a lazy chunk, play page ~188 kB First Load)
-- [ ] Reviewer-agent pass (Sonnet) on the M1 diff
-- Note: the "I'm here" step is still manual in M1; GPS verification is M2. The map caption copy
-  ("stylised demo map") is now shown under a real street map — to be refined in M4's copy pass.
+- [x] Reviewer-agent pass (Sonnet) — no HIGH; fixes applied (below)
+
+**M1 review (Sonnet) — no HIGH. Fixed:** if WebGL is missing or MapLibre throws on construction, RealMap
+now falls back to the stylised `DemoMap` instead of crashing the game screen; pins are added immediately
+(not only on the map's `load`), so they show even if a remote style/tiles fail, plus a `map.on('error')`
+handler; a11y — dropped `role="img"` from the map container (it was hiding the zoom controls), the name
+moved to the `<figure role="group">`; OSM attribution now links to the copyright page and the raster
+source caps at `maxzoom: 19`; pin colours use the theme tokens where they exist. Added a unit test:
+every `gps` checkpoint has valid, unique Heidelberg coordinates. 91 unit tests; verified live (8 markers,
+attribution link, no console errors). **Deferred to M4 copy pass:** the map note / `simulatedHelp` /
+safety-banner copy that still reads as if there were no real map; localising MapLibre's built-in control
+strings; moving off OSM's volunteer tile servers. **Deferred to M2:** re-fit on `userPosition`, and
+reading latest props from refs in the `load` handler (only matters once GPS moves the camera).
 
 ### M2 — GPS "I'm here"
 - [ ] Geolocation permission UX; distance-to-checkpoint check within a radius; manual fallback; clear

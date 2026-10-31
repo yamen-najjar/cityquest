@@ -127,6 +127,28 @@ describe('content', () => {
         }
       });
 
+      it('every GPS checkpoint has valid, unique Heidelberg coordinates (Phase 4)', () => {
+        const seen = new Set<string>();
+        for (const c of a.chapters) {
+          const cp = c.checkpoint;
+          if (cp.verification.includes('gps')) {
+            expect(cp.coordinates, c.id).toBeDefined();
+            const { lat, lng } = cp.coordinates!;
+            expect(Number.isFinite(lat) && Number.isFinite(lng), c.id).toBe(true);
+            // Heidelberg bounding box.
+            expect(lat, c.id).toBeGreaterThan(49.38);
+            expect(lat, c.id).toBeLessThan(49.44);
+            expect(lng, c.id).toBeGreaterThan(8.65);
+            expect(lng, c.id).toBeLessThan(8.75);
+          }
+          if (cp.coordinates) {
+            const key = `${cp.coordinates.lat},${cp.coordinates.lng}`;
+            expect(seen.has(key), `${c.id} duplicate ${key}`).toBe(false);
+            seen.add(key);
+          }
+        }
+      });
+
       it('uses at least six different puzzle types', () => {
         expect(new Set(a.chapters.map((c) => c.puzzle.type)).size).toBeGreaterThanOrEqual(6);
       });
