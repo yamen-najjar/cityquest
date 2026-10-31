@@ -4,7 +4,7 @@ Tracking document for Phase 4. Same way of working as Phase 2: one feature branc
 reviewable commits, this document kept in sync, each milestone tested (unit + typecheck + build, live
 where it applies) and reviewed by a Sonnet agent before the next. **Design shown first** for the map UI.
 
-**Branch:** `phase-4-map` · **Status:** complete (map + GPS; QR deferred) · **Started:** 2026-10-31
+**Branch:** `phase-4-map` → `phase-4-qr` · **Status:** complete (map, GPS, QR) · **Started:** 2026-10-31
 
 **Scope (confirmed):** map + GPS first (QR later); demo gets approximate Heidelberg coordinates (still
 `simulated`, manual always available). Design mock approved before building.
@@ -80,8 +80,18 @@ reading latest props from refs in the `load` handler (only matters once GPS move
       advances to the puzzle); typecheck + 91 tests
 - [ ] Reviewer-agent pass (Sonnet)
 
-### M3 — QR (if in scope)
-- [ ] Camera scan matching the checkpoint code; permission on demand; manual fallback
+### M3 — QR (complete)
+- [x] `jsqr@1.4.0` (pinned); lazy `QrScanner` (camera + decoder in its own chunk), requested only when
+      the player taps "Scan QR code"; the stream is stopped on close/unmount; frames are decoded locally
+      and only a match (or cancel) is reported — nothing leaves the device
+- [x] `CheckpointArrival` now offers GPS "I'm here", "Scan QR code" and manual together; a scan that
+      matches the checkpoint's `code` arrives, else manual stays the fallback
+- [x] Demo checkpoints got a `code` (`cq-<slug>-<n>`) + `qr` verification; `Permissions-Policy` opened
+      to `camera=(self)` (microphone stays blocked)
+- [x] QR strings in all 4 locales; unit test: every `qr` checkpoint has a well-formed, unique code
+- [x] Verified live (the three options show; "Scan QR code" opens the camera + scanning UI; Cancel
+      stops the stream and returns). 93 unit tests; typecheck + build clean (`jsqr` lazy)
+- [ ] Reviewer-agent pass (Sonnet) on the QR diff
 
 ### M4 — Content + privacy + copy (complete)
 - [x] Demo coordinates added (M1); Permissions-Policy opened to `geolocation=(self)` (M2)
@@ -105,8 +115,9 @@ MapLibre two-finger mobile hint is localised (mobile is the main platform); the 
 was dropped; the dead "fit to user position" line was removed (deliberately not following the player, so
 tiles are never fetched for their real location). 91 unit tests; build clean.
 
-**Phase 4 scope (map + GPS) is complete.** QR verification is deferred (the chosen scope was "map + GPS first"). When picked up it becomes a new
-milestone: camera permission on demand, scan matching the checkpoint code, manual fallback.
+**Phase 4 is complete: real map, GPS and QR checkpoint verification**, each with manual fallback. The
+remaining real-world work (keyed tile provider, real on-location coordinates/QR codes for paid
+adventures) lands at hosting time.
 
 ## Env vars (Phase 4)
 - `NEXT_PUBLIC_MAP_STYLE_URL` — MapLibre style URL (e.g. a MapTiler style with a domain-restricted key).

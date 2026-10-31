@@ -127,6 +127,19 @@ describe('content', () => {
         }
       });
 
+      it('every QR checkpoint has a well-formed, unique code (Phase 4)', () => {
+        const seen = new Set<string>();
+        for (const c of a.chapters) {
+          const cp = c.checkpoint;
+          if (cp.verification.includes('qr')) {
+            expect(cp.code, c.id).toBeTruthy();
+            expect(cp.code!, c.id).toMatch(/^cq-[a-z0-9-]+$/);
+            expect(seen.has(cp.code!), `${c.id} duplicate code ${cp.code}`).toBe(false);
+            seen.add(cp.code!);
+          }
+        }
+      });
+
       it('every GPS checkpoint has valid, unique Heidelberg coordinates (Phase 4)', () => {
         const seen = new Set<string>();
         for (const c of a.chapters) {
