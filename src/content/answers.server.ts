@@ -39,10 +39,10 @@ export const answerKeys: Record<string, AnswerKey> = {
     carillon: { accepted: ['9472'] },
     sonsbeek: {
       accepted: [
-        'rhine', 'the rhine', 'to the rhine', 'river', 'the river',
-        'rijn', 'de rijn', 'naar de rijn', 'rivier', 'de rivier', 'rijnkade', 'kade',
-        'rhein', 'der rhein', 'zum rhein', 'fluss', 'am fluss', 'zum fluss',
-        'نهر', 'النهر', 'نهر الراين', 'الراين', 'إلى نهر الراين',
+        'rhine', 'the rhine', 'to the rhine', 'to the rhine before midnight', 'river', 'the river', 'quay', 'the quay',
+        'rijn', 'de rijn', 'naar de rijn', 'naar de rijn voor middernacht', 'rivier', 'de rivier', 'rijnkade', 'kade',
+        'rhein', 'der rhein', 'zum rhein', 'kai', 'rheinkai', 'fluss', 'am fluss', 'zum fluss',
+        'نهر', 'النهر', 'نهر الراين', 'الراين', 'إلى نهر الراين', 'الرصيف',
       ],
     },
     rijnkade: { accepted: ['1545'] },

@@ -7,8 +7,8 @@ import type { Adventure, Authored } from '../types';
 // the Sabelspoort, the Eusebius church, Sonsbeek park, the Rhine quay, Museum Arnhem) are real places,
 // used only as settings.
 //
-// STATUS: draft. It becomes 'published' once the full eight chapters are reviewed. While it is a draft it
-// stays out of every public page and out of the strict content tests.
+// The eight checkpoints are simulated (approximate positions in Arnhem), so distanceKm and the walking
+// time are indicative until the route is validated on foot.
 
 export const hetDuivelshuis: Authored<Adventure> = {
   slug: 'het-duivelshuis',
@@ -30,8 +30,8 @@ export const hetDuivelshuis: Authored<Adventure> = {
   theme: 'detective',
   groupTypes: ['friends', 'family', 'couples'],
   difficulty: 'medium',
-  durationMinutes: { min: 120, max: 165 },
-  distanceKm: 4,
+  durationMinutes: { min: 135, max: 180 },
+  distanceKm: 5,
   teamSize: { min: 1, max: 5 },
   minAge: 10,
   languages: ['nl', 'en', 'de', 'ar'],
@@ -149,12 +149,12 @@ export const hetDuivelshuis: Authored<Adventure> = {
     {
       id: 'koster',
       voice: 'man',
-      appears: 'duivels',
+      appears: 'archief',
       name: { de: 'Daan Koster', en: 'Daan Koster', ar: 'دان كوستر' },
       role: { de: 'Antiquitätenhändler, „der Sammler“', en: 'Antiques dealer, “the Collector”', ar: 'تاجر تحف، «الجامع»' },
       notes: [
-        { after: 'duivels', text: { de: 'War schon am Teufelshaus und hat den Stein beschädigt. Sucht dasselbe wie du.', en: 'Has already been at the Devil’s House and damaged the stone. He is after the same thing you are.', ar: 'كان عند بيت الشيطان وأتلف الحجر. يسعى إلى ما تسعى إليه.' } },
-        { after: 'aanklacht', text: { de: 'Hat die Archivtür aufgebrochen und wollte das Register Seite für Seite verkaufen.', en: 'Forced the archive door and meant to sell the register page by page.', ar: 'كسر باب الأرشيف وكان ينوي بيع السجلّ صفحةً صفحة.' } },
+        { after: 'archief', text: { de: 'War schon am Teufelshaus und hat den Stein beschädigt. Sucht dasselbe wie du.', en: 'Has already been at the Devil’s House and damaged the stone. He is after the same thing you are.', ar: 'كان عند بيت الشيطان وأتلف الحجر. يسعى إلى ما تسعى إليه.' } },
+        { after: 'aanklacht', text: { de: 'Hat die Archivtür aufgebrochen und wollte das Hauptbuch Seite für Seite verkaufen.', en: 'Forced the archive door and meant to sell the ledger page by page.', ar: 'كسر باب الأرشيف وكان ينوي بيع الدفتر صفحةً صفحة.' } },
       ],
     },
     {
@@ -174,7 +174,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
       name: { de: 'Saar de Vries', en: 'Saar de Vries', ar: 'سار دي فريس' },
       role: { de: 'Kuratorin im Museum Arnheim', en: 'Curator at Museum Arnhem', ar: 'أمينة متحف أرنم' },
       notes: [
-        { after: 'archief', text: { de: 'Ließ dich ins Archiv. Fand die mittlere Lade bereits aufgebrochen vor.', en: 'Let you into the archive. Found the middle drawer already forced open.', ar: 'أدخلتك إلى الأرشيف، ووجدت الدرج الأوسط مكسوراً من قبل.' } },
+        { after: 'archief', text: { de: 'Ließ dich ins Archiv. Fand die mittlere Schublade bereits aufgebrochen vor.', en: 'Let you into the archive. Found the middle drawer already forced open.', ar: 'أدخلتك إلى الأرشيف، ووجدت الدرج الأوسط مكسوراً من قبل.' } },
       ],
     },
   ],
@@ -421,18 +421,18 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'carillon',
-      title: { de: 'Das Glockenspiel', en: 'The Carillon', ar: 'ناقوس الأجراس' },
+      title: { de: 'Das Glockenspiel', en: 'The Carillon', ar: 'أجراس البرج' },
       story: {
         de: [
-          'Lenas Schlüssel passt in die Turmtür. Oben, in der Glockenstube, hängen vier Glocken, jede mit einer eingegossenen Zahl in römischen Ziffern.',
+          'Die Turmtür ist nur angelehnt — Lena hat ihren Schlüssel im Schloss stecken lassen. Oben, in der Glockenstube, hängen vier Glocken, jede mit einer eingegossenen Zahl in römischen Ziffern.',
           'An der Wand ein kleines Zahlenschloss, das eine Klappe sichert. Lena hat daneben gekritzelt: „Lies die Glocken.“',
         ],
         en: [
-          'Lena’s key fits the tower door. Up in the bell chamber hang four bells, each cast with a number in Roman numerals.',
+          'The tower door is ajar — Lena left her key in the lock. Up in the bell chamber hang four bells, each cast with a number in Roman numerals.',
           'On the wall a small number lock secures a hatch. Lena has scribbled beside it: “Read the bells.”',
         ],
         ar: [
-          'مفتاح لينا يناسب باب البرج. وفي الأعلى، في غرفة الأجراس، تتدلّى أربعة أجراس، على كلٍّ منها رقم مصبوب بالأرقام الرومانية.',
+          'باب البرج موارب — تركت لينا مفتاحها في القفل. وفي الأعلى، في غرفة الأجراس، تتدلّى أربعة أجراس، على كلٍّ منها رقم مصبوب بالأرقام الرومانية.',
           'على الجدار قفل أرقام صغير يحمي كوّة. وقد خطّت لينا بجانبه: «اقرأ الأجراس».',
         ],
       },
@@ -511,9 +511,9 @@ export const hetDuivelshuis: Authored<Adventure> = {
         ],
       },
       success: {
-        de: 'Zum Rhein, vor Mitternacht. Der Sammler will das Register heute Nacht aus der Stadt bringen — über das Wasser. Du musst vor ihm an der Kade sein.',
-        en: 'To the Rhine, before midnight. The Collector means to take the register out of the city tonight — across the water. You must reach the quay before him.',
-        ar: 'إلى نهر الراين، قبل منتصف الليل. ينوي الجامع إخراج السجلّ من المدينة الليلة — عبر الماء. عليك أن تسبقه إلى الرصيف.',
+        de: 'Zum Rhein, vor Mitternacht. Der Sammler will das Hauptbuch heute Nacht aus der Stadt bringen — über das Wasser. Du musst vor ihm am Kai sein.',
+        en: 'To the Rhine, before midnight. The Collector means to take the ledger out of the city tonight — across the water. You must reach the quay before him.',
+        ar: 'إلى نهر الراين، قبل منتصف الليل. ينوي الجامع إخراج الدفتر من المدينة الليلة — عبر الماء. عليك أن تسبقه إلى الرصيف.',
       },
       clues: [
         { de: 'Der Sammler will heute Nacht zum Rhein, vor Mitternacht.', en: 'The Collector is heading to the Rhine tonight, before midnight.', ar: 'يتجه الجامع إلى نهر الراين الليلة، قبل منتصف الليل.' },
@@ -524,15 +524,15 @@ export const hetDuivelshuis: Authored<Adventure> = {
       title: { de: 'Das Signal über den Rhein', en: 'The Signal Across the Rhine', ar: 'الإشارة عبر نهر الراين' },
       story: {
         de: [
-          'An der Rijnkade ist es still. Über dem Wasser, von einem Fenster am Museumshang, blinkt eine Lampe: kurz, lang, lang … kein Zufall.',
+          'An der Rijnkade ist es still. Oben am Museumshang, in einem erleuchteten Fenster, blinkt eine Lampe: kurz, lang, lang … kein Zufall.',
           'Jemand sendet dir Ziffern. Sie öffnen die Seitentür des Museums, in dem das Archiv liegt.',
         ],
         en: [
-          'The Rhine quay is quiet. Across the water, from a window on the museum hill, a lamp is blinking: short, long, long… not by chance.',
+          'The Rhine quay is quiet. Up on the museum slope above you, a lamp is blinking in a lit window: short, long, long… not by chance.',
           'Someone is sending you digits. They open the side door of the museum where the archive is.',
         ],
         ar: [
-          'الرصيف على نهر الراين هادئ. وعبر الماء، من نافذة على تلّة المتحف، يومض مصباح: قصير، طويل، طويل… ليس صدفة.',
+          'الرصيف على نهر الراين هادئ. وفي الأعلى على منحدر المتحف، يومض مصباح في نافذة مضيئة: قصير، طويل، طويل… ليس صدفة.',
           'أحدهم يرسل إليك أرقاماً. إنها تفتح الباب الجانبي للمتحف حيث يوجد الأرشيف.',
         ],
       },
@@ -566,11 +566,11 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'archief',
-      title: { de: 'Die mittlere Lade', en: 'The Middle Drawer', ar: 'الدرج الأوسط' },
+      title: { de: 'Die mittlere Schublade', en: 'The Middle Drawer', ar: 'الدرج الأوسط' },
       story: {
         de: [
-          'Im Museum Arnheim empfängt dich die Kuratorin Saar de Vries, blass. „Jemand ist schon hier gewesen“, sagt sie. „Die mittlere Lade im Archivschrank ist aufgebrochen — aber nicht geöffnet.“',
-          'Die Lade ist aus Eisen, mit einem abgenutzten Schlüsselloch. Darüber, eingeritzt, dieselben Worte wie auf deinem Schlüssel: „De middelste bewaart.“',
+          'Im Museum Arnheim empfängt dich die Kuratorin Saar de Vries, blass. „Jemand ist schon hier gewesen“, sagt sie. „Die mittlere Schublade im Archivschrank ist aufgebrochen — aber nicht geöffnet.“',
+          'Die Schublade ist aus Eisen, mit einem abgenutzten Schlüsselloch. Darüber, eingeritzt, dieselben Worte wie auf deinem Schlüssel: „De middelste bewaart.“',
         ],
         en: [
           'At Museum Arnhem the curator Saar de Vries meets you, pale. “Someone has already been here,” she says. “The middle drawer of the archive cabinet was forced — but not opened.”',
@@ -593,20 +593,20 @@ export const hetDuivelshuis: Authored<Adventure> = {
       puzzle: {
         type: 'item-use',
         fromInventory: true,
-        prompt: { de: 'Welchen Gegenstand aus deinem Inventar steckst du in die mittlere Lade?', en: 'Which item from your inventory do you put into the middle drawer?', ar: 'أي غرض من حقيبتك تضعه في الدرج الأوسط؟' },
+        prompt: { de: 'Welchen Gegenstand aus deinem Inventar steckst du in die mittlere Schublade?', en: 'Which item from your inventory do you put into the middle drawer?', ar: 'أي غرض من حقيبتك تضعه في الدرج الأوسط؟' },
         hints: [
-          { de: 'Die Lade ist aus Eisen, mit einem Schlüsselloch.', en: 'The drawer is iron, with a keyhole.', ar: 'الدرج من حديد، وفيه ثقب مفتاح.' },
+          { de: 'Die Schublade ist aus Eisen, mit einem Schlüsselloch.', en: 'The drawer is iron, with a keyhole.', ar: 'الدرج من حديد، وفيه ثقب مفتاح.' },
           { de: 'Hinter dem mittleren Teufel hast du genau dafür etwas gefunden.', en: 'Behind the middle devil you found something for exactly this.', ar: 'خلف الشيطان الأوسط وجدت شيئاً لهذا بالضبط.' },
           { de: 'Der alte Eisenschlüssel.', en: 'The old iron key.', ar: 'المفتاح الحديدي القديم.' },
         ],
       },
       success: {
-        de: 'Der Schlüssel dreht sich, und die Lade gleitet auf. Darin liegt das gebundene Register — vollständig. An der Kante klemmt ein Handschuh aus Samt. Der Sammler war hier und musste es zurücklassen.',
-        en: 'The key turns and the drawer slides open. Inside lies the bound register — complete. A velvet glove is caught on the edge. The Collector was here and had to leave it behind.',
-        ar: 'يدور المفتاح وينزلق الدرج مفتوحاً. في داخله السجلّ المجلّد — كاملاً. وعلى الحافة عَلِقت قفّاز مخملي. كان الجامع هنا واضطُرّ إلى تركه.',
+        de: 'Der Schlüssel dreht sich, und die Schublade gleitet auf. Darin liegt das gebundene Hauptbuch — doch eine Seite fehlt: genau die, die du wieder zusammengefügt hast. An der Kante klemmt ein Handschuh aus Samt. Der Sammler war hier und musste ihn zurücklassen.',
+        en: 'The key turns and the drawer slides open. Inside lies the bound ledger — but one leaf is missing: the very page you pieced back together. A velvet glove is caught on the edge. The Collector was here and had to leave it behind.',
+        ar: 'يدور المفتاح وينزلق الدرج مفتوحاً. في داخله الدفتر المجلّد — لكن تنقصه ورقة واحدة: الورقة نفسها التي أعدت جمعها. وعلى الحافة عَلِق قفّاز مخملي. كان الجامع هنا واضطُرّ إلى تركه.',
       },
       clues: [
-        { de: 'Das Register lag unberührt in der mittleren Lade.', en: 'The register lay untouched in the middle drawer.', ar: 'كان السجلّ سليماً في الدرج الأوسط.' },
+        { de: 'Das Hauptbuch lag unberührt in der mittleren Schublade.', en: 'The ledger lay untouched in the middle drawer.', ar: 'كان الدفتر سليماً في الدرج الأوسط.' },
         { de: 'Ein Samthandschuh verrät: Der Sammler war hier.', en: 'A velvet glove gives it away: the Collector was here.', ar: 'قفّاز مخملي يفضح الأمر: الجامع كان هنا.' },
       ],
     },
@@ -615,7 +615,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
       title: { de: 'Die Anklage', en: 'The Accusation', ar: 'الاتهام' },
       story: {
         de: [
-          'Auf der Binnenplatz hinter dem Teufelshaus steht er: ein Mann im Samtmantel, ohne einen Handschuh. Lena tritt aus dem Schatten, die Ledermappe in der Hand.',
+          'Im Innenhof hinter dem Teufelshaus steht er: ein Mann im Samtmantel, dem ein Handschuh fehlt. Lena tritt aus dem Schatten, die Ledermappe in der Hand.',
           '„Du hast alles gesehen“, sagt sie zu dir. „Sag es ihm ins Gesicht. Wer hat das Archiv aufgebrochen — und womit beweist du es?“',
         ],
         en: [
@@ -629,7 +629,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
       },
       checkpoint: {
         id: 'cp-binnenplaats',
-        name: { de: 'Die Binnenplatz', en: 'The courtyard', ar: 'الفناء' },
+        name: { de: 'Der Innenhof', en: 'The courtyard', ar: 'الفناء' },
         simulated: true,
         mapPosition: { x: 30, y: 46 },
         verification: ['gps', 'qr', 'manual'],
@@ -652,42 +652,42 @@ export const hetDuivelshuis: Authored<Adventure> = {
         ],
       },
       success: {
-        de: 'Koster. Sein fehlender Handschuh liegt im Archiv, sein Name steht am Rand des Registers. Er wollte es verkaufen. Als du die ganze Seite hochhältst, sinken ihm die Schultern.',
-        en: 'Koster. His missing glove is in the archive, his name is in the margin of the register. He meant to sell it. When you hold up the whole page, his shoulders drop.',
-        ar: 'كوستر. قفّازه المفقود في الأرشيف، واسمه على هامش السجلّ. أراد بيعه. وحين ترفع الصفحة كاملة، تهبط كتفاه.',
+        de: 'Koster. Sein fehlender Handschuh liegt im Archiv, sein Name steht am Rand des Hauptbuchs. Er wollte es verkaufen. Als du die ganze Seite hochhältst, sinken ihm die Schultern.',
+        en: 'Koster. His missing glove is in the archive, his name is in the margin of the ledger. He meant to sell it. When you hold up the whole page, his shoulders drop.',
+        ar: 'كوستر. قفّازه المفقود في الأرشيف، واسمه على هامش الدفتر. أراد بيعه. وحين ترفع الصفحة كاملة، تهبط كتفاه.',
       },
-      clues: [{ de: 'Koster hat das Archiv aufgebrochen; sein Name steht im Register.', en: 'Koster forced the archive; his name is in the register.', ar: 'كوستر كسر الأرشيف؛ واسمه في السجلّ.' }],
+      clues: [{ de: 'Koster hat das Archiv aufgebrochen; sein Name steht im Hauptbuch.', en: 'Koster forced the archive; his name is in the ledger.', ar: 'كوستر كسر الأرشيف؛ واسمه في الدفتر.' }],
     },
   ],
   ending: {
     artifact: { kind: 'book' },
     reveal: {
       de: [
-        '„Das Hauptbuch ist kein Schatzverzeichnis“, wird Lena dir später erklären. „Es ist ein Versprechen. Maarten van Rossum ließ die Teufel an sein Haus setzen, damit die Leute wegsehen — und dahinter ein Register verstecken: wer in dieser Stadt kein Dach hatte, fand hier eines.“',
+        '„Das Hauptbuch ist kein Schatzverzeichnis“, wird Lena dir später erklären. „Es ist ein Versprechen. Maarten van Rossum ließ die Teufel an sein Haus setzen, damit die Leute wegsehen — und dahinter ein Hauptbuch verstecken: wer in dieser Stadt kein Dach hatte, fand hier eines.“',
         '„Die Teufel bewachen keine Goldstücke. Sie bewachen die Namen all derer, die Arnheim aufgenommen hat.“',
-        'Der Sammler wollte das Register verkaufen, Seite für Seite. Du hast es vorher gefunden.',
+        'Der Sammler wollte das Hauptbuch verkaufen, Seite für Seite. Du hast es vorher gefunden.',
       ],
       en: [
-        '“The ledger is no treasure list,” Lena will explain to you later. “It is a promise. Maarten van Rossum had the devils set on his house so that people would look away — and hid a register behind them: whoever had no roof in this city found one here.”',
+        '“The ledger is no treasure list,” Lena will explain to you later. “It is a promise. Maarten van Rossum had the devils set on his house so that people would look away — and hid a ledger behind them: whoever had no roof in this city found one here.”',
         '“The devils guard no gold. They guard the names of everyone Arnhem once took in.”',
-        'The Collector wanted to sell the register, page by page. You found it first.',
+        'The Collector wanted to sell the ledger, page by page. You found it first.',
       ],
       ar: [
-        '«الدفتر ليس قائمة كنوز»، ستشرح لك لينا لاحقاً. «إنه وعد. أمر مارتن فان روسوم بوضع الشياطين على بيته كي يصرف الناس أنظارهم — وأخفى خلفها سجلّاً: كل من لم يكن له سقف في هذه المدينة وجد سقفاً هنا».',
+        '«الدفتر ليس قائمة كنوز»، ستشرح لك لينا لاحقاً. «إنه وعد. أمر مارتن فان روسوم بوضع الشياطين على بيته كي يصرف الناس أنظارهم — وأخفى خلفها دفتراً: كل من لم يكن له سقف في هذه المدينة وجد سقفاً هنا».',
         '«الشياطين لا تحرس ذهباً. تحرس أسماء كل من آوتهم أرنم يوماً».',
-        'أراد الجامع أن يبيع السجلّ، صفحةً صفحة. لكنك وجدته أولاً.',
+        'أراد الجامع أن يبيع الدفتر، صفحةً صفحة. لكنك وجدته أولاً.',
       ],
     },
     decision: {
-      prompt: { de: 'Das Register liegt wieder vollständig vor dir. Was tust du damit?', en: 'The register lies before you again, whole. What do you do with it?', ar: 'السجلّ أمامك كاملاً من جديد. ماذا ستفعل به؟' },
+      prompt: { de: 'Das Hauptbuch liegt wieder vollständig vor dir. Was tust du damit?', en: 'The ledger lies before you again, whole. What do you do with it?', ar: 'الدفتر أمامك كاملاً من جديد. ماذا ستفعل به؟' },
       choices: [
         {
           id: 'archive',
           label: { de: 'Dem Stadtarchiv übergeben', en: 'Hand it to the city archive', ar: 'تسليمه إلى أرشيف المدينة' },
           epilogue: {
-            de: 'Lena legt das Register in die Vitrine des Stadtarchivs, für alle sichtbar. „Ein Versprechen, das niemand mehr verstecken muss“, sagt sie. Der mittlere Teufel am Haus scheint fast zu lächeln.',
-            en: 'Lena places the register in the city archive’s display case, in plain sight. “A promise no one has to hide any more,” she says. The middle devil on the house almost seems to smile.',
-            ar: 'تضع لينا السجلّ في خزانة العرض بأرشيف المدينة، أمام الجميع. «وعدٌ لم يعد على أحد أن يخفيه»، تقول. ويكاد الشيطان الأوسط على البيت أن يبتسم.',
+            de: 'Lena legt das Hauptbuch in die Vitrine des Stadtarchivs, für alle sichtbar. „Ein Versprechen, das niemand mehr verstecken muss“, sagt sie. Der mittlere Teufel am Haus scheint fast zu lächeln.',
+            en: 'Lena places the ledger in the city archive’s display case, in plain sight. “A promise no one has to hide any more,” she says. The middle devil on the house almost seems to smile.',
+            ar: 'تضع لينا الدفتر في خزانة العرض بأرشيف المدينة، أمام الجميع. «وعدٌ لم يعد على أحد أن يخفيه»، تقول. ويكاد الشيطان الأوسط على البيت أن يبتسم.',
           },
         },
         {

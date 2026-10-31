@@ -482,17 +482,17 @@ export const nl: Record<string, string> = {
     "Je duwt tegen de middelste duivel en een steen geeft mee. Erachter: een oude ijzeren sleutel, met daarin gekrast ‘De middelste bewaart’. Achter je knerpt het grind — iemand zat je dicht op de hielen en trekt zich terug.",
   "An old key lay behind the middle devil.": "Achter de middelste duivel lag een oude sleutel.",
   "Someone — “the Collector” — was at the stone just before you.": "Iemand — ‘de Verzamelaar’ — was vlak voor jou bij de steen.",
-  "“The ledger is no treasure list,” Lena will explain to you later. “It is a promise. Maarten van Rossum had the devils set on his house so that people would look away — and hid a register behind them: whoever had no roof in this city found one here.”":
-    "‘Het grootboek is geen schattenlijst,’ zal Lena je later uitleggen. ‘Het is een belofte. Maarten van Rossum liet de duivels op zijn huis zetten zodat mensen wegkeken — en verborg erachter een register: wie in deze stad geen dak had, vond er hier een.’",
+  "“The ledger is no treasure list,” Lena will explain to you later. “It is a promise. Maarten van Rossum had the devils set on his house so that people would look away — and hid a ledger behind them: whoever had no roof in this city found one here.”":
+    "‘Het grootboek is geen schattenlijst,’ zal Lena je later uitleggen. ‘Het is een belofte. Maarten van Rossum liet de duivels op zijn huis zetten zodat mensen wegkeken — en verborg erachter een grootboek: wie in deze stad geen dak had, vond er hier een.’",
   "“The devils guard no gold. They guard the names of everyone Arnhem once took in.”":
     "‘De duivels bewaken geen goud. Ze bewaken de namen van iedereen die Arnhem ooit heeft opgenomen.’",
-  "The Collector wanted to sell the register, page by page. You found it first.":
-    "De Verzamelaar wilde het register verkopen, pagina voor pagina. Jij vond het eerst.",
-  "The register lies before you again, whole. What do you do with it?":
-    "Het register ligt weer compleet voor je. Wat doe je ermee?",
+  "The Collector wanted to sell the ledger, page by page. You found it first.":
+    "De Verzamelaar wilde het grootboek verkopen, pagina voor pagina. Jij vond het eerst.",
+  "The ledger lies before you again, whole. What do you do with it?":
+    "Het grootboek ligt weer compleet voor je. Wat doe je ermee?",
   "Hand it to the city archive": "Aan het stadsarchief geven",
-  "Lena places the register in the city archive’s display case, in plain sight. “A promise no one has to hide any more,” she says. The middle devil on the house almost seems to smile.":
-    "Lena legt het register in de vitrine van het stadsarchief, zichtbaar voor iedereen. ‘Een belofte die niemand meer hoeft te verbergen,’ zegt ze. De middelste duivel aan het huis lijkt bijna te glimlachen.",
+  "Lena places the ledger in the city archive’s display case, in plain sight. “A promise no one has to hide any more,” she says. The middle devil on the house almost seems to smile.":
+    "Lena legt het grootboek in de vitrine van het stadsarchief, zichtbaar voor iedereen. ‘Een belofte die niemand meer hoeft te verbergen,’ zegt ze. De middelste duivel aan het huis lijkt bijna te glimlachen.",
   "Read the first page aloud at the Korenmarkt": "De eerste pagina hardop voorlezen op de Korenmarkt",
   "At the Korenmarkt you read out the first names aloud. Passers-by stop to listen. An older woman nods: the city once took in her great-grandfather. The story belongs to everyone again.":
     "Op de Korenmarkt lees je de eerste namen hardop voor. Voorbijgangers blijven staan om te luisteren. Een oudere vrouw knikt: de stad nam ooit haar overgrootvader op. De geschiedenis is weer van iedereen.",
@@ -502,7 +502,7 @@ export const nl: Record<string, string> = {
   "A city on the Lower Rhine, between the Devil’s House, the Eusebius church and the hills of Sonsbeek park. The setting of our first Dutch detective adventure.":
     "Een stad aan de Nederrijn, tussen het Duivelshuis, de Eusebiuskerk en de heuvels van park Sonsbeek. Het decor van ons eerste Nederlandse detectiveavontuur.",
   // ---------------------------------------------------------------- Het Duivelshuis-geheim (chapters 3-8)
-  "Forced the archive door and meant to sell the register page by page.": "Heeft de archiefdeur opengebroken en wilde het register pagina voor pagina verkopen.",
+  "Forced the archive door and meant to sell the ledger page by page.": "Heeft de archiefdeur opengebroken en wilde het grootboek pagina voor pagina verkopen.",
   "Bram": "Bram",
   "Street musician at the Sabelspoort": "Straatmuzikant bij de Sabelspoort",
   "Saw Lena hurry to the Eusebius church with a leather folder, followed by a man in a velvet coat.": "Zag Lena met een leren map naar de Eusebiuskerk haasten, gevolgd door een man in een fluwelen jas.",
@@ -534,7 +534,7 @@ export const nl: Record<string, string> = {
   "Lena went into the Eusebius church with a key.": "Lena ging met een sleutel de Eusebiuskerk in.",
   "The man in the velvet coat — “the Collector” — followed her.": "De man in de fluwelen jas — ‘de Verzamelaar’ — volgde haar.",
   "The Carillon": "Het carillon",
-  "Lena’s key fits the tower door. Up in the bell chamber hang four bells, each cast with a number in Roman numerals.": "Lena’s sleutel past op de torendeur. Boven in de klokkenkamer hangen vier klokken, elk met een getal in Romeinse cijfers gegoten.",
+  "The tower door is ajar — Lena left her key in the lock. Up in the bell chamber hang four bells, each cast with a number in Roman numerals.": "De torendeur staat op een kier — Lena liet haar sleutel in het slot zitten. Boven in de klokkenkamer hangen vier klokken, elk met een getal in Romeinse cijfers gegoten.",
   "On the wall a small number lock secures a hatch. Lena has scribbled beside it: “Read the bells.”": "Aan de muur beveiligt een klein cijferslot een luikje. Lena heeft ernaast gekrabbeld: ‘Lees de klokken.’",
   "In the bell chamber": "In de klokkenkamer",
   "Read the four bells as digits and enter the code.": "Lees de vier klokken als cijfers en voer de code in.",
@@ -554,13 +554,13 @@ export const nl: Record<string, string> = {
   "Sweep the light across the stone. Where is the Collector heading next?": "Strijk met het licht over de steen. Waar gaat de Verzamelaar nu heen?",
   "To the Rhine": "Naar de Rijn",
   "before midnight": "voor middernacht",
-  "Move over the middle of the stone. The writing is mirrored.": "Ga over het midden van de steen. Het schrift staat spiegelverkeerd.",
+  "Move over the middle of the stone. The writing is mirrored.": "Beweeg het licht over het midden van de steen. Het schrift staat spiegelverkeerd.",
   "It is the river that runs along the south of the city.": "Het is de rivier die langs de zuidkant van de stad loopt.",
   "To the Rhine.": "Naar de Rijn.",
-  "To the Rhine, before midnight. The Collector means to take the register out of the city tonight — across the water. You must reach the quay before him.": "Naar de Rijn, voor middernacht. De Verzamelaar wil het register vannacht de stad uit brengen — over het water. Jij moet eerder bij de kade zijn dan hij.",
+  "To the Rhine, before midnight. The Collector means to take the ledger out of the city tonight — across the water. You must reach the quay before him.": "Naar de Rijn, voor middernacht. De Verzamelaar wil het grootboek vannacht de stad uit brengen — over het water. Jij moet eerder bij de kade zijn dan hij.",
   "The Collector is heading to the Rhine tonight, before midnight.": "De Verzamelaar gaat vannacht naar de Rijn, voor middernacht.",
   "The Signal Across the Rhine": "Het signaal over de Rijn",
-  "The Rhine quay is quiet. Across the water, from a window on the museum hill, a lamp is blinking: short, long, long… not by chance.": "Het is stil op de Rijnkade. Aan de overkant van het water knippert vanuit een raam op de museumheuvel een lamp: kort, lang, lang… geen toeval.",
+  "The Rhine quay is quiet. Up on the museum slope above you, a lamp is blinking in a lit window: short, long, long… not by chance.": "Het is stil op de Rijnkade. Hoog op de museumhelling boven je knippert een lamp in een verlicht raam: kort, lang, lang… geen toeval.",
   "Someone is sending you digits. They open the side door of the museum where the archive is.": "Iemand stuurt je cijfers. Ze openen de zijdeur van het museum waar het archief is.",
   "On the Rhine quay": "Op de Rijnkade",
   "Read the four digits in the signal. They open the museum’s side door.": "Lees de vier cijfers uit het signaal. Ze openen de zijdeur van het museum.",
@@ -576,17 +576,17 @@ export const nl: Record<string, string> = {
   "The drawer is iron, with a keyhole.": "De lade is van ijzer, met een sleutelgat.",
   "Behind the middle devil you found something for exactly this.": "Achter de middelste duivel vond je hier precies iets voor.",
   "The old iron key.": "De oude ijzeren sleutel.",
-  "The key turns and the drawer slides open. Inside lies the bound register — complete. A velvet glove is caught on the edge. The Collector was here and had to leave it behind.": "De sleutel draait en de lade glijdt open. Erin ligt het ingebonden register — compleet. Aan de rand zit een fluwelen handschoen klem. De Verzamelaar is hier geweest en moest hem achterlaten.",
-  "The register lay untouched in the middle drawer.": "Het register lag onaangeroerd in de middelste lade.",
+  "The key turns and the drawer slides open. Inside lies the bound ledger — but one leaf is missing: the very page you pieced back together. A velvet glove is caught on the edge. The Collector was here and had to leave it behind.": "De sleutel draait en de lade glijdt open. Erin ligt het ingebonden grootboek — maar er ontbreekt één blad: precies de pagina die je weer hebt samengevoegd. Aan de rand zit een fluwelen handschoen klem. De Verzamelaar is hier geweest en moest hem achterlaten.",
+  "The ledger lay untouched in the middle drawer.": "Het grootboek lag onaangeroerd in de middelste lade.",
   "A velvet glove gives it away: the Collector was here.": "Een fluwelen handschoen verraadt het: de Verzamelaar is hier geweest.",
   "The Accusation": "De aanklacht",
-  "On the courtyard behind the Devil’s House he stands: a man in a velvet coat, missing one glove. Lena steps out of the shadow, the leather folder in her hand.": "Op de binnenplaats achter het Duivelshuis staat hij: een man in een fluwelen jas, zonder één handschoen. Lena stapt uit de schaduw, de leren map in haar hand.",
+  "On the courtyard behind the Devil’s House he stands: a man in a velvet coat, missing one glove. Lena steps out of the shadow, the leather folder in her hand.": "Op de binnenplaats achter het Duivelshuis staat hij: een man in een fluwelen jas die één handschoen mist. Lena stapt uit de schaduw, de leren map in haar hand.",
   "“You have seen everything,” she tells you. “Say it to his face. Who forced the archive — and what is your proof?”": "‘Je hebt alles gezien,’ zegt ze tegen je. ‘Zeg het hem recht in zijn gezicht. Wie brak het archief open — en waarmee bewijs je het?’",
   "The courtyard": "De binnenplaats",
   "Who forced the archive and chased you? Name them and lay down the proof.": "Wie brak het archief open en achtervolgde je? Noem de persoon en leg het bewijs voor.",
   "Who was at the stone before you and smelled of old books?": "Wie was vóór jou bij de steen en rook naar oude boeken?",
   "The proof is the ledger page — join its two halves in the journal.": "Het bewijs is de grootboekpagina — voeg de twee helften samen in het dossier.",
   "Daan Koster, with the whole ledger page.": "Daan Koster, met de hele grootboekpagina.",
-  "Koster. His missing glove is in the archive, his name is in the margin of the register. He meant to sell it. When you hold up the whole page, his shoulders drop.": "Koster. Zijn ontbrekende handschoen ligt in het archief, zijn naam staat in de kantlijn van het register. Hij wilde het verkopen. Als je de hele pagina omhooghoudt, zakken zijn schouders.",
-  "Koster forced the archive; his name is in the register.": "Koster brak het archief open; zijn naam staat in het register.",
+  "Koster. His missing glove is in the archive, his name is in the margin of the ledger. He meant to sell it. When you hold up the whole page, his shoulders drop.": "Koster. Zijn ontbrekende handschoen ligt in het archief, zijn naam staat in de kantlijn van het grootboek. Hij wilde het verkopen. Als je de hele pagina omhooghoudt, zakken zijn schouders.",
+  "Koster forced the archive; his name is in the ledger.": "Koster brak het archief open; zijn naam staat in het grootboek.",
 };
