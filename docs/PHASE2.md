@@ -3,7 +3,7 @@
 Tracking document for Phase 2. Kept in sync with the code: every decision and every completed step is
 recorded here so the work stays auditable and reversible.
 
-**Branch:** `phase-2-backend` · **Status:** Milestone 1 complete (reviewed) · **Started:** 2026-10-31
+**Branch:** `phase-2-backend` · **Status:** Milestone 2 built (review pending) · **Started:** 2026-10-31
 
 ## Goal (from the roadmap)
 
@@ -34,6 +34,8 @@ export (GDPR), newsletter with double opt-in.
 | D6 | Magic-link (passwordless) email auth | Matches the roadmap; no password storage; lowest-friction for a consumer game. Local dev reads the link from the Supabase CLI mail catcher (Mailpit). |
 | D7 | "Furthest wins" is also a **server-side** invariant (DB trigger `keep_furthest_progress`) | A client push can never regress account progress regardless of timing. The client merge rule and the DB trigger use the same ordering (finished > more solved > later lastActiveAt). Added after the M1 review found a last-write-wins data-loss path. |
 | D8 | The site must boot with Supabase **unconfigured** | `isSupabaseConfigured()` guards every Supabase entry point; with no env the app runs signed-out, offline-only, and never 500s (CI, preview deploys, fresh clones). |
+| D9 | Entitlement + order gating applies to **paid (non-demo) adventures only**; demo stays open/offline | Demo adventures must keep working signed-out and offline (D2), and their page stays SSG. The check API gates only `!isDemo` adventures (account + ownership + previous chapter solved). Both current adventures are `isDemo`, so this is dormant groundwork until a purchasable adventure exists. Full per-chapter content *delivery* (not shipping later chapters to the browser at all) is deferred to Phase 3, when purchases make it necessary — nothing is leaked to a paying context before then (YAGNI). |
+| D10 | A **server-authoritative** `solves` table; gating never trusts `progress.data` | The M1 review flagged that `progress.data` is client-trusted. The answer-check route writes a `solves` row only when it has itself confirmed a correct answer; order gating reads `solves`. `entitlements` and `solves` have no client write policies, so only the service role (server) writes them; owners can read their own. Paid checks fail **closed** when no service role is configured. |
 
 ## Milestones
 
@@ -67,10 +69,14 @@ To get Studio too, add `/Applications/XAMPP/xamppfiles/htdocs` under Docker Desk
 → File Sharing, then `supabase start` with no excludes. Magic-link emails in dev: Mailpit at
 http://127.0.0.1:54324.
 
-### M2 — Entitlements
-- [ ] `entitlements` table + RLS
-- [ ] Server-enforced: own the adventure + previous chapter solved, in `check.server.ts`
-- [ ] Chapters served only after the previous is solved (closes the content-leak gap)
+### M2 — Entitlements (built, review pending)
+- [x] `entitlements` + `solves` tables + RLS (owner-read, no client writes; service-role-only writes) — migration `20261031112616_entitlements_and_solves`
+- [x] Server-enforced in the check route: demo = open; paid = own the adventure + every earlier chapter solved, both read from the DB (`lib/engine/entitlement.server.ts`), answer compared only after authorising
+- [x] Server-authoritative solve recording (D10): a solve is written only after the server confirms correctness; gating reads `solves`, never `progress.data`
+- [x] Service-role admin client (`lib/supabase/admin.ts`), `isAdminConfigured()` guard; paid checks fail closed with no backend
+- [x] Tests: 82 unit (resolveGuess + entitlement gating branches, Supabase mocked); RLS invariants verified live (anon cannot read/write either table, service role can, slug check constraint holds); typecheck + build clean, `play/[slug]` still SSG
+- [ ] Reviewer-agent pass (Sonnet) on the M2 diff
+- Deferred to Phase 3 (documented, D9): full per-chapter content *delivery* for paid adventures (not shipping later chapters to the browser) + an end-to-end paid-flow e2e, which needs a real purchasable (non-demo) adventure to exist first.
 
 ### M3 — Admin dashboard
 - [ ] Roles, admin-only area, draft/published, preview — **design shown first**
@@ -101,3 +107,10 @@ Already documented in `.env.example`. For local dev, `supabase start` prints the
   All addressed (migration `20261031094501_harden_progress_sync`, env guards, sync rewrite, callback fix,
   client-derived header auth). 71 unit tests pass; `tests/e2e/auth.spec.ts` (auth + sync) green on a
   production build; typecheck + build clean. **M1 complete.**
+- 2026-10-31 — M2 built (Option A, chosen with the user: secure the API now, keep pages offline-first).
+  Added `entitlements` + server-authoritative `solves` tables (RLS owner-read, service-role-only writes;
+  migration `20261031112616`), a service-role admin client, and `lib/engine/entitlement.server.ts` that
+  gates paid-adventure answers on ownership + previous-chapter-solved and records a solve only after the
+  server confirms it. `check.server.ts` split into `resolveGuess` (pure) + `checkAnswer`; the check route
+  branches demo (open, offline) vs paid (authorised). 82 unit tests pass; RLS invariants verified live;
+  build keeps `play/[slug]` SSG. Reviewer pass next.

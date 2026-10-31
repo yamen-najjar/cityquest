@@ -23,7 +23,21 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "profiles": {
+            "entitlements": {
+                  Row: {
+                    "adventure": string,"granted_at": string,"source": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "adventure": string,"granted_at"?: string,"source"?: string,"user_id": string
+                  }
+                  Update: {
+                    "adventure"?: string,"granted_at"?: string,"source"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"profiles": {
                   Row: {
                     "created_at": string,"display_name": string | null,"id": string,"locale": string,"updated_at": string
                   }
@@ -47,6 +61,20 @@ export type Database = {
                   }
                   Update: {
                     "adventure"?: string,"data"?: NonNullable<Json>,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"solves": {
+                  Row: {
+                    "adventure": string,"chapter_id": string,"solved_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "adventure": string,"chapter_id": string,"solved_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "adventure"?: string,"chapter_id"?: string,"solved_at"?: string,"user_id"?: string
                   }
                   Relationships: [
                     

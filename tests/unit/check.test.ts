@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adventures } from '@/content/adventures';
 import { answerKeys } from '@/content/answers.server';
-import { checkAnswer } from '@/lib/engine/check.server';
+import { checkAnswer, resolveGuess } from '@/lib/engine/check.server';
 import { ALPHABETS, caesar } from '@/components/game/puzzles/CipherWheel';
 import { MORSE_DIGITS } from '@/components/game/puzzles/Morse';
 
@@ -67,6 +67,31 @@ describe('checkAnswer: requests', () => {
     expect(checkAnswer('lost-manuscript', { chapterId: 'message' })).toMatchObject({ ok: false, status: 400 });
     expect(checkAnswer('lost-manuscript', { chapterId: 'message', answer: 'x'.repeat(201) })).toMatchObject({ ok: false, status: 400 });
     expect(checkAnswer('lost-manuscript', null)).toMatchObject({ ok: false, status: 400 });
+  });
+});
+
+describe('resolveGuess', () => {
+  it('resolves a valid guess with the chapter index used for order gating', () => {
+    const r = resolveGuess('lost-manuscript', { chapterId: 'clockmaker', answer: '7347' });
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.adventure.slug).toBe('lost-manuscript');
+      expect(r.chapterId).toBe('clockmaker');
+      expect(r.chapterIndex).toBe(2); // message, witnesses, clockmaker
+      expect(r.accepted).toContain('7347');
+      expect(r.answer).toBe('7347');
+    }
+  });
+
+  it('gives the first chapter index 0 and never checks correctness', () => {
+    const r = resolveGuess('lost-manuscript', { chapterId: 'message', answer: 'totally wrong' });
+    expect(r).toMatchObject({ ok: true, chapterIndex: 0 });
+  });
+
+  it('mirrors checkAnswer error shapes (unknown adventure/chapter, bad body)', () => {
+    expect(resolveGuess('nope', { chapterId: 'message', answer: 'x' })).toMatchObject({ ok: false, status: 404 });
+    expect(resolveGuess('lost-manuscript', { chapterId: 'nope', answer: 'x' })).toMatchObject({ ok: false, status: 404 });
+    expect(resolveGuess('lost-manuscript', { chapterId: 'message' })).toMatchObject({ ok: false, status: 400 });
   });
 });
 
