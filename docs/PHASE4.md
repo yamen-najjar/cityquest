@@ -68,9 +68,17 @@ safety-banner copy that still reads as if there were no real map; localising Map
 strings; moving off OSM's volunteer tile servers. **Deferred to M2:** re-fit on `userPosition`, and
 reading latest props from refs in the `load` handler (only matters once GPS moves the camera).
 
-### M2 — GPS "I'm here"
-- [ ] Geolocation permission UX; distance-to-checkpoint check within a radius; manual fallback; clear
-      errors (denied, timeout, too far, weak accuracy). On-device only (D2)
+### M2 — GPS "I'm here" (complete)
+- [x] `CheckpointArrival` component: for a checkpoint with coordinates + `gps`, an "I'm here" check reads
+      the device location (`getCurrentPosition`), measures the great-circle distance, and shows
+      locating / arrived (≤40 m) / too-far (with the distance) / location-off / error. Manual
+      confirmation is always present. On-device only — the position is never sent or stored (D2)
+- [x] The player's position flows to `RealMap` as the blue "you are here" dot
+- [x] Permissions-Policy opened to `geolocation=(self)`; camera stays blocked (QR is later)
+- [x] Simulated checkpoints show a note that GPS won't match — confirm manually
+- [x] Verified live (far: 423 km Amsterdam→Heidelberg; arrived within radius → continue + dot;
+      advances to the puzzle); typecheck + 91 tests
+- [ ] Reviewer-agent pass (Sonnet)
 
 ### M3 — QR (if in scope)
 - [ ] Camera scan matching the checkpoint code; permission on demand; manual fallback

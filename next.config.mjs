@@ -3,8 +3,9 @@ const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'X-Frame-Options', value: 'DENY' },
-  // Location is asked for only in Phase 4; until then the browser never offers it to the page.
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+  // Phase 4: the page itself may ask for location (GPS checkpoint confirmation), but only on this origin
+  // and only when the player taps "I'm here". Camera/microphone stay blocked until QR arrives.
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
 ];
 
 const nextConfig = {
