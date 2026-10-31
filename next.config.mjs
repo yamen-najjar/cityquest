@@ -3,9 +3,9 @@ const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'X-Frame-Options', value: 'DENY' },
-  // Phase 4: the page itself may ask for location (GPS checkpoint confirmation), but only on this origin
-  // and only when the player taps "I'm here". Camera/microphone stay blocked until QR arrives.
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
+  // Phase 4: the page itself may ask for location (GPS confirmation) and the camera (QR scan), but only
+  // on this origin and only when the player taps "I'm here" / "Scan". Microphone stays blocked.
+  { key: 'Permissions-Policy', value: 'camera=(self), microphone=(), geolocation=(self)' },
 ];
 
 const nextConfig = {

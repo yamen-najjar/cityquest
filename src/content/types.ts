@@ -128,6 +128,8 @@ export interface Checkpoint {
   /** Position on the stylised demo map, 0-100 on each axis. */
   mapPosition: { x: number; y: number };
   coordinates?: { lat: number; lng: number };
+  /** The value encoded in the QR code placed at this checkpoint (Phase 4); matched when `verification` includes 'qr'. */
+  code?: string;
   verification: Verification[];
 }
 
