@@ -163,6 +163,8 @@ export const hetDuivelshuis: Authored<Adventure> = {
       notes: [
         { after: 'archief', text: { de: 'War schon am Teufelshaus und hat den Stein beschädigt. Sucht dasselbe wie du.', en: 'Has already been at the Devil’s House and damaged the stone. He is after the same thing you are.', ar: 'كان عند بيت الشيطان وأتلف الحجر. يسعى إلى ما تسعى إليه.' } },
         { after: 'aanklacht', text: { de: 'Hat die Archivtür aufgebrochen und wollte das Hauptbuch Seite für Seite verkaufen.', en: 'Forced the archive door and meant to sell the ledger page by page.', ar: 'كسر باب الأرشيف وكان ينوي بيع الدفتر صفحةً صفحة.' } },
+        { after: 'archief', when: 'archief:police', text: { de: 'Saar hat die Polizei gerufen.', en: 'Saar has called the police.', ar: 'اتصلت سار بالشرطة.' } },
+        { after: 'archief', when: 'archief:wait', text: { de: 'Du willst ihn stellen, bevor die Polizei kommt.', en: 'You chose to face him before the police.', ar: 'اخترت أن تواجهه قبل الشرطة.' } },
       ],
     },
     {
@@ -665,6 +667,22 @@ export const hetDuivelshuis: Authored<Adventure> = {
         { de: 'Das Hauptbuch lag unberührt in der mittleren Schublade.', en: 'The ledger lay untouched in the middle drawer.', ar: 'كان الدفتر سليماً في الدرج الأوسط.' },
         { de: 'Ein Samthandschuh verrät: Der Sammler war hier.', en: 'A velvet glove gives it away: the Collector was here.', ar: 'قفّاز مخملي يفضح الأمر: الجامع كان هنا.' },
       ],
+      // A story decision (see StoryChoice): it changes the journal, the final scene and every ending.
+      choice: {
+        prompt: { de: 'Saar will sofort die Polizei rufen. Lena hat dir geraten, niemandem zu trauen. Was tust du?', en: 'Saar wants to call the police right now. Lena told you to trust no one. What do you do?', ar: 'تريد سار أن تتصل بالشرطة فوراً. ولينا نصحتك ألا تثق بأحد. ماذا تفعل؟' },
+        options: [
+          {
+            id: 'police',
+            label: { de: 'Sie die Polizei rufen lassen', en: 'Let her call the police', ar: 'دعها تتصل بالشرطة' },
+            outcome: { de: 'Saar ruft mit zitternden Händen an. Hilfe ist unterwegs – und vielleicht auch eine Warnung an den Sammler.', en: 'Saar makes the call with shaking hands. Help is on its way — and so, perhaps, is word of it to the Collector.', ar: 'تتصل سار بيدين مرتجفتين. المساعدة في الطريق — وربما خبرها أيضاً إلى الجامع.' },
+          },
+          {
+            id: 'wait',
+            label: { de: 'Sie bitten zu warten: Du stellst ihn zuerst selbst', en: 'Ask her to wait: you will face him first', ar: 'اطلب منها أن تنتظر: ستواجهه أنت أولاً' },
+            outcome: { de: '„Gib mir zehn Minuten“, sagst du. Saar zögert, dann nickt sie und steckt das Telefon weg.', en: '“Give me ten minutes,” you say. Saar hesitates, then nods and puts the phone away.', ar: '«أمهليني عشر دقائق»، تقول. تتردد سار، ثم تومئ وتضع الهاتف جانباً.' },
+          },
+        ],
+      },
     },
     {
       id: 'aanklacht',
@@ -715,8 +733,33 @@ export const hetDuivelshuis: Authored<Adventure> = {
       clues: [{ de: 'Koster hat das Archiv aufgebrochen; sein Name steht im Hauptbuch.', en: 'Koster forced the archive; his name is in the ledger.', ar: 'كوستر كسر الأرشيف؛ واسمه في الدفتر.' }],
     },
   ],
+  // Optional deductions on the evidence board (see BoardQuestion); answers in answers.server.ts.
+  board: [
+    {
+      id: 'tower',
+      after: 'carillon',
+      question: { de: 'Wer hat die Turmtür offen gelassen?', en: 'Who left the tower door open?', ar: 'مَن ترك باب البرج مفتوحاً؟' },
+      deduction: { de: 'Lena. Sie ging mit einem Schlüssel in die Kirche, und die halbe Seite in der Glockenstube gehört zu ihrem Hauptbuch.', en: 'Lena. She went into the church with a key, and the half page in the bell chamber belongs to her ledger.', ar: 'لينا. دخلت الكنيسة ومعها مفتاح، ونصف الصفحة في غرفة الأجراس من دفترها.' },
+    },
+    {
+      id: 'honest',
+      after: 'archief',
+      question: { de: 'Saar sagt, die Schublade sei aufgebrochen, aber nicht geöffnet worden. Sagt sie die Wahrheit?', en: 'Saar says the drawer was forced but not opened. Is she telling the truth?', ar: 'تقول سار إن الدرج كُسر ولكنه لم يُفتح. هل تقول الحقيقة؟' },
+      deduction: { de: 'Ja. Das Hauptbuch lag unberührt in der mittleren Schublade, und nur dein Schlüssel aus dem Teufelshaus konnte sie öffnen.', en: 'Yes. The ledger lay untouched in the middle drawer, and only your key from the Devil’s House could open it.', ar: 'نعم. كان الدفتر في الدرج الأوسط لم يمسّه أحد، ولم يكن يفتحه إلا مفتاحك من بيت الشيطان.' },
+    },
+    {
+      id: 'velvet',
+      after: 'archief',
+      question: { de: 'Wer ist dir seit dem Teufelshaus immer einen Schritt hinterher?', en: 'Who has been one step behind you since the Devil’s House?', ar: 'مَن يسير خلفك بخطوة منذ بيت الشيطان؟' },
+      deduction: { de: 'Koster. Der Mann im Samtmantel folgte Lena, und sein Samthandschuh blieb an der Schublade hängen.', en: 'Koster. The man in the velvet coat followed Lena, and his velvet glove was caught on the drawer.', ar: 'كوستر. الرجل ذو المعطف المخملي تبع لينا، وعلِق قفازه المخملي بالدرج.' },
+    },
+  ],
   ending: {
     artifact: { kind: 'book' },
+    revealIf: [
+      { when: 'archief:police', text: { de: 'Blaues Licht streift über den Hof: Saars Anruf hat die Polizei gebracht. Koster rennt nicht weg. Er streckt die Hände aus, bevor ihn jemand darum bittet.', en: 'Blue light sweeps across the courtyard: Saar’s call has brought the police. Koster does not run. He holds out his wrists before anyone asks.', ar: 'يمسح ضوء أزرق الفناء: اتصال سار جاء بالشرطة. لا يهرب كوستر، بل يمدّ معصميه قبل أن يطلب منه أحد.' } },
+      { when: 'archief:wait', text: { de: 'Keine Sirenen, kein Blaulicht: nur du, Lena und ein Mann, dem die Ausreden ausgegangen sind. Saar kommt eine Minute später, außer Atem, und bleibt an deiner Seite.', en: 'No sirens, no lights: only you, Lena and a man who has run out of excuses. Saar arrives a minute later, out of breath, and stays at your side.', ar: 'لا صفارات ولا أضواء: أنت ولينا ورجل نفدت أعذاره. تصل سار بعد دقيقة لاهثة، وتبقى إلى جانبك.' } },
+    ],
     reveal: {
       de: [
         '„Das Hauptbuch ist kein Schatzverzeichnis“, wird Lena dir später erklären. „Es ist ein Versprechen. Maarten van Rossum ließ die Teufel an sein Haus setzen, damit die Leute wegsehen — und dahinter ein Hauptbuch verstecken: wer in dieser Stadt kein Dach hatte, fand hier eines.“',
@@ -745,6 +788,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
             en: 'Lena places the ledger in the city archive’s display case, in plain sight. “A promise no one has to hide any more,” she says. The middle devil on the house almost seems to smile.',
             ar: 'تضع لينا الدفتر في خزانة العرض بأرشيف المدينة، أمام الجميع. «وعدٌ لم يعد على أحد أن يخفيه»، تقول. ويكاد الشيطان الأوسط على البيت أن يبتسم.',
           },
+          epilogueIf: [
+            { when: 'archief:police', text: { de: 'Kosters Prozess ist kurz. Er bittet nur um eines: das Hauptbuch noch einmal zu sehen, hinter Glas.', en: 'Koster’s trial is short. He asks only one thing: to see the ledger once more, behind glass.', ar: 'محاكمة كوستر قصيرة. لا يطلب سوى شيء واحد: أن يرى الدفتر مرة أخرى، خلف الزجاج.' } },
+            { when: 'archief:wait', text: { de: 'Eine Woche später bringt Koster etwas zurück, das er vor Jahren genommen hat: eine Seite aus einem anderen Archiv, mit einem Zettel: „Es tut mir leid.“', en: 'A week later Koster brings back something he took years ago: a page from another archive, with a note: “I am sorry.”', ar: 'بعد أسبوع يعيد كوستر شيئاً أخذه قبل سنوات: صفحة من أرشيف آخر، ومعها ورقة: «أنا آسف».' } },
+          ],
         },
         {
           id: 'read',
@@ -754,6 +801,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
             en: 'At the Korenmarkt you read out the first names aloud. Passers-by stop to listen. An older woman nods: the city once took in her great-grandfather. The story belongs to everyone again.',
             ar: 'عند كورنمارخت تقرأ الأسماء الأولى بصوت عالٍ. يتوقف المارّة للإصغاء. تومئ امرأة مسنّة برأسها: آوت المدينة جدّ جدّها يوماً. وتعود الحكاية مُلكاً للجميع.',
           },
+          epilogueIf: [
+            { when: 'archief:police', text: { de: 'Der Polizist, der Koster abgeführt hat, kommt zurück und hört zu, die Mütze in der Hand.', en: 'The officer who led Koster away comes back to listen, cap in hand.', ar: 'يعود الشرطي الذي اقتاد كوستر ليستمع، وقبعته في يده.' } },
+            { when: 'archief:wait', text: { de: 'Ganz hinten in der Menge steht ein Mann im Samtmantel und hört zu. Niemand bittet ihn zu gehen.', en: 'At the back of the crowd stands a man in a velvet coat, listening. No one asks him to leave.', ar: 'في آخر الحشد يقف رجل بمعطف مخملي يستمع. لا أحد يطلب منه أن يرحل.' } },
+          ],
         },
       ],
     },

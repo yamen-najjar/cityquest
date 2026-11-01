@@ -85,6 +85,9 @@ test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the ac
   await journal.getByRole('textbox', { name: 'Notes' }).fill('Kehl is hiding something.');
   await page.waitForTimeout(700);
   await journal.getByRole('button', { name: 'Close' }).click();
+  // The story choice in Kehl's study: leave the diary closed.
+  await page.getByRole('button', { name: /Leave it closed/ }).click();
+  await expect(page.getByText('you will hear it from him', { exact: false })).toBeVisible();
   await next(page);
 
   // 5. Use an item from the inventory

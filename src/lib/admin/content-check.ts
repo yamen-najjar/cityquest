@@ -6,6 +6,9 @@ import { locales } from '@/i18n/config';
 
 export type Issue = { level: 'error' | 'warning'; where: string; message: string };
 
+/** The fewest evidence-board questions a published adventure may have. */
+export const MIN_BOARD = 3;
+
 export interface ContentReport {
   slug: string;
   title: string;
@@ -73,6 +76,27 @@ export function checkAdventure(a: Adventure, key: AnswerKey | undefined): Conten
   ];
   for (const [where, when] of whens) if (!options.has(when)) error(where, `Depends on a story choice that does not exist: “${when}”.`);
   if (a.ending.decision.choices.length < 2) error('ending', 'The final decision needs at least two choices.');
+
+  // Feature parity: every published adventure offers the same experience, so a new story ships with all
+  // of it or is held back. A draft may still be missing pieces; there they are warnings. The list is the
+  // one in docs/NEW-ADVENTURE.md.
+  const missing = a.status === 'published' ? error : warn;
+  for (const c of a.chapters) if (!c.scenes?.intro) missing(`chapter “${c.id}”`, 'No intro cutscene: every chapter opens with one (content/adventures/scenes.ts).');
+  if (!a.chapters.some((c) => c.scenes?.success)) missing('scenes', 'No success cutscene at all: give the key moments one.');
+  if ((a.board?.length ?? 0) < MIN_BOARD) missing('board', `The evidence board needs at least ${MIN_BOARD} questions (has ${a.board?.length ?? 0}).`);
+  const choices = a.chapters.filter((c) => c.choice);
+  if (!choices.length) missing('story', 'Needs at least one story choice that changes the story.');
+  for (const c of choices) {
+    for (const o of c.choice!.options) {
+      const when = `${c.id}:${o.id}`;
+      for (const ending of a.ending.decision.choices) {
+        if (!(ending.epilogueIf ?? []).some((e) => e.when === when)) missing(`ending “${ending.id}”`, `Says nothing for the story choice “${when}”: every ending answers every choice.`);
+      }
+      if (!(a.ending.revealIf ?? []).some((r) => r.when === when)) missing('ending reveal', `The final scene does not change for “${when}”.`);
+    }
+  }
+  if (!a.ending.artifact) missing('ending', 'No 3D artifact for the finale.');
+  // A pursuer is a matter of tone, not a feature: the family story deliberately has none.
 
   for (const { path, text } of localizedTexts(a, '')) {
     for (const l of locales) if (isEmpty(text[l])) warn(path || 'adventure', `Empty text in ${l.toUpperCase()}.`);

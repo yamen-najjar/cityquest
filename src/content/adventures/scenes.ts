@@ -521,3 +521,263 @@ export const ringScenes: Scenes = {
     },
   },
 };
+
+// ------------------------------------------------------------------ The Devil's House Secret (Arnhem)
+// Same sets and positions as the stories above, so every prop stands where the set expects it.
+
+export const duivelshuisScenes: Scenes = {
+  message: {
+    intro: {
+      set: 'square',
+      duration: 7,
+      actors: [{ id: 'phone', kind: 'phone', at: [0.1, 1.28, 0.25], turn: 0.25 }],
+      shots: [
+        { t: 0, camera: [0, 4, 7], look: [0, 6, -5] },
+        { t: 3.2, camera: [0, 2.2, 3], look: [0, 2.4, -4] },
+        { t: 6.6, camera: [0.12, 1.62, 0.95], look: [0.1, 1.28, 0.25] },
+      ],
+      actions: [
+        { t: 4.2, d: 0.5, do: 'glow', id: 'phone' },
+        { t: 4.2, d: 1.4, do: 'shake', id: 'phone' },
+      ],
+    },
+    success: {
+      set: 'square',
+      duration: 5,
+      actors: [
+        { id: 'phone', kind: 'phone', at: [0.1, 1.28, 0.25], turn: 0.25 },
+        { id: 'page', kind: 'page', at: [-0.25, 1.2, 0.2], hidden: true },
+      ],
+      shots: [
+        { t: 0, camera: [0.12, 1.62, 0.95], look: [0.1, 1.28, 0.25] },
+        { t: 4.5, camera: [-0.1, 1.6, 0.95], look: [-0.25, 1.35, 0.2] },
+      ],
+      actions: [
+        { t: 0.8, d: 0.6, do: 'appear', id: 'page' },
+        { t: 0.8, d: 2.2, do: 'rise', id: 'page', by: 0.2 },
+        { t: 1, d: 1.2, do: 'glow', id: 'page' },
+      ],
+    },
+  },
+  duivels: {
+    intro: {
+      set: 'lanes',
+      duration: 7,
+      actors: [
+        { id: 'door', kind: 'door', at: [0.82, 0, -21] },
+        { id: 'left', kind: 'writing', at: [0.42, 2.45, -20.9], scale: 0.28 },
+        { id: 'middle', kind: 'writing', at: [0.82, 2.62, -20.9], scale: 0.28 },
+        { id: 'right', kind: 'writing', at: [1.22, 2.45, -20.9], scale: 0.28 },
+      ],
+      shots: [
+        { t: 0, camera: [0, 1.6, -8], look: [0.82, 2.2, -21] },
+        { t: 6.5, camera: [0.82, 1.7, -16.6], look: [0.82, 2.5, -21] },
+      ],
+      actions: [
+        { t: 3.6, d: 1, do: 'glow', id: 'left' },
+        { t: 4.4, d: 1, do: 'glow', id: 'middle' },
+        { t: 5.2, d: 1, do: 'glow', id: 'right' },
+      ],
+      handheld: true,
+    },
+    success: {
+      set: 'lanes',
+      duration: 5,
+      actors: [
+        { id: 'door', kind: 'door', at: [0.82, 0, -21] },
+        { id: 'middle', kind: 'writing', at: [0.82, 2.62, -20.9], scale: 0.28 },
+        { id: 'key', kind: 'key', at: [0.82, 2.5, -20.7], hidden: true },
+      ],
+      shots: [
+        { t: 0, camera: [0.82, 1.7, -16.6], look: [0.82, 2.5, -21] },
+        { t: 4.5, camera: [0.82, 2.0, -18.3], look: [0.82, 2.0, -19.9] },
+      ],
+      actions: [
+        { t: 0.4, d: 0.6, do: 'shake', id: 'middle' },
+        { t: 1.2, d: 0.6, do: 'appear', id: 'key' },
+        { t: 1.2, d: 1.4, do: 'glow', id: 'key' },
+        { t: 1.6, d: 2.2, do: 'move', id: 'key', to: [0.82, 2.0, -19.9] },
+      ],
+    },
+  },
+  sabelspoort: {
+    intro: {
+      set: 'square',
+      duration: 7.5,
+      actors: [
+        { id: 'bram', kind: 'man', at: [0.8, 0, -2.0], turn: -0.5 },
+        { id: 'lantern', kind: 'lantern', at: [1.25, 0.05, -1.7] },
+      ],
+      shots: [
+        { t: 0, camera: [-2.5, 1.7, 5], look: [0, 3, -4] },
+        { t: 4, camera: [-0.4, 1.65, 1.6], look: [0.8, 1.5, -2] },
+        { t: 7.5, camera: [0.1, 1.62, 0.4], look: [0.8, 1.55, -2] },
+      ],
+      lines: [say(4.2, 3, 'man', 'Sie kam hier vorbei, mit einer Ledermappe.', 'She came through here, with a leather folder.', 'مرّت من هنا، ومعها حافظة جلدية.')],
+      actions: [{ t: 3.2, d: 1.2, do: 'turn', id: 'bram', to: -0.15 }],
+    },
+    success: {
+      set: 'square',
+      duration: 5,
+      actors: [
+        { id: 'bram', kind: 'man', at: [0.8, 0, -2.0], turn: -0.15 },
+        { id: 'lantern', kind: 'lantern', at: [1.25, 0.05, -1.7] },
+      ],
+      shots: [
+        { t: 0, camera: [0.1, 1.62, 0.4], look: [0.8, 1.55, -2] },
+        { t: 4.5, camera: [-0.6, 1.8, 0.8], look: [0, 6, -8] },
+      ],
+      lines: [say(0.6, 2.8, 'man', 'Der Mann im Mantel ging ihr nach. Beeil dich.', 'The man in the coat went after her. Hurry.', 'الرجل ذو المعطف تبعها. أسرع.')],
+      actions: [{ t: 0.4, d: 1, do: 'reach', id: 'bram' }],
+    },
+  },
+  carillon: {
+    intro: {
+      set: 'workshop',
+      duration: 7,
+      actors: [
+        { id: 'hatch', kind: 'cabinet', at: [1.6, 0, -3.0] },
+        { id: 'sketch', kind: 'page', at: [-1.6, 0.96, -2.2], turn: 0.3 },
+      ],
+      shots: [
+        { t: 0, camera: [0, 1.65, 3.2], look: [0, 2.2, -3] },
+        { t: 3.4, camera: [-0.6, 1.6, 0.6], look: [-1.6, 0.95, -2.2] },
+        { t: 6.6, camera: [0.7, 1.5, 0.2], look: [1.6, 1.0, -2.8] },
+      ],
+      actions: [{ t: 3.6, d: 1.4, do: 'glow', id: 'sketch' }],
+      handheld: true,
+    },
+    success: {
+      set: 'workshop',
+      duration: 5,
+      actors: [
+        { id: 'hatch', kind: 'cabinet', at: [1.6, 0, -3.0] },
+        { id: 'half', kind: 'page', at: [1.6, 0.85, -2.75], hidden: true },
+      ],
+      shots: [
+        { t: 0, camera: [1.2, 1.4, -0.6], look: [1.6, 1.0, -2.8] },
+        { t: 4.5, camera: [1.4, 1.3, -1.3], look: [1.6, 1.1, -2.8] },
+      ],
+      actions: [
+        { t: 0.5, d: 1.4, do: 'open', id: 'hatch' },
+        { t: 1.6, d: 0.6, do: 'appear', id: 'half' },
+        { t: 1.6, d: 1.6, do: 'rise', id: 'half', by: 0.3 },
+        { t: 1.8, d: 1, do: 'glow', id: 'half' },
+      ],
+    },
+  },
+  sonsbeek: {
+    intro: {
+      set: 'riverbank',
+      duration: 7,
+      actors: [
+        { id: 'stone', kind: 'writing', at: [0.6, 0.4, -3.0], scale: 0.4 },
+      ],
+      shots: [
+        { t: 0, camera: [-1.5, 1.65, 5], look: [0, 1.4, -6] },
+        { t: 6.5, camera: [0.45, 1.05, -1.5], look: [0.6, 0.4, -3] },
+      ],
+      actions: [{ t: 4.2, d: 2, do: 'glow', id: 'stone' }],
+      handheld: true,
+    },
+  },
+  rijnkade: {
+    intro: {
+      set: 'riverbank',
+      duration: 8,
+      actors: [{ id: 'window', kind: 'lantern', at: [3.2, 2.6, -18.3], scale: 4, hidden: true }],
+      shots: [
+        { t: 0, camera: [-1.5, 1.65, 4], look: [0, 1.4, -6] },
+        { t: 2.2, camera: [0.6, 1.6, -2.2], look: [3.2, 2.8, -18] },
+        { t: 8, camera: [0.8, 1.6, -2.6], look: [3.2, 2.8, -18] },
+      ],
+      actions: [
+        // Short, long, long: the lamp in the museum window starts signalling.
+        { t: 2.6, d: 0.1, do: 'appear', id: 'window' },
+        { t: 2.9, d: 0.1, do: 'vanish', id: 'window' },
+        { t: 3.3, d: 0.1, do: 'appear', id: 'window' },
+        { t: 4.2, d: 0.1, do: 'vanish', id: 'window' },
+        { t: 4.6, d: 0.1, do: 'appear', id: 'window' },
+        { t: 5.5, d: 0.1, do: 'vanish', id: 'window' },
+        { t: 6.1, d: 0.1, do: 'appear', id: 'window' },
+      ],
+    },
+  },
+  archief: {
+    intro: {
+      set: 'archive',
+      duration: 7,
+      actors: [
+        { id: 'saar', kind: 'woman', at: [1.4, 0, -1.4], turn: -0.6 },
+        { id: 'lantern', kind: 'lantern', at: [0.36, 1.45, -3.85] },
+      ],
+      shots: [
+        { t: 0, camera: [-3, 1.7, 2.5], look: [0, 1.5, -4] },
+        { t: 6.5, camera: [-0.2, 1.6, 1.2], look: [1.4, 1.5, -1.4] },
+      ],
+      lines: [say(3.8, 2.6, 'woman', 'Jemand war schon hier.', 'Someone has already been here.', 'أحدهم كان هنا قبلك.')],
+      actions: [{ t: 3.4, d: 1, do: 'reach', id: 'saar' }],
+    },
+    success: {
+      set: 'archive',
+      duration: 5,
+      actors: [
+        { id: 'lantern', kind: 'lantern', at: [0.36, 1.45, -3.85] },
+        { id: 'ledger', kind: 'page', at: [0, 1.6, -3.55], hidden: true },
+      ],
+      shots: [
+        { t: 0, camera: [0, 1.6, 0.6], look: [0, 1.5, -4] },
+        { t: 4.5, camera: [0.2, 1.75, -1.6], look: [0, 1.6, -3.6] },
+      ],
+      actions: [
+        { t: 0.8, d: 0.8, do: 'appear', id: 'ledger' },
+        { t: 0.8, d: 1.6, do: 'glow', id: 'ledger' },
+        { t: 1.2, d: 1.8, do: 'rise', id: 'ledger', by: 0.12 },
+      ],
+    },
+  },
+  aanklacht: {
+    intro: {
+      set: 'alley',
+      duration: 7.5,
+      actors: [
+        { id: 'koster', kind: 'man', at: [0.3, 0, -7] },
+        { id: 'lena', kind: 'woman', at: [-1.2, 0, -2.6], hidden: true, turn: 0.5 },
+      ],
+      shots: [
+        { t: 0, camera: [0.6, 1.6, 2], look: [0.3, 1.5, -7] },
+        { t: 3.6, camera: [0.4, 1.6, 0.6], look: [0.3, 1.5, -7] },
+        { t: 7.5, camera: [0.2, 1.6, 0.4], look: [-1.0, 1.5, -2.6] },
+      ],
+      lines: [say(5.2, 2.2, 'woman', 'Sag es ihm ins Gesicht.', 'Say it to his face.', 'قلها في وجهه.')],
+      actions: [
+        { t: 3.8, d: 0.8, do: 'appear', id: 'lena' },
+        { t: 4.0, d: 1.6, do: 'walk', id: 'lena', to: [-0.9, 0, -3.2] },
+      ],
+    },
+    success: {
+      set: 'alley',
+      duration: 6.5,
+      actors: [
+        { id: 'koster', kind: 'man', at: [0.3, 0, -7] },
+        { id: 'lena', kind: 'woman', at: [-0.9, 0, -3.2], turn: 0.5 },
+        { id: 'ledger', kind: 'page', at: [-0.65, 1.3, -2.95], hidden: true },
+      ],
+      shots: [
+        { t: 0, camera: [0.2, 1.6, 0.4], look: [-0.7, 1.35, -3] },
+        { t: 3.2, camera: [0.3, 1.6, 0.2], look: [-0.2, 1.4, -5] },
+        { t: 6.2, camera: [0.5, 1.6, -1.6], look: [0.3, 1.4, -7] },
+      ],
+      lines: [
+        say(1.4, 2.4, 'man', 'Niemand hätte es je vermisst.', 'No one would ever have missed it.', 'ما كان أحد ليفتقده.'),
+        say(4, 2.2, 'woman', 'Es war nie zu verkaufen.', 'It was never for sale.', 'لم يكن للبيع يوماً.'),
+      ],
+      actions: [
+        { t: 0.4, d: 1, do: 'reach', id: 'lena' },
+        { t: 0.8, d: 0.6, do: 'appear', id: 'ledger' },
+        { t: 0.8, d: 1.2, do: 'glow', id: 'ledger' },
+        { t: 3.6, d: 1.4, do: 'turn', id: 'koster', to: 0.5 },
+      ],
+    },
+  },
+};
