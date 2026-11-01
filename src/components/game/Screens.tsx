@@ -7,7 +7,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { contextOf, earned } from '@/lib/engine/achievements';
-import { MAX_TEAM, MODES, isFinished, pursuitLevel, rankFor, starsFor, totalHints, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
+import { MAX_TEAM, MODES, chose, isFinished, pursuitLevel, rankFor, starsFor, totalHints, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
 import { formatDuration } from '@/lib/format';
 import type { HeadingRef } from './ChapterView';
 import { SkylineArt } from '../SkylineArt';
@@ -181,6 +181,7 @@ export function Finale({
   three,
   headingRef,
   onDecide,
+  choices,
 }: {
   a: Adventure;
   locale: Locale;
@@ -188,7 +189,13 @@ export function Finale({
   three: boolean;
   headingRef: HeadingRef;
   onDecide: (id: string) => void;
+  /** The team's story choices, which can add paragraphs to the reveal. */
+  choices: Progress['choices'];
 }) {
+  // The reveal, with any paragraph a story choice added slotted in after the one it follows.
+  const extra = (a.ending.revealIf ?? []).filter((r) => chose({ choices }, r.when));
+  const base = a.ending.reveal[locale];
+  const reveal = base.flatMap((para, i) => [para, ...extra.filter((r) => (r.after ?? base.length - 1) === i).map((r) => r.text[locale])]);
   return (
     <article className="animate-rise">
       <p className="eyebrow">{t.reveal}</p>
@@ -201,7 +208,7 @@ export function Finale({
         </div>
       )}
       <div className="mt-6 space-y-4 text-lg leading-relaxed text-ivory-dim">
-        {a.ending.reveal[locale].map((para) => (
+        {reveal.map((para) => (
           <p key={para}>{para}</p>
         ))}
       </div>
@@ -264,7 +271,16 @@ export function Results({
       <h1 ref={headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold sm:text-5xl">
         {t.resultsTitle}
       </h1>
-      {choice && <p className="mt-6 border-s-2 border-gold ps-5 font-display text-xl italic">{choice.epilogue[locale]}</p>}
+      {choice && (
+          <div className="mt-6 space-y-3 border-s-2 border-gold ps-5 font-display text-xl italic">
+            <p>{choice.epilogue[locale]}</p>
+            {(choice.epilogueIf ?? [])
+              .filter((e) => chose(p, e.when))
+              .map((e) => (
+                <p key={e.when}>{e.text[locale]}</p>
+              ))}
+          </div>
+        )}
 
       <div className="card mt-10 flex flex-col items-center gap-1 p-6 text-center">
         <p className="text-xs text-ivory-mute">{t.rank}</p>

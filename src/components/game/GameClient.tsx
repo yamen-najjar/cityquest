@@ -317,7 +317,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
             onClues={() => toast(t.journal.newClue)}
           />
         ) : !p.decision ? (
-          <Finale a={a} locale={locale} t={t} three={three} headingRef={headingRef} onDecide={(id) => dispatch({ type: 'decide', choiceId: id, chapterCount: total, now: Date.now() })} />
+          <Finale a={a} locale={locale} t={t} three={three} headingRef={headingRef} choices={p.choices} onDecide={(id) => dispatch({ type: 'decide', choiceId: id, chapterCount: total, now: Date.now() })} />
         ) : (
           <Results a={a} p={p} locale={locale} cityName={cityName} t={t} achievements={achievements} headingRef={headingRef} onRestart={() => setConfirmRestart(true)} />
         )}

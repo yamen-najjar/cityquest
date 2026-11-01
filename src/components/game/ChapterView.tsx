@@ -472,13 +472,71 @@ export function ChapterView({
                 ))}
               </ul>
             ) : null}
-            <button type="button" className="btn-gold mt-6 w-full sm:w-auto" onClick={() => dispatch({ type: 'next', chapterCount: total })}>
+            {chapter.choice && <StoryDecision chapterId={chapter.id} choice={chapter.choice} chosen={p.choices[chapter.id]} locale={locale} t={t} dispatch={dispatch} />}
+            <button
+              type="button"
+              className="btn-gold mt-6 w-full sm:w-auto"
+              disabled={!!chapter.choice && !p.choices[chapter.id]}
+              onClick={() => dispatch({ type: 'next', chapterCount: total })}
+            >
               {index + 1 < total ? t.next : t.toFinale}
             </button>
           </div>
         </section>
       )}
     </article>
+  );
+}
+
+/**
+ * A story decision after a solved chapter. It is made once (the next chapter waits for it) and then shows
+ * what it led to; later chapters, the journal and the ending read it back (see StoryChoice).
+ */
+function StoryDecision({
+  chapterId,
+  choice,
+  chosen,
+  locale,
+  t,
+  dispatch,
+}: {
+  chapterId: string;
+  choice: NonNullable<Chapter['choice']>;
+  chosen: string | undefined;
+  locale: Locale;
+  t: Dictionary['game'];
+  dispatch: (action: Action) => void;
+}) {
+  const picked = choice.options.find((o) => o.id === chosen);
+  return (
+    <section className="mt-6 rounded-2xl border border-gold/40 bg-gold/[0.05] p-5" aria-labelledby={`choice-${chapterId}`}>
+      <h3 id={`choice-${chapterId}`} className="eyebrow">
+        {t.decisionTitle}
+      </h3>
+      <p className="mt-2 text-lg text-ivory">{choice.prompt[locale]}</p>
+      {picked ? (
+        <div role="status" className="mt-4 space-y-2">
+          <p className="font-semibold text-gold">{picked.label[locale]}</p>
+          <p className="font-display text-lg italic text-ivory-dim">{picked.outcome[locale]}</p>
+        </div>
+      ) : (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {choice.options.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              className="btn-ghost min-h-[56px] rounded-2xl text-start text-base"
+              onClick={() => {
+                sfx('page');
+                dispatch({ type: 'choose', chapterId, optionId: o.id });
+              }}
+            >
+              {o.label[locale]}
+            </button>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 

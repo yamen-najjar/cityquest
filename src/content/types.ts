@@ -102,13 +102,31 @@ export interface Puzzle {
   hints: Localized[];
 }
 
+/**
+ * Story branching. A chapter can end with a decision; the pick is saved as "chapterId:optionId", and any
+ * later content can name that pair in `when` to appear only for teams who chose it. Content without
+ * `when` is shown to everyone, so a story that never branches is unchanged.
+ */
+export interface StoryChoice {
+  prompt: Localized;
+  options: { id: string; label: Localized; outcome: Localized }[];
+}
+
+/** A piece of text shown only after a given story choice ("chapterId:optionId"). */
+export interface WhenChosen {
+  when: string;
+  text: Localized;
+  /** Reveal paragraphs only: shown after this paragraph (0-based); at the end when left out. */
+  after?: number;
+}
+
 /** Someone the player meets; listed in the journal from the chapter they first appear in. */
 export interface Person {
   id: string;
   name: Localized;
   role: Localized;
-  /** What the player knows about them; grows with the story (an entry per chapter id). */
-  notes: { after: string; text: Localized }[];
+  /** What the player knows about them; grows with the story (an entry per chapter id), optionally only after a story choice. */
+  notes: { after: string; text: Localized; when?: string }[];
   appears: string;
   /** How their lines sound when read aloud. */
   voice: Voice;
@@ -249,6 +267,8 @@ export interface Chapter {
   success: Localized;
   /** Item added to the inventory when the chapter is solved. */
   reward?: string;
+  /** A decision the team makes after solving the chapter (see StoryChoice). */
+  choice?: StoryChoice;
 }
 
 /**
@@ -271,9 +291,11 @@ export interface Ending {
   /** The object the story was about, shown in 3D at the finale. */
   artifact?: ModelSpec;
   reveal: Localized<string[]>;
+  /** Extra reveal paragraphs, each only after a story choice. */
+  revealIf?: WhenChosen[];
   decision: {
     prompt: Localized;
-    choices: (Choice & { epilogue: Localized })[];
+    choices: (Choice & { epilogue: Localized; epilogueIf?: WhenChosen[] })[];
   };
 }
 

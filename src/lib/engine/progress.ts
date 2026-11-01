@@ -33,6 +33,8 @@ export interface Progress {
   notes: string;
   /** Evidence-board questions answered, by question id. */
   deductions: string[];
+  /** Story choices made, as chapterId -> optionId. */
+  choices: Record<string, string>;
   decision: string | null;
   team: Team;
   startedAt: number;
@@ -51,6 +53,7 @@ export type Action =
   | { type: 'combine'; from: string[]; to: string }
   | { type: 'notes'; text: string }
   | { type: 'deduce'; questionId: string }
+  | { type: 'choose'; chapterId: string; optionId: string }
   | { type: 'next'; chapterCount: number }
   | { type: 'decide'; choiceId: string; chapterCount: number; now: number }
   | { type: 'tick'; now: number }
@@ -73,6 +76,7 @@ export function newProgress(adventure: string, team: Team, now: number, mode: Mo
     asked: {},
     notes: '',
     deductions: [],
+    choices: {},
     decision: null,
     team: clampTeam(team),
     startedAt: now,
@@ -121,6 +125,10 @@ export function reduce(p: Progress, a: Action): Progress {
     }
     case 'notes':
       return { ...p, notes: a.text.slice(0, MAX_NOTES) };
+    case 'choose':
+      // Made once, after the chapter is solved; a choice is never changed afterwards.
+      if (!p.solved.includes(a.chapterId) || p.choices[a.chapterId]) return p;
+      return { ...p, choices: { ...p.choices, [a.chapterId]: a.optionId } };
     case 'deduce':
       return p.deductions.includes(a.questionId) ? p : { ...p, deductions: [...p.deductions, a.questionId] };
     case 'next':
@@ -138,6 +146,13 @@ export function reduce(p: Progress, a: Action): Progress {
     case 'team':
       return { ...p, team: clampTeam(a.team) };
   }
+}
+
+/** Whether the team made the story choice "chapterId:optionId". Content without a condition always shows. */
+export function chose(p: Pick<Progress, 'choices'>, when: string | undefined): boolean {
+  if (!when) return true;
+  const [chapterId, optionId] = when.split(':');
+  return !!chapterId && p.choices[chapterId] === optionId;
 }
 
 export function isFinished(p: Progress): boolean {
@@ -220,6 +235,14 @@ function counts(v: unknown): Record<string, number> {
   return out;
 }
 
+/** { chapterId: optionId }. */
+function choiceMap(v: unknown): Record<string, string> {
+  const out: Record<string, string> = {};
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return out;
+  for (const [k, id] of Object.entries(v).slice(0, LIST_MAX)) if (isId(k) && isId(id)) out[k] = id;
+  return out;
+}
+
 /** { chapterId: [questionId, …] }. */
 function askedMap(v: unknown): Record<string, string[]> {
   const out: Record<string, string[]> = {};
@@ -259,6 +282,7 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
     notes: typeof p.notes === 'string' ? p.notes.slice(0, MAX_NOTES) : '',
     // Older saves have no board yet: an empty one.
     deductions: idList(p.deductions),
+    choices: choiceMap(p.choices),
     decision: isId(p.decision) ? p.decision : null,
     team: clampTeam({ name: team.name, players: Number(team.players) }),
     startedAt,
@@ -295,6 +319,8 @@ export function fitToAdventure(p: Progress, chapterIds: readonly string[], itemI
     solved,
     inventory: p.inventory.filter((id) => items.has(id)),
     deductions: p.deductions.filter((id) => boardIds.includes(id)),
+    // A choice only stands for a chapter that is still solved.
+    choices: Object.fromEntries(Object.entries(p.choices).filter(([id]) => solved.includes(id))),
     decision: finished ? p.decision : null,
     finishedAt: finished ? p.finishedAt : null,
   };

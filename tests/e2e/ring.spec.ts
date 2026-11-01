@@ -73,6 +73,11 @@ test('The Neckar Ring in expert mode: interrogation, torn strips, cipher wheel, 
   await expect(page.getByText('FORGIVE ME. I WAS AFRAID.')).toBeVisible();
   await answer(page, 'forgive me');
   await correct(page);
+  // The story decision: the next chapter waits for it, and it cannot be changed afterwards.
+  await expect(page.getByRole('button', { name: /Next chapter|To the finale/ })).toBeDisabled();
+  await page.getByRole('button', { name: /Confront her/ }).click();
+  await expect(page.getByText('she will explain herself to me', { exact: false })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Forgive her/ })).toHaveCount(0);
   await next(page);
 
   // 8. The accusation on the bridge
@@ -87,8 +92,15 @@ test('The Neckar Ring in expert mode: interrogation, torn strips, cipher wheel, 
   await page.getByRole('button', { name: /Journal/ }).click();
   await page.getByRole('tab', { name: /People/ }).click();
   await expect(page.getByRole('dialog').getByText('Ask for Hedda.', { exact: false })).toBeVisible();
+  // The decision shows in what the journal says about Hedda, and only the one that was made.
+  await expect(page.getByRole('dialog').getByText('You want the truth from her, face to face.')).toBeVisible();
+  await expect(page.getByRole('dialog').getByText('You chose to forgive her.')).toHaveCount(0);
   await page.getByRole('button', { name: 'Close' }).click();
   await next(page);
+
+  // The bridge scene follows the decision.
+  await expect(page.getByText('“Why me?” you ask.', { exact: false })).toBeVisible();
+  await expect(page.getByText('“I forgive you.”', { exact: false })).toHaveCount(0);
 
   // Three endings; the bittersweet one
   await expect(page.getByRole('button', { name: 'Give the ring back to Hedda' })).toBeVisible();
@@ -96,6 +108,7 @@ test('The Neckar Ring in expert mode: interrogation, torn strips, cipher wheel, 
   await page.getByRole('button', { name: 'Give the ring back to Hedda' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Mystery solved');
   await expect(page.getByText('It was always mine', { exact: false })).toBeVisible();
+  await expect(page.getByText('She does not ask for your forgiveness.', { exact: false })).toBeVisible();
   await expect(page.getByText('Expert', { exact: false }).first()).toBeVisible();
   await expect(page.getByText('Master detective').first()).toBeVisible(); // no hints, no mistakes
   await noHorizontalScroll(page);
