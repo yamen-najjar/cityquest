@@ -43,6 +43,15 @@ export const answerKeys: Record<string, AnswerKey> = {
     verdict: { accepted: ['kehl+second-half', 'kehl+whole-letter'] },
   },
   'het-duivelshuis': {
+    'board:tower': { accepted: [board('lena', 'clue:sabelspoort-0', 'clue:carillon-0'), board('lena', 'said:sabelspoort-where', 'clue:carillon-0')] },
+    'board:honest': { accepted: [board('devries', 'clue:archief-0', 'item:iron-key'), board('devries', 'clue:archief-0', 'clue:duivels-0')] },
+    'board:velvet': {
+      accepted: [
+        board('koster', 'said:sabelspoort-followed', 'clue:archief-1'),
+        board('koster', 'clue:sabelspoort-1', 'clue:archief-1'),
+        board('koster', 'clue:duivels-1', 'clue:archief-1'),
+      ],
+    },
     message: {
       accepted: [
         'devils', 'the devils', 'devil',
@@ -67,6 +76,16 @@ export const answerKeys: Record<string, AnswerKey> = {
     aanklacht: { accepted: ['koster+whole-ledger', 'koster+ledger-left'] },
   },
   'neckar-ring': {
+    'board:pursuer': {
+      accepted: [
+        board('collector', 'clue:whispers-1', 'said:watchman-grey'),
+        board('collector', 'clue:whispers-1', 'clue:chase-0'),
+        board('collector', 'said:watchman-grey', 'clue:chase-0'),
+      ],
+    },
+    'board:sign': { accepted: [board('mira', 'item:chalk-sign', 'clue:chase-1'), board('mira', 'item:chalk-sign', 'item:mira-bookmark')] },
+    'board:maker': { accepted: [board('valen', 'clue:ledger-1', 'clue:goldsmith-0'), board('valen', 'clue:ledger-0', 'clue:goldsmith-0')] },
+    'board:knew': { accepted: [board('hedda', 'said:watchman-how', 'clue:letter-0'), board('hedda', 'clue:watchman-1', 'clue:letter-0')] },
     box: { accepted: ['369'] },
     whispers: {
       accepted: ['bookbinder', 'book binder', 'a bookbinder', 'buchbinder', 'buchbinderin', 'ein buchbinder', 'boekbinder', 'een boekbinder', 'boekbindster', 'مجلد', 'مجلدة', 'مجلد الكتب', 'مجلدة الكتب', 'مجلد كتب'],

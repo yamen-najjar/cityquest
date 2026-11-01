@@ -690,6 +690,33 @@ export const neckarRing: Authored<Adventure> = {
       clues: [{ de: 'Valens Name wurde auf der Brücke zurückgegeben.', en: 'Valen’s name was given back on the bridge.', ar: 'أُعيد اسم فالين على الجسر.' }],
     },
   ],
+  // Optional deductions on the evidence board (see BoardQuestion); answers in answers.server.ts.
+  board: [
+    {
+      id: 'pursuer',
+      after: 'chase',
+      question: { de: 'Wer verfolgt dich – und wie?', en: 'Who is following you, and how?', ar: 'مَن يلاحقك، وكيف؟' },
+      deduction: { de: 'Der Graue Sammler. Er geht nie durch die Straßen: Er kann dir nur durch Glas und Wasser folgen.', en: 'The Grey Collector. He never walks the streets: he can only follow you through glass and water.', ar: 'الجامع الرمادي. لا يمشي في الشوارع أبداً: لا يستطيع أن يتبعك إلا عبر الزجاج والماء.' },
+    },
+    {
+      id: 'sign',
+      after: 'chase',
+      question: { de: 'Zu wem hat dich der Ring geführt – und wie hast du sie gefunden?', en: 'Who did the ring lead you to, and how did you find her?', ar: 'إلى مَن قادك الخاتم، وكيف وجدتها؟' },
+      deduction: { de: 'Zu Mira, der Buchbinderin. Das Kreidezeichen mit Feder und Nadel hing über ihrer Tür.', en: 'To Mira, the bookbinder. The chalk sign of a quill and a needle hung over her door.', ar: 'إلى ميرا، مجلّدة الكتب. كانت علامة الطباشير — ريشة وإبرة — معلّقة فوق بابها.' },
+    },
+    {
+      id: 'maker',
+      after: 'goldsmith',
+      question: { de: 'Wer hat den Ring gemacht?', en: 'Who made the ring?', ar: 'مَن صنع الخاتم؟' },
+      deduction: { de: 'Valen, der Goldschmied, der seinen Namen verkaufte. Sein Name steht als Punzen im Ring.', en: 'Valen, the goldsmith who sold his name. It is stamped inside the ring as hallmarks.', ar: 'فالين، الصائغ الذي باع اسمه. اسمه مختوم داخل الخاتم أختاماً.' },
+    },
+    {
+      id: 'knew',
+      after: 'letter',
+      question: { de: 'Wer wusste die ganze Zeit, wie man den Ring loswird?', en: 'Who knew all along how to be rid of the ring?', ar: 'مَن كان يعرف منذ البداية كيف يتخلّص المرء من الخاتم؟' },
+      deduction: { de: 'Hedda. Man verliert den Ring nur, wenn ihn jemand freiwillig nimmt – also sorgte sie dafür, dass du das Kästchen nimmst.', en: 'Hedda. You can only lose the ring if someone takes it freely, so she made sure you would take the box.', ar: 'هيدا. لا يزول الخاتم إلا إذا أخذه أحد بإرادته، فحرصت على أن تأخذ أنت الصندوق.' },
+    },
+  ],
   ending: {
     artifact: { kind: 'ring', hallmarks: ['N5', 'L3', 'V1', 'E4', 'A2'] },
     revealIf: [

@@ -78,6 +78,8 @@ test('The Devil’s House Secret: all eight chapters, the combined ledger, the a
   await page.getByRole('radio', { name: 'Old iron key' }).check();
   await page.getByRole('button', { name: 'Check answer' }).click();
   await correct(page);
+  // The story choice: ask Saar to wait instead of calling the police.
+  await page.getByRole('button', { name: /Ask her to wait/ }).click();
   await next(page);
 
   // 8. Deduction — the wrong proof first, then the whole ledger page convicts Koster.
@@ -92,8 +94,10 @@ test('The Devil’s House Secret: all eight chapters, the combined ledger, the a
 
   // Finale and results.
   await expect(page.getByText('The devils guard no gold.', { exact: false })).toBeVisible();
+  await expect(page.getByText('No sirens, no lights', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Read the first page aloud at the Korenmarkt' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Mystery solved');
+  await expect(page.getByText('At the back of the crowd stands a man in a velvet coat', { exact: false })).toBeVisible();
   await expect(page.locator('#chapters-title + ol li')).toHaveCount(8);
   await expect(page.locator('#certificate')).toContainText('in Arnhem');
   await noHorizontalScroll(page);

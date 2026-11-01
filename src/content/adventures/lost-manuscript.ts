@@ -163,6 +163,8 @@ export const lostManuscript: Authored<Adventure> = {
       role: { de: 'Sammler seltener Handschriften', en: 'Collector of rare manuscripts', ar: 'جامع مخطوطات نادرة' },
       notes: [
         { after: 'study', text: { de: 'Wollte den Codex seit Jahren kaufen. Wusste von der Truhe am Fluss.', en: 'Has tried to buy the codex for years. Knew about the chest by the river.', ar: 'يحاول شراء المخطوطة منذ سنوات، وكان يعرف بأمر الصندوق عند النهر.' } },
+        { after: 'study', when: 'study:read', text: { de: 'Sein Tagebuch: Er sehnt sich danach, den Codex ein einziges Mal zu sehen.', en: 'His diary: he longs to see the codex just once.', ar: 'دفتر يومياته: يتوق إلى رؤية المخطوطة ولو مرة واحدة.' } },
+        { after: 'study', when: 'study:leave', text: { de: 'Du hast sein Tagebuch ungelesen gelassen.', en: 'You left his diary unread.', ar: 'تركت دفتر يومياته دون أن تقرأه.' } },
       ],
     },
     {
@@ -429,6 +431,22 @@ export const lostManuscript: Authored<Adventure> = {
         { de: 'Bei Kehl lag die fehlende Hälfte deines Briefes.', en: 'The missing half of your letter was at Kehl’s.', ar: 'النصف المفقود من رسالتك كان عند كيل.' },
       ],
       reward: 'second-half',
+      // A story decision (see StoryChoice): it changes the journal, the final scene and every ending.
+      choice: {
+        prompt: { de: 'Auf Kehls Schreibtisch liegt sein Tagebuch, aufgeschlagen. Liest du darin?', en: 'On Kehl’s desk lies his diary, open. Do you read it?', ar: 'على مكتب كيل يرقد دفتر يومياته مفتوحاً. هل تقرؤه؟' },
+        options: [
+          {
+            id: 'read',
+            label: { de: 'Darin lesen: Heute Nacht zählt jede Spur', en: 'Read it: tonight every clue counts', ar: 'اقرأه: الليلة كل دليل مهم' },
+            outcome: { de: 'Eine Zeile bleibt hängen: „Wenn ich ihn nur ein einziges Mal mit eigenen Augen sehen könnte.“ Du schließt das Tagebuch, etwas weniger sicher, was für ein Mensch er ist.', en: 'One line stays with you: “If only I could see it once with my own eyes.” You close the diary, a little less sure what kind of man he is.', ar: 'يبقى سطر واحد في ذهنك: «لو أستطيع أن أراها مرة واحدة بعينيّ». تغلق الدفتر وقد صرت أقل يقيناً بحقيقته.' },
+          },
+          {
+            id: 'leave',
+            label: { de: 'Es geschlossen lassen: Es gehört dir nicht', en: 'Leave it closed: it is not yours to read', ar: 'اتركه مغلقاً: ليس من حقك أن تقرأه' },
+            outcome: { de: 'Du schließt es, ohne hineinzusehen. Was immer er geschrieben hat, du wirst es von ihm selbst hören.', en: 'You close it without a glance. Whatever he wrote, you will hear it from him.', ar: 'تغلقه دون أن تنظر فيه. أياً كان ما كتبه، ستسمعه منه هو.' },
+          },
+        ],
+      },
     },
     {
       id: 'chest',
@@ -655,6 +673,10 @@ export const lostManuscript: Authored<Adventure> = {
   ],
   ending: {
     artifact: { kind: 'book' },
+    revealIf: [
+      { when: 'study:read', text: { de: 'Du erinnerst dich an die Zeile in seinem Tagebuch. „Du wolltest ihn wirklich nur sehen“, sagst du leise. Kehl nickt, und einen Moment lang wirkt er weniger wie ein Dieb als wie ein Leser.', en: 'You remember the line in his diary. “You really did only want to see it,” you say quietly. Kehl nods, and for a moment he looks less like a thief than a reader.', ar: 'تتذكّر السطر في دفتر يومياته. «كنت تريد أن تراها فحسب»، تقول بهدوء. يومئ كيل، ويبدو للحظة قارئاً أكثر منه لصاً.' } },
+      { when: 'study:leave', text: { de: 'Sein Tagebuch hast du nie gelesen. Worauf Kehl gehofft hat, erfährst du nur, wenn er es dir erzählt – und er erzählt dir nichts.', en: 'You never read his diary. Whatever Kehl was hoping for, you will only know if he tells you — and he tells you nothing.', ar: 'لم تقرأ دفتر يومياته قط. وما كان كيل يأمله لن تعرفه إلا إذا أخبرك به — وهو لا يخبرك بشيء.' } },
+    ],
     reveal: {
       de: [
         '„Der Codex Lumen ist kein Schatzplan“, sagt Elise. „Seine Seiten sind leer, bis auf die erste: Wer ihn findet, soll die Geschichten dieser Stadt sammeln, bevor sie vergessen werden.“',
@@ -683,6 +705,10 @@ export const lostManuscript: Authored<Adventure> = {
             en: 'Together you put the codex back on its shelf. Elise puts out her lantern. “It will wait until the next one is curious enough.”',
             ar: 'تعيدان المخطوطة معاً إلى رفّها، وتطفئ إليزه فانوسها: «ستنتظر حتى يأتي شخص آخر فضوليّ بما يكفي».',
           },
+          epilogueIf: [
+            { when: 'study:read', text: { de: 'Beim Hinausgehen fragt Kehl Elise, ob er den Codex ab und zu besuchen darf. Sie sagt Ja.', en: 'On the way out, Kehl asks Elise if he may visit the codex now and then. She says yes.', ar: 'وفي طريق الخروج يسأل كيل إليزه إن كان يستطيع زيارة المخطوطة بين حين وآخر. فتقول نعم.' } },
+            { when: 'study:leave', text: { de: 'Kehl geht wortlos. In der nächsten Woche kommt ein Buch im Archiv an, ohne Absender: ein Geschenk für die Regale.', en: 'Kehl leaves without a word. The next week a book arrives at the archive, unsigned: a gift for the shelves.', ar: 'يغادر كيل دون كلمة. وفي الأسبوع التالي يصل إلى الأرشيف كتاب بلا اسم مرسل: هدية للرفوف.' } },
+          ],
         },
         {
           id: 'write',
@@ -692,6 +718,10 @@ export const lostManuscript: Authored<Adventure> = {
             en: 'You open the second page and write how an anonymous message led you through the city. Elise reads along and nods. Even Kehl looks over your shoulder.',
             ar: 'تفتح الصفحة الثانية وتكتب كيف قادتك رسالة مجهولة عبر المدينة. إليزه تقرأ معك وتومئ برأسها، وحتى كيل ينظر من فوق كتفك.',
           },
+          epilogueIf: [
+            { when: 'study:read', text: { de: 'Deine Geschichte endet mit der Zeile aus seinem Tagebuch. Kehl liest sie zweimal und sagt nichts.', en: 'Your story ends with the line from his diary. Kehl reads it twice and says nothing.', ar: 'تنتهي حكايتك بالسطر من دفتر يومياته. يقرؤه كيل مرتين ولا يقول شيئاً.' } },
+            { when: 'study:leave', text: { de: 'Auf der Seite ist noch Platz. Elise reicht Kehl den Stift: „Du bist dran.“', en: 'There is space left on the page. Elise hands Kehl the pen: “Your turn.”', ar: 'ما زال في الصفحة متّسع. تناول إليزه القلم لكيل: «دورك».' } },
+          ],
         },
       ],
     },

@@ -123,12 +123,12 @@ tests/e2e/                         Playwright
 - **Answer normalisation** forgives case, accents, umlauts, Arabic letter variants, the Arabic article,
   harakat and Eastern Arabic digits, and accepts every language's answer in every language.
 
-### Adding an adventure (Phase 1, by hand)
+### Adding an adventure
 
-1. Add a file in `src/content/adventures/` that exports an `Adventure`, and list it in `adventures/index.ts`.
-2. Add its accepted answers, keyed by chapter id, to `src/content/answers.server.ts`.
-3. Run `npm test`. It fails if a translation is missing, a chapter has no answer key or a reward item
-   does not exist.
+Follow **[docs/NEW-ADVENTURE.md](docs/NEW-ADVENTURE.md)**. Every published adventure must have the same
+features: a cutscene for every chapter, an evidence board, a story choice that changes every ending, a 3D
+finale, and all four languages. `npm test` fails for a published adventure that misses one, and says what to
+add; `/admin/content` shows the same report.
 
 ## Deployment
 
