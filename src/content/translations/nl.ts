@@ -396,6 +396,29 @@ export const nl: Record<string, string> = {
   "You put the ring back on. It fits perfectly. In the dark water your reflection smiles, one second after you do. The next morning Hedda puts a new box on her shelf.":
     "Je schuift de ring weer om. Hij past perfect. In het donkere water glimlacht je spiegelbeeld, één seconde na jou. De volgende ochtend zet Hedda een nieuw kistje op haar plank.",
 
+  // Story choice after Hedda's letter, and what it changes
+  "You chose to forgive her.": "Je hebt besloten haar te vergeven.",
+  "You want the truth from her, face to face.": "Je wilt de waarheid van haar horen, oog in oog.",
+  "Hedda gave you the curse on purpose. What will you do when you see her again?": "Hedda heeft je de vloek met opzet gegeven. Wat doe je als je haar weer ziet?",
+  "Forgive her: she was as afraid as you are now": "Haar vergeven: ze was net zo bang als jij nu",
+  "You fold the letter carefully and put it in your coat. Mira watches you and says nothing, but her face softens.":
+    "Je vouwt de brief zorgvuldig op en steekt hem in je jas. Mira kijkt naar je en zegt niets, maar haar gezicht wordt zachter.",
+  "Confront her: she owes you the truth": "Haar ter verantwoording roepen: ze is je de waarheid verschuldigd",
+  "You crumple the letter. “When this is over, she will explain herself to me,” you say. Mira nods slowly.":
+    "Je verfrommelt de brief. ‘Als dit voorbij is, legt ze het me uit,’ zeg je. Mira knikt langzaam.",
+  "You take the folded letter from your coat and show it to her. “I read it,” you say. “I forgive you.” Her lantern trembles.":
+    "Je haalt de opgevouwen brief uit je jas en laat hem haar zien. ‘Ik heb hem gelezen,’ zeg je. ‘Ik vergeef je.’ Haar lantaarn trilt.",
+  "“Why me?” you ask. For a long moment she says nothing. Then: “Because you came in smiling. I had forgotten how.” You hold her gaze until she looks away.":
+    "‘Waarom ik?’ vraag je. Lange tijd zegt ze niets. Dan: ‘Omdat je lachend binnenkwam. Ik was vergeten hoe dat moest.’ Je houdt haar blik vast tot ze wegkijkt.",
+  "Under the sign, in small letters: “For the one who forgave me.”": "Onder het bord staat in kleine letters: ‘Voor wie mij vergaf.’",
+  "She never says sorry again. But every week a story arrives in your letterbox, unsigned.":
+    "Ze zegt nooit meer sorry. Maar elke week ligt er een verhaal in je brievenbus, zonder naam.",
+  "Before she goes, she squeezes your hand: “Thank you for forgiving me.”": "Voordat ze gaat, knijpt ze in je hand: ‘Dank je dat je me vergeven hebt.’",
+  "She does not ask for your forgiveness. Perhaps that is the fairest thing she has ever done.":
+    "Ze vraagt je niet om vergeving. Misschien is dat het eerlijkste wat ze ooit heeft gedaan.",
+  "Hedda sees the ring on your finger and says nothing. She, of all people, understands.": "Hedda ziet de ring aan je vinger en zegt niets. Juist zij begrijpt het.",
+  "Now you are the one who owes someone an explanation.": "Nu ben jij degene die iemand een verklaring schuldig is.",
+
   // ---------------------------------------------------------------- Scene subtitles
   "We were on duty that night. One of us took the key.": "Wij hadden die nacht dienst. Een van ons heeft de sleutel gepakt.",
   "VII asked me to hide it.": "VII vroeg me hem te verstoppen.",

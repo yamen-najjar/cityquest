@@ -6,7 +6,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { sfx } from '@/lib/audio';
-import { combinationKey, MAX_NOTES, type Action, type Progress } from '@/lib/engine/progress';
+import { chose, combinationKey, MAX_NOTES, type Action, type Progress } from '@/lib/engine/progress';
 import { visibleQuestions } from '@/lib/engine/board';
 import { EvidenceBoard } from './EvidenceBoard';
 import { ItemIcon } from './ItemIcon';
@@ -148,7 +148,7 @@ export function Journal({
             (people.length ? (
               <ul className="space-y-4">
                 {people.map((person) => {
-                  const notes = person.notes.filter((n) => p.solved.includes(n.after));
+                  const notes = person.notes.filter((n) => p.solved.includes(n.after) && chose(p, n.when));
                   const statements = a.chapters.flatMap((c) =>
                     c.puzzle.interview?.person === person.id
                       ? (p.asked[c.id] ?? []).map((qid) => c.puzzle.interview!.questions.find((q) => q.id === qid)).filter((q): q is NonNullable<typeof q> => !!q)

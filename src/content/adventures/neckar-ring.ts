@@ -142,6 +142,8 @@ export const neckarRing: Authored<Adventure> = {
         { after: 'box', text: { de: 'Gab dir das Kästchen: „Es hat lange auf dich gewartet.“', en: 'Gave you the box: “It has been waiting for you.”', ar: 'أعطتك الصندوق: «كان ينتظرك منذ زمن».' } },
         { after: 'watchman', text: { de: 'Trug vor vierzig Jahren denselben Ring.', en: 'Wore the same ring forty years ago.', ar: 'كانت تلبس الخاتم نفسه قبل أربعين عاماً.' } },
         { after: 'letter', text: { de: 'Hat dir den Ring absichtlich gegeben, aus Angst.', en: 'Gave you the ring on purpose, out of fear.', ar: 'أعطتك الخاتم عمداً، بدافع الخوف.' } },
+        { after: 'letter', when: 'letter:forgive', text: { de: 'Du hast beschlossen, ihr zu verzeihen.', en: 'You chose to forgive her.', ar: 'قرّرت أن تسامحها.' } },
+        { after: 'letter', when: 'letter:confront', text: { de: 'Du willst die Wahrheit von ihr hören, von Angesicht zu Angesicht.', en: 'You want the truth from her, face to face.', ar: 'تريد الحقيقة منها، وجهاً لوجه.' } },
       ],
     },
     {
@@ -626,6 +628,22 @@ export const neckarRing: Authored<Adventure> = {
         { de: 'Der Brief war im Futter des Kästchens versteckt.', en: 'The letter was hidden in the lining of the box.', ar: 'كانت الرسالة مخبأة في بطانة الصندوق.' },
       ],
       reward: 'hedda-letter',
+      // The story's turning point: how the team meets Hedda again changes the bridge and every ending.
+      choice: {
+        prompt: { de: 'Hedda hat dir den Fluch absichtlich gegeben. Was tust du, wenn du sie wiedersiehst?', en: 'Hedda gave you the curse on purpose. What will you do when you see her again?', ar: 'أعطتك هيدا اللعنة عمداً. ماذا ستفعل حين تراها مجدداً؟' },
+        options: [
+          {
+            id: 'forgive',
+            label: { de: 'Ihr verzeihen: Sie hatte genauso viel Angst wie du jetzt', en: 'Forgive her: she was as afraid as you are now', ar: 'سامحها: كانت خائفة كما أنت الآن' },
+            outcome: { de: 'Du faltest den Brief sorgfältig und steckst ihn in deinen Mantel. Mira sieht dich an und sagt nichts, aber ihr Gesicht wird weicher.', en: 'You fold the letter carefully and put it in your coat. Mira watches you and says nothing, but her face softens.', ar: 'تطوي الرسالة بعناية وتضعها في معطفك. تراقبك ميرا ولا تقول شيئاً، لكن ملامحها تلين.' },
+          },
+          {
+            id: 'confront',
+            label: { de: 'Sie zur Rede stellen: Sie schuldet dir die Wahrheit', en: 'Confront her: she owes you the truth', ar: 'واجهها: إنها مدينة لك بالحقيقة' },
+            outcome: { de: 'Du zerknüllst den Brief. „Wenn das vorbei ist, wird sie es mir erklären“, sagst du. Mira nickt langsam.', en: 'You crumple the letter. “When this is over, she will explain herself to me,” you say. Mira nods slowly.', ar: 'تجعّد الرسالة: «حين ينتهي هذا، ستشرح لي كل شيء». تومئ ميرا ببطء.' },
+          },
+        ],
+      },
     },
     {
       id: 'bridge',
@@ -674,6 +692,18 @@ export const neckarRing: Authored<Adventure> = {
   ],
   ending: {
     artifact: { kind: 'ring', hallmarks: ['N5', 'L3', 'V1', 'E4', 'A2'] },
+    revealIf: [
+      {
+        when: 'letter:forgive',
+        after: 1,
+        text: { de: 'Du nimmst den gefalteten Brief aus dem Mantel und zeigst ihn ihr. „Ich habe ihn gelesen“, sagst du. „Ich verzeihe dir.“ Ihre Laterne zittert.', en: 'You take the folded letter from your coat and show it to her. “I read it,” you say. “I forgive you.” Her lantern trembles.', ar: 'تُخرج الرسالة المطويّة من معطفك وتريها إياها: «قرأتها. أنا أسامحك». يرتجف فانوسها في يدها.' },
+      },
+      {
+        when: 'letter:confront',
+        after: 1,
+        text: { de: '„Warum ich?“, fragst du. Lange sagt sie nichts. Dann: „Weil du lächelnd hereingekommen bist. Ich hatte vergessen, wie das geht.“ Du hältst ihrem Blick stand, bis sie wegsieht.', en: '“Why me?” you ask. For a long moment she says nothing. Then: “Because you came in smiling. I had forgotten how.” You hold her gaze until she looks away.', ar: '«لماذا أنا؟» تسأل. تصمت طويلاً، ثم تقول: «لأنك دخلت مبتسماً. كنت قد نسيت كيف يكون ذلك». تحدّق في عينيها حتى تشيح بنظرها.' },
+      },
+    ],
     reveal: {
       de: [
         'Eine zweite, sanfte Stimme flüstert: „Hundert Jahre habe ich darauf gewartet, dass jemand mich beim Namen ruft.“',
@@ -702,6 +732,10 @@ export const neckarRing: Authored<Adventure> = {
             en: 'The silver shatters. In the river the grey shadow dissolves like mist in the sun. Hedda cries, then laughs. The next morning a new sign hangs over her shop: “Stories, free of charge”.',
             ar: 'تتكسّر الفضة، ويذوب الظل الرمادي في النهر كضباب تحت الشمس. تبكي هيدا ثم تضحك. وفي الصباح التالي تُعلّق فوق محلها لافتة جديدة: «حكايات بالمجان».',
           },
+          epilogueIf: [
+            { when: 'letter:forgive', text: { de: 'Unter dem Schild steht in kleinen Buchstaben: „Für die Person, die mir verziehen hat.“', en: 'Under the sign, in small letters: “For the one who forgave me.”', ar: 'وتحت اللافتة، بحروف صغيرة: «إلى من سامحني».' } },
+            { when: 'letter:confront', text: { de: 'Sie entschuldigt sich nie wieder. Aber jede Woche liegt eine Geschichte in deinem Briefkasten, ohne Unterschrift.', en: 'She never says sorry again. But every week a story arrives in your letterbox, unsigned.', ar: 'لا تعتذر مرة أخرى أبداً. لكن كل أسبوع تصل إلى صندوق بريدك حكاية بلا توقيع.' } },
+          ],
         },
         {
           id: 'return',
@@ -711,6 +745,10 @@ export const neckarRing: Authored<Adventure> = {
             en: 'Hedda takes the ring, of her own free will. “It was always mine,” she says. In the water the shadow turns towards her, and she smiles at it, unafraid. What happened next she tells no one.',
             ar: 'تأخذ هيدا الخاتم بإرادتها: «كان لي دائماً». في الماء يلتفت الظل نحوها، فتبتسم له بلا خوف. وما حدث بعد ذلك لم تروِه لأحد.',
           },
+          epilogueIf: [
+            { when: 'letter:forgive', text: { de: 'Bevor sie geht, drückt sie deine Hand: „Danke, dass du mir verziehen hast.“', en: 'Before she goes, she squeezes your hand: “Thank you for forgiving me.”', ar: 'وقبل أن تمضي تضغط على يدك: «شكراً لأنك سامحتني».' } },
+            { when: 'letter:confront', text: { de: 'Sie bittet dich nicht um Verzeihung. Vielleicht ist das das Fairste, was sie je getan hat.', en: 'She does not ask for your forgiveness. Perhaps that is the fairest thing she has ever done.', ar: 'لا تطلب منك أن تسامحها. ربما كان هذا أعدل ما فعلته في حياتها.' } },
+          ],
         },
         {
           id: 'keep',
@@ -720,6 +758,10 @@ export const neckarRing: Authored<Adventure> = {
             en: 'You put the ring back on. It fits perfectly. In the dark water your reflection smiles, one second after you do. The next morning Hedda puts a new box on her shelf.',
             ar: 'تعيد الخاتم إلى إصبعك، فيناسبه تماماً. وفي الماء المظلم يبتسم انعكاسك… بعدك بثانية. وفي الصباح التالي تضع هيدا صندوقاً جديداً على رفّها.',
           },
+          epilogueIf: [
+            { when: 'letter:forgive', text: { de: 'Hedda sieht den Ring an deinem Finger und schweigt. Gerade sie versteht es.', en: 'Hedda sees the ring on your finger and says nothing. She, of all people, understands.', ar: 'ترى هيدا الخاتم في إصبعك ولا تقول شيئاً. هي بالذات تفهم.' } },
+            { when: 'letter:confront', text: { de: 'Jetzt schuldest du jemandem eine Erklärung.', en: 'Now you are the one who owes someone an explanation.', ar: 'والآن أنت من يدين لأحدٍ بتفسير.' } },
+          ],
         },
       ],
     },
