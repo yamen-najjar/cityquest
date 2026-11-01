@@ -204,6 +204,7 @@ const en = {
     chooseOne: 'Choose an answer first.',
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
+    tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
     hint: 'Show a hint',
     nextHint: 'Show another hint',
     hintLabel: 'Hint {n} of {total}',

@@ -19,7 +19,7 @@ import { OrderStrips } from './puzzles/OrderStrips';
 import { Reveal } from './puzzles/Reveal';
 import { SymbolEquations } from './SymbolEquations';
 
-type Feedback = 'correct' | 'incorrect' | 'empty' | 'choose' | 'network' | null;
+type Feedback = 'correct' | 'incorrect' | 'empty' | 'choose' | 'network' | 'slow' | null;
 export type HeadingRef = React.RefObject<HTMLHeadingElement | null>;
 
 export function ChapterView({
@@ -113,6 +113,10 @@ export function ChapterView({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chapterId: chapter.id, answer: guess }),
       });
+      if (res.status === 429) {
+        setFeedback('slow');
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       const { correct } = (await res.json()) as { correct: boolean };
       if (correct) {
@@ -147,6 +151,7 @@ export function ChapterView({
     empty: t.emptyAnswer,
     choose: t.chooseOne,
     network: t.networkError,
+    slow: t.tooFast,
   };
 
   const readAloud = () => {

@@ -7,7 +7,7 @@ import type { Locale } from '@/i18n/config';
 import { fmt, type Dictionary } from '@/i18n/dictionary';
 import { isMuted, playAmbience, setMuted, stopAmbience, stopSpeaking, unlockAudio } from '@/lib/audio';
 import { contextOf, earned, type AchievementId } from '@/lib/engine/achievements';
-import { isFinished, newProgress, reduce, totalHints, type Action, type Progress } from '@/lib/engine/progress';
+import { fitToAdventure, isFinished, newProgress, reduce, totalHints, type Action, type Progress } from '@/lib/engine/progress';
 import { localProgressStore as store } from '@/lib/engine/storage';
 import { isAtLeastAsFar } from '@/lib/engine/merge';
 import { pushLocalDebounced, remoteDelete, SYNCED_EVENT } from '@/lib/engine/sync';
@@ -48,11 +48,24 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
   const ctx = useMemo(() => contextOf(a), [a]);
   const [three, setThree] = use3D();
   const [viewing, setViewing] = useState<string | null>(null);
+  // The save as last written, for writes that cannot wait for a render (the page being closed).
+  const latest = useRef<Progress | null>(null);
+  // A save read from storage or the account is fitted to the story as it is now (see fitToAdventure).
+  const fit = useCallback(
+    (saved: Progress | null) =>
+      saved &&
+      fitToAdventure(
+        saved,
+        a.chapters.map((c) => c.id),
+        a.items.map((i) => i.id),
+      ),
+    [a],
+  );
 
   // Load saved progress once, in the browser. A reload or a language switch in the same tab goes straight
   // back into the game; a new visit first shows Continue / Start over.
   useEffect(() => {
-    const saved = store.load(a.slug);
+    const saved = fit(store.load(a.slug));
     setP(saved);
     setMutedState(isMuted());
     try {
@@ -61,7 +74,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
       /* no session storage: show the start screen */
     }
     setLoaded(true);
-  }, [a.slug]);
+  }, [a.slug, fit]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -75,18 +88,30 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
 
   // Save after every change: instantly to this device, and mirrored up to the account when signed in.
   useEffect(() => {
+    latest.current = p;
     if (p) {
       store.save(p);
       pushLocalDebounced(p);
     }
   }, [p]);
 
+  // Journal notes are written through at once (not after the next render), so closing the journal or the
+  // page straight after typing never loses the last words.
+  const saveNotes = useCallback((text: string) => {
+    const current = latest.current;
+    if (!current || current.notes === text) return;
+    const next = reduce(current, { type: 'notes', text });
+    latest.current = next;
+    store.save(next);
+    setP((prev) => (prev ? reduce(prev, { type: 'notes', text }) : prev));
+  }, []);
+
   // When a reconcile updates this device's save, keep the screen in step. On the start / continue screen
   // we adopt it outright; mid-game we adopt only if the account is strictly further, so an older account
   // save can never throw away the game being played right now.
   useEffect(() => {
     const onSynced = () => {
-      const fresh = store.load(a.slug);
+      const fresh = fit(store.load(a.slug));
       if (!fresh) return;
       setP((prev) => {
         if (!prev || onStart) return fresh;
@@ -96,7 +121,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
     };
     window.addEventListener(SYNCED_EVENT, onSynced);
     return () => window.removeEventListener(SYNCED_EVENT, onSynced);
-  }, [onStart, a.slug]);
+  }, [onStart, a.slug, fit]);
 
   const dispatch = useCallback((action: Action) => {
     setP((prev) => (prev ? reduce(reduce(prev, { type: 'tick', now: Date.now() }), action) : prev));
@@ -298,6 +323,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
           t={t}
           three={three}
           dispatch={dispatch}
+          onSaveNotes={saveNotes}
           onView={(id) => setViewing(id)}
           onCombined={(name) => toast(combinedToast(t, name))}
           onClose={() => setJournalOpen(false)}

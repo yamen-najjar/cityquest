@@ -188,27 +188,104 @@ export function xpFor(p: Progress): number {
 }
 
 const MODES_SET = new Set<string>(MODES);
+const STAGES = new Set<string>(['travel', 'puzzle', 'solved']);
+/** Ids in a save are short slugs; anything longer is not ours. */
+const ID_MAX = 80;
+/** No adventure has anywhere near this many chapters, items or questions; caps what a bad save can hold. */
+const LIST_MAX = 200;
 
-/** Accepts only a well-formed saved object; anything else (an old version, a hand-edited value) starts over. */
+const isId = (v: unknown): v is string => typeof v === 'string' && v.length > 0 && v.length <= ID_MAX;
+const isTime = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0;
+
+/** Unique ids, in order, dropping anything that is not one. */
+function idList(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  return [...new Set(v.filter(isId))].slice(0, LIST_MAX);
+}
+
+/** { id: count } with whole, non-negative counts only. */
+function counts(v: unknown): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return out;
+  for (const [k, n] of Object.entries(v).slice(0, LIST_MAX)) {
+    if (isId(k) && typeof n === 'number' && Number.isInteger(n) && n >= 0) out[k] = Math.min(n, 1_000_000);
+  }
+  return out;
+}
+
+/** { chapterId: [questionId, …] }. */
+function askedMap(v: unknown): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return out;
+  for (const [k, ids] of Object.entries(v).slice(0, LIST_MAX)) if (isId(k)) out[k] = idList(ids);
+  return out;
+}
+
+/**
+ * Accepts only a well-formed saved object; anything else (an old version, a hand-edited value) starts over.
+ * The core fields must be right, or the save is refused; the rest is repaired field by field (a wrong type
+ * becomes its empty value), so one bad field cannot crash the game or poison every later calculation.
+ */
 export function parseProgress(raw: unknown, adventure: string): Progress | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const p = raw as Partial<Progress>;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const p = raw as Record<string, unknown>;
   if (p.version !== 2 || p.adventure !== adventure) return null;
-  if (typeof p.chapter !== 'number' || !['travel', 'puzzle', 'solved'].includes(p.stage as string)) return null;
+  if (typeof p.chapter !== 'number' || !Number.isInteger(p.chapter) || p.chapter < 0 || p.chapter > LIST_MAX) return null;
+  if (!STAGES.has(p.stage as string)) return null;
   if (!Array.isArray(p.solved) || !Array.isArray(p.inventory)) return null;
-  if (!p.team || typeof p.team.name !== 'string') return null;
+  const team = p.team as Partial<Team> | null | undefined;
+  if (!team || typeof team !== 'object' || typeof team.name !== 'string') return null;
+
+  const now = Date.now();
+  const startedAt = isTime(p.startedAt) ? p.startedAt : now;
   return {
-    ...(p as Progress),
+    version: 2,
+    adventure,
     mode: MODES_SET.has(p.mode as string) ? (p.mode as Mode) : 'classic',
-    hintsUsed: p.hintsUsed ?? {},
-    wrongAttempts: p.wrongAttempts ?? {},
-    asked: p.asked ?? {},
+    chapter: p.chapter,
+    stage: p.stage as Stage,
+    solved: idList(p.solved),
+    inventory: idList(p.inventory),
+    hintsUsed: counts(p.hintsUsed),
+    wrongAttempts: counts(p.wrongAttempts),
+    asked: askedMap(p.asked),
     notes: typeof p.notes === 'string' ? p.notes.slice(0, MAX_NOTES) : '',
-    decision: p.decision ?? null,
-    finishedAt: p.finishedAt ?? null,
-    elapsedMs: p.elapsedMs ?? 0,
-    // Guard against a non-finite value (corrupt or hand-edited remote data): a NaN here would make every
-    // merge comparison fall through, so clamp it to a usable timestamp.
-    lastActiveAt: Number.isFinite(p.lastActiveAt) ? (p.lastActiveAt as number) : Date.now(),
+    decision: isId(p.decision) ? p.decision : null,
+    team: clampTeam({ name: team.name, players: Number(team.players) }),
+    startedAt,
+    finishedAt: isTime(p.finishedAt) ? p.finishedAt : null,
+    elapsedMs: isTime(p.elapsedMs) ? p.elapsedMs : 0,
+    // A non-finite value here would make every merge comparison fall through, so use a usable timestamp.
+    lastActiveAt: isTime(p.lastActiveAt) ? p.lastActiveAt : startedAt,
+  };
+}
+
+/**
+ * Fits a parsed save to the adventure as it exists now: drops chapter and item ids it no longer has and
+ * keeps the chapter index in range. Without this, a save with a chapter index past the end (corrupt, or
+ * from an edited story) skipped straight to the finale.
+ */
+export function fitToAdventure(p: Progress, chapterIds: readonly string[], itemIds: readonly string[]): Progress {
+  const chapters = new Set(chapterIds);
+  const items = new Set(itemIds);
+  const solved = p.solved.filter((id) => chapters.has(id));
+  const count = chapterIds.length;
+  // The furthest a save can honestly be: the first chapter not yet solved, or the end if all are.
+  const firstOpen = chapterIds.findIndex((id) => !solved.includes(id));
+  const reachable = firstOpen === -1 ? count : firstOpen;
+  const chapter = Math.min(p.chapter, reachable);
+  let stage = p.stage;
+  // Pulled back to the first open chapter: start it from its checkpoint.
+  if (chapter === count || chapter < p.chapter) stage = 'travel';
+  else if (stage === 'solved' && !solved.includes(chapterIds[chapter]!)) stage = 'puzzle';
+  const finished = p.decision !== null && chapter === count;
+  return {
+    ...p,
+    chapter,
+    stage,
+    solved,
+    inventory: p.inventory.filter((id) => items.has(id)),
+    decision: finished ? p.decision : null,
+    finishedAt: finished ? p.finishedAt : null,
   };
 }

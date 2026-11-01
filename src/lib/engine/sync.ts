@@ -11,7 +11,7 @@ import { isSupabaseConfigured } from '@/lib/supabase/config';
 import type { Json } from '@/lib/supabase/database.types';
 import { reconcile } from './merge';
 import { parseProgress, type Progress } from './progress';
-import { clearAllLocalProgress, localProgressStore } from './storage';
+import { clearAllLocalProgress, localProgressStore, pendingRestarts } from './storage';
 
 export const SYNCED_EVENT = 'cityquest:synced';
 
@@ -84,6 +84,13 @@ async function runReconcile(): Promise<void> {
   const userId = await currentUserId();
   if (!userId) return;
 
+  // A "start over" whose account delete has not gone through yet must land first, or the pull below
+  // would bring the old, further game straight back over the new one. Still failing: try again later.
+  for (const adventure of pendingRestarts.list()) {
+    if (!(await deleteRemote(userId, adventure))) return;
+    pendingRestarts.remove(adventure);
+  }
+
   const pull = await remotePull();
   if (!pull) return; // transient error: do not treat as "remote is empty" and overwrite the account
 
@@ -117,6 +124,9 @@ export function pushLocalDebounced(p: Progress, delayMs = 1500): void {
     setTimeout(async () => {
       pushTimers.delete(p.adventure);
       await firstReconcile;
+      // Held back while a restart is pending: the account keeps the furthest save, so this new game could
+      // not replace the old one anyway. The reconcile that clears the restart pushes it.
+      if (pendingRestarts.list().includes(p.adventure)) return;
       const userId = await currentUserId();
       if (userId) await remoteUpsert(userId, p);
     }, delayMs),
@@ -132,16 +142,35 @@ export function cancelPush(adventure: string): void {
   }
 }
 
-/** Delete one adventure's account save (used by "start over"), so the next reconcile cannot resurrect it. */
+async function deleteRemote(userId: string, adventure: string): Promise<boolean> {
+  try {
+    const { error } = await sb().from('progress').delete().eq('user_id', userId).eq('adventure', adventure);
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Delete one adventure's account save (used by "start over"), so the next reconcile cannot resurrect it.
+ * The intent is remembered on this device until the delete succeeds, so an offline restart sticks too.
+ */
 export async function remoteDelete(adventure: string): Promise<void> {
   cancelPush(adventure);
   const userId = await currentUserId();
   if (!userId) return;
-  await sb().from('progress').delete().eq('user_id', userId).eq('adventure', adventure);
+  pendingRestarts.add(adventure);
+  if (await deleteRemote(userId, adventure)) pendingRestarts.remove(adventure);
 }
 
-/** On sign-out, clear this device's saves so they never merge into the next account on a shared browser. */
+/**
+ * On sign-out, clear this device's saves so they never merge into the next account on a shared browser.
+ * Pending pushes are dropped first: one firing after a quick switch would otherwise upload the previous
+ * player's game into the next account.
+ */
 export async function signOutAndClear(): Promise<void> {
+  for (const timer of pushTimers.values()) clearTimeout(timer);
+  pushTimers.clear();
   if (isSupabaseConfigured()) await sb().auth.signOut({ scope: 'local' });
   clearAllLocalProgress();
 }

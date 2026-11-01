@@ -197,6 +197,7 @@ const nl: Dictionary = {
     chooseOne: 'Kies eerst een antwoord.',
     emptyAnswer: 'Typ eerst een antwoord.',
     networkError: 'Je antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer het opnieuw.',
+    tooFast: 'Te veel pogingen in korte tijd. Wacht even en probeer het dan opnieuw.',
     hint: 'Toon een hint',
     nextHint: 'Toon nog een hint',
     hintLabel: 'Hint {n} van {total}',
