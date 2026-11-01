@@ -205,6 +205,13 @@ const en = {
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
     tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
+    goToCheckpoint: 'Confirm arrival',
+    briefing: {
+      eyebrow: 'Case file',
+      case: 'The case',
+      firstContact: 'First contact',
+      facts: '{min}–{max} min · {players} people · {age}+',
+    },
     hint: 'Show a hint',
     nextHint: 'Show another hint',
     hintLabel: 'Hint {n} of {total}',

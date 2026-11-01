@@ -197,6 +197,13 @@ const ar: Dictionary = {
     emptyAnswer: 'اكتب إجابة أولاً.',
     networkError: 'تعذّر التحقق من إجابتك. تأكد من الاتصال وحاول مرة أخرى.',
     tooFast: 'محاولات كثيرة في وقت قصير. انتظر لحظة ثم حاول مرة أخرى.',
+    goToCheckpoint: 'تأكيد الوصول',
+    briefing: {
+      eyebrow: 'ملف القضية',
+      case: 'القضية',
+      firstContact: 'أول من ستلتقيه',
+      facts: '{min}–{max} دقيقة · {players} أشخاص · {age}+',
+    },
     hint: 'أظهر تلميحاً',
     nextHint: 'أظهر تلميحاً آخر',
     hintLabel: 'التلميح {n} من {total}',

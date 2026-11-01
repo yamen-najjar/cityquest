@@ -13,7 +13,9 @@ import { reconcile } from './merge';
 import { parseProgress, type Progress } from './progress';
 import { clearAllLocalProgress, localProgressStore, pendingRestarts } from './storage';
 
-export const SYNCED_EVENT = 'cityquest:synced';
+import { SYNCED_EVENT } from './sync-events';
+
+export { SYNCED_EVENT };
 
 let client: ReturnType<typeof createClient> | null = null;
 function sb() {

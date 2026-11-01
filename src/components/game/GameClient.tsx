@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Adventure, Chapter } from '@/content/types';
 import type { Locale } from '@/i18n/config';
-import { fmt, type Dictionary } from '@/i18n/dictionary';
+import type { Dictionary } from '@/i18n/dictionary';
+import { fmt } from '@/i18n/fmt';
 import { isMuted, playAmbience, setMuted, stopAmbience, stopSpeaking, unlockAudio } from '@/lib/audio';
 import { contextOf, earned, type AchievementId } from '@/lib/engine/achievements';
 import { fitToAdventure, isFinished, newProgress, reduce, totalHints, type Action, type Progress } from '@/lib/engine/progress';
@@ -128,18 +129,24 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
     setP((prev) => (prev ? reduce(reduce(prev, { type: 'tick', now: Date.now() }), action) : prev));
   }, []);
 
-  // The clock: a display tick every second, and the saved playing time every 15 seconds and when the tab hides.
+  // The clock: a display tick every second while a timer is on screen (re-rendering the game every second
+  // for nothing costs battery), and the saved playing time every 15 seconds and when the tab hides.
   const playing = !!p && !onStart && !isFinished(p);
+  const clockShown = playing && (showTimer || p?.mode === 'expert');
+  useEffect(() => {
+    if (!clockShown) return;
+    setNow(Date.now());
+    const show = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(show);
+  }, [clockShown]);
   useEffect(() => {
     if (!playing) return;
-    const show = window.setInterval(() => setNow(Date.now()), 1000);
     const save = window.setInterval(() => setP((prev) => (prev ? reduce(prev, { type: 'tick', now: Date.now() }) : prev)), 15000);
     const onHide = () => {
       if (document.visibilityState === 'hidden') setP((prev) => (prev ? reduce(prev, { type: 'tick', now: Date.now() }) : prev));
     };
     document.addEventListener('visibilitychange', onHide);
     return () => {
-      window.clearInterval(show);
       window.clearInterval(save);
       document.removeEventListener('visibilitychange', onHide);
     };
@@ -214,7 +221,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
             <LogoMark className="h-7 w-7" />
             <span className="hidden sm:inline">{t.exit}</span>
           </Link>
-          <p className="min-w-0 flex-1 truncate text-center font-display text-lg">{a.title[locale]}</p>
+          <p className="min-w-0 flex-1 truncate text-center font-display text-lg max-sm:invisible">{a.title[locale]}</p>
           <button
             type="button"
             onClick={() => {

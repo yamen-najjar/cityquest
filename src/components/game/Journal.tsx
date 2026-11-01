@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Adventure } from '@/content/types';
 import type { Locale } from '@/i18n/config';
-import { fmt, type Dictionary } from '@/i18n/dictionary';
+import type { Dictionary } from '@/i18n/dictionary';
+import { fmt } from '@/i18n/fmt';
 import { sfx } from '@/lib/audio';
 import { combinationKey, MAX_NOTES, type Action, type Progress } from '@/lib/engine/progress';
 import { visibleQuestions } from '@/lib/engine/board';

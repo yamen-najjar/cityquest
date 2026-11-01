@@ -10,7 +10,7 @@ test('The Devil’s House Secret: all eight chapters, the combined ledger, the a
   test.setTimeout(240_000);
   await fresh(page, PLAY);
 
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ready to begin?');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('The Devil’s House Secret');
   await page.getByRole('button', { name: 'Start the adventure' }).click();
 
   // 1. Cipher — the numbers spell DEVILS.

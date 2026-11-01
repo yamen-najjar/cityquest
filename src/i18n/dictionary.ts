@@ -19,7 +19,4 @@ export function getDictionary(locale: Locale): Dictionary {
   return dictionaries[locale];
 }
 
-/** "{n} of {total}" with { n: 2, total: 5 } -> "2 of 5". Unknown placeholders are left as they are. */
-export function fmt(template: string, vars: Record<string, string | number>): string {
-  return template.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m));
-}
+export { fmt } from './fmt';

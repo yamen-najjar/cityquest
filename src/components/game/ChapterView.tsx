@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Adventure, Chapter } from '@/content/types';
 import type { Locale } from '@/i18n/config';
-import { fmt, type Dictionary } from '@/i18n/dictionary';
+import type { Dictionary } from '@/i18n/dictionary';
+import { fmt } from '@/i18n/fmt';
 import { sfx, speak, stopSpeaking } from '@/lib/audio';
 import type { Action, Progress } from '@/lib/engine/progress';
 import { prefersReducedMotion } from '../three/support';
@@ -64,6 +66,34 @@ export function ChapterView({
   const [code, setCode] = useState('0'.repeat(digits));
   const [opening, setOpening] = useState(false);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
+  // Whether the arrival buttons are on screen (or above it): the phone's "next step" bar hides then.
+  const arrival = useRef<HTMLDivElement>(null);
+  const [arrivalInView, setArrivalInView] = useState(true);
+  useEffect(() => {
+    if (p.stage !== 'travel') return;
+    // Measured on scroll, resize and layout changes (a map or scene loading above moves the card). An
+    // IntersectionObserver missed the change when the bar was tapped while the page was still settling.
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const el = arrival.current;
+      if (el) setArrivalInView(el.getBoundingClientRect().top < window.innerHeight - 96);
+    };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(schedule);
+    ro?.observe(document.body);
+    return () => {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      ro?.disconnect();
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [p.stage]);
   const useLock = three && digits > 0 && !typing;
   const inspect3D = three && !!puzzle.model;
   const hintsShown = p.hintsUsed[chapter.id] ?? 0;
@@ -201,7 +231,7 @@ export function ChapterView({
           ) : (
             <DemoMap chapters={a.chapters} current={index} solved={p.solved} locale={locale} labels={{ title: t.map, note: t.mapNote, destination: t.destination, done: t.done }} />
           )}
-          <div className="card p-5">
+          <div className="card scroll-mt-24 p-5" ref={arrival}>
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-lg font-semibold">{chapter.checkpoint.name[locale]}</span>
               {chapter.checkpoint.simulated && <span className="chip border-gold/40 text-gold">{t.simulated}</span>}
@@ -219,6 +249,30 @@ export function ChapterView({
               onPosition={setUserPosition}
             />
           </div>
+          {/* On a phone the arrival buttons sit below the story and the map. Until they are on screen, a bar
+              at the bottom says where to go next and takes the team straight to them. It is portalled to
+              <body>: the chapter's entrance animation (a transform) would otherwise pin it to the article. */}
+          {!arrivalInView &&
+            createPortal(
+              <div className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/25 bg-navy/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:hidden">
+                <div className="mx-auto flex max-w-3xl items-center gap-3">
+                  <p className="min-w-0 flex-1 truncate text-sm">
+                    <span className="text-gold" aria-hidden="true">
+                      ◉{' '}
+                    </span>
+                    {chapter.checkpoint.name[locale]}
+                  </p>
+                  <button
+                    type="button"
+                    className="btn-gold min-h-[44px] shrink-0 px-5 py-2 text-sm"
+                    onClick={() => arrival.current?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' })}
+                  >
+                    {t.goToCheckpoint}
+                  </button>
+                </div>
+              </div>,
+              document.body,
+            )}
         </section>
       )}
 

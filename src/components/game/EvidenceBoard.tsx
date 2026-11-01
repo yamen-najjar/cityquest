@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Adventure, BoardQuestion } from '@/content/types';
 import type { Locale } from '@/i18n/config';
-import { fmt, type Dictionary } from '@/i18n/dictionary';
+import type { Dictionary } from '@/i18n/dictionary';
+import { fmt } from '@/i18n/fmt';
 import { sfx } from '@/lib/audio';
 import { boardAnswer, evidenceCards, peopleMet, visibleQuestions, type EvidenceCard } from '@/lib/engine/board';
 import type { Progress } from '@/lib/engine/progress';

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the accusation, results', async ({ page }) => {
   test.setTimeout(300_000);
   // Start: team, players, difficulty
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ready to begin?');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('The Lost Manuscript');
   await page.getByRole('textbox', { name: 'Team name (optional)' }).fill('Night Owls');
   await page.getByText('3', { exact: true }).click();
   await expect(page.getByRole('radio', { name: /Classic/ })).toBeChecked();
@@ -144,7 +144,7 @@ test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the ac
   await page.goto(`/en${PLAY}`);
   await page.getByRole('button', { name: 'Play again' }).click();
   await page.getByRole('button', { name: 'Yes, start over' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ready to begin?');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('The Lost Manuscript');
 });
 
 test('an empty answer is caught before it is sent', async ({ page }) => {

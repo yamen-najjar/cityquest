@@ -208,6 +208,13 @@ const de: Dictionary = {
     emptyAnswer: 'Gib zuerst eine Antwort ein.',
     networkError: 'Deine Antwort konnte nicht geprüft werden. Prüfe die Verbindung und versuch es erneut.',
     tooFast: 'Zu viele Versuche in kurzer Zeit. Warte einen Moment und versuche es dann noch einmal.',
+    goToCheckpoint: 'Ankunft bestätigen',
+    briefing: {
+      eyebrow: 'Fallakte',
+      case: 'Der Fall',
+      firstContact: 'Erster Kontakt',
+      facts: '{min}–{max} Min. · {players} Personen · ab {age}',
+    },
     hint: 'Hinweis anzeigen',
     nextHint: 'Weiteren Hinweis anzeigen',
     hintLabel: 'Hinweis {n} von {total}',
