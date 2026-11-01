@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Adventure } from '@/content/types';
 import type { Locale } from '@/i18n/config';
 import { fmt, type Dictionary } from '@/i18n/dictionary';
 import { sfx } from '@/lib/audio';
-import { combinationKey, type Action, type Progress } from '@/lib/engine/progress';
+import { combinationKey, MAX_NOTES, type Action, type Progress } from '@/lib/engine/progress';
 import { ItemIcon } from './ItemIcon';
 import { initials } from './puzzles/Interrogation';
 
@@ -22,6 +22,7 @@ export function Journal({
   t,
   three,
   dispatch,
+  onSaveNotes,
   onView,
   onCombined,
   onClose,
@@ -32,6 +33,8 @@ export function Journal({
   t: Dictionary['game'];
   three: boolean;
   dispatch: (action: Action) => void;
+  /** Writes the notes to the save immediately. */
+  onSaveNotes: (text: string) => void;
   onView: (itemId: string) => void;
   onCombined: (name: string) => void;
   onClose: () => void;
@@ -41,12 +44,25 @@ export function Journal({
   const [notes, setNotes] = useState(p.notes);
   const reached = (chapterId: string) => a.chapters.findIndex((c) => c.id === chapterId) <= p.chapter;
 
-  // Notes save shortly after typing stops.
+  // Notes save shortly after typing stops, and at once whenever they could otherwise be lost: the journal
+  // closing, the tab being hidden or the page being left or reloaded.
+  const notesRef = useRef(notes);
   useEffect(() => {
-    if (notes === p.notes) return;
-    const id = window.setTimeout(() => dispatch({ type: 'notes', text: notes }), 500);
+    notesRef.current = notes;
+    const id = window.setTimeout(() => onSaveNotes(notes), 500);
     return () => window.clearTimeout(id);
-  }, [notes, p.notes, dispatch]);
+  }, [notes, onSaveNotes]);
+  useEffect(() => {
+    const flush = () => onSaveNotes(notesRef.current);
+    const onVisibility = () => document.visibilityState === 'hidden' && flush();
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('pagehide', flush);
+      document.removeEventListener('visibilitychange', onVisibility);
+      flush();
+    };
+  }, [onSaveNotes]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -232,7 +248,7 @@ export function Journal({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={10}
-                maxLength={4000}
+                maxLength={MAX_NOTES}
                 placeholder={t.journal.notesPlaceholder}
                 className="field min-h-[240px] resize-y bg-[#1b1611] font-display text-lg leading-relaxed"
                 dir="auto"
