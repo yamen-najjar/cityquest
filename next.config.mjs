@@ -6,6 +6,10 @@ const securityHeaders = [
   // Phase 4: the page itself may ask for location (GPS confirmation) and the camera (QR scan), but only
   // on this origin and only when the player taps "I'm here" / "Scan". Microphone stays blocked.
   { key: 'Permissions-Policy', value: 'camera=(self), microphone=(), geolocation=(self)' },
+  // The parts of a Content Security Policy that cannot break the app: no plugins, no <base> hijack, forms
+  // only post back here, no framing. A full script/style/connect policy needs nonces for Next's inline
+  // scripts plus the map, Supabase and asset origins; it is listed as an open item in docs/SECURITY.md.
+  { key: 'Content-Security-Policy', value: "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" },
 ];
 
 const nextConfig = {
