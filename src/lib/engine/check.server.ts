@@ -15,6 +15,8 @@ export type ResolvedGuess = {
   chapterIndex: number;
   accepted: string[];
   answer: string;
+  /** An evidence-board question rather than a chapter puzzle: optional, so never recorded as a solve. */
+  board: boolean;
 };
 export type ResolveError = { ok: false; status: 400 | 404; error: string };
 
@@ -32,10 +34,15 @@ export function resolveGuess(slug: string, body: unknown): ResolvedGuess | Resol
   if (typeof chapterId !== 'string' || typeof answer !== 'string' || answer.length > 200) {
     return { ok: false, status: 400, error: 'invalid body' };
   }
-  const chapterIndex = adventure.chapters.findIndex((c) => c.id === chapterId);
   const accepted = key[chapterId]?.accepted;
-  if (chapterIndex === -1 || !accepted) return { ok: false, status: 404, error: 'unknown chapter' };
-  return { ok: true, adventure, chapterId, chapterIndex, accepted, answer };
+  // Board questions ("board:<id>") unlock after their chapter, so for order gating they count as the
+  // chapter after it: every chapter up to and including `after` must be solved.
+  const question = chapterId.startsWith('board:') ? adventure.board?.find((q) => `board:${q.id}` === chapterId) : undefined;
+  const chapterIndex = question
+    ? adventure.chapters.findIndex((c) => c.id === question.after) + 1
+    : adventure.chapters.findIndex((c) => c.id === chapterId);
+  if (chapterIndex < (question ? 1 : 0) || chapterIndex === -1 || !accepted) return { ok: false, status: 404, error: 'unknown chapter' };
+  return { ok: true, adventure, chapterId, chapterIndex, accepted, answer, board: !!question };
 }
 
 /**

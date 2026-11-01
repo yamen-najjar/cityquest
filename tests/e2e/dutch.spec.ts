@@ -4,7 +4,8 @@ import { fresh, noHorizontalScroll } from './helpers';
 test('the game in Dutch: the Dutch cipher, a Dutch answer and the journal', async ({ page }) => {
   await fresh(page, '/nl/play/lost-manuscript');
   await expect(page.locator('html')).toHaveAttribute('lang', 'nl');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Klaar om te beginnen?');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Het verdwenen manuscript');
+  await expect(page.getByRole('heading', { name: 'Klaar om te beginnen?' })).toBeVisible();
   await page.getByRole('button', { name: 'Start het avontuur' }).click();
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Het anonieme bericht');

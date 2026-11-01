@@ -4,12 +4,15 @@ import Link from 'next/link';
 import { useState } from 'react';
 import type { Adventure } from '@/content/types';
 import type { Locale } from '@/i18n/config';
-import { fmt, type Dictionary } from '@/i18n/dictionary';
+import type { Dictionary } from '@/i18n/dictionary';
+import { fmt } from '@/i18n/fmt';
 import { contextOf, earned } from '@/lib/engine/achievements';
 import { MAX_TEAM, MODES, isFinished, pursuitLevel, rankFor, starsFor, totalHints, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
 import { formatDuration } from '@/lib/format';
 import type { HeadingRef } from './ChapterView';
+import { SkylineArt } from '../SkylineArt';
 import { Artifact3D } from './lazy';
+import { initials } from './puzzles/Interrogation';
 
 export function StartScreen({
   a,
@@ -32,14 +35,62 @@ export function StartScreen({
   const [players, setPlayers] = useState(2);
   const [mode, setMode] = useState<Mode>('classic');
   const resumeChapter = saved ? Math.min(saved.chapter + 1, a.chapters.length) : 1;
+  // Only who the team meets in the first chapter: naming later characters would spoil the story.
+  const firstChapter = a.chapters[0]?.id;
+  const firstContact = a.people.filter((person) => person.appears === firstChapter);
   return (
     <section className="animate-rise">
-      <p className="eyebrow">{a.isDemo ? t.simulated : ''}</p>
-      <h1 ref={headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold sm:text-5xl">
-        {saved ? a.title[locale] : t.startTitle}
-      </h1>
-      <p className="mt-4 text-ivory-dim">{a.tagline[locale]}</p>
-      <p className="mt-2 text-sm text-ivory-mute">{t.startText}</p>
+      {/* The case file: what the story is about, who comes first, and what the evening will take. */}
+      <div className="relative -mx-4 overflow-hidden px-4 pb-6 pt-10 sm:mx-0 sm:rounded-3xl sm:border sm:border-gold/20 sm:px-8">
+        <SkylineArt variant={a.art ?? 'night'} idPrefix={`start-${a.slug}`} className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-transparent" aria-hidden="true" />
+        <div className="relative">
+          <p className="eyebrow">{t.briefing.eyebrow}</p>
+          <h1 ref={headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold sm:text-5xl">
+            {a.title[locale]}
+          </h1>
+          <p className="mt-3 text-lg text-ivory">{a.tagline[locale]}</p>
+          <p className="mt-4 text-sm text-gold">
+            {fmt(t.briefing.facts, {
+              min: a.durationMinutes.min,
+              max: a.durationMinutes.max,
+              players: `${a.teamSize.min}–${a.teamSize.max}`,
+              age: a.minAge,
+            })}
+          </p>
+        </div>
+      </div>
+
+      {!saved && (
+        <div className="mt-6 grid gap-4">
+          <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5" aria-labelledby="case-title">
+            <h2 id="case-title" className="eyebrow">
+              {t.briefing.case}
+            </h2>
+            <p className="mt-3 leading-relaxed text-ivory-dim">{a.description[locale]}</p>
+          </section>
+          {firstContact.length > 0 && (
+            <section aria-labelledby="contact-title">
+              <h2 id="contact-title" className="eyebrow">
+                {t.briefing.firstContact}
+              </h2>
+              <ul className="mt-3 flex flex-wrap gap-3">
+                {firstContact.map((person) => (
+                  <li key={person.id} className="flex items-center gap-3 rounded-full border border-white/10 py-1.5 pe-4 ps-1.5">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold/15 font-display text-lg text-gold" aria-hidden="true">
+                      {initials(person.name[locale])}
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold">{person.name[locale]}</span>
+                      <span className="block text-xs text-ivory-mute">{person.role[locale]}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      )}
 
       {saved ? (
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -57,7 +108,14 @@ export function StartScreen({
             e.preventDefault();
             onBegin({ name, players }, mode);
           }}
+          aria-labelledby="start-title"
         >
+          <div>
+            <h2 id="start-title" className="font-display text-2xl font-semibold">
+              {t.startTitle}
+            </h2>
+            <p className="mt-1 text-sm text-ivory-mute">{t.startText}</p>
+          </div>
           <label className="grid gap-1.5 text-sm">
             {t.teamName}
             <input className="field" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} placeholder={t.teamPlaceholder} autoComplete="off" />

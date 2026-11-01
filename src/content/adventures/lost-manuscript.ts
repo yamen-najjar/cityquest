@@ -593,6 +593,66 @@ export const lostManuscript: Authored<Adventure> = {
       clues: [{ de: 'Kehl hat den Brief abgefangen und ist eingebrochen.', en: 'Kehl intercepted the letter and broke in.', ar: 'كيل اعترض الرسالة واقتحم الأرشيف.' }],
     },
   ],
+  // Optional deductions on the evidence board. Each is answered with one person and two pieces of
+  // evidence the team already holds; the accepted combinations are in answers.server.ts.
+  board: [
+    {
+      id: 'liar',
+      after: 'witnesses',
+      question: {
+        de: 'Zwei Zeugen widersprechen sich wegen des Schlüssels. Wer hat gelogen?',
+        en: 'Two witnesses contradict each other about the key. Who lied?',
+        ar: 'شاهدان يتناقضان بشأن المفتاح. مَن كذب؟',
+      },
+      deduction: {
+        de: 'Anna hat gelogen. Clara hatte den Schlüssel die ganze Zeit – sie hat ihn für VII versteckt –, also stimmte Annas Geschichte über Ben nicht.',
+        en: 'Anna lied. Clara had the key all along — she hid it for VII — so Anna’s story about Ben was false.',
+        ar: 'آنا كذبت. كان المفتاح مع كلارا طوال الوقت — خبّأته من أجل VII — فقصة آنا عن بن غير صحيحة.',
+      },
+    },
+    {
+      id: 'who-is-k',
+      after: 'study',
+      question: {
+        de: 'Wer ist das „K.“ auf dem Zettel im Schrank des Uhrmachers?',
+        en: 'Who is the “K.” on the note in the clockmaker’s cabinet?',
+        ar: 'مَن هو «ك.» في الورقة داخل خزانة صانع الساعات؟',
+      },
+      deduction: {
+        de: 'K. ist Professor Albrecht Kehl: der Sammler, der seit Jahren alles über den Codex zusammenträgt.',
+        en: 'K. is Professor Albrecht Kehl: the collector who has gathered everything about the codex for years.',
+        ar: 'ك. هو البروفيسور ألبرشت كيل: الجامع الذي يجمع كل ما يخص المخطوطة منذ سنوات.',
+      },
+    },
+    {
+      id: 'footprints',
+      after: 'chest',
+      question: {
+        de: 'Wessen Fußspuren waren vor dir an der Truhe?',
+        en: 'Whose footprints were at the chest before you?',
+        ar: 'آثار أقدام مَن كانت عند الصندوق قبلك؟',
+      },
+      deduction: {
+        de: 'Kehls. Er wollte heute Nacht zur Truhe am Fluss – und hat sie nicht aufbekommen.',
+        en: 'Kehl’s. He set off for the chest by the river tonight — and could not open it.',
+        ar: 'آثار كيل. انطلق الليلة إلى الصندوق عند النهر — ولم يستطع فتحه.',
+      },
+    },
+    {
+      id: 'signal',
+      after: 'mirror',
+      question: {
+        de: 'Wer hat dir das Laternensignal aus dem Archiv geschickt?',
+        en: 'Who sent you the lantern signal from the archive?',
+        ar: 'مَن أرسل إليك إشارة الفانوس من الأرشيف؟',
+      },
+      deduction: {
+        de: 'Elise Brandt – VII selbst. Sie wartete im Archiv und wollte, dass du den Weg hinein findest.',
+        en: 'Elise Brandt — VII herself. She was waiting in the archive and wanted you to find the way in.',
+        ar: 'إليزه برانت — VII نفسها. كانت تنتظر في الأرشيف وأرادت أن تجد طريقك إلى الداخل.',
+      },
+    },
+  ],
   ending: {
     artifact: { kind: 'book' },
     reveal: {

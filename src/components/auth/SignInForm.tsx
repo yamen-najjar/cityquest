@@ -2,7 +2,8 @@
 
 import { useState, type FormEvent } from 'react';
 import type { Locale } from '@/i18n/config';
-import { fmt, type Dictionary } from '@/i18n/dictionary';
+import type { Dictionary } from '@/i18n/dictionary';
+import { fmt } from '@/i18n/fmt';
 import { createClient } from '@/lib/supabase/client';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

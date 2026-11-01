@@ -251,6 +251,22 @@ export interface Chapter {
   reward?: string;
 }
 
+/**
+ * An open question on the evidence board. It appears once chapter `after` is solved; the player answers it
+ * by naming one person and pinning two pieces of evidence they have collected. The accepted combinations
+ * live server-side, like every other answer (answers.server.ts, key `board:<id>`).
+ *
+ * Evidence ids on the board: `item:<itemId>` for an item, `clue:<chapterId>-<n>` for the n-th clue of a
+ * chapter, `said:<chapterId>-<questionId>` for an answer heard in an interrogation.
+ */
+export interface BoardQuestion {
+  id: string;
+  after: string;
+  question: Localized;
+  /** What the team has worked out, shown once the question is answered. */
+  deduction: Localized;
+}
+
 export interface Ending {
   /** The object the story was about, shown in 3D at the finale. */
   artifact?: ModelSpec;
@@ -304,6 +320,8 @@ export interface Adventure {
   combinations?: { from: string; to: string }[];
   people: Person[];
   chapters: Chapter[];
+  /** Optional deductions for the evidence board in the case journal. */
+  board?: BoardQuestion[];
   ending: Ending;
 }
 

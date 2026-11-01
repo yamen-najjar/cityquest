@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { Locale } from '@/i18n/config';
-import { fmt, type Dictionary } from '@/i18n/dictionary';
+import type { Dictionary } from '@/i18n/dictionary';
+import { fmt } from '@/i18n/fmt';
 import { ACHIEVEMENTS, earned, type AchievementContext, type AchievementId } from '@/lib/engine/achievements';
 import { isFinished, xpFor, type Progress } from '@/lib/engine/progress';
 import { localProgressStore } from '@/lib/engine/storage';
-import { SYNCED_EVENT } from '@/lib/engine/sync';
+import { SYNCED_EVENT } from '@/lib/engine/sync-events';
 
 export interface DashboardAdventure {
   slug: string;
