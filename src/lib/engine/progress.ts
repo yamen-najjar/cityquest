@@ -31,6 +31,8 @@ export interface Progress {
   asked: Record<string, string[]>;
   /** The player's own notes, from the journal. */
   notes: string;
+  /** Evidence-board questions answered, by question id. */
+  deductions: string[];
   decision: string | null;
   team: Team;
   startedAt: number;
@@ -48,6 +50,7 @@ export type Action =
   | { type: 'solve'; chapterId: string; reward?: string }
   | { type: 'combine'; from: string[]; to: string }
   | { type: 'notes'; text: string }
+  | { type: 'deduce'; questionId: string }
   | { type: 'next'; chapterCount: number }
   | { type: 'decide'; choiceId: string; chapterCount: number; now: number }
   | { type: 'tick'; now: number }
@@ -69,6 +72,7 @@ export function newProgress(adventure: string, team: Team, now: number, mode: Mo
     wrongAttempts: {},
     asked: {},
     notes: '',
+    deductions: [],
     decision: null,
     team: clampTeam(team),
     startedAt: now,
@@ -117,6 +121,8 @@ export function reduce(p: Progress, a: Action): Progress {
     }
     case 'notes':
       return { ...p, notes: a.text.slice(0, MAX_NOTES) };
+    case 'deduce':
+      return p.deductions.includes(a.questionId) ? p : { ...p, deductions: [...p.deductions, a.questionId] };
     case 'next':
       if (p.stage !== 'solved') return p;
       return { ...p, chapter: Math.min(p.chapter + 1, a.chapterCount), stage: 'travel' };
@@ -178,11 +184,12 @@ export function rankFor(stars: number, chapters: number): 0 | 1 | 2 | 3 {
   return 0;
 }
 
-/** Experience: 100 a chapter, 15 less a hint in classic mode (never below 40), 25 a star, 200 for finishing. */
+/** Experience: 100 a chapter, 15 less a hint in classic mode (never below 40), 25 a star, 30 a deduction on the evidence board, 200 for finishing. */
 export function xpFor(p: Progress): number {
   let xp = 0;
   const hintCost = p.mode === 'classic' ? 15 : 0;
   for (const id of p.solved) xp += Math.max(40, 100 - hintCost * (p.hintsUsed[id] ?? 0)) + 25 * starsFor(p, id);
+  xp += 30 * p.deductions.length;
   if (isFinished(p)) xp += p.mode === 'expert' ? 300 : 200;
   return xp;
 }
@@ -250,6 +257,8 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
     wrongAttempts: counts(p.wrongAttempts),
     asked: askedMap(p.asked),
     notes: typeof p.notes === 'string' ? p.notes.slice(0, MAX_NOTES) : '',
+    // Older saves have no board yet: an empty one.
+    deductions: idList(p.deductions),
     decision: isId(p.decision) ? p.decision : null,
     team: clampTeam({ name: team.name, players: Number(team.players) }),
     startedAt,
@@ -265,7 +274,7 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
  * keeps the chapter index in range. Without this, a save with a chapter index past the end (corrupt, or
  * from an edited story) skipped straight to the finale.
  */
-export function fitToAdventure(p: Progress, chapterIds: readonly string[], itemIds: readonly string[]): Progress {
+export function fitToAdventure(p: Progress, chapterIds: readonly string[], itemIds: readonly string[], boardIds: readonly string[] = []): Progress {
   const chapters = new Set(chapterIds);
   const items = new Set(itemIds);
   const solved = p.solved.filter((id) => chapters.has(id));
@@ -285,6 +294,7 @@ export function fitToAdventure(p: Progress, chapterIds: readonly string[], itemI
     stage,
     solved,
     inventory: p.inventory.filter((id) => items.has(id)),
+    deductions: p.deductions.filter((id) => boardIds.includes(id)),
     decision: finished ? p.decision : null,
     finishedAt: finished ? p.finishedAt : null,
   };

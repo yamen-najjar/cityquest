@@ -58,6 +58,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
         saved,
         a.chapters.map((c) => c.id),
         a.items.map((i) => i.id),
+        (a.board ?? []).map((q) => q.id),
       ),
     [a],
   );

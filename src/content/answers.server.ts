@@ -1,4 +1,5 @@
 import 'server-only';
+import { boardAnswer } from '@/lib/engine/board';
 import type { AnswerKey } from './types';
 
 // Accepted answers, kept out of the browser bundle: the game screen sends a guess to
@@ -7,8 +8,24 @@ import type { AnswerKey } from './types';
 //
 // Formats by puzzle type: choice and logic puzzles take the choice id; order puzzles the piece ids in
 // order ("bacd"); deductions "suspect+item"; locks and Morse the digits.
+//
+// Evidence-board questions are keyed "board:<id>" and answered "person|card+card", the two evidence
+// cards sorted (see BoardQuestion in types.ts). board() builds that string, so the order never matters.
+const board = (person: string, ...cards: string[]) => boardAnswer(person, cards);
+
 export const answerKeys: Record<string, AnswerKey> = {
   'lost-manuscript': {
+    'board:liar': { accepted: [board('anna', 'item:brass-key', 'clue:witnesses-0')] },
+    'board:who-is-k': {
+      accepted: [
+        board('kehl', 'clue:clockmaker-1', 'clue:study-1'),
+        board('kehl', 'clue:clockmaker-1', 'clue:study-0'),
+        board('kehl', 'clue:clockmaker-1', 'clue:study-2'),
+        board('kehl', 'clue:clockmaker-1', 'item:second-half'),
+      ],
+    },
+    'board:footprints': { accepted: [board('kehl', 'clue:chest-0', 'clue:study-0')] },
+    'board:signal': { accepted: [board('elise', 'clue:signal-0', 'clue:mirror-0'), board('vii', 'clue:signal-0', 'clue:mirror-0')] },
     message: { accepted: ['tower', 'turm', 'toren', 'برج'] },
     witnesses: { accepted: ['clara'] },
     clockmaker: { accepted: ['7347'] },

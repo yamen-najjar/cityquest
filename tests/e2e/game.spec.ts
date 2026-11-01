@@ -69,6 +69,9 @@ test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the ac
   // The journal: clues, people, notes, and putting the two letter halves together
   await page.getByRole('button', { name: /Journal/ }).click();
   const journal = page.getByRole('dialog', { name: 'Case journal' });
+  // With questions open, the journal opens on the evidence board; the clues are one tab over.
+  await expect(journal.getByRole('tab', { name: /Board/ })).toHaveAttribute('aria-selected', 'true');
+  await journal.getByRole('tab', { name: /Clues/ }).click();
   await expect(journal.getByText('Kehl was going to the chest by the river tonight.')).toBeVisible();
   await journal.getByRole('tab', { name: /People/ }).click();
   await expect(journal.getByText('Prof. Albrecht Kehl')).toBeVisible();

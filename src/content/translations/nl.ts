@@ -183,6 +183,19 @@ export const nl: Record<string, string> = {
   "You open the second page and write how an anonymous message led you through the city. Elise reads along and nods. Even Kehl looks over your shoulder.":
     "Je slaat de tweede pagina open en schrijft hoe een anoniem bericht je door de stad leidde. Elise leest mee en knikt. Zelfs Kehl kijkt over je schouder mee.",
 
+  // Evidence board
+  "Two witnesses contradict each other about the key. Who lied?": "Twee getuigen spreken elkaar tegen over de sleutel. Wie loog?",
+  "Anna lied. Clara had the key all along — she hid it for VII — so Anna’s story about Ben was false.":
+    "Anna loog. Clara had de sleutel al die tijd — ze verstopte hem voor VII — dus Anna’s verhaal over Ben klopte niet.",
+  "Who is the “K.” on the note in the clockmaker’s cabinet?": "Wie is de ‘K.’ op het briefje in de kast van de klokkenmaker?",
+  "K. is Professor Albrecht Kehl: the collector who has gathered everything about the codex for years.":
+    "K. is professor Albrecht Kehl: de verzamelaar die al jaren alles over de codex bijeenbrengt.",
+  "Whose footprints were at the chest before you?": "Van wie waren de voetsporen bij de kist, vóór jou?",
+  "Kehl’s. He set off for the chest by the river tonight — and could not open it.": "Van Kehl. Hij ging vannacht naar de kist bij de rivier — en kreeg hem niet open.",
+  "Who sent you the lantern signal from the archive?": "Wie stuurde je het lantaarnsignaal uit het archief?",
+  "Elise Brandt — VII herself. She was waiting in the archive and wanted you to find the way in.":
+    "Elise Brandt — VII zelf. Ze wachtte in het archief en wilde dat jij de weg naar binnen vond.",
+
   // ---------------------------------------------------------------- The Neckar Ring
   "The Neckar Ring": "De ring van de Neckar",
   "A ring that will not come off. A pursuer in every reflection. And a shopkeeper who knows more than she says.": "Een ring die niet meer af wil. Een achtervolger in elke weerspiegeling. En een winkelierster die meer weet dan ze zegt.",

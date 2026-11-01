@@ -55,7 +55,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
     if (!authz.ok) return NextResponse.json({ error: authz.error }, { status: authz.status });
 
     const correct = matchesAnswer(guess.answer, guess.accepted);
-    if (correct && !(await recordSolve(authz.userId, slug, guess.chapterId))) {
+    if (correct && !guess.board && !(await recordSolve(authz.userId, slug, guess.chapterId))) {
       return NextResponse.json({ error: 'could not save progress' }, { status: 503 });
     }
     return NextResponse.json({ correct }, noStore);

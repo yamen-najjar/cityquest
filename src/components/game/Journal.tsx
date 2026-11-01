@@ -6,10 +6,12 @@ import type { Locale } from '@/i18n/config';
 import { fmt, type Dictionary } from '@/i18n/dictionary';
 import { sfx } from '@/lib/audio';
 import { combinationKey, MAX_NOTES, type Action, type Progress } from '@/lib/engine/progress';
+import { visibleQuestions } from '@/lib/engine/board';
+import { EvidenceBoard } from './EvidenceBoard';
 import { ItemIcon } from './ItemIcon';
 import { initials } from './puzzles/Interrogation';
 
-type Tab = 'clues' | 'people' | 'items' | 'notes';
+type Tab = 'board' | 'clues' | 'people' | 'items' | 'notes';
 
 /**
  * The case journal: every clue found so far, the people met (with what they said), the items carried
@@ -39,7 +41,8 @@ export function Journal({
   onCombined: (name: string) => void;
   onClose: () => void;
 }) {
-  const [tab, setTab] = useState<Tab>('clues');
+  // Opens on the board while it has an open question, so a new one is never missed.
+  const [tab, setTab] = useState<Tab>(() => (visibleQuestions(a, p).some((q) => !p.deductions.includes(q.id)) ? 'board' : 'clues'));
   const [picked, setPicked] = useState<string[]>([]);
   const [notes, setNotes] = useState(p.notes);
   const reached = (chapterId: string) => a.chapters.findIndex((c) => c.id === chapterId) <= p.chapter;
@@ -75,7 +78,10 @@ export function Journal({
   const items = p.inventory.map((id) => a.items.find((i) => i.id === id)).filter((i): i is NonNullable<typeof i> => !!i);
   const combo = picked.length === 2 ? a.combinations?.find((c) => c.from === combinationKey(picked)) : undefined;
 
+  const openQuestions = visibleQuestions(a, p).filter((q) => !p.deductions.includes(q.id)).length;
   const tabs: { id: Tab; label: string; count?: number }[] = [
+    // Only adventures that have deductions show the board.
+    ...(a.board?.length ? [{ id: 'board' as const, label: t.journal.board.tab, count: openQuestions }] : []),
     { id: 'clues', label: t.journal.clues, count: clues.length },
     { id: 'people', label: t.journal.people, count: people.length },
     { id: 'items', label: t.journal.items, count: items.length },
@@ -91,7 +97,7 @@ export function Journal({
         className="flex max-h-[88dvh] w-full max-w-2xl flex-col rounded-t-3xl border border-gold/25 bg-[#13100c] shadow-card sm:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
+        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
           <h2 id="journal-title" className="font-display text-2xl text-gold">
             {t.journal.title}
           </h2>
@@ -99,7 +105,7 @@ export function Journal({
             {t.threeD.close}
           </button>
         </header>
-        <nav className="flex gap-1 overflow-x-auto border-b border-white/10 px-3 py-2" role="tablist">
+        <nav className="flex shrink-0 gap-1 overflow-x-auto overflow-y-hidden border-b border-white/10 px-3 py-2" role="tablist">
           {tabs.map((x) => (
             <button
               key={x.id}
@@ -118,6 +124,8 @@ export function Journal({
           ))}
         </nav>
         <div className="flex-1 overflow-y-auto p-5" role="tabpanel">
+          {tab === 'board' && <EvidenceBoard a={a} p={p} locale={locale} t={t} onDeduced={(questionId) => dispatch({ type: 'deduce', questionId })} />}
+
           {tab === 'clues' &&
             (clues.length ? (
               <ol className="space-y-3">

@@ -2,7 +2,7 @@ import type { Adventure, PuzzleType } from '@/content/types';
 import type { Progress } from './progress';
 import { isFinished, totalHints } from './progress';
 
-export type AchievementId = 'first-clue' | 'codebreaker' | 'clear-thinker' | 'mystery-solved' | 'no-hints' | 'heidelberg-explorer' | 'arnhem-explorer';
+export type AchievementId = 'first-clue' | 'codebreaker' | 'clear-thinker' | 'mystery-solved' | 'no-hints' | 'heidelberg-explorer' | 'arnhem-explorer' | 'sharp-eye';
 
 export const ACHIEVEMENTS: AchievementId[] = [
   'first-clue',
@@ -12,16 +12,19 @@ export const ACHIEVEMENTS: AchievementId[] = [
   'no-hints',
   'heidelberg-explorer',
   'arnhem-explorer',
+  'sharp-eye',
 ];
 
 /** What the rules need to know about an adventure; small enough to pass to the dashboard. */
 export interface AchievementContext {
   city: string;
   chapters: { id: string; type: PuzzleType }[];
+  /** Ids of the evidence-board questions (none for an adventure without a board). */
+  board: string[];
 }
 
 export function contextOf(a: Adventure): AchievementContext {
-  return { city: a.city, chapters: a.chapters.map((c) => ({ id: c.id, type: c.puzzle.type })) };
+  return { city: a.city, chapters: a.chapters.map((c) => ({ id: c.id, type: c.puzzle.type })), board: (a.board ?? []).map((q) => q.id) };
 }
 
 const CODE_TYPES: PuzzleType[] = ['cipher', 'number-code', 'image'];
@@ -36,6 +39,7 @@ export function earned(p: Progress, ctx: AchievementContext): AchievementId[] {
   if (p.solved.length >= 1) out.push('first-clue');
   if (solvedOfType(CODE_TYPES).length) out.push('codebreaker');
   if (solvedOfType(['logic']).some((c) => !(p.wrongAttempts[c.id] ?? 0))) out.push('clear-thinker');
+  if (ctx.board.length && ctx.board.every((id) => p.deductions.includes(id))) out.push('sharp-eye');
   if (isFinished(p)) {
     out.push('mystery-solved');
     if (totalHints(p) === 0) out.push('no-hints');
