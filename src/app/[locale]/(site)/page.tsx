@@ -63,7 +63,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <div className="absolute inset-x-0 bottom-0 p-6">
                 <span className="chip border-gold/40 text-gold">{t.cities.pilot}</span>
                 <h3 className="mt-2 font-display text-3xl font-semibold">{c.name[locale]}</h3>
-                <p className="text-sm text-ivory-dim">{fmt(t.cities.adventureCount, { n: adventuresIn(c.slug).length })}</p>
+                <p className="text-sm text-ivory-dim">{fmt(adventuresIn(c.slug).length === 1 ? t.cities.adventureCountOne : t.cities.adventureCount, { n: adventuresIn(c.slug).length })}</p>
               </div>
             </Link>
           ))}

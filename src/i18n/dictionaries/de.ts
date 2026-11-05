@@ -94,6 +94,7 @@ const de: Dictionary = {
     all: 'Alle',
     availableOnly: 'Jetzt verfügbar',
     adventureCount: '{n} Abenteuer',
+    adventureCountOne: '{n} Abenteuer',
     pilot: 'Pilotstadt',
     available: 'Verfügbar',
     comingSoon: 'Demnächst',
