@@ -90,6 +90,34 @@ test('the case dossier: a printable sheet without spoilers', async ({ page }) =>
   await noHorizontalScroll(page);
 });
 
+test('a replay tells another truth: the next game draws a second culprit, the one after the original again', async ({ page }) => {
+  const chapters = ['message', 'witnesses', 'clockmaker', 'study', 'chest', 'signal', 'mirror', 'verdict'];
+  await fresh(page, '/en/play/lost-manuscript');
+  await page.evaluate((s) => {
+    localStorage.setItem('cityquest:3d', 'off');
+    localStorage.setItem('cityquest:progress:lost-manuscript', JSON.stringify(s));
+    sessionStorage.setItem('cityquest:playing', 'lost-manuscript');
+  }, finished('lost-manuscript', chapters, [], 'return', Date.now()));
+  await page.reload();
+
+  await page.getByRole('button', { name: 'Play again' }).click();
+  await page.getByRole('button', { name: 'Yes, start over' }).click();
+  await expect(page.getByText('Another truth: The Night Guard')).toBeVisible();
+  await page.getByRole('button', { name: 'Start the adventure' }).click();
+  await arrive(page);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('cityquest:progress:lost-manuscript')!));
+  expect(saved.variant).toBe('anna');
+
+  // Starting over in the middle keeps the truth; only finishing a case moves on to the next one.
+  await page.goto('/en/play/lost-manuscript');
+  await page.evaluate((s) => localStorage.setItem('cityquest:progress:lost-manuscript', JSON.stringify(s)), { ...finished('lost-manuscript', chapters, [], 'return', Date.now()), variant: 'anna' });
+  await page.reload();
+  await page.getByRole('button', { name: 'Play again' }).click();
+  await page.getByRole('button', { name: 'Yes, start over' }).click();
+  await expect(page.getByRole('button', { name: 'Start the adventure' })).toBeVisible();
+  await expect(page.getByText('Another truth', { exact: false })).toHaveCount(0);
+});
+
 test('junior mode: every puzzle explained for young detectives', async ({ page }) => {
   await fresh(page, '/en/play/lost-manuscript');
   await page.getByText('Junior', { exact: true }).click();

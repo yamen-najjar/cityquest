@@ -209,6 +209,7 @@ const de: Dictionary = {
     emptyAnswer: 'Gib zuerst eine Antwort ein.',
     networkError: 'Deine Antwort konnte nicht geprüft werden. Prüfe die Verbindung und versuch es erneut.',
     tooFast: 'Zu viele Versuche in kurzer Zeit. Warte einen Moment und versuche es dann noch einmal.',
+    variant: { title: 'Eine andere Wahrheit', text: 'Du hast diesen Fall schon einmal gelöst. Dieselbe Stadt, dieselben Zeugen – doch diesmal führen die Spuren vielleicht zu jemand anderem.' },
     junior: { label: 'Für junge Detektive' },
     extras: {
       title: 'Noch mehr zu entdecken',

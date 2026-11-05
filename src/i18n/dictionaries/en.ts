@@ -206,6 +206,7 @@ const en = {
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
     tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
+    variant: { title: 'Another truth', text: 'You have solved this case before. Same city, same witnesses — but this time the clues may lead to someone else.' },
     junior: { label: 'For young detectives' },
     extras: {
       title: 'More to discover',

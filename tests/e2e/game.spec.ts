@@ -133,7 +133,7 @@ test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the ac
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Case report');
   await fileReport(page, [
     [/Who broke into the archive/, 'Professor Kehl'],
-    [/How did he get in/, 'He forced the back door'],
+    [/How did the thief get in/, 'He forced the back door'],
     [/^\d\. Why/, 'To sell the codex'],
     [/Roughly when/, 'After midnight'],
     [/Whose absence/, 'Ben'],

@@ -120,6 +120,23 @@ export function checkAdventure(a: Adventure, key: AnswerKey | undefined): Conten
   if (!a.ending.letter?.text.en.length) missing('ending', 'Needs a letter that arrives a week later (ending.letter).');
   if (!a.token) missing('lantern sign', 'Needs a lantern sign for the meta-mystery (token, see content/meta.ts).');
   if (!a.dossier?.en.length) missing('dossier', 'Needs a brief for the printable case dossier (dossier).');
+  // Second truths for replays: at least one, each with another culprit and an answer that changes.
+  if (!a.variants?.length) missing('variants', 'Needs a second truth for replays (variants, see Variant).');
+  const last = a.chapters[a.chapters.length - 1];
+  for (const v of a.variants ?? []) {
+    const where = `variant “${v.id}”`;
+    if (!a.people.some((person) => person.id === v.culprit)) error(where, `Unknown culprit “${v.culprit}”.`);
+    if (!key?.[`${last?.id}@${v.id}`] && !key?.[`report@${v.id}`]) error(where, `No answer changes: add "${last?.id}@${v.id}" or "report@${v.id}" to answers.server.ts.`);
+    for (const id of Object.keys(v.chapters ?? {})) if (!a.chapters.some((c) => c.id === id)) error(where, `Unknown chapter “${id}”.`);
+    for (const id of Object.keys(v.phoneText ?? {})) if (!(a.phone ?? []).some((m) => m.id === id)) error(where, `Unknown message “${id}”.`);
+    for (const id of Object.keys(v.notes ?? {})) if (!a.people.some((person) => person.id === id)) error(where, `Unknown person “${id}”.`);
+    if (!(v.phone ?? []).length) missing(where, 'A second truth needs at least one new clue on the phone (variant.phone).');
+    const reportKey = key?.[`report@${v.id}`]?.accepted[0];
+    if (reportKey && a.report) {
+      const right = decodeReport(reportKey);
+      for (const slot of a.report.slots) if (!slot.options.some((o) => o.id === right[slot.id])) error(where, `Report “${slot.id}” has no right answer in "report@${v.id}".`);
+    }
+  }
   // Walk narration on the way to every checkpoint after the first.
   for (const c of a.chapters.slice(1)) {
     if (!c.walk?.length) missing(`chapter “${c.id}”`, 'Needs a walk narration (Chapter.walk) for the way to its checkpoint.');

@@ -14,6 +14,7 @@ import { SkylineArt } from '../SkylineArt';
 import { Artifact3D } from './lazy';
 import { initials } from './puzzles/Interrogation';
 import { tokenEarned } from '@/lib/engine/meta';
+import { variantOf } from '@/lib/engine/variant';
 import { DetectiveReport, SouvenirCard } from './Report';
 
 export function StartScreen({
@@ -70,6 +71,15 @@ export function StartScreen({
               {t.briefing.case}
             </h2>
             <p className="mt-3 leading-relaxed text-ivory-dim">{a.description[locale]}</p>
+            {variantOf(a, a.appliedVariant) && (
+              <p className="mt-4 rounded-2xl border border-danger/40 bg-danger/[0.07] p-4 text-sm text-ivory">
+                <span className="block font-display text-lg text-danger">
+                  <span aria-hidden="true">🔁 </span>
+                  {t.variant.title}: {variantOf(a, a.appliedVariant)!.title[locale]}
+                </span>
+                {t.variant.text}
+              </p>
+            )}
           </section>
           {firstContact.length > 0 && (
             <section aria-labelledby="contact-title">
@@ -299,6 +309,11 @@ export function Results({
         <p className="text-sm text-ivory-dim">
           {t.totalStars}: {stars} / {a.chapters.length * 3} · {t.modes[p.mode].name}
         </p>
+        {variantOf(a, p.variant) && (
+          <p className="mt-2 chip border-danger/40 text-danger">
+            🔁 {t.variant.title}: {variantOf(a, p.variant)!.title[locale]}
+          </p>
+        )}
       </div>
 
       <dl className="mt-4 grid grid-cols-3 gap-3 text-center">

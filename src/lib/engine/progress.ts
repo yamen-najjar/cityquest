@@ -61,6 +61,8 @@ export interface Progress {
   reportConfirmed: string[];
   reportTries: number;
   reportDone: 'solved' | 'revealed' | null;
+  /** The second truth this game tells (a variant id), or null for the original. */
+  variant: string | null;
   decision: string | null;
   team: Team;
   startedAt: number;
@@ -97,7 +99,7 @@ export type Action =
 export const MAX_TEAM = 5;
 export const MAX_NOTES = 4000;
 
-export function newProgress(adventure: string, team: Team, now: number, mode: Mode = 'classic'): Progress {
+export function newProgress(adventure: string, team: Team, now: number, mode: Mode = 'classic', variant: string | null = null): Progress {
   return {
     version: 2,
     adventure,
@@ -124,6 +126,7 @@ export function newProgress(adventure: string, team: Team, now: number, mode: Mo
     reportConfirmed: [],
     reportTries: 0,
     reportDone: null,
+    variant,
     decision: null,
     team: clampTeam(team),
     startedAt: now,
@@ -415,6 +418,7 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
     reportConfirmed: idList(p.reportConfirmed),
     reportTries: typeof p.reportTries === 'number' && Number.isInteger(p.reportTries) && p.reportTries >= 0 ? Math.min(p.reportTries, 1000) : 0,
     reportDone: p.reportDone === 'solved' || p.reportDone === 'revealed' ? p.reportDone : null,
+    variant: typeof p.variant === 'string' && /^[a-z0-9-]{1,40}$/.test(p.variant) ? p.variant : null,
     decision: isId(p.decision) ? p.decision : null,
     team: clampTeam({ name: team.name, players: Number(team.players) }),
     startedAt,
