@@ -112,6 +112,20 @@ export function checkAdventure(a: Adventure, key: AnswerKey | undefined): Conten
   }
   for (const l of a.leads ?? []) if (!key?.[`lead:${l.id}`]?.accepted.length) error(`lead “${l.id}”`, 'No accepted answer: the lead can never be followed up.');
   if ((a.secrets?.length ?? 0) < 2) missing('secrets', 'Needs at least 2 secrets to find.');
+  // Walk narration on the way to every checkpoint after the first.
+  for (const c of a.chapters.slice(1)) {
+    if (!c.walk?.length) missing(`chapter “${c.id}”`, 'Needs a walk narration (Chapter.walk) for the way to its checkpoint.');
+  }
+  // Trust: replies that someone remembers, and a message that only that trust brings.
+  if (!phone.some((m) => m.replies?.some((r) => r.trust))) missing('trust', 'Needs at least one phone reply that changes trust (reply.trust).');
+  if (!phone.some((m) => m.trust)) missing('trust', 'Needs at least one message that arrives only with trust (message.trust).');
+  for (const m of phone) {
+    if (m.trust && !a.people.some((person) => person.id === m.trust!.person)) error(`message “${m.id}”`, `Trust names an unknown person “${m.trust.person}”.`);
+  }
+  // Seasons: something different in the phone at Halloween and in winter.
+  for (const season of ['halloween', 'winter'] as const) {
+    if (!phone.some((m) => m.season === season)) missing('seasons', `Needs a ${season} message (message.season).`);
+  }
   // The case report before the reveal: enough questions that "three right together" means something.
   if ((a.report?.slots.length ?? 0) < 5) missing('report', 'Needs a case report with at least 5 questions (see CaseReport).');
   if (a.report) {

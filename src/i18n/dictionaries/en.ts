@@ -205,6 +205,8 @@ const en = {
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
     tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
+    trust: { trusts: 'Trusts you', wary: 'Wary of you', remembers: '{name} will remember that.' },
+    walk: { title: 'On the way', play: 'Listen while you walk', stop: 'Stop' },
     caseReport: {
       title: 'Case report',
       intro: 'Before the truth comes out, file your report. The game confirms nothing until at least three answers are right together — then it tells you which.',

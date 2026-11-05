@@ -233,6 +233,8 @@ export function ChapterView({
         ))}
       </div>
 
+      {p.stage === 'travel' && chapter.walk?.length ? <WalkAudio lines={chapter.walk} locale={locale} t={t} /> : null}
+
       {p.stage === 'travel' && (
         <section className="mt-10 space-y-4" aria-labelledby="cp-title">
           <h2 id="cp-title" className="eyebrow">
@@ -514,6 +516,38 @@ export function ChapterView({
         </section>
       )}
     </article>
+  );
+}
+
+/**
+ * Heard on the way to the checkpoint: the story goes on while the team walks, in the characters' acted
+ * voices (read by the device until real recordings exist). Started by a tap, never by itself.
+ */
+function WalkAudio({ lines, locale, t }: { lines: NonNullable<Chapter['walk']>; locale: Locale; t: Dictionary['game'] }) {
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => () => stopSpeaking(), []);
+  const toggle = () => {
+    stopSpeaking();
+    if (playing) return setPlaying(false);
+    lines.forEach((l, i) => speak(l.text[locale], locale, l.voice, i > 0));
+    setPlaying(true);
+  };
+  return (
+    <section className="mt-8 rounded-2xl border border-gold/25 bg-gold/[0.04] p-4" aria-labelledby="walk-title">
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="walk-title" className="eyebrow">
+          🎧 {t.walk.title}
+        </h2>
+        <button type="button" className="btn-ghost min-h-[40px] px-4 py-1.5 text-sm" onClick={toggle}>
+          {playing ? `■ ${t.walk.stop}` : `▶ ${t.walk.play}`}
+        </button>
+      </div>
+      <div className="mt-3 space-y-1 font-display text-lg italic text-ivory-dim">
+        {lines.map((l, i) => (
+          <p key={i}>{l.text[locale]}</p>
+        ))}
+      </div>
+    </section>
   );
 }
 

@@ -1,7 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
 import { fresh } from './helpers';
 
-function save(extra: Record<string, unknown> = {}) {
+// The phone's seasonal messages depend on the date: pin it, outside any season unless a test says so.
+const OFF_SEASON = new Date(2026, 5, 15, 20, 0);
+
+function save(extra: Record<string, unknown> = {}, now = OFF_SEASON.getTime()) {
   return {
     version: 2,
     adventure: 'lost-manuscript',
@@ -26,15 +29,16 @@ function save(extra: Record<string, unknown> = {}) {
     secrets: [],
     decision: null,
     team: { name: 'Owls', players: 2 },
-    startedAt: Date.now() - 60_000,
+    startedAt: now - 60_000,
     finishedAt: null,
     elapsedMs: 60_000,
-    lastActiveAt: Date.now(),
+    lastActiveAt: now,
     ...extra,
   };
 }
 
-async function load(page: Page, s: Record<string, unknown>) {
+async function load(page: Page, s: Record<string, unknown>, date = OFF_SEASON) {
+  await page.clock.setFixedTime(date);
   await fresh(page, '/en/play/lost-manuscript');
   await page.evaluate((x) => {
     localStorage.setItem('cityquest:3d', 'off');
@@ -97,4 +101,24 @@ test('the detective report counts what was found and names what is still open', 
   await expect(report.getByText('That night, in order')).toBeVisible();
   await expect(report.getByText('Leave it closed', { exact: false })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Save the card' })).toBeVisible();
+});
+
+test('trust and seasons: a kept secret brings Clara back; at Halloween VII writes about the lanterns', async ({ page }) => {
+  const halloween = new Date(2026, 9, 31, 20, 0);
+  await load(page, save({ chapter: 2, stage: 'travel', solved: ['message', 'witnesses', 'clockmaker'], replies: { 'clara-log': 'safe' } }, halloween.getTime()), halloween);
+
+  // On the way: the story goes on while the team walks.
+  await expect(page.getByRole('heading', { name: /On the way/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Listen while you walk/ })).toBeVisible();
+
+  await page.getByRole('button', { name: /Phone/ }).click();
+  const phone = page.getByRole('dialog', { name: 'Phone' });
+  await expect(phone.getByText('the man in the long coat asked for', { exact: false })).toBeVisible();
+  await expect(phone.getByText('the archive’s lanterns light themselves', { exact: false })).toBeVisible();
+  await expect(phone.getByText('Clara will remember that.')).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('button', { name: /Journal/ }).click();
+  await page.getByRole('dialog', { name: 'Case journal' }).getByRole('tab', { name: /People/ }).click();
+  await expect(page.getByRole('dialog', { name: 'Case journal' }).getByText('Trusts you')).toBeVisible();
 });

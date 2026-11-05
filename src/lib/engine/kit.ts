@@ -1,6 +1,6 @@
 // The investigation kit's rules: what is unlocked when, what the team holds, and how lead answers are
 // written. Pure, so the phone, the journal, the report, the server's answer key and the tests all agree.
-import type { Adventure, CaseDocument, Lead, PhoneMessage, Trigger, WebPage } from '@/content/types';
+import type { Adventure, CaseDocument, Lead, PhoneMessage, Season, Trigger, WebPage } from '@/content/types';
 import type { Progress } from './progress';
 
 /** Whether a trigger has happened: 'start', a solved chapter, 'board:<id>', 'lead:<id>' or 'choice:<chapter>:<option>'. */
@@ -15,9 +15,44 @@ export function unlocked(p: Progress, when: Trigger): boolean {
   return p.solved.includes(when);
 }
 
+/** Whether a date falls in a season: Halloween 25 Oct – 2 Nov, winter 1 Dec – 6 Jan. */
+export function inSeason(season: Season, date: Date): boolean {
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  if (season === 'halloween') return (m === 10 && d >= 25) || (m === 11 && d <= 2);
+  return m === 12 || (m === 1 && d <= 6);
+}
+
+/**
+ * How a person sees the team: the sum of the trust carried by the replies the team sent them. Positive
+ * is warm, negative wary. Derived from the replies, never stored on its own.
+ */
+export function trustWith(a: Adventure, p: Progress, person: string): number {
+  let trust = 0;
+  for (const m of a.phone ?? []) {
+    if (m.from !== person) continue;
+    const reply = m.replies?.find((r) => r.id === p.replies[m.id]);
+    trust += reply?.trust ?? 0;
+  }
+  return trust;
+}
+
+/** Whether a message has arrived: its trigger, and any trust or season condition, are met. */
+export function arrived(a: Adventure, p: Progress, m: PhoneMessage, now: Date = new Date()): boolean {
+  if (!unlocked(p, m.when)) return false;
+  if (m.trust) {
+    const t = trustWith(a, p, m.trust.person);
+    if (m.trust.atLeast !== undefined && t < m.trust.atLeast) return false;
+    if (m.trust.atMost !== undefined && t > m.trust.atMost) return false;
+  }
+  // A seasonal message arrives only in its season, but once read it stays in the phone.
+  if (m.season && !inSeason(m.season, now) && !p.phoneRead.includes(m.id)) return false;
+  return true;
+}
+
 /** The messages that have arrived, in the order the story sends them. */
-export function inbox(a: Adventure, p: Progress): PhoneMessage[] {
-  return (a.phone ?? []).filter((m) => unlocked(p, m.when));
+export function inbox(a: Adventure, p: Progress, now: Date = new Date()): PhoneMessage[] {
+  return (a.phone ?? []).filter((m) => arrived(a, p, m, now));
 }
 
 export function unread(a: Adventure, p: Progress): PhoneMessage[] {
