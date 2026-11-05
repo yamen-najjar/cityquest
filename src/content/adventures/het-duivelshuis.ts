@@ -312,6 +312,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'duivels',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Vom Korenmarkt aus werden die Gassen enger. Vor dir bewachen drei steinerne Teufel die Straße, wie seit fünfhundert Jahren.', en: 'From the Korenmarkt the lanes grow narrow. Ahead, three stone devils watch the street, as they have for five hundred years.', ar: 'من ساحة كورنمارخت تضيق الأزقة. أمامك ثلاثة شياطين حجرية تراقب الشارع، كما تفعل منذ خمسمئة عام.' } },
+      ],
       title: { de: 'Die drei Teufel', en: 'The Three Devils', ar: 'الشياطين الثلاثة' },
       story: {
         de: [
@@ -380,6 +384,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'sabelspoort',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Das alte Stadttor wächst aus der Dunkelheit. Musik weht durch den Bogen: Jemand spielt für niemanden.', en: 'The old city gate rises out of the dark. Music drifts through the arch: someone is playing for nobody.', ar: 'تنهض بوابة المدينة القديمة من العتمة. وتنساب موسيقى عبر القوس: أحدهم يعزف لا لأحد.' } },
+      ],
       title: { de: 'Der Zeuge an der Sabelspoort', en: 'The Witness at the Sabelspoort', ar: 'الشاهد عند بوابة سابلسبورت' },
       story: {
         de: [
@@ -450,6 +458,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'carillon',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'man', text: { de: 'Die große Kirche – die Eusebius. Geh, bevor der Mann im Mantel vor dir dort ist.', en: 'The great church — the Eusebius. Go, before the man in the coat gets there first.', ar: 'الكنيسة الكبيرة — أوزيبيوس. اذهب، قبل أن يسبقك الرجل ذو المعطف.' } },
+      ],
       title: { de: 'Fremde aus Stein', en: 'Strangers in Stone', ar: 'غرباء من حجر' },
       story: {
         de: [
@@ -551,6 +563,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'sonsbeek',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Die beiden Hälften des Hauptbuchs passen in deinen Händen zusammen. Der Weg steigt in den Park, wo im Dunkeln Wasser fällt.', en: 'The ledger’s two halves fit together in your hands. The path climbs into the park, where water falls in the dark.', ar: 'يلتئم نصفا الدفتر بين يديك. يصعد الدرب إلى الحديقة، حيث يتساقط الماء في العتمة.' } },
+      ],
       title: { de: 'Der Wasserfall im Sonsbeek-Park', en: 'The Waterfall in Sonsbeek Park', ar: 'شلّال حديقة سونسبيك' },
       story: {
         de: [
@@ -598,6 +614,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'rijnkade',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Jetzt hinunter zum Fluss. Der Rhein ist breit und schwarz, und am Hang darüber brennt ein einziges Fenster.', en: 'Down to the river now. The Rhine is wide and black, and on the slope above it a single window is lit.', ar: 'نزولاً إلى النهر الآن. الراين عريض وأسود، وعلى المنحدر فوقه نافذة واحدة مضاءة.' } },
+      ],
       title: { de: 'Das Signal über den Rhein', en: 'The Signal Across the Rhine', ar: 'الإشارة عبر نهر الراين' },
       story: {
         de: [
@@ -643,6 +663,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'archief',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'woman', text: { de: 'Komm zur Seitentür. Leise – ich glaube, wir sind nicht allein im Gebäude.', en: 'Come to the side door. Quietly — I don’t think we are alone in the building.', ar: 'تعالَ إلى الباب الجانبي. بهدوء — لا أظن أننا وحدنا في المبنى.' } },
+      ],
       title: { de: 'Die mittlere Schublade', en: 'The Middle Drawer', ar: 'الدرج الأوسط' },
       story: {
         de: [
@@ -705,6 +729,10 @@ export const hetDuivelshuis: Authored<Adventure> = {
     },
     {
       id: 'aanklacht',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'woman', text: { de: 'Hinter dem Teufelshaus gibt es einen Hof. Dort endet es – so oder so.', en: 'Behind the Devil’s House there is a courtyard. That is where it ends — one way or another.', ar: 'خلف بيت الشيطان فناء. هناك ينتهي الأمر — بطريقة أو بأخرى.' } },
+      ],
       title: { de: 'Die Anklage', en: 'The Accusation', ar: 'الاتهام' },
       story: {
         de: [
@@ -839,7 +867,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
       text: { de: 'Ich schreibe meine Lieder auf – und wer vorbeigeht. Alte Gewohnheit.', en: 'I write down my songs — and who walks by. Old habit.', ar: 'أكتب أغنياتي — ومَن يمرّ بي. عادة قديمة.' },
       document: 'bram-notes',
       replies: [
-        { id: 'watch', label: { de: 'Kannst du weiter das Tor im Auge behalten?', en: 'Can you keep watching the gate?', ar: 'هل تستطيع أن تواصل مراقبة البوابة؟' }, answer: { de: 'Für dich? Bis Mitternacht. Danach gehört die Dunkelheit dem Sammler.', en: 'For you? Until midnight. After that, the dark belongs to the Collector.', ar: 'من أجلك؟ حتى منتصف الليل. بعدها تصبح العتمة للجامع.' } },
+        { id: 'watch', label: { de: 'Kannst du weiter das Tor im Auge behalten?', en: 'Can you keep watching the gate?', ar: 'هل تستطيع أن تواصل مراقبة البوابة؟' }, answer: { de: 'Für dich? Bis Mitternacht. Danach gehört die Dunkelheit dem Sammler.', en: 'For you? Until midnight. After that, the dark belongs to the Collector.', ar: 'من أجلك؟ حتى منتصف الليل. بعدها تصبح العتمة للجامع.' }, trust: 1 },
         { id: 'thanks', label: { de: 'Danke, Bram.', en: 'Thank you, Bram.', ar: 'شكراً يا برام.' }, answer: { de: 'Spiel fair, dann spielt die Stadt fair mit dir.', en: 'Play fair, and the city plays fair with you.', ar: 'العب بنزاهة، فتلعب المدينة معك بنزاهة.' } },
       ],
     },
@@ -886,6 +914,30 @@ export const hetDuivelshuis: Authored<Adventure> = {
       when: 'aanklacht',
       kind: 'text',
       text: { de: 'Danke. Jetzt kann ich aus dem Schatten kommen.', en: 'Thank you. Now I can come out of the shadows.', ar: 'شكراً. الآن أستطيع الخروج من الظل.' },
+    },
+    {
+      id: 'bram-bonus',
+      from: 'bram',
+      when: 'carillon',
+      kind: 'text',
+      text: { de: 'Ich habe das Tor weiter beobachtet, wie du gebeten hast. Der Mann im Samtmantel kam um 21:40 zurück – ohne seinen linken Handschuh.', en: 'I kept watching the gate, like you asked. The man in the velvet coat came back at 21:40 — without his left glove.', ar: 'واصلت مراقبة البوابة كما طلبت. عاد الرجل ذو المعطف المخملي الساعة 21:40 — من دون قفازه الأيسر.' },
+      trust: { person: 'bram', atLeast: 1 },
+    },
+    {
+      id: 'lena-halloween',
+      from: 'unknown',
+      when: 'start',
+      kind: 'text',
+      text: { de: 'Heute Nacht scheinen die steinernen Teufel zu grinsen. Lass dich nicht ablenken.', en: 'Tonight the stone devils seem to grin. Don’t let them distract you.', ar: 'الليلة تبدو الشياطين الحجرية كأنها تبتسم. لا تدعها تشتّت انتباهك.' },
+      season: 'halloween',
+    },
+    {
+      id: 'bram-winter',
+      from: 'bram',
+      when: 'sabelspoort',
+      kind: 'text',
+      text: { de: 'Kalte Finger, warme Lieder. Wenn du wieder am Tor vorbeikommst, bring mir einen Kaffee mit.', en: 'Cold fingers, warm songs. If you pass the gate again, bring me a coffee.', ar: 'أصابع باردة وأغانٍ دافئة. إن مررت بالبوابة مجدداً، أحضر لي قهوة.' },
+      season: 'winter',
     },
   ],
   leads: [

@@ -198,6 +198,8 @@ const nl: Dictionary = {
     emptyAnswer: 'Typ eerst een antwoord.',
     networkError: 'Je antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer het opnieuw.',
     tooFast: 'Te veel pogingen in korte tijd. Wacht even en probeer het dan opnieuw.',
+    trust: { trusts: 'Vertrouwt je', wary: 'Is op zijn hoede', remembers: '{name} zal dat onthouden.' },
+    walk: { title: 'Onderweg', play: 'Luister onder het lopen', stop: 'Stop' },
     caseReport: {
       title: 'Zaakrapport',
       intro: 'Voordat de waarheid aan het licht komt, dien je je rapport in. Het spel bevestigt niets zolang er niet minstens drie antwoorden samen kloppen — dan zegt het welke.',

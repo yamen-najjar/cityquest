@@ -8,6 +8,7 @@ import { fmt } from '@/i18n/fmt';
 import { sfx } from '@/lib/audio';
 import { chose, combinationKey, MAX_NOTES, type Action, type Progress } from '@/lib/engine/progress';
 import { visibleQuestions } from '@/lib/engine/board';
+import { trustWith } from '@/lib/engine/kit';
 import { EvidenceBoard } from './EvidenceBoard';
 import { LeadsPanel } from './Leads';
 import { ItemIcon } from './ItemIcon';
@@ -168,10 +169,19 @@ export function Journal({
                         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold/15 font-display text-lg text-gold" aria-hidden="true">
                           {initials(person.name[locale])}
                         </span>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <p className="font-semibold">{person.name[locale]}</p>
                           <p className="text-xs text-ivory-mute">{person.role[locale]}</p>
                         </div>
+                        {(() => {
+                          const trust = trustWith(a, p, person.id);
+                          if (!trust) return null;
+                          return (
+                            <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs ${trust > 0 ? 'bg-success/15 text-success' : 'bg-danger/15 text-danger'}`}>
+                              {trust > 0 ? '♥' : '✕'} {trust > 0 ? t.trust.trusts : t.trust.wary}
+                            </span>
+                          );
+                        })()}
                       </div>
                       {notes.length > 0 && (
                         <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-ivory-dim">

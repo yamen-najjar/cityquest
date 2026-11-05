@@ -218,6 +218,7 @@ export function Phone({
                           <span className="sr-only">{name}: </span>
                           {reply.answer[locale]}
                         </p>
+                        {reply.trust ? <p className="text-center text-[11px] italic text-ivory-mute">{fmt(t.trust.remembers, { name })}</p> : null}
                       </>
                     )}
                   </li>

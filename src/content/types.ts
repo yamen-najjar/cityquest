@@ -269,6 +269,8 @@ export interface Chapter {
   reward?: string;
   /** A decision the team makes after solving the chapter (see StoryChoice). */
   choice?: StoryChoice;
+  /** Heard on the way to this chapter's checkpoint: the story goes on while the team walks. */
+  walk?: { voice: Voice; text: Localized }[];
 }
 
 /**
@@ -333,8 +335,16 @@ export interface PhoneMessage {
   lines?: { voice: Voice; text: Localized }[];
   document?: string;
   page?: string;
-  replies?: { id: string; label: Localized; answer: Localized }[];
+  /** Replies; `trust` (+1 warm, -1 cold) changes how the sender sees the team from then on. */
+  replies?: { id: string; label: Localized; answer: Localized; trust?: number }[];
+  /** Arrives only if the team's trust with this person is at least (or at most) the given value. */
+  trust?: { person: string; atLeast?: number; atMost?: number };
+  /** Arrives only during a season of the year (local date), on top of `when`. */
+  season?: Season;
 }
+
+/** Seasonal windows: Halloween (25 October – 2 November) and winter (1 December – 6 January). */
+export type Season = 'halloween' | 'winter';
 
 /** One frame of the imagined view: a façade drawn as data (or a photo of a public place, later). */
 export interface Facade {

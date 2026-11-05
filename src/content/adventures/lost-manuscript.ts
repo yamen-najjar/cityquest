@@ -295,6 +295,10 @@ export const lostManuscript: Authored<Adventure> = {
     },
     {
       id: 'witnesses',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Der Turm ragt über die Dächer. In seinem Schatten warten drei Gestalten, und keine sieht die anderen an.', en: 'The tower rises above the roofs. Three figures wait in its shadow, and none of them looks at the others.', ar: 'يرتفع البرج فوق الأسطح. في ظله تنتظر ثلاث شخصيات، ولا تنظر أيٌّ منها إلى الأخرى.' } },
+      ],
       title: { de: 'Drei Zeugen', en: 'Three Witnesses', ar: 'ثلاثة شهود' },
       story: {
         de: [
@@ -343,6 +347,10 @@ export const lostManuscript: Authored<Adventure> = {
     },
     {
       id: 'clockmaker',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Der Messingschlüssel liegt schwer in deiner Tasche. Irgendwo vor dir ticken hundert Uhren, keine im selben Takt.', en: 'The brass key is heavy in your pocket. Somewhere ahead, a hundred clocks are ticking, none of them in time.', ar: 'المفتاح النحاسي ثقيل في جيبك. في مكان ما أمامك تدقّ مئة ساعة، ولا تتفق اثنتان منها.' } },
+      ],
       title: { de: 'Das Schloss des Uhrmachers', en: 'The Clockmaker’s Lock', ar: 'قفل صانع الساعات' },
       story: {
         de: [
@@ -388,6 +396,10 @@ export const lostManuscript: Authored<Adventure> = {
     },
     {
       id: 'study',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: '„K. weiß es.“ Zwei Buchstaben, und ein Name nimmt Gestalt an. Die Straße des Professors ist still – zu still für diese Stunde.', en: '“K. knows.” Two letters, and a name begins to form. The professor’s street is quiet — too quiet for this hour.', ar: '«ك. يعرف». حرفان، ويبدأ اسم بالتشكّل. شارع البروفيسور هادئ — أهدأ مما ينبغي في هذه الساعة.' } },
+      ],
       title: { de: 'Das Arbeitszimmer des Professors', en: 'The Professor’s Study', ar: 'مكتب الأستاذ' },
       story: {
         de: [
@@ -450,6 +462,10 @@ export const lostManuscript: Authored<Adventure> = {
     },
     {
       id: 'chest',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Du eilst zum Fluss. Die Laterne auf der Karte leuchtet in deinem Kopf: ein Kreuz, eine Chance, der Erste zu sein.', en: 'You hurry towards the river. The lantern on the map glows in your mind: one cross, one chance to be first.', ar: 'تسرع نحو النهر. يتوهّج فانوس الخريطة في ذهنك: صليب واحد، وفرصة واحدة لتكون الأول.' } },
+      ],
       title: { de: 'Die Truhe am Fluss', en: 'The Riverside Chest', ar: 'الصندوق عند النهر' },
       story: {
         de: [
@@ -488,6 +504,10 @@ export const lostManuscript: Authored<Adventure> = {
     },
     {
       id: 'signal',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Die Seite aus der Truhe knistert in deiner Hand. Drüben über dem Wasser sind die Fenster des Archivs dunkel. Alle bis auf eines.', en: 'The page from the chest crackles in your hand. Across the water, the archive’s windows are dark. All but one.', ar: 'تخشخش الصفحة من الصندوق في يدك. على الضفة الأخرى نوافذ الأرشيف مظلمة. كلها إلا واحدة.' } },
+      ],
       title: { de: 'Das Lichtsignal', en: 'The Lantern Signal', ar: 'الإشارة الضوئية' },
       story: {
         de: [
@@ -529,6 +549,10 @@ export const lostManuscript: Authored<Adventure> = {
     },
     {
       id: 'mirror',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'old', text: { de: 'Komm die Stufen herauf. Ich warte schon länger, als du denkst.', en: 'Come up the steps. I have been waiting longer than you think.', ar: 'اصعد الدرج. أنا أنتظر منذ وقت أطول مما تظن.' } },
+      ],
       title: { de: 'Die Spiegelseite', en: 'The Mirror Page', ar: 'الصفحة المعكوسة' },
       story: {
         de: [
@@ -568,6 +592,10 @@ export const lostManuscript: Authored<Adventure> = {
     },
     {
       id: 'verdict',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Elise geht mit ihrer Laterne voraus. Hinter dir hängt die Hintertür des Archivs an einer einzigen Angel.', en: 'Elise walks ahead with her lantern. Behind you, the archive’s back door hangs from a single hinge.', ar: 'تمشي إليزه أمامك بفانوسها. وخلفك يتدلّى باب الأرشيف الخلفي من مفصّلة واحدة.' } },
+      ],
       title: { de: 'Der Einbruch', en: 'The Break-in', ar: 'الاقتحام' },
       story: {
         de: [
@@ -741,7 +769,7 @@ export const lostManuscript: Authored<Adventure> = {
       document: 'duty-log',
       replies: [
         { id: 'why', label: { de: 'Warum hast du den Schlüssel versteckt?', en: 'Why did you hide the key?', ar: 'لماذا خبّأتِ المفتاح؟' }, answer: { de: 'Weil VII mich darum gebeten hat – und weil ich ihr mehr vertraut habe als dem Mann, der an dem Abend am Tor Fragen gestellt hat.', en: 'Because VII asked me — and because I trusted her more than the man asking questions at the gate that evening.', ar: 'لأن VII طلب مني ذلك — ولأنني وثقت به أكثر من الرجل الذي كان يطرح الأسئلة عند البوابة تلك الليلة.' } },
-        { id: 'safe', label: { de: 'Dein Geheimnis ist sicher.', en: 'Your secret is safe.', ar: 'سرّك في أمان.' }, answer: { de: 'Dann hier eines von mir: In jener Nacht hat noch jemand nach dem Schlüssel gefragt. Ein Mann in einem langen Mantel.', en: 'Then here is one of mine: someone else came asking for the key that night. A man in a long coat.', ar: 'إذن إليك أحد أسراري: جاء شخص آخر يسأل عن المفتاح تلك الليلة. رجل بمعطف طويل.' } },
+        { id: 'safe', label: { de: 'Dein Geheimnis ist sicher.', en: 'Your secret is safe.', ar: 'سرّك في أمان.' }, answer: { de: 'Dann hier eines von mir: In jener Nacht hat noch jemand nach dem Schlüssel gefragt. Ein Mann in einem langen Mantel.', en: 'Then here is one of mine: someone else came asking for the key that night. A man in a long coat.', ar: 'إذن إليك أحد أسراري: جاء شخص آخر يسأل عن المفتاح تلك الليلة. رجل بمعطف طويل.' }, trust: 1 },
       ],
     },
     {
@@ -786,7 +814,7 @@ export const lostManuscript: Authored<Adventure> = {
       kind: 'text',
       text: { de: 'Komm zum Archiv. Benutze den Code.', en: 'Come to the archive. Use the code.', ar: 'تعالَ إلى الأرشيف. استخدم الرمز.' },
       replies: [
-        { id: 'team', label: { de: 'Wir kommen zusammen.', en: 'We are coming together.', ar: 'سنأتي معاً.' }, answer: { de: 'Gut. Geschichten brauchen mehr als einen Leser.', en: 'Good. Stories need more than one reader.', ar: 'جيد. الحكايات تحتاج إلى أكثر من قارئ.' } },
+        { id: 'team', label: { de: 'Wir kommen zusammen.', en: 'We are coming together.', ar: 'سنأتي معاً.' }, answer: { de: 'Gut. Geschichten brauchen mehr als einen Leser.', en: 'Good. Stories need more than one reader.', ar: 'جيد. الحكايات تحتاج إلى أكثر من قارئ.' }, trust: 1 },
         { id: 'alone', label: { de: 'Ich komme allein.', en: 'I will come alone.', ar: 'سآتي وحدي.' }, answer: { de: 'Mutig. Oder leichtsinnig. Wir werden sehen, was von beidem.', en: 'Brave. Or foolish. We will see which.', ar: 'شجاع. أو متهوّر. سنرى أيّهما.' } },
       ],
     },
@@ -807,9 +835,33 @@ export const lostManuscript: Authored<Adventure> = {
       kind: 'text',
       text: { de: 'Das mit der Tür tut mir leid. Ich würde ihn trotzdem gern eines Tages lesen – wenn ihr mich lasst.', en: 'I am sorry about the door. I would still like to read it one day — if you let me.', ar: 'أنا آسف بشأن الباب. ما زلت أودّ أن أقرأها يوماً ما — إن سمحتم لي.' },
       replies: [
-        { id: 'one-day', label: { de: 'Eines Tages vielleicht.', en: 'One day, perhaps.', ar: 'يوماً ما، ربما.' }, answer: { de: 'Danke. Das ist mehr, als ich verdiene.', en: 'Thank you. That is more than I deserve.', ar: 'شكراً. هذا أكثر مما أستحق.' } },
-        { id: 'no', label: { de: 'Nicht nach all dem.', en: 'Not after this.', ar: 'ليس بعد كل هذا.' }, answer: { de: 'Ich verstehe.', en: 'I understand.', ar: 'أفهم.' } },
+        { id: 'one-day', label: { de: 'Eines Tages vielleicht.', en: 'One day, perhaps.', ar: 'يوماً ما، ربما.' }, answer: { de: 'Danke. Das ist mehr, als ich verdiene.', en: 'Thank you. That is more than I deserve.', ar: 'شكراً. هذا أكثر مما أستحق.' }, trust: 1 },
+        { id: 'no', label: { de: 'Nicht nach all dem.', en: 'Not after this.', ar: 'ليس بعد كل هذا.' }, answer: { de: 'Ich verstehe.', en: 'I understand.', ar: 'أفهم.' }, trust: -1 },
       ],
+    },
+    {
+      id: 'clara-bonus',
+      from: 'clara',
+      when: 'clockmaker',
+      kind: 'text',
+      text: { de: 'Weil du mein Geheimnis bewahrt hast: Der Mann im langen Mantel fragte nach „dem Schrank des Professors“. Ich habe es damals nicht verstanden. Vielleicht verstehst du es.', en: 'Because you kept my secret: the man in the long coat asked for “the professor’s cabinet”. I did not understand then. Maybe you do.', ar: 'لأنك حفظت سرّي: الرجل ذو المعطف الطويل سأل عن «خزانة البروفيسور». لم أفهم حينها. ربما تفهم أنت.' },
+      trust: { person: 'clara', atLeast: 1 },
+    },
+    {
+      id: 'vii-halloween',
+      from: 'vii',
+      when: 'start',
+      kind: 'text',
+      text: { de: 'In Nächten wie dieser brennen die Laternen des Archivs von selbst. So sagten es jedenfalls die alten Hüter.', en: 'On nights like this the archive’s lanterns light themselves. Or so the old keepers said.', ar: 'في ليالٍ كهذه تشتعل فوانيس الأرشيف من تلقاء نفسها. أو هكذا كان يقول الحرّاس القدامى.' },
+      season: 'halloween',
+    },
+    {
+      id: 'vii-winter',
+      from: 'vii',
+      when: 'start',
+      kind: 'text',
+      text: { de: 'Heute Nacht liegt Schnee auf dem Turm. Geh vorsichtig – und halte die Zahlen warm.', en: 'Snow on the tower tonight. Walk carefully — and keep the numbers warm.', ar: 'الثلج على البرج الليلة. امشِ بحذر — وأبقِ الأرقام دافئة.' },
+      season: 'winter',
     },
   ],
   leads: [

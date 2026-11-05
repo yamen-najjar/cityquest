@@ -327,6 +327,10 @@ export const neckarRing: Authored<Adventure> = {
     },
     {
       id: 'whispers',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'ghost', text: { de: 'Jedes Fenster, an dem du vorbeigehst, gehe ich mit.', en: 'Every window you pass, I pass too.', ar: 'كل نافذة تمرّ بها، أمرّ بها أنا أيضاً.' } },
+      ],
       title: { de: 'Das Flüstern', en: 'The Whispers', ar: 'الهمسات' },
       story: {
         de: [
@@ -380,6 +384,10 @@ export const neckarRing: Authored<Adventure> = {
     },
     {
       id: 'watchman',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Der Ring wird warm, dann kalt. Auf dem Turmplatz schwingt eine Laterne, obwohl kein Wind geht.', en: 'The ring grows warm, then cold. On the tower square a lantern swings, though there is no wind.', ar: 'يدفأ الخاتم ثم يبرد. وفي ساحة البرج يتأرجح فانوس، مع أنه لا ريح.' } },
+      ],
       title: { de: 'Der Nachtwächter', en: 'The Night Watchman', ar: 'الحارس الليلي' },
       story: {
         de: [
@@ -467,6 +475,10 @@ export const neckarRing: Authored<Adventure> = {
     },
     {
       id: 'chase',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Schritte hinter dir – doch als du dich umdrehst, nur dein eigenes Spiegelbild, eine Spur zu langsam.', en: 'Footsteps behind you — but when you turn, only your own reflection, a little too slow.', ar: 'وقع خطوات خلفك — لكن حين تلتفت، لا شيء سوى انعكاسك، متأخراً قليلاً.' } },
+      ],
       title: { de: 'Die Verfolgung', en: 'The Chase', ar: 'المطاردة' },
       story: {
         de: [
@@ -515,6 +527,10 @@ export const neckarRing: Authored<Adventure> = {
     },
     {
       id: 'ledger',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'woman', text: { de: 'Bleib auf der trockenen Seite der Gasse. Wo nichts glänzt, kann er dir nicht folgen.', en: 'Keep to the dry side of the lane. He cannot follow where nothing shines.', ar: 'التزم الجانب الجاف من الزقاق. لا يستطيع أن يتبعك حيث لا شيء يلمع.' } },
+      ],
       title: { de: 'Das Zunftbuch', en: 'The Guild Ledger', ar: 'سجلّ النقابة' },
       story: {
         de: [
@@ -563,6 +579,10 @@ export const neckarRing: Authored<Adventure> = {
     },
     {
       id: 'goldsmith',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Miras Werkstatt riecht nach Leim und altem Papier. Auf der zerrissenen Seite steht ein Name, und der Name steht in deinem Ring.', en: 'Mira’s workshop smells of glue and old paper. The torn page holds a name, and the name is in your ring.', ar: 'تفوح من ورشة ميرا رائحة الغراء والورق القديم. في الصفحة الممزقة اسم، والاسم في خاتمك.' } },
+      ],
       title: { de: 'Der Name des Goldschmieds', en: 'The Goldsmith’s Name', ar: 'اسم الصائغ' },
       story: {
         de: [
@@ -605,6 +625,10 @@ export const neckarRing: Authored<Adventure> = {
     },
     {
       id: 'letter',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'narrator', text: { de: 'Mitternacht rückt näher. Das Kästchen aus dem Laden liegt noch in deiner Tasche, und in seinem Futter raschelt etwas.', en: 'Midnight is closer now. The box from the shop is still in your bag, and something rustles in its lining.', ar: 'منتصف الليل يقترب. ما زال صندوق المحل في حقيبتك، وشيء يخشخش في بطانته.' } },
+      ],
       title: { de: 'Heddas Brief', en: 'Hedda’s Letter', ar: 'رسالة هيدا' },
       story: {
         de: [
@@ -665,6 +689,10 @@ export const neckarRing: Authored<Adventure> = {
     },
     {
       id: 'bridge',
+      // Heard on the way to the checkpoint (see Chapter.walk).
+      walk: [
+        { voice: 'ghost', text: { de: 'Ein Name für einen Namen. Komm ans Wasser.', en: 'A name for a name. Come to the water.', ar: 'اسم مقابل اسم. تعالَ إلى الماء.' } },
+      ],
       title: { de: 'Mitternacht auf der Brücke', en: 'Midnight on the Bridge', ar: 'منتصف الليل على الجسر' },
       story: {
         de: [
@@ -802,8 +830,8 @@ export const neckarRing: Authored<Adventure> = {
       kind: 'text',
       text: { de: 'Bleib weg von Fenstern. Komm zum Zeichen des Buchbinders.', en: 'Stay away from windows. Come to the bookbinder’s sign.', ar: 'ابتعد عن النوافذ. تعالَ إلى علامة مجلّد الكتب.' },
       replies: [
-        { id: 'trust', label: { de: 'Warum sollte ich dir trauen?', en: 'Why should I trust you?', ar: 'لماذا أثق بكِ؟' }, answer: { de: 'Weil ich ihn auch gesehen habe – und immer noch hier bin.', en: 'Because I have seen him too — and I am still here.', ar: 'لأنني رأيته أنا أيضاً — وما زلت هنا.' } },
-        { id: 'how', label: { de: 'Woher weißt du von ihm?', en: 'How do you know about him?', ar: 'كيف تعرفين عنه؟' }, answer: { de: 'Meine Großmutter hat die Bücher der Zunft geführt. Sie hat über ihn geschrieben.', en: 'My grandmother kept the guild’s books. She wrote about him.', ar: 'كانت جدتي تحفظ سجلات النقابة. وكتبت عنه.' } },
+        { id: 'trust', label: { de: 'Warum sollte ich dir trauen?', en: 'Why should I trust you?', ar: 'لماذا أثق بكِ؟' }, answer: { de: 'Weil ich ihn auch gesehen habe – und immer noch hier bin.', en: 'Because I have seen him too — and I am still here.', ar: 'لأنني رأيته أنا أيضاً — وما زلت هنا.' }, trust: -1 },
+        { id: 'how', label: { de: 'Woher weißt du von ihm?', en: 'How do you know about him?', ar: 'كيف تعرفين عنه؟' }, answer: { de: 'Meine Großmutter hat die Bücher der Zunft geführt. Sie hat über ihn geschrieben.', en: 'My grandmother kept the guild’s books. She wrote about him.', ar: 'كانت جدتي تحفظ سجلات النقابة. وكتبت عنه.' }, trust: 1 },
       ],
     },
     {
@@ -841,6 +869,38 @@ export const neckarRing: Authored<Adventure> = {
       when: 'bridge',
       kind: 'text',
       text: { de: 'Du hast es geschafft. Was auch immer du wählst – du wählst es frei.', en: 'You did it. Whatever you choose — you choose it freely.', ar: 'لقد فعلتها. أياً كان ما تختاره — فأنت تختاره بحرية.' },
+    },
+    {
+      id: 'mira-bonus',
+      from: 'mira',
+      when: 'ledger',
+      kind: 'text',
+      text: { de: 'Meine Großmutter hat einmal geschrieben: „Einen trockenen Raum kann er nicht durchqueren.“ Ich dachte, das solltest du wissen.', en: 'My grandmother once wrote: “He cannot cross a dry room.” I thought you should know.', ar: 'كتبت جدتي ذات مرة: «لا يستطيع أن يعبر غرفة جافة». ظننت أنه يجب أن تعرف ذلك.' },
+      trust: { person: 'mira', atLeast: 1 },
+    },
+    {
+      id: 'mira-cold',
+      from: 'mira',
+      when: 'ledger',
+      kind: 'text',
+      text: { de: 'Ich weiß nicht, ob du mir traust. Aber halte dich von dem Spiegel an meiner Wand fern.', en: 'I don’t know if you trust me. But stay away from the mirror on my wall.', ar: 'لا أعرف إن كنت تثق بي. لكن ابتعد عن المرآة على جداري.' },
+      trust: { person: 'mira', atMost: -1 },
+    },
+    {
+      id: 'collector-halloween',
+      from: 'unknown',
+      when: 'box',
+      kind: 'text',
+      text: { de: 'Heute Nacht ist jedes Fenster eine Tür. Meine.', en: 'Tonight every window is a door. Mine.', ar: 'الليلة كل نافذة باب. بابي.' },
+      season: 'halloween',
+    },
+    {
+      id: 'hedda-winter',
+      from: 'hedda',
+      when: 'start',
+      kind: 'text',
+      text: { de: 'Frost am Schaufenster. Sieh nicht zu lange hinein.', en: 'Frost on the shop window. Don’t look into it too long.', ar: 'صقيع على واجهة المحل. لا تحدّق فيها طويلاً.' },
+      season: 'winter',
     },
   ],
   leads: [

@@ -208,6 +208,8 @@ const de: Dictionary = {
     emptyAnswer: 'Gib zuerst eine Antwort ein.',
     networkError: 'Deine Antwort konnte nicht geprüft werden. Prüfe die Verbindung und versuch es erneut.',
     tooFast: 'Zu viele Versuche in kurzer Zeit. Warte einen Moment und versuche es dann noch einmal.',
+    trust: { trusts: 'Vertraut dir', wary: 'Ist misstrauisch', remembers: '{name} wird sich das merken.' },
+    walk: { title: 'Unterwegs', play: 'Beim Gehen anhören', stop: 'Stopp' },
     caseReport: {
       title: 'Ermittlungsbericht',
       intro: 'Bevor die Wahrheit ans Licht kommt, reiche deinen Bericht ein. Das Spiel bestätigt nichts, solange nicht mindestens drei Antworten zusammen stimmen – dann sagt es, welche.',
