@@ -6,9 +6,9 @@ import type { Adventure, Chapter } from '@/content/types';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
-import { isMuted, playAmbience, setMuted, stopAmbience, stopSpeaking, unlockAudio } from '@/lib/audio';
+import { isMuted, playAmbience, setMuted, sfx, stopAmbience, stopSpeaking, unlockAudio } from '@/lib/audio';
 import { contextOf, earned, type AchievementId } from '@/lib/engine/achievements';
-import { fitToAdventure, isFinished, newProgress, reduce, totalHints, type Action, type Progress } from '@/lib/engine/progress';
+import { canCatch, fitToAdventure, isFinished, isLost, newProgress, reduce, threatLevel, type Action, type Progress } from '@/lib/engine/progress';
 import { localProgressStore as store } from '@/lib/engine/storage';
 import { isAtLeastAsFar } from '@/lib/engine/merge';
 import { pushLocalDebounced, remoteDelete, SYNCED_EVENT } from '@/lib/engine/sync';
@@ -17,6 +17,7 @@ import { LanguageSwitcher } from '../LanguageSwitcher';
 import { LogoMark } from '../Logo';
 import { use3D } from '../three/support';
 import { ChapterView } from './ChapterView';
+import { CaughtDialog, DangerPulse } from './Danger';
 import { Journal, combinedToast } from './Journal';
 import { Artifact3D } from './lazy';
 import { Finale, PursuitMeter, Results, StartScreen } from './Screens';
@@ -132,6 +133,25 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
   // The clock: a display tick every second while a timer is on screen (re-rendering the game every second
   // for nothing costs battery), and the saved playing time every 15 seconds and when the tab hides.
   const playing = !!p && !onStart && !isFinished(p);
+
+  // The pursuer: how close he is, felt as well as shown. Every step closer beats like a heart (and the
+  // phone buzzes); when he reaches the team in classic or expert mode, he catches them (see Pursuit.caught).
+  const levels = a.pursuit?.levels.length ?? 0;
+  const level = p && a.pursuit ? threatLevel(p, levels) : 0;
+  const lastLevel = useRef(level);
+  useEffect(() => {
+    if (playing && level > lastLevel.current) {
+      sfx('heartbeat');
+      navigator.vibrate?.([90, 120, 90]);
+    }
+    lastLevel.current = level;
+  }, [level, playing]);
+  useEffect(() => {
+    if (!p || !playing || !a.pursuit?.caught || !canCatch(p, levels)) return;
+    sfx('stinger');
+    navigator.vibrate?.([220, 120, 220]);
+    dispatch({ type: 'caught', now: Date.now() });
+  }, [p, playing, a.pursuit, levels, dispatch]);
   const clockShown = playing && (showTimer || p?.mode === 'expert');
   useEffect(() => {
     if (!clockShown) return;
@@ -279,7 +299,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
             </button>
           </div>
         )}
-        {p && !onStart && a.pursuit && !isFinished(p) && <PursuitMeter pursuit={a.pursuit} hints={totalHints(p)} locale={locale} />}
+        {p && !onStart && a.pursuit && !isFinished(p) && <PursuitMeter pursuit={a.pursuit} level={level} locale={locale} />}
       </header>
 
       <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-8">
@@ -298,6 +318,8 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
             }}
             onRestart={() => setConfirmRestart(true)}
           />
+        ) : isLost(p) ? (
+          <Results a={a} p={p} locale={locale} cityName={cityName} t={t} achievements={achievements} headingRef={headingRef} onRestart={() => setConfirmRestart(true)} />
         ) : chapter ? (
           <ChapterView
             key={chapter.id}
@@ -322,6 +344,22 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
           <Results a={a} p={p} locale={locale} cityName={cityName} t={t} achievements={achievements} headingRef={headingRef} onRestart={() => setConfirmRestart(true)} />
         )}
       </main>
+
+      {playing && a.pursuit && (
+        <DangerPulse level={level} levels={levels} label={fmt(t.danger.near, { level: a.pursuit.levels[level]?.[locale] ?? '' })} />
+      )}
+      {p?.recovering && a.pursuit?.caught && (
+        <CaughtDialog
+          a={a}
+          p={p}
+          locale={locale}
+          t={t}
+          onRecovered={(message) => {
+            dispatch({ type: 'recover' });
+            if (message) toast(message);
+          }}
+        />
+      )}
 
       {journalOpen && p && (
         <Journal

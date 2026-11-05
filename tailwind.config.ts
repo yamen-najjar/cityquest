@@ -23,8 +23,12 @@ export default {
       keyframes: {
         rise: { from: { opacity: '0', transform: 'translateY(8px)' }, to: { opacity: '1', transform: 'none' } },
         shimmer: { '0%,100%': { opacity: '.55' }, '50%': { opacity: '1' } },
+        // The pursuer's danger: a slow pulse (at most about one a second, far below the 3-per-second
+        // photosensitivity limit). With reduced motion the global rule stops it on its resting frame.
+        danger: { '0%,100%': { opacity: '.45' }, '50%': { opacity: '1' } },
       },
       animation: {
+        danger: 'danger 2s ease-in-out infinite',
         rise: 'rise .5s ease-out both',
         shimmer: 'shimmer 4s ease-in-out infinite',
       },

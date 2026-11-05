@@ -130,6 +130,24 @@ export const neckarRing: Authored<Adventure> = {
       { de: 'ganz nah', en: 'close', ar: 'قريب جداً' },
       { de: 'direkt hinter dir', en: 'right behind you', ar: 'خلفك مباشرة' },
     ],
+    // When he reaches the team (classic and expert mode): a stolen item to win back, then the case is lost.
+    caught: {
+      text: { de: 'Der Spiegel neben dir wird dunkel. Eine graue Hand greift aus dem Glas und schließt sich um das, was du trägst. „Ein Ding für ein Ding“, flüstert der Sammler. Dann ist er fort – aber nicht weit.', en: 'The mirror beside you goes dark. A grey hand reaches out of the glass and closes around what you carry. “A thing for a thing,” the Collector whispers. Then he is gone — but not far.', ar: 'تُظلم المرآة بجانبك. تمتد يد رمادية من الزجاج وتنغلق على ما تحمله. «شيء مقابل شيء»، يهمس الجامع. ثم يختفي — لكن ليس بعيداً.' },
+      recover: {
+        prompt: { de: 'Er hat ein Wort auf dem Glas hinterlassen, rückwärts geschrieben: das, ohne das er nicht reisen kann. Sprich es aus und verdecke es, damit er loslässt.', en: 'He left one word on the glass, back to front: the thing he cannot travel without. Say it, and cover it, to make him let go.', ar: 'ترك كلمة واحدة على الزجاج، مكتوبة بالمقلوب: الشيء الذي لا يستطيع التنقّل من دونه. انطقها وغطِّها ليُفلت ما أخذه.' },
+        material: { de: ['L E G E I P S'], en: ['R O R R I M'], ar: ['ة آ ر م'] },
+        hints: [
+          { de: 'Lies die Buchstaben von rechts nach links.', en: 'Read the letters from right to left.', ar: 'اقرأ الحروف بالعكس، من اليسار إلى اليمين.' },
+          { de: 'Er bewegt sich durch Glas und Wasser. Das Wort ist etwas, in das man hineinschaut.', en: 'He moves through glass and water. The word is something you look into.', ar: 'يتنقّل عبر الزجاج والماء. الكلمة شيء تنظر فيه.' },
+          { de: 'SPIEGEL.', en: 'MIRROR.', ar: 'مرآة.' },
+        ],
+        success: { de: 'Du wirfst deinen Mantel über das Glas und sprichst das Wort. Die graue Hand öffnet sich. Was er genommen hat, fällt zurück in deine Hand – noch kalt.', en: 'You throw your coat over the glass and say the word. The grey hand opens. What he took falls back into your palm — still cold.', ar: 'ترمي معطفك على الزجاج وتنطق الكلمة. تنفتح اليد الرمادية، ويسقط ما أخذه في كفّك — ما زال بارداً.' },
+      },
+      lost: {
+        title: { de: 'Der Graue Sammler gewinnt', en: 'The Grey Collector wins', ar: 'الجامع الرمادي ينتصر' },
+        text: { de: 'Die graue Hand schließt sich um den Ring – und um deinen Namen. In den Schaufenstern der Altstadt erscheint ein neues Spiegelbild, eine Sekunde hinter allen anderen. Am nächsten Morgen stellt Hedda ein neues Kästchen ins Regal.', en: 'The grey hand closes around the ring — and around your name. In the shop windows of the old town a new reflection appears, one second behind everyone else. The next morning Hedda puts a new box on her shelf.', ar: 'تنغلق اليد الرمادية على الخاتم — وعلى اسمك. وفي واجهات محلات البلدة القديمة يظهر انعكاس جديد، متأخر ثانية عن الجميع. وفي الصباح التالي تضع هيدا صندوقاً جديداً على رفّها.' },
+      },
+    },
   },
   people: [
     {

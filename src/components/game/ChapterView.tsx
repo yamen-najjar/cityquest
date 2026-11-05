@@ -7,7 +7,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { sfx, speak, stopSpeaking } from '@/lib/audio';
-import type { Action, Progress } from '@/lib/engine/progress';
+import { threatLevel, type Action, type Progress } from '@/lib/engine/progress';
 import { prefersReducedMotion } from '../three/support';
 import { DemoMap } from './DemoMap';
 import { CheckpointArrival } from './CheckpointArrival';
@@ -97,6 +97,20 @@ export function ChapterView({
   const useLock = three && digits > 0 && !typing;
   const inspect3D = three && !!puzzle.model;
   const hintsShown = p.hintsUsed[chapter.id] ?? 0;
+  // Would the next hint let the pursuer catch the team? Then it asks first (see Pursuit.caught).
+  const [confirmHint, setConfirmHint] = useState(false);
+  const pursuitLevels = a.pursuit?.levels.length ?? 0;
+  const hintCatches =
+    !!a.pursuit?.caught &&
+    p.mode !== 'relaxed' &&
+    p.caught < 2 &&
+    threatLevel({ ...p, hintsUsed: { ...p.hintsUsed, [chapter.id]: hintsShown + 1 } }, pursuitLevels) >= pursuitLevels - 1;
+  const takeHint = () => {
+    setConfirmHint(false);
+    dispatch({ type: 'hint', chapterId: chapter.id, available: puzzle.hints.length });
+    sfx('hint');
+    onHint();
+  };
   const reward = chapter.reward ? a.items.find((i) => i.id === chapter.reward) : undefined;
   const inventoryItems = p.inventory.map((id) => a.items.find((i) => i.id === id)).filter((i): i is NonNullable<typeof i> => !!i);
   const isDeduction = puzzle.type === 'deduction';
@@ -413,20 +427,35 @@ export function ChapterView({
                   </div>
                 ))}
                 {hintsShown < puzzle.hints.length ? (
-                  <div className="flex flex-wrap items-center gap-3">
-                    <button
-                      type="button"
-                      className="btn-ghost"
-                      onClick={() => {
-                        dispatch({ type: 'hint', chapterId: chapter.id, available: puzzle.hints.length });
-                        sfx('hint');
-                        onHint();
-                      }}
-                    >
-                      {hintsShown === lastHint ? t.solution : a.pursuit ? a.pursuit.hintLabel[locale] : hintsShown ? t.nextHint : t.hint}
-                    </button>
-                    {p.mode === 'classic' && <span className="text-xs text-ivory-mute">{t.hintCost}</span>}
-                  </div>
+                  <>
+                    {/* Two wrong answers: offer the help, and say what it costs. */}
+                    {(p.wrongAttempts[chapter.id] ?? 0) >= 2 && feedback === 'incorrect' && a.pursuit && !confirmHint && (
+                      <p className="rounded-xl border border-danger/30 bg-danger/[0.06] p-3 text-sm text-ivory">{fmt(t.danger.offer, { name: a.pursuit.name[locale] })}</p>
+                    )}
+                    {confirmHint ? (
+                      <div role="alertdialog" aria-labelledby="hint-warning" className="rounded-xl border border-danger/50 bg-danger/10 p-4">
+                        <p id="hint-warning" className="text-sm text-ivory">
+                          <b className="text-danger">{t.danger.careful}: </b>
+                          {fmt(p.caught ? t.danger.confirmLose : t.danger.confirmCatch, { name: a.pursuit?.name[locale] ?? '' })}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-3">
+                          <button type="button" className="btn-ghost" onClick={() => setConfirmHint(false)} autoFocus>
+                            {t.cancel}
+                          </button>
+                          <button type="button" className="btn-ghost border-danger/60 text-danger" onClick={takeHint}>
+                            {t.danger.takeIt}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button type="button" className="btn-ghost" onClick={() => (hintCatches ? setConfirmHint(true) : takeHint())}>
+                          {hintsShown === lastHint ? t.solution : a.pursuit ? a.pursuit.hintLabel[locale] : hintsShown ? t.nextHint : t.hint}
+                        </button>
+                        {p.mode === 'classic' && <span className="text-xs text-ivory-mute">{t.hintCost}</span>}
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <p className="text-xs text-ivory-mute">{t.noMoreHints}</p>
                 )}

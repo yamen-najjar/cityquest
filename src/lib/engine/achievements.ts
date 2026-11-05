@@ -1,6 +1,6 @@
 import type { Adventure, PuzzleType } from '@/content/types';
 import type { Progress } from './progress';
-import { isFinished, totalHints } from './progress';
+import { isFinished, isLost, totalHints } from './progress';
 
 export type AchievementId = 'first-clue' | 'codebreaker' | 'clear-thinker' | 'mystery-solved' | 'no-hints' | 'heidelberg-explorer' | 'arnhem-explorer' | 'sharp-eye';
 
@@ -40,7 +40,8 @@ export function earned(p: Progress, ctx: AchievementContext): AchievementId[] {
   if (solvedOfType(CODE_TYPES).length) out.push('codebreaker');
   if (solvedOfType(['logic']).some((c) => !(p.wrongAttempts[c.id] ?? 0))) out.push('clear-thinker');
   if (ctx.board.length && ctx.board.every((id) => p.deductions.includes(id))) out.push('sharp-eye');
-  if (isFinished(p)) {
+  // A lost case is over, but it is not a solved one.
+  if (isFinished(p) && !isLost(p)) {
     out.push('mystery-solved');
     if (totalHints(p) === 0) out.push('no-hints');
     if (ctx.city === 'heidelberg') out.push('heidelberg-explorer');

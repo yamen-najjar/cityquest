@@ -96,7 +96,10 @@ export function checkAdventure(a: Adventure, key: AnswerKey | undefined): Conten
     }
   }
   if (!a.ending.artifact) missing('ending', 'No 3D artifact for the finale.');
-  // A pursuer is a matter of tone, not a feature: the family story deliberately has none.
+  // A pursuer is a matter of tone, not a feature: the family story deliberately has none. But a pursuer
+  // must have real stakes: what he takes when he catches the team, how to win it back, and the lost ending.
+  if (a.pursuit && !a.pursuit.caught) missing('pursuer', 'Has a pursuer but no catch: add Pursuit.caught (the scene, the puzzle to win the item back, the lost ending).');
+  if (a.pursuit?.caught && !key?.recover?.accepted.length) error('pursuer', 'No accepted answer for winning back the stolen item (key "recover" in answers.server.ts).');
 
   for (const { path, text } of localizedTexts(a, '')) {
     for (const l of locales) if (isEmpty(text[l])) warn(path || 'adventure', `Empty text in ${l.toUpperCase()}.`);

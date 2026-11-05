@@ -7,7 +7,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { contextOf, earned } from '@/lib/engine/achievements';
-import { MAX_TEAM, MODES, chose, isFinished, pursuitLevel, rankFor, starsFor, totalHints, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
+import { MAX_TEAM, MODES, chose, isFinished, isLost, rankFor, starsFor, totalHints, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
 import { formatDuration } from '@/lib/format';
 import type { HeadingRef } from './ChapterView';
 import { SkylineArt } from '../SkylineArt';
@@ -153,8 +153,7 @@ export function StartScreen({
   );
 }
 
-export function PursuitMeter({ pursuit, hints, locale }: { pursuit: NonNullable<Adventure['pursuit']>; hints: number; locale: Locale }) {
-  const level = pursuitLevel(hints, pursuit.levels.length);
+export function PursuitMeter({ pursuit, level, locale }: { pursuit: NonNullable<Adventure['pursuit']>; level: number; locale: Locale }) {
   return (
     <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 pb-3 text-xs">
       <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-danger" aria-hidden="true">
@@ -264,13 +263,23 @@ export function Results({
   const got = earned(p, contextOf(a));
   const team = p.team.name || t.soloTeam;
   const stars = totalStars(p);
-  const rank = t.ranks[rankFor(stars, a.chapters.length)];
+  const lost = isLost(p);
+  const lostEnding = a.pursuit?.caught?.lost;
+  // A lost case can never earn the top ranks.
+  const rank = t.ranks[Math.min(rankFor(stars, a.chapters.length), lost ? 1 : 3)];
   return (
     <article className="animate-rise">
       <p className="eyebrow">{t.reveal}</p>
       <h1 ref={headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold sm:text-5xl">
-        {t.resultsTitle}
+        {lost ? t.danger.lost : t.resultsTitle}
       </h1>
+      {lost && lostEnding && (
+        <div className="mt-6 rounded-2xl border border-danger/40 bg-danger/[0.07] p-5">
+          <p className="font-display text-2xl text-danger">{lostEnding.title[locale]}</p>
+          <p className="mt-3 font-display text-xl italic leading-relaxed text-ivory-dim">{lostEnding.text[locale]}</p>
+          <p className="mt-4 text-sm text-ivory-mute">{t.danger.lostNote}</p>
+        </div>
+      )}
       {choice && (
           <div className="mt-6 space-y-3 border-s-2 border-gold ps-5 font-display text-xl italic">
             <p>{choice.epilogue[locale]}</p>
@@ -342,25 +351,30 @@ export function Results({
         </ul>
       </section>
 
-      <section id="certificate" className="mt-10 rounded-3xl border-2 border-gold/50 bg-navy-800 p-8 text-center" aria-labelledby="cert-title">
-        <p className="eyebrow">CityQuest</p>
-        <h2 id="cert-title" className="mt-2 font-display text-3xl">
-          {t.certificate}
-        </h2>
-        <div className="gold-rule mx-auto mt-4" />
-        <p className="mt-4 text-lg">{fmt(t.certificateText, { team, title: a.title[locale], city: cityName })}</p>
-        <p className="mt-2 font-display text-2xl text-gold">
-          {rank} · {stars} ★
-        </p>
-        <p className="mt-2 text-sm text-ivory-mute">
-          {p.finishedAt ? new Date(p.finishedAt).toLocaleDateString(locale === 'ar' ? 'ar-u-nu-latn' : locale) : ''} · {fmt(t.playersCount, { n: p.team.players })}
-        </p>
-      </section>
+      {/* A certificate says the case was solved, so a lost case gets none. */}
+      {!lost && (
+        <section id="certificate" className="mt-10 rounded-3xl border-2 border-gold/50 bg-navy-800 p-8 text-center" aria-labelledby="cert-title">
+          <p className="eyebrow">CityQuest</p>
+          <h2 id="cert-title" className="mt-2 font-display text-3xl">
+            {t.certificate}
+          </h2>
+          <div className="gold-rule mx-auto mt-4" />
+          <p className="mt-4 text-lg">{fmt(t.certificateText, { team, title: a.title[locale], city: cityName })}</p>
+          <p className="mt-2 font-display text-2xl text-gold">
+            {rank} · {stars} ★
+          </p>
+          <p className="mt-2 text-sm text-ivory-mute">
+            {p.finishedAt ? new Date(p.finishedAt).toLocaleDateString(locale === 'ar' ? 'ar-u-nu-latn' : locale) : ''} · {fmt(t.playersCount, { n: p.team.players })}
+          </p>
+        </section>
+      )}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <button type="button" className="btn-ghost" onClick={() => window.print()}>
-          {t.print}
-        </button>
+        {!lost && (
+          <button type="button" className="btn-ghost" onClick={() => window.print()}>
+            {t.print}
+          </button>
+        )}
         <button type="button" className="btn-gold" onClick={onRestart}>
           {t.playAgain}
         </button>

@@ -142,6 +142,25 @@ export const hetDuivelshuis: Authored<Adventure> = {
       { de: 'Du hörst seine Schritte schon in derselben Gasse.', en: 'You can hear his footsteps in the same lane now.', ar: 'تسمع وقع خطواته في الزقاق نفسه الآن.' },
       { de: 'Der Sammler ist dir dicht auf den Fersen.', en: 'The Collector is right at your heels.', ar: 'الجامع يلاحقك عن قرب.' },
     ],
+    // When he reaches the team (classic and expert mode): a stolen item to win back, then the case is lost.
+    caught: {
+      text: { de: 'Im Dunkeln packt dich eine Hand in einem Samthandschuh am Arm. Als du dich losreißt, fehlt etwas. „Wer’s findet, dem gehört’s“, ruft Koster, schon im Laufen – und verliert einen Zettel.', en: 'A hand in a velvet glove grabs your arm in the dark. When you pull free, something is missing. “Finders, keepers,” Koster calls, already running — and drops a slip of paper.', ar: 'في العتمة تمسك يدٌ بقفاز مخملي ذراعك. وحين تفلت، تجد أن شيئاً قد اختفى. «من وجد شيئاً فهو له»، يصيح كوستر وهو يركض — وتسقط منه قصاصة ورق.' },
+      recover: {
+        prompt: { de: 'Es ist ein Pfandschein. Die Nummer steht in römischen Ziffern. Nenne dem Pfandhaus die Nummer, und sie geben zurück, was er versetzt hat.', en: 'It is a pawnshop ticket. The number is written in Roman numerals. Give the pawnshop the number, and they will hand back what he pawned.', ar: 'إنها قسيمة رهن. الرقم مكتوب بالأرقام الرومانية. أعطِ محل الرهونات الرقم، فيعيدون إليك ما رهنه.' },
+        material: { de: ['Pfandhaus „De Gouden Sleutel“', 'Schein Nr. XLII'], en: ['Pawnshop “De Gouden Sleutel”', 'Ticket no. XLII'], ar: ['محل رهونات «دي خاودن سلويتل»', 'قسيمة رقم XLII'] },
+        input: 'numeric',
+        hints: [
+          { de: 'Römische Ziffern: X = 10, L = 50, I = 1.', en: 'Roman numerals: X = 10, L = 50, I = 1.', ar: 'الأرقام الرومانية: X = 10، L = 50، I = 1.' },
+          { de: 'XL ist 50 minus 10.', en: 'XL is 50 minus 10.', ar: 'XL تعني 50 ناقص 10.' },
+          { de: '42.', en: '42.', ar: '42.' },
+        ],
+        success: { de: 'Der Pfandleiher kneift die Augen zusammen, zuckt mit den Schultern und schiebt es dir über den Tresen zurück. Koster wird sich nicht freuen.', en: 'The pawnbroker squints at the ticket, shrugs and slides it back across the counter. Koster will not be pleased.', ar: 'يُمعن صاحب المحل النظر في القسيمة، يهزّ كتفيه ويعيد إليك ما أخذه عبر الطاولة. لن يكون كوستر مسروراً.' },
+      },
+      lost: {
+        title: { de: 'Der Sammler gewinnt', en: 'The Collector wins', ar: 'الجامع ينتصر' },
+        text: { de: 'Koster ist vor Mitternacht verschwunden, das Hauptbuch im Mantel. Eine Woche später tauchen die ersten Seiten auf einer Auktion im Ausland auf, ein Name nach dem anderen. Das Versprechen des Teufelshauses ist gebrochen.', en: 'Koster is gone before midnight, the ledger in his coat. A week later the first pages turn up at an auction abroad, one name at a time. The promise of the Devil’s House is broken.', ar: 'يختفي كوستر قبل منتصف الليل والدفتر في معطفه. وبعد أسبوع تظهر الصفحات الأولى في مزاد خارج البلاد، اسماً بعد اسم. لقد انكسر وعد بيت الشيطان.' },
+      },
+    },
   },
   people: [
     {
