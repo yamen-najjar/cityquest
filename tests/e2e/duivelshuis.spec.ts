@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { answer, arrive, correct, fresh, next, noHorizontalScroll, setCode } from './helpers';
+import { answer, arrive, correct, fileReport, fresh, next, noHorizontalScroll, setCode } from './helpers';
 
 const PLAY = '/en/play/het-duivelshuis';
 
@@ -91,6 +91,21 @@ test('The Devil’s House Secret: all eight chapters, the combined ledger, the a
   await page.getByRole('button', { name: 'Check answer' }).click();
   await correct(page);
   await next(page);
+
+  // The case report: three right answers are confirmed and lock; then the rest.
+  await fileReport(page, [
+    [/forced the archive/, 'Bram'],
+    [/^\d\. Why/, 'To protect the names'],
+    [/Since when/, 'Since the Sabelspoort, just after her'],
+    [/really hold/, 'The names of everyone Arnhem once took in'],
+    [/gave Koster away/, 'His velvet glove in the archive'],
+  ]);
+  await expect(page.getByText('3 answers confirmed.', { exact: false })).toBeVisible();
+  await expect(page.getByRole('group', { name: /Since when/ }).getByRole('button', { name: 'Since the Korenmarkt' })).toBeDisabled();
+  await fileReport(page, [
+    [/forced the archive/, 'Daan Koster'],
+    [/^\d\. Why/, 'To sell the ledger page by page abroad'],
+  ]);
 
   // Finale and results.
   await expect(page.getByText('The devils guard no gold.', { exact: false })).toBeVisible();

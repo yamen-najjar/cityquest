@@ -15,6 +15,8 @@ const board = (person: string, ...cards: string[]) => boardAnswer(person, cards)
 
 export const answerKeys: Record<string, AnswerKey> = {
   'lost-manuscript': {
+    // The case report: "slot=option;…" (see lib/engine/report.ts).
+    report: { accepted: ['helper=anna;how=door;when=between;who=kehl;why=lock'] },
     // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
     'lead:anna-alibi': { accepted: ['duty-log:0'] },
     'lead:night': { accepted: ['katg'] },
@@ -48,6 +50,8 @@ export const answerKeys: Record<string, AnswerKey> = {
     verdict: { accepted: ['kehl+second-half', 'kehl+whole-letter'] },
   },
   'het-duivelshuis': {
+    // The case report: "slot=option;…" (see lib/engine/report.ts).
+    report: { accepted: ['ledger=names;proof=glove;since=gate;who=koster;why=sell'] },
     // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
     'lead:koster-claim': { accepted: ['koster-list:1'] },
     'lead:evening': { accepted: ['fvtd'] },
@@ -88,6 +92,8 @@ export const answerKeys: Record<string, AnswerKey> = {
     aanklacht: { accepted: ['koster+whole-ledger', 'koster+ledger-left'] },
   },
   'neckar-ring': {
+    // The case report: "slot=option;…" (see lib/engine/report.ts).
+    report: { accepted: ['how=free-will;name=valen;weakness=dry;who=hedda;why=fear'] },
     // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
     'lead:hedda-claim': { accepted: ['given-book:0', 'given-book:2'] },
     'lead:sightings': { accepted: ['hbsl'] },

@@ -205,6 +205,19 @@ const en = {
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
     tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
+    caseReport: {
+      title: 'Case report',
+      intro: 'Before the truth comes out, file your report. The game confirms nothing until at least three answers are right together — then it tells you which.',
+      file: 'File the report',
+      pick: 'Answer every question first.',
+      none: 'Not enough is right yet to confirm anything.',
+      some: '{n} answers confirmed. The others are still wrong.',
+      solved: 'Report confirmed. Case closed.',
+      reveal: 'Show me the truth',
+      revealNote: 'After three tries you may give up. The report then earns nothing.',
+      confirmed: 'Confirmed',
+      tries: 'Tries: {n}',
+    },
     phone: {
       open: 'Phone',
       title: 'Phone',
@@ -480,6 +493,7 @@ const en = {
     'heidelberg-explorer': { name: 'Heidelberg explorer', text: 'Finish an adventure in Heidelberg.' },
     'arnhem-explorer': { name: 'Arnhem explorer', text: 'Finish an adventure in Arnhem.' },
     'sharp-eye': { name: 'Sharp eye', text: 'Work out every question on an evidence board.' },
+    'case-closed': { name: 'Case closed', text: 'File a perfect case report without giving up.' },
   },
   legal: {
     placeholder: 'Placeholder',

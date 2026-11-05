@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { answer, arrive, correct, fresh, next, noHorizontalScroll, setCode } from './helpers';
+import { answer, arrive, correct, fileReport, fresh, next, noHorizontalScroll, setCode } from './helpers';
 
 const PLAY = '/play/lost-manuscript';
 
@@ -128,6 +128,22 @@ test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the ac
   await page.getByRole('button', { name: 'Check answer' }).click();
   await correct(page);
   await next(page);
+
+  // The case report: two right answers confirm nothing; all five close the case.
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Case report');
+  await fileReport(page, [
+    [/Who broke into the archive/, 'Professor Kehl'],
+    [/How did he get in/, 'He forced the back door'],
+    [/^\d\. Why/, 'To sell the codex'],
+    [/Roughly when/, 'After midnight'],
+    [/Whose absence/, 'Ben'],
+  ]);
+  await expect(page.getByText('Not enough is right yet to confirm anything.')).toBeVisible();
+  await fileReport(page, [
+    [/^\d\. Why/, 'To lock it away, “to protect it”'],
+    [/Roughly when/, 'After Anna left, before his taxi'],
+    [/Whose absence/, 'Anna, who left the gate'],
+  ]);
 
   // Finale and results
   await expect(page.getByText('You protect a book by opening it.', { exact: false })).toBeVisible();

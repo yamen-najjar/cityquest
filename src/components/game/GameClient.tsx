@@ -17,6 +17,7 @@ import { formatDuration } from '@/lib/format';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { LogoMark } from '../Logo';
 import { use3D } from '../three/support';
+import { CaseReportView } from './CaseReport';
 import { ChapterView } from './ChapterView';
 import { CaughtDialog, DangerPulse } from './Danger';
 import { Phone, senderName } from './Phone';
@@ -226,7 +227,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
   }, [p, ctx, achievements, t.achievement, toast]);
 
   // Move focus to the new heading at each step, so screen readers and keyboards follow the story.
-  const stepKey = p ? `${onStart}-${p.chapter}-${p.stage}-${p.decision ?? ''}` : 'start';
+  const stepKey = p ? `${onStart}-${p.chapter}-${p.stage}-${p.decision ?? ''}-${p.reportDone ?? ''}` : 'start';
   useEffect(() => {
     headingRef.current?.focus({ preventScroll: false });
     window.scrollTo({ top: 0 });
@@ -364,6 +365,8 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
             }}
             onClues={() => toast(t.journal.newClue)}
           />
+        ) : !p.decision && a.report && !p.reportDone ? (
+          <CaseReportView a={a} p={p} locale={locale} t={t} headingRef={headingRef} dispatch={dispatch} />
         ) : !p.decision ? (
           <Finale a={a} locale={locale} t={t} three={three} headingRef={headingRef} choices={p.choices} onDecide={(id) => dispatch({ type: 'decide', choiceId: id, chapterCount: total, now: Date.now() })} />
         ) : (

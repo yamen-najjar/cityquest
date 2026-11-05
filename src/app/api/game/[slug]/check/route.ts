@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { resolveGuess } from '@/lib/engine/check.server';
+import { grade, resolveGuess } from '@/lib/engine/check.server';
 import { authorizePaidAnswer, recordSolve, requiresEntitlement } from '@/lib/engine/entitlement.server';
-import { matchesAnswer } from '@/lib/engine/normalize';
 import { clientKey, createLimiter } from '@/lib/rate-limit';
 
 const noStore = { headers: { 'Cache-Control': 'no-store' } };
@@ -43,7 +42,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
 
   // Demo adventures are open: stateless, no account, works offline — exactly as in Phase 1.
   if (!requiresEntitlement(guess.adventure)) {
-    return NextResponse.json({ correct: matchesAnswer(guess.answer, guess.accepted) }, noStore);
+    const { ok: _ok, ...verdict } = grade(guess);
+    return NextResponse.json(verdict, noStore);
   }
 
   // Paid adventure: the caller must own it and have solved every earlier chapter, both verified in the
@@ -54,11 +54,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
     const authz = await authorizePaidAnswer(slug, guess.adventure, guess.chapterIndex);
     if (!authz.ok) return NextResponse.json({ error: authz.error }, { status: authz.status });
 
-    const correct = matchesAnswer(guess.answer, guess.accepted);
-    if (correct && !guess.board && !(await recordSolve(authz.userId, slug, guess.chapterId))) {
+    const { ok: _ok, ...verdict } = grade(guess);
+    if (verdict.correct && !guess.board && !(await recordSolve(authz.userId, slug, guess.chapterId))) {
       return NextResponse.json({ error: 'could not save progress' }, { status: 503 });
     }
-    return NextResponse.json({ correct }, noStore);
+    return NextResponse.json(verdict, noStore);
   } catch (err) {
     // No player data in the log: the error and where it happened are enough to debug.
     console.error('paid answer check failed', { slug, chapterId: guess.chapterId, error: err instanceof Error ? err.message : 'unknown' });

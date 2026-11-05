@@ -890,6 +890,61 @@ export const lostManuscript: Authored<Adventure> = {
     { id: 'lantern-mark', title: { de: 'Das Zeichen von VII', en: 'VII’s mark', ar: 'علامة VII' }, text: { de: 'Neben Claras Kürzel hat jemand eine winzige Laterne gezeichnet: das Zeichen von VII. Clara hat den Schlüssel für VII ausgetragen, genau wie sie gesagt hat.', en: 'Next to Clara’s initial someone drew a tiny lantern: VII’s sign. Clara signed the key out for VII, just as she told you.', ar: 'بجانب الحرف الأول من اسم كلارا رسم أحدهم فانوساً صغيراً: علامة VII. أخرجت كلارا المفتاح من أجل VII، كما قالت لك تماماً.' } },
     { id: 'initials', title: { de: 'Initialen im Fensterrahmen', en: 'Initials in the window frame', ar: 'أحرف في إطار النافذة' }, text: { de: 'In den Rahmen geritzt: E. B. 1974. Elise Brandt kannte dieses Haus lange vor heute Nacht.', en: 'Scratched into the frame: E. B. 1974. Elise Brandt knew this house long before tonight.', ar: 'محفور في الإطار: E. B. 1974. كانت إليزه برانت تعرف هذا البيت قبل الليلة بزمن طويل.' } },
   ],
+  // The case report filed before the reveal (see CaseReport); the right answers are in answers.server.ts.
+  report: {
+    slots: [
+      {
+        id: 'who',
+        question: { de: 'Wer ist ins Archiv eingebrochen?', en: 'Who broke into the archive?', ar: 'مَن اقتحم الأرشيف؟' },
+        options: [
+          { id: 'kehl', label: { de: 'Professor Kehl', en: 'Professor Kehl', ar: 'البروفيسور كيل' } },
+          { id: 'anna', label: { de: 'Anna', en: 'Anna', ar: 'آنا' } },
+          { id: 'ben', label: { de: 'Ben', en: 'Ben', ar: 'بن' } },
+          { id: 'clara', label: { de: 'Clara', en: 'Clara', ar: 'كلارا' } },
+        ],
+      },
+      {
+        id: 'how',
+        question: { de: 'Wie kam er hinein?', en: 'How did he get in?', ar: 'كيف دخل؟' },
+        options: [
+          { id: 'key', label: { de: 'Mit dem Schlüssel aus dem Schrank', en: 'With the key from the cabinet', ar: 'بالمفتاح من الخزانة' } },
+          { id: 'door', label: { de: 'Er brach die Hintertür auf', en: 'He forced the back door', ar: 'كسر الباب الخلفي' } },
+          { id: 'window', label: { de: 'Durch das Fenster des Lesesaals', en: 'Through the reading-room window', ar: 'عبر نافذة قاعة المطالعة' } },
+          { id: 'let-in', label: { de: 'Anna ließ ihn herein', en: 'Anna let him in', ar: 'أدخلته آنا' } },
+        ],
+      },
+      {
+        id: 'why',
+        question: { de: 'Warum?', en: 'Why?', ar: 'لماذا؟' },
+        options: [
+          { id: 'sell', label: { de: 'Um den Codex zu verkaufen', en: 'To sell the codex', ar: 'ليبيع المخطوطة' } },
+          { id: 'lock', label: { de: 'Um ihn wegzuschließen, „zu seinem Schutz“', en: 'To lock it away, “to protect it”', ar: 'ليحبسها بعيداً، «ليحميها»' } },
+          { id: 'destroy', label: { de: 'Um ihn zu vernichten', en: 'To destroy it', ar: 'ليُتلفها' } },
+          { id: 'help', label: { de: 'Um VII zu helfen', en: 'To help VII', ar: 'ليساعد VII' } },
+        ],
+      },
+      {
+        id: 'when',
+        question: { de: 'Wann ungefähr?', en: 'Roughly when?', ar: 'متى تقريباً؟' },
+        options: [
+          { id: 'before', label: { de: 'Bevor der Schlüssel ausgetragen wurde', en: 'Before the key was signed out', ar: 'قبل تسجيل خروج المفتاح' } },
+          { id: 'between', label: { de: 'Nachdem Anna ging, bevor sein Taxi fuhr', en: 'After Anna left, before his taxi', ar: 'بعد مغادرة آنا، وقبل التاكسي' } },
+          { id: 'midnight', label: { de: 'Nach Mitternacht', en: 'After midnight', ar: 'بعد منتصف الليل' } },
+          { id: 'morning', label: { de: 'Beim Schichtwechsel am Morgen', en: 'At the morning shift change', ar: 'عند تبديل المناوبة صباحاً' } },
+        ],
+      },
+      {
+        id: 'helper',
+        question: { de: 'Wessen Abwesenheit hat es möglich gemacht?', en: 'Whose absence made it possible?', ar: 'غياب مَن جعل ذلك ممكناً؟' },
+        options: [
+          { id: 'anna', label: { de: 'Anna, die das Tor verließ', en: 'Anna, who left the gate', ar: 'آنا، التي غادرت البوابة' } },
+          { id: 'ben', label: { de: 'Ben', en: 'Ben', ar: 'بن' } },
+          { id: 'clara', label: { de: 'Clara', en: 'Clara', ar: 'كلارا' } },
+          { id: 'elise', label: { de: 'Elise', en: 'Elise', ar: 'إليزه' } },
+        ],
+      },
+    ],
+  },
   ending: {
     artifact: { kind: 'book' },
     revealIf: [

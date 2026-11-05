@@ -967,6 +967,61 @@ export const hetDuivelshuis: Authored<Adventure> = {
     { id: 'velvet-thread', title: { de: 'Ein grüner Faden', en: 'A green thread', ar: 'خيط أخضر' }, text: { de: 'In der Heftklammer der Liste hängt ein dunkelgrüner Samtfaden – dieselbe Farbe wie der Handschuh im Archiv.', en: 'Caught in the list’s staple: a dark green velvet thread — the same colour as the glove in the archive.', ar: 'عالق في دبّوس القائمة: خيط مخملي أخضر داكن — بلون القفاز في الأرشيف نفسه.' } },
     { id: 'devil-stamp', title: { de: 'Ein Teufelskopf auf dem Fensterbrett', en: 'A devil’s head on the sill', ar: 'رأس شيطان على حافة النافذة' }, text: { de: 'Auf dem Fensterbrett ein winziger Stempel: derselbe Teufelskopf wie auf Lenas Seite. Sie war hier, lange bevor sie dir schrieb.', en: 'On the window sill, a tiny stamp: the same devil’s head as on Lena’s page. She was here long before she wrote to you.', ar: 'على حافة النافذة ختم صغير: رأس الشيطان نفسه الذي على صفحة لينا. كانت هنا قبل أن تكتب إليك بزمن طويل.' } },
   ],
+  // The case report filed before the reveal (see CaseReport); the right answers are in answers.server.ts.
+  report: {
+    slots: [
+      {
+        id: 'who',
+        question: { de: 'Wer hat das Archiv aufgebrochen?', en: 'Who forced the archive?', ar: 'مَن كسر الأرشيف؟' },
+        options: [
+          { id: 'koster', label: { de: 'Daan Koster', en: 'Daan Koster', ar: 'دان كوستر' } },
+          { id: 'bram', label: { de: 'Bram', en: 'Bram', ar: 'برام' } },
+          { id: 'devries', label: { de: 'Saar de Vries', en: 'Saar de Vries', ar: 'سار دي فريس' } },
+          { id: 'lena', label: { de: 'Lena Verhoef', en: 'Lena Verhoef', ar: 'لينا فرهوف' } },
+        ],
+      },
+      {
+        id: 'why',
+        question: { de: 'Warum?', en: 'Why?', ar: 'لماذا؟' },
+        options: [
+          { id: 'protect', label: { de: 'Um die Namen zu schützen', en: 'To protect the names', ar: 'ليحمي الأسماء' } },
+          { id: 'sell', label: { de: 'Um das Hauptbuch Seite für Seite im Ausland zu verkaufen', en: 'To sell the ledger page by page abroad', ar: 'ليبيع الدفتر صفحةً صفحة في الخارج' } },
+          { id: 'city', label: { de: 'Um es der Stadt zu schenken', en: 'To give it to the city', ar: 'ليهديه إلى المدينة' } },
+          { id: 'find-lena', label: { de: 'Um Lena zu finden', en: 'To find Lena', ar: 'ليجد لينا' } },
+        ],
+      },
+      {
+        id: 'since',
+        question: { de: 'Seit wann folgte er Lena?', en: 'Since when was he following Lena?', ar: 'منذ متى كان يتبع لينا؟' },
+        options: [
+          { id: 'market', label: { de: 'Seit dem Korenmarkt', en: 'Since the Korenmarkt', ar: 'منذ ساحة كورنمارخت' } },
+          { id: 'gate', label: { de: 'Seit der Sabelspoort, kurz nach ihr', en: 'Since the Sabelspoort, just after her', ar: 'منذ بوابة سابلسبورت، بعدها بقليل' } },
+          { id: 'tower', label: { de: 'Seit der Glockenstube', en: 'Since the bell chamber', ar: 'منذ غرفة الأجراس' } },
+          { id: 'river', label: { de: 'Seit dem Rhein', en: 'Since the Rhine', ar: 'منذ نهر الراين' } },
+        ],
+      },
+      {
+        id: 'ledger',
+        question: { de: 'Was steht wirklich im Hauptbuch?', en: 'What does the ledger really hold?', ar: 'ماذا يحوي الدفتر حقاً؟' },
+        options: [
+          { id: 'treasure', label: { de: 'Eine Schatzkarte', en: 'A treasure map', ar: 'خريطة كنز' } },
+          { id: 'names', label: { de: 'Die Namen aller, die Arnheim einst aufnahm', en: 'The names of everyone Arnhem once took in', ar: 'أسماء كل من آوتهم أرنم يوماً' } },
+          { id: 'debts', label: { de: 'Maarten van Rossums Schulden', en: 'Maarten van Rossum’s debts', ar: 'ديون مارتن فان روسوم' } },
+          { id: 'thieves', label: { de: 'Eine Liste von Dieben', en: 'A list of thieves', ar: 'قائمة لصوص' } },
+        ],
+      },
+      {
+        id: 'proof',
+        question: { de: 'Was hat Koster verraten?', en: 'What gave Koster away?', ar: 'ما الذي فضح كوستر؟' },
+        options: [
+          { id: 'glove', label: { de: 'Sein Samthandschuh im Archiv', en: 'His velvet glove in the archive', ar: 'قفازه المخملي في الأرشيف' } },
+          { id: 'tower-book', label: { de: 'Seine Unterschrift im Turmbuch', en: 'His signature in the tower book', ar: 'توقيعه في دفتر البرج' } },
+          { id: 'song', label: { de: 'Ein Lied von Bram', en: 'A song of Bram’s', ar: 'أغنية لبرام' } },
+          { id: 'taxi', label: { de: 'Eine Taxiquittung', en: 'A taxi receipt', ar: 'إيصال تاكسي' } },
+        ],
+      },
+    ],
+  },
   ending: {
     artifact: { kind: 'book' },
     revealIf: [

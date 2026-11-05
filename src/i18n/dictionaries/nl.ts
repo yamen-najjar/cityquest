@@ -198,6 +198,19 @@ const nl: Dictionary = {
     emptyAnswer: 'Typ eerst een antwoord.',
     networkError: 'Je antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer het opnieuw.',
     tooFast: 'Te veel pogingen in korte tijd. Wacht even en probeer het dan opnieuw.',
+    caseReport: {
+      title: 'Zaakrapport',
+      intro: 'Voordat de waarheid aan het licht komt, dien je je rapport in. Het spel bevestigt niets zolang er niet minstens drie antwoorden samen kloppen — dan zegt het welke.',
+      file: 'Rapport indienen',
+      pick: 'Beantwoord eerst elke vraag.',
+      none: 'Er klopt nog niet genoeg om iets te bevestigen.',
+      some: '{n} antwoorden bevestigd. De andere kloppen nog niet.',
+      solved: 'Rapport bevestigd. Zaak gesloten.',
+      reveal: 'Laat me de waarheid zien',
+      revealNote: 'Na drie pogingen mag je opgeven. Het rapport levert dan niets op.',
+      confirmed: 'Bevestigd',
+      tries: 'Pogingen: {n}',
+    },
     phone: {
       open: 'Telefoon',
       title: 'Telefoon',
@@ -473,6 +486,7 @@ const nl: Dictionary = {
     'heidelberg-explorer': { name: 'Heidelberg-ontdekker', text: 'Voltooi een avontuur in Heidelberg.' },
     'arnhem-explorer': { name: 'Arnhem-ontdekker', text: 'Voltooi een avontuur in Arnhem.' },
     'sharp-eye': { name: 'Scherp oog', text: 'Los elke vraag op een prikbord op.' },
+    'case-closed': { name: 'Zaak gesloten', text: 'Dien een foutloos zaakrapport in zonder op te geven.' },
   },
   legal: {
     placeholder: 'Tijdelijke tekst',
