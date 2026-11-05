@@ -276,6 +276,7 @@ export const lostManuscript: Authored<Adventure> = {
         },
         material: { de: ['20 · 21 · 18 · 13'], en: ['20 · 15 · 23 · 5 · 18'], ar: ['2 · 10 · 5'] },
         input: 'text',
+        junior: { de: 'Zahlen sind Buchstaben! 1 ist A, 2 ist B, 3 ist C. Zählt an den Fingern ab, welcher Buchstabe zu jeder Zahl gehört.', en: 'Numbers are letters! 1 is A, 2 is B, 3 is C. Count on your fingers to turn each number into a letter.', ar: 'الأرقام حروف! 1 هو A، و2 هو B، و3 هو C. عُدّوا على أصابعكم لتحوّلوا كل رقم إلى حرف.' },
         hints: [
           { de: 'Zähle das Alphabet ab: A = 1, B = 2, C = 3 … Z = 26.', en: 'Count through the alphabet: A = 1, B = 2, C = 3 … Z = 26.', ar: 'عُدّ الحروف بالترتيب: أ ب ت ث ج ح خ د ذ ر …' },
           { de: 'Der erste Buchstabe ist T (20). Gesucht ist ein hohes Bauwerk.', en: 'The first letter is T (20). You are looking for a tall building.', ar: 'الحرف الأول هو ب (2)، والعاشر هو ر. المطلوب بناء عالٍ.' },
@@ -328,6 +329,7 @@ export const lostManuscript: Authored<Adventure> = {
           { id: 'ben', label: { de: 'Ben', en: 'Ben', ar: 'بن' } },
           { id: 'clara', label: { de: 'Clara', en: 'Clara', ar: 'كلارا' } },
         ],
+        junior: { de: 'Nur einer der drei sagt die Wahrheit. Tut so, als wäre jeder einmal der Ehrliche, und schaut, welche Geschichte passt.', en: 'Only one of the three is telling the truth. Pretend each one is the honest one, and see which story works.', ar: 'واحد فقط من الثلاثة يقول الحقيقة. تخيّلوا أن كل واحد منهم هو الصادق، وانظروا أي قصة تنجح.' },
         hints: [
           { de: 'Anna und Ben widersprechen sich: Genau einer von beiden sagt die Wahrheit.', en: 'Anna and Ben contradict each other: exactly one of the two is telling the truth.', ar: 'آنا وبن يناقض أحدهما الآخر، إذن واحد منهما فقط صادق.' },
           { de: 'Dann bleibt für Clara keine wahre Aussage übrig. Was bedeutet ihre Aussage, wenn sie gelogen ist?', en: 'That leaves no true statement for Clara. What does her statement mean if it is a lie?', ar: 'إذن عبارة كلارا لا بد أن تكون كاذبة. ماذا يعني ذلك؟' },
@@ -377,6 +379,7 @@ export const lostManuscript: Authored<Adventure> = {
         },
         input: 'numeric',
         lock: { digits: 4 },
+        junior: { de: 'Jedes Bild steht für eine Zahl. Fangt mit der leichtesten Zeile an und rechnet damit die anderen aus.', en: 'Each picture stands for a number. Start with the easiest line, then use it to work out the others.', ar: 'كل صورة تعني رقماً. ابدؤوا بالسطر الأسهل، ثم استعملوه لتعرفوا الباقي.' },
         hints: [
           { de: 'Beginne mit der ersten Zeile: Zwei Sonnen ergeben 6.', en: 'Start with the first line: two suns make 6.', ar: 'ابدأ بالسطر الأول: شمسان تساويان 6.' },
           { de: 'Sonne = 3, also Mond = 7 und Stern = 4. Jetzt nur noch in der Reihenfolge des Schlosses lesen.', en: 'Sun = 3, so moon = 7 and star = 4. Now read them in the lock’s order.', ar: 'الشمس = 3، إذن القمر = 7 والنجمة = 4. الآن اقرأها بترتيب القفل.' },
@@ -426,6 +429,7 @@ export const lostManuscript: Authored<Adventure> = {
         },
         material: { de: ['Truhe am Fluss', 'heute Nacht'], en: ['Chest by the river', 'tonight'], ar: ['الصندوق عند النهر', 'الليلة'] },
         input: 'text',
+        junior: { de: 'Fahrt mit dem Finger wie mit einer Lampe über das Papier. Die Schrift ist verkehrt herum, wie im Spiegel.', en: 'Slide your finger over the paper like a lamp. The writing is back to front, like in a mirror.', ar: 'مرّروا إصبعكم فوق الورقة كأنه مصباح. الكتابة معكوسة، كما في المرآة.' },
         hints: [
           { de: 'Fahre über die Mitte des Papiers. Die Schrift ist spiegelverkehrt.', en: 'Move over the middle of the paper. The writing is mirrored.', ar: 'مرّر الضوء على وسط الورقة. الكتابة معكوسة.' },
           { de: 'Es ist ein Ort, den du schon auf der Karte gesehen hast.', en: 'It is a place you have already seen on the map.', ar: 'إنه مكان رأيته من قبل على الخريطة.' },
@@ -486,6 +490,7 @@ export const lostManuscript: Authored<Adventure> = {
         type: 'item-use',
         fromInventory: true,
         prompt: { de: 'Welchen Gegenstand aus deinem Inventar legst du auf die Truhe?', en: 'Which item from your inventory do you place on the chest?', ar: 'أي غرض من حقيبتك تضعه على الصندوق؟' },
+        junior: { de: 'Schaut in eure Tasche. Welches Ding ist dafür gemacht, ein Schloss zu öffnen?', en: 'Look in your bag. Which thing is made for opening a lock?', ar: 'انظروا في حقيبتكم. أي شيء صُنع لفتح قفل؟' },
         hints: [
           { de: 'Der Schlüssel ist aus Metall, die Briefhälften sind zerrissen.', en: 'The key is metal, the letter halves are torn.', ar: 'المفتاح من معدن، ونصفا الرسالة ممزقان.' },
           { de: 'Was hat dir den Weg zu dieser Laterne gezeigt?', en: 'What showed you the way to this lantern?', ar: 'ما الذي دلّك على طريق هذا الفانوس؟' },
@@ -534,6 +539,7 @@ export const lostManuscript: Authored<Adventure> = {
         },
         input: 'numeric',
         lock: { digits: 4 },
+        junior: { de: 'Das Licht blinkt kurz und lang. Malt einen Punkt für kurz und einen Strich für lang – und zählt dann.', en: 'The light blinks short and long. Draw a dot for short and a dash for long, then count them.', ar: 'يومض الضوء قصيراً وطويلاً. ارسموا نقطة للقصير وشرطة للطويل، ثم عُدّوها.' },
         hints: [
           { de: 'Jede Gruppe von fünf Blinkern ist eine Ziffer. Achte auf kurz und lang.', en: 'Each group of five flashes is one digit. Watch for short and long.', ar: 'كل مجموعة من خمس ومضات رقم واحد. انتبه للقصير والطويل.' },
           { de: 'Die erste Ziffer ist 1: einmal kurz, viermal lang.', en: 'The first digit is 1: one short, four long.', ar: 'الرقم الأول 1: ومضة قصيرة ثم أربع طويلة.' },
@@ -574,6 +580,7 @@ export const lostManuscript: Authored<Adventure> = {
         prompt: { de: 'Die Buchstaben stehen in umgekehrter Reihenfolge. Welches Wort steht auf der Seite?', en: 'The letters are in reverse order. Which word is on the page?', ar: 'الحروف مكتوبة بترتيب معكوس. ما الكلمة المكتوبة على الصفحة؟' },
         material: { de: ['N E T H C I H C S E G'], en: ['S E I R O T S'], ar: ['ت ا ي ا ك ح'] },
         input: 'text',
+        junior: { de: 'Das Wort steht rückwärts da. Fangt am Ende an und lest bis zum Anfang.', en: 'The word is written backwards. Start at the end and read to the beginning.', ar: 'الكلمة مكتوبة بالمقلوب. ابدؤوا من آخرها واقرؤوا حتى أولها.' },
         hints: [
           { de: 'Lies die Buchstaben von rechts nach links.', en: 'Read the letters from right to left.', ar: 'اقرأ الحروف من اليسار إلى اليمين.' },
           { de: 'Das Wort beginnt mit G und hat 11 Buchstaben.', en: 'The word starts with S and has 7 letters.', ar: 'الكلمة تبدأ بحرف ح ولها ستة حروف.' },
@@ -625,6 +632,7 @@ export const lostManuscript: Authored<Adventure> = {
           { id: 'ben', label: { de: 'Ben', en: 'Ben', ar: 'بن' } },
           { id: 'elise', label: { de: 'Elise Brandt', en: 'Elise Brandt', ar: 'إليزه برانت' } },
         ],
+        junior: { de: 'Denkt wie Detektive: Wer wusste ein Geheimnis, das er gar nicht wissen durfte?', en: 'Think like detectives: who knew a secret they should never have known?', ar: 'فكّروا كالمحققين: من عرف سرّاً ما كان يجب أن يعرفه؟' },
         hints: [
           { de: 'Wer wusste von VIIs Nachricht, ohne sie bekommen zu haben?', en: 'Who knew about VII’s message without having been sent it?', ar: 'من كان يعرف برسالة VII دون أن تُرسل إليه؟' },
           { de: 'Der Beweis lag in seinem Arbeitszimmer. In der Akte kannst du Beweisstücke auch zusammenfügen.', en: 'The proof was in his study. In the journal you can also put items together.', ar: 'الدليل كان في مكتبه. ويمكنك في الملف أيضاً جمع الأغراض معاً.' },
@@ -997,7 +1005,23 @@ export const lostManuscript: Authored<Adventure> = {
       },
     ],
   },
+  // The meta-mystery's lantern sign (content/meta.ts) and the printable dossier's brief.
+  token: { order: 1, fragment: { de: 'Was bewahrt wird', en: 'What is kept', ar: 'ما يُحفَظ' } },
+  dossier: {
+      de: ['Heidelberg, ein Herbstabend. Aus dem Universitätsarchiv ist ein Codex verschwunden, der seit Jahrhunderten niemandem gezeigt wurde.', 'Jemand, der sich nur VII nennt, hat euch ausgewählt, ihn zu finden. Folgt den Zahlen, traut nicht jedem Zeugen – und behaltet die Uhr im Blick.'],
+      en: ['Heidelberg, an autumn evening. A codex that no one has been shown for centuries has vanished from the university archive.', 'Someone who signs only as VII has chosen you to find it. Follow the numbers, do not trust every witness — and keep an eye on the clock.'],
+      ar: ['هايدلبرغ، مساء خريفي. اختفت من أرشيف الجامعة مخطوطة لم يُطلَع عليها أحد منذ قرون.', 'شخص يوقّع باسم VII فقط اختاركم للعثور عليها. اتبعوا الأرقام، ولا تثقوا بكل شاهد — وراقبوا الساعة.'],
+    },
   ending: {
+    // Arrives in the dashboard a week after the case is solved.
+    letter: {
+      from: { de: 'VII', en: 'VII', ar: 'VII' },
+      text: {
+        de: ['Eine Woche ist vergangen, und das Archiv ist still geworden.', 'Ich habe euch nie gesagt, warum ich gerade euch gewählt habe. Weil ihr Fremde in dieser Stadt wart – und Fremde sehen, was wir längst übersehen.', 'Was immer ihr mit dem Codex entschieden habt: Er wurde wieder gelesen. Mehr wollte ich nie.'],
+        en: ['A week has passed, and the archive has grown quiet again.', 'I never told you why I chose you. Because you were strangers in this city — and strangers see what the rest of us stopped seeing long ago.', 'Whatever you decided about the codex: it was read again. That is all I ever wanted.'],
+        ar: ['مرّ أسبوع، وعاد الأرشيف إلى هدوئه.', 'لم أخبركم قطّ لماذا اخترتكم. لأنكم كنتم غرباء في هذه المدينة — والغرباء يرون ما توقّفنا نحن عن رؤيته منذ زمن.', 'أياً كان ما قررتموه بشأن المخطوطة: لقد قُرئت من جديد. هذا كل ما أردته يوماً.'],
+      },
+    },
     artifact: { kind: 'book' },
     revealIf: [
       { when: 'study:read', text: { de: 'Du erinnerst dich an die Zeile in seinem Tagebuch. „Du wolltest ihn wirklich nur sehen“, sagst du leise. Kehl nickt, und einen Moment lang wirkt er weniger wie ein Dieb als wie ein Leser.', en: 'You remember the line in his diary. “You really did only want to see it,” you say quietly. Kehl nods, and for a moment he looks less like a thief than a reader.', ar: 'تتذكّر السطر في دفتر يومياته. «كنت تريد أن تراها فحسب»، تقول بهدوء. يومئ كيل، ويبدو للحظة قارئاً أكثر منه لصاً.' } },

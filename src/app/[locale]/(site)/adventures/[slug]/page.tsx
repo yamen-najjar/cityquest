@@ -173,6 +173,10 @@ export default async function AdventurePage({ params }: Props) {
                 labels={{ play: t.adventure.play, continue: t.adventure.continue, replay: t.adventure.replay }}
               />
               <p className="mt-3 text-center text-xs text-ivory-mute">{t.adventure.purchaseLater}</p>
+              <Link href={`/${locale}/adventures/${a.slug}/dossier`} className="btn-ghost mt-4 w-full justify-center text-sm">
+                <span aria-hidden="true">🗂 </span>
+                {t.adventure.dossier}
+              </Link>
             </div>
           </div>
         </aside>

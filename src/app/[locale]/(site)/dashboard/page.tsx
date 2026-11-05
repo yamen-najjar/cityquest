@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Dashboard } from '@/components/Dashboard';
 import { SectionHeading } from '@/components/Section';
 import { adventures } from '@/content/adventures';
+import { meta } from '@/content/meta';
 import { isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionary';
 import { contextOf } from '@/lib/engine/achievements';
@@ -26,7 +27,16 @@ export default async function DashboardPage({ params }: Props) {
         locale={locale}
         t={t.dashboard}
         achievements={t.achievements}
-        adventures={adventures.map((a) => ({ slug: a.slug, title: a.title[locale], chapters: a.chapters.length, context: contextOf(a) }))}
+        adventures={adventures.map((a) => ({
+          slug: a.slug,
+          title: a.title[locale],
+          chapters: a.chapters.length,
+          context: contextOf(a),
+          secrets: (a.secrets ?? []).map((s) => s.id),
+          token: a.token && { order: a.token.order, fragment: a.token.fragment[locale] },
+          letter: a.ending.letter && { from: a.ending.letter.from[locale], text: a.ending.letter.text[locale] },
+        }))}
+        meta={{ title: meta.title[locale], intro: meta.intro[locale], from: meta.from[locale], solved: meta.solved[locale] }}
       />
     </div>
   );

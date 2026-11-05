@@ -100,6 +100,8 @@ export interface Puzzle {
   input?: 'text' | 'numeric';
   /** Shown one at a time, in order: a nudge, a clearer clue, then the answer itself. */
   hints: Localized[];
+  /** Junior mode: the puzzle explained for young detectives, in one friendly line. */
+  junior?: Localized;
 }
 
 /**
@@ -416,6 +418,8 @@ export interface Ending {
     prompt: Localized;
     choices: (Choice & { epilogue: Localized; epilogueIf?: WhenChosen[] })[];
   };
+  /** A letter that arrives in the dashboard a week after the case is solved. */
+  letter?: { from: Localized; text: Localized<string[]> };
 }
 
 /**
@@ -481,6 +485,13 @@ export interface Adventure {
   secrets?: Secret[];
   /** The case report the team files before the reveal. */
   report?: CaseReport;
+  /**
+   * The meta-mystery: one lantern sign per story, won by finishing the case with every secret found.
+   * `order` places its fragment in the sentence the signs make together (content/meta.ts).
+   */
+  token?: { order: number; fragment: Localized };
+  /** The printable case dossier's in-world brief, read before playing. No spoilers. */
+  dossier?: Localized<string[]>;
   ending: Ending;
 }
 

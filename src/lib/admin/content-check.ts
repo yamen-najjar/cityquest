@@ -112,6 +112,14 @@ export function checkAdventure(a: Adventure, key: AnswerKey | undefined): Conten
   }
   for (const l of a.leads ?? []) if (!key?.[`lead:${l.id}`]?.accepted.length) error(`lead “${l.id}”`, 'No accepted answer: the lead can never be followed up.');
   if ((a.secrets?.length ?? 0) < 2) missing('secrets', 'Needs at least 2 secrets to find.');
+  // Junior mode: every puzzle explained for young detectives.
+  for (const c of a.chapters) {
+    if (!c.puzzle.junior) missing(`chapter “${c.id}”`, 'Needs a junior line (puzzle.junior) for junior mode.');
+  }
+  // Beyond the case: the letter a week later, the lantern sign, the printable dossier's brief.
+  if (!a.ending.letter?.text.en.length) missing('ending', 'Needs a letter that arrives a week later (ending.letter).');
+  if (!a.token) missing('lantern sign', 'Needs a lantern sign for the meta-mystery (token, see content/meta.ts).');
+  if (!a.dossier?.en.length) missing('dossier', 'Needs a brief for the printable case dossier (dossier).');
   // Walk narration on the way to every checkpoint after the first.
   for (const c of a.chapters.slice(1)) {
     if (!c.walk?.length) missing(`chapter “${c.id}”`, 'Needs a walk narration (Chapter.walk) for the way to its checkpoint.');

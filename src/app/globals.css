@@ -96,8 +96,18 @@ body {
     visibility: hidden;
   }
   #certificate,
-  #certificate * {
+  #certificate *,
+  #dossier,
+  #dossier * {
     visibility: visible;
+  }
+  #dossier {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    margin: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
   }
   #certificate {
     position: absolute;

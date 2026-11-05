@@ -160,6 +160,7 @@ const de: Dictionary = {
       'Dies ist eine Demo. Alle Kontrollpunkte sind simuliert, eine Laufroute wurde noch nicht geprüft. Bitte nicht als Wegbeschreibung in der Stadt verwenden.',
     purchaseLater: 'Käufe mit sicherer Zahlung folgen in einer späteren Phase.',
     breadcrumb: 'Brotkrumennavigation',
+    dossier: 'Fallakte drucken',
   },
   game: {
     exit: 'Spiel verlassen',
@@ -208,6 +209,13 @@ const de: Dictionary = {
     emptyAnswer: 'Gib zuerst eine Antwort ein.',
     networkError: 'Deine Antwort konnte nicht geprüft werden. Prüfe die Verbindung und versuch es erneut.',
     tooFast: 'Zu viele Versuche in kurzer Zeit. Warte einen Moment und versuche es dann noch einmal.',
+    junior: { label: 'Für junge Detektive' },
+    extras: {
+      title: 'Noch mehr zu entdecken',
+      tokenFound: 'Du hast ein Laternenzeichen gefunden: „{fragment}“. Sammle alle Zeichen in deinem Dashboard.',
+      tokenHidden: 'In diesem Fall ist ein Laternenzeichen versteckt. Finde jedes Geheimnis, um es zu gewinnen.',
+      letterSoon: 'In einer Woche kommt ein Brief. Halte in deinem Dashboard danach Ausschau.',
+    },
     trust: { trusts: 'Vertraut dir', wary: 'Ist misstrauisch', remembers: '{name} wird sich das merken.' },
     walk: { title: 'Unterwegs', play: 'Beim Gehen anhören', stop: 'Stopp' },
     caseReport: {
@@ -385,6 +393,7 @@ const de: Dictionary = {
     expertNoHints: 'Expertenmodus: keine Hinweise. Du schaffst das.',
     modes: {
       title: 'Schwierigkeit',
+      junior: { name: 'Junior', text: 'Für junge Detektive ab 8: jedes Rätsel erklärt, kostenlose Hinweise, niemand wird gefangen.' },
       relaxed: { name: 'Entspannt', text: 'Hinweise sind kostenlos. Für Familien und das erste Abenteuer.' },
       classic: { name: 'Klassisch', text: 'Hinweise kosten Erfahrung. So ist es gedacht.' },
       expert: { name: 'Experte', text: 'Keine Hinweise, die Uhr läuft immer mit. Für erfahrene Rätsler.' },
@@ -431,6 +440,19 @@ const de: Dictionary = {
       stop: 'Vorlesen beenden',
     },
   },
+  dossier: {
+    title: 'Fallakte',
+    confidential: 'Vertraulich',
+    brief: 'Auftrag',
+    facts: 'Der Fall auf einen Blick',
+    bring: 'Mitbringen',
+    bringList: ['Ein geladenes Handy', 'Bequeme Schuhe', 'Einen Stift für dieses Blatt', 'Neugier und jemanden zum Diskutieren'],
+    notes: 'Notizen',
+    detective: 'Namen der Detektive',
+    print: 'Drucken',
+    back: 'Zurück zum Abenteuer',
+    noSpoilers: 'Keine Spoiler: Alles hier ist bekannt, bevor die erste Nachricht eintrifft.',
+  },
   dashboard: {
     title: 'Meine Abenteuer',
     intro: 'Dein Fortschritt wird auf diesem Gerät gespeichert und mit deinem Konto zwischen deinen Geräten synchronisiert, sobald du angemeldet bist.',
@@ -444,6 +466,13 @@ const de: Dictionary = {
     totalXp: 'Erfahrung gesamt',
     achievements: 'Erfolge',
     locked: 'Noch nicht erreicht',
+    letterArrived: 'Ein Brief ist angekommen',
+    letterOnWay: 'Ein Brief ist unterwegs · {n} Tage',
+    letterFrom: 'Von: {from}',
+    letterClose: 'Brief zusammenfalten',
+    metaLocked: 'Noch nicht gefunden',
+    metaProgress: '{n} von {total} Laternenzeichen',
+    metaHint: 'Jedes Zeichen gewinnt, wer einen Fall mit allen gefundenen Geheimnissen abschließt.',
   },
   account: {
     title: 'Dein Konto',

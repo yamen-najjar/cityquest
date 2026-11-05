@@ -4,11 +4,16 @@
 export type Stage = 'travel' | 'puzzle' | 'solved';
 
 /**
- * Difficulty, chosen at the start. relaxed: hints cost nothing; classic: hints cost experience;
+ * Difficulty, chosen at the start. junior: like relaxed, with each puzzle explained for young detectives; relaxed: hints cost nothing; classic: hints cost experience;
  * expert: no hints at all and the timer is always shown.
  */
-export type Mode = 'relaxed' | 'classic' | 'expert';
-export const MODES: Mode[] = ['relaxed', 'classic', 'expert'];
+export type Mode = 'junior' | 'relaxed' | 'classic' | 'expert';
+export const MODES: Mode[] = ['junior', 'relaxed', 'classic', 'expert'];
+
+/** Modes in which the pursuer only threatens and never catches: junior (young detectives) and relaxed. */
+export function gentle(mode: Mode): boolean {
+  return mode === 'junior' || mode === 'relaxed';
+}
 
 export interface Team {
   name: string;
@@ -260,9 +265,9 @@ export function threatLevel(p: Progress, levels: number): number {
   return pursuitLevel(pressure(p), levels);
 }
 
-/** True when the pursuer has reached the team and may catch them (never in relaxed mode). */
+/** True when the pursuer has reached the team and may catch them (never in junior or relaxed mode). */
 export function canCatch(p: Progress, levels: number): boolean {
-  return p.mode !== 'relaxed' && !p.decision && p.caught < 2 && !p.recovering && threatLevel(p, levels) >= levels - 1;
+  return !gentle(p.mode) && !p.decision && p.caught < 2 && !p.recovering && threatLevel(p, levels) >= levels - 1;
 }
 
 export function isFinished(p: Progress): boolean {
