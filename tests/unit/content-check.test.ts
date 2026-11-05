@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allAdventures, getAdventure } from '@/content/adventures';
 import { answerKeys } from '@/content/answers.server';
-import { checkAdventure, MIN_BOARD } from '@/lib/admin/content-check';
+import { checkAdventure, MIN_BOARD, MIN_MESSAGES } from '@/lib/admin/content-check';
 
 describe('admin content check', () => {
   it('finds no errors and no warnings in the shipped stories', () => {
@@ -52,6 +52,9 @@ describe('feature parity across adventures', () => {
       expect(a.board?.length ?? 0, 'evidence board questions').toBeGreaterThanOrEqual(MIN_BOARD);
       expect(a.chapters.some((c) => c.choice), 'a story choice').toBe(true);
       expect(a.ending.artifact, 'a 3D artifact for the finale').toBeTruthy();
+      expect(a.phone?.length ?? 0, 'phone messages').toBeGreaterThanOrEqual(MIN_MESSAGES);
+      expect(new Set((a.leads ?? []).map((l) => l.kind)), 'one lead of each kind').toEqual(new Set(['confront', 'timeline', 'echo', 'listen']));
+      expect(a.secrets?.length ?? 0, 'secrets').toBeGreaterThanOrEqual(2);
     });
   }
 
@@ -60,6 +63,8 @@ describe('feature parity across adventures', () => {
     bare.chapters = bare.chapters.map(({ scenes: _scenes, choice: _choice, ...c }) => c);
     bare.board = [];
     delete bare.ending.artifact;
+    delete bare.phone;
+    delete bare.leads;
     const errors = checkAdventure(bare, answerKeys['het-duivelshuis']).issues.filter((i) => i.level === 'error').map((i) => i.message);
     expect(errors).toEqual(
       expect.arrayContaining([
@@ -67,6 +72,8 @@ describe('feature parity across adventures', () => {
         expect.stringMatching(/evidence board needs at least 3/),
         expect.stringMatching(/at least one story choice/),
         expect.stringMatching(/No 3D artifact/),
+        expect.stringMatching(/The phone needs at least 6 messages/),
+        expect.stringMatching(/No "confront" lead/),
       ]),
     );
     // As a draft the missing features are only warnings. (The journal notes and endings that still name the
