@@ -43,6 +43,14 @@ export interface Progress {
   seized: string | null;
   /** The first catch is being dealt with (the recovery puzzle is open). */
   recovering: boolean;
+  /** Phone messages already seen, by id. */
+  phoneRead: string[];
+  /** Replies sent on the phone, as messageId -> replyId. */
+  replies: Record<string, string>;
+  /** Leads followed up (solved), by id. */
+  leadsSolved: string[];
+  /** Secrets found, by id. */
+  secrets: string[];
   decision: string | null;
   team: Team;
   startedAt: number;
@@ -64,6 +72,10 @@ export type Action =
   | { type: 'choose'; chapterId: string; optionId: string }
   | { type: 'caught'; now: number }
   | { type: 'recover' }
+  | { type: 'read'; ids: string[] }
+  | { type: 'reply'; messageId: string; replyId: string }
+  | { type: 'lead'; leadId: string }
+  | { type: 'discover'; secretId: string }
   | { type: 'next'; chapterCount: number }
   | { type: 'decide'; choiceId: string; chapterCount: number; now: number }
   | { type: 'tick'; now: number }
@@ -91,6 +103,10 @@ export function newProgress(adventure: string, team: Team, now: number, mode: Mo
     relief: 0,
     seized: null,
     recovering: false,
+    phoneRead: [],
+    replies: {},
+    leadsSolved: [],
+    secrets: [],
     decision: null,
     team: clampTeam(team),
     startedAt: now,
@@ -160,6 +176,17 @@ export function reduce(p: Progress, a: Action): Progress {
     case 'recover':
       if (!p.recovering) return p;
       return { ...p, recovering: false, seized: null, inventory: p.seized && !p.inventory.includes(p.seized) ? [...p.inventory, p.seized] : p.inventory };
+    case 'read': {
+      const fresh = a.ids.filter((id) => !p.phoneRead.includes(id));
+      return fresh.length ? { ...p, phoneRead: [...p.phoneRead, ...fresh] } : p;
+    }
+    case 'reply':
+      // One answer per message; what was said stays said.
+      return p.replies[a.messageId] ? p : { ...p, replies: { ...p.replies, [a.messageId]: a.replyId } };
+    case 'lead':
+      return p.leadsSolved.includes(a.leadId) ? p : { ...p, leadsSolved: [...p.leadsSolved, a.leadId] };
+    case 'discover':
+      return p.secrets.includes(a.secretId) ? p : { ...p, secrets: [...p.secrets, a.secretId] };
     case 'deduce':
       return p.deductions.includes(a.questionId) ? p : { ...p, deductions: [...p.deductions, a.questionId] };
     case 'next':
@@ -256,12 +283,15 @@ export function rankFor(stars: number, chapters: number): 0 | 1 | 2 | 3 {
   return 0;
 }
 
-/** Experience: 100 a chapter, 15 less a hint in classic mode (never below 40), 25 a star, 30 a deduction on the evidence board, 200 for finishing. */
+/**
+ * Experience: 100 a chapter, 15 less a hint in classic mode (never below 40), 25 a star, 30 a deduction on
+ * the evidence board, 40 a lead, 20 a secret, 200 for finishing (300 in expert mode).
+ */
 export function xpFor(p: Progress): number {
   let xp = 0;
   const hintCost = p.mode === 'classic' ? 15 : 0;
   for (const id of p.solved) xp += Math.max(40, 100 - hintCost * (p.hintsUsed[id] ?? 0)) + 25 * starsFor(p, id);
-  xp += 30 * p.deductions.length;
+  xp += 30 * p.deductions.length + 40 * p.leadsSolved.length + 20 * p.secrets.length;
   if (isFinished(p) && !isLost(p)) xp += p.mode === 'expert' ? 300 : 200;
   return xp;
 }
@@ -344,6 +374,10 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
     relief: typeof p.relief === 'number' && Number.isInteger(p.relief) && p.relief >= 0 ? Math.min(p.relief, 1000) : 0,
     seized: isId(p.seized) ? p.seized : null,
     recovering: p.recovering === true,
+    phoneRead: idList(p.phoneRead),
+    replies: choiceMap(p.replies),
+    leadsSolved: idList(p.leadsSolved),
+    secrets: idList(p.secrets),
     decision: isId(p.decision) ? p.decision : null,
     team: clampTeam({ name: team.name, players: Number(team.players) }),
     startedAt,

@@ -9,10 +9,11 @@ import { sfx } from '@/lib/audio';
 import { chose, combinationKey, MAX_NOTES, type Action, type Progress } from '@/lib/engine/progress';
 import { visibleQuestions } from '@/lib/engine/board';
 import { EvidenceBoard } from './EvidenceBoard';
+import { LeadsPanel } from './Leads';
 import { ItemIcon } from './ItemIcon';
 import { initials } from './puzzles/Interrogation';
 
-type Tab = 'board' | 'clues' | 'people' | 'items' | 'notes';
+type Tab = 'board' | 'leads' | 'clues' | 'people' | 'items' | 'notes';
 
 /**
  * The case journal: every clue found so far, the people met (with what they said), the items carried
@@ -28,6 +29,7 @@ export function Journal({
   onSaveNotes,
   onView,
   onCombined,
+  onNotice,
   onClose,
 }: {
   a: Adventure;
@@ -40,6 +42,8 @@ export function Journal({
   onSaveNotes: (text: string) => void;
   onView: (itemId: string) => void;
   onCombined: (name: string) => void;
+  /** Shows a short notice (a lead solved, a secret found). */
+  onNotice: (text: string) => void;
   onClose: () => void;
 }) {
   // Opens on the board while it has an open question, so a new one is never missed.
@@ -79,10 +83,12 @@ export function Journal({
   const items = p.inventory.map((id) => a.items.find((i) => i.id === id)).filter((i): i is NonNullable<typeof i> => !!i);
   const combo = picked.length === 2 ? a.combinations?.find((c) => c.from === combinationKey(picked)) : undefined;
 
+  const openLeads = (a.leads ?? []).filter((l) => p.solved.includes(l.after) && !p.leadsSolved.includes(l.id)).length;
   const openQuestions = visibleQuestions(a, p).filter((q) => !p.deductions.includes(q.id)).length;
   const tabs: { id: Tab; label: string; count?: number }[] = [
     // Only adventures that have deductions show the board.
     ...(a.board?.length ? [{ id: 'board' as const, label: t.journal.board.tab, count: openQuestions }] : []),
+    ...(a.leads?.length ? [{ id: 'leads' as const, label: t.leads.tab, count: openLeads }] : []),
     { id: 'clues', label: t.journal.clues, count: clues.length },
     { id: 'people', label: t.journal.people, count: people.length },
     { id: 'items', label: t.journal.items, count: items.length },
@@ -126,6 +132,8 @@ export function Journal({
         </nav>
         <div className="flex-1 overflow-y-auto p-5" role="tabpanel">
           {tab === 'board' && <EvidenceBoard a={a} p={p} locale={locale} t={t} onDeduced={(questionId) => dispatch({ type: 'deduce', questionId })} />}
+
+          {tab === 'leads' && <LeadsPanel a={a} p={p} locale={locale} t={t} dispatch={dispatch} onNotice={onNotice} />}
 
           {tab === 'clues' &&
             (clues.length ? (

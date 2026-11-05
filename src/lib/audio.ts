@@ -256,7 +256,8 @@ export function canSpeak(locale: string): boolean {
 }
 
 /** Reads text aloud in the device's own voice for that language. Returns false if it cannot. */
-export function speak(text: string, locale: string, voice = 'narrator', queue = false): boolean {
+/** Reads a line aloud in the character's acted voice. olume (0-1) lets a line be spoken softly, under the rest. */
+export function speak(text: string, locale: string, voice = 'narrator', queue = false, volume = 1): boolean {
   if (typeof window === 'undefined' || !window.speechSynthesis || isMuted() || !voicesOn()) return false;
   const synth = window.speechSynthesis;
   if (!queue) synth.cancel();
@@ -268,6 +269,7 @@ export function speak(text: string, locale: string, voice = 'narrator', queue = 
   const style = VOICE_STYLE[voice] ?? VOICE_STYLE.narrator!;
   u.pitch = style.pitch;
   u.rate = style.rate;
+  u.volume = volume;
   synth.speak(u);
   return true;
 }

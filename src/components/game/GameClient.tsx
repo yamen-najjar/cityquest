@@ -8,6 +8,7 @@ import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { isMuted, playAmbience, setMuted, sfx, stopAmbience, stopSpeaking, unlockAudio } from '@/lib/audio';
 import { contextOf, earned, type AchievementId } from '@/lib/engine/achievements';
+import { inbox, unread } from '@/lib/engine/kit';
 import { canCatch, fitToAdventure, isFinished, isLost, newProgress, reduce, threatLevel, type Action, type Progress } from '@/lib/engine/progress';
 import { localProgressStore as store } from '@/lib/engine/storage';
 import { isAtLeastAsFar } from '@/lib/engine/merge';
@@ -18,6 +19,7 @@ import { LogoMark } from '../Logo';
 import { use3D } from '../three/support';
 import { ChapterView } from './ChapterView';
 import { CaughtDialog, DangerPulse } from './Danger';
+import { Phone, senderName } from './Phone';
 import { Journal, combinedToast } from './Journal';
 import { Artifact3D } from './lazy';
 import { Finale, PursuitMeter, Results, StartScreen } from './Screens';
@@ -42,6 +44,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
   const [now, setNow] = useState(() => Date.now());
   const [showTimer, setShowTimer] = useState(false);
   const [journalOpen, setJournalOpen] = useState(false);
+  const [phoneOpen, setPhoneOpen] = useState(false);
   const [confirmRestart, setConfirmRestart] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [muted, setMutedState] = useState(false);
@@ -133,6 +136,23 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
   // The clock: a display tick every second while a timer is on screen (re-rendering the game every second
   // for nothing costs battery), and the saved playing time every 15 seconds and when the tab hides.
   const playing = !!p && !onStart && !isFinished(p);
+
+  // The phone: a message arriving buzzes, chimes and shows who it is from (not while the phone is open).
+  const unreadCount = p && !onStart ? unread(a, p).length : 0;
+  const seenArrivals = useRef<Set<string> | null>(null);
+  useEffect(() => {
+    if (!p || onStart) return;
+    const arrived = inbox(a, p);
+    if (seenArrivals.current) {
+      const fresh = arrived.filter((m) => !seenArrivals.current!.has(m.id) && !p.phoneRead.includes(m.id));
+      if (fresh.length && !phoneOpen) {
+        sfx('item');
+        navigator.vibrate?.([60, 60, 60]);
+        toast(fmt(t.phone.newMessage, { name: senderName(a, fresh[0]!.from, locale, t) }));
+      }
+    }
+    seenArrivals.current = new Set(arrived.map((m) => m.id));
+  }, [p, onStart, a, phoneOpen, locale, t]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The pursuer: how close he is, felt as well as shown. Every step closer beats like a heart (and the
   // phone buzzes); when he reaches the team in classic or expert mode, he catches them (see Pursuit.caught).
@@ -283,6 +303,12 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
                 );
               })}
             </ol>
+            {a.phone?.length ? (
+              <button type="button" onClick={() => setPhoneOpen(true)} className="chip relative min-h-[36px] hover:border-gold/50" aria-haspopup="dialog">
+                📱 {t.phone.open}
+                {unreadCount > 0 && <span className="rounded-full bg-danger px-1.5 text-[10px] font-bold text-white">{unreadCount}</span>}
+              </button>
+            ) : null}
             <button type="button" onClick={() => setJournalOpen(true)} className="chip min-h-[36px] hover:border-gold/50" aria-haspopup="dialog">
               📜 {t.journal.open}
               <span className="rounded-full bg-gold px-1.5 text-[10px] font-bold text-navy">{p.inventory.length}</span>
@@ -361,6 +387,8 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
         />
       )}
 
+      {phoneOpen && p && <Phone a={a} p={p} locale={locale} t={t} dispatch={dispatch} onNotice={toast} onClose={() => setPhoneOpen(false)} />}
+
       {journalOpen && p && (
         <Journal
           a={a}
@@ -372,6 +400,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
           onSaveNotes={saveNotes}
           onView={(id) => setViewing(id)}
           onCombined={(name) => toast(combinedToast(t, name))}
+          onNotice={toast}
           onClose={() => setJournalOpen(false)}
         />
       )}
