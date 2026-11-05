@@ -13,6 +13,7 @@ import type { HeadingRef } from './ChapterView';
 import { SkylineArt } from '../SkylineArt';
 import { Artifact3D } from './lazy';
 import { initials } from './puzzles/Interrogation';
+import { DetectiveReport, SouvenirCard } from './Report';
 
 export function StartScreen({
   a,
@@ -351,6 +352,8 @@ export function Results({
         </ul>
       </section>
 
+      <DetectiveReport a={a} p={p} locale={locale} t={t} />
+
       {/* A certificate says the case was solved, so a lost case gets none. */}
       {!lost && (
         <section id="certificate" className="mt-10 rounded-3xl border-2 border-gold/50 bg-navy-800 p-8 text-center" aria-labelledby="cert-title">
@@ -368,6 +371,8 @@ export function Results({
           </p>
         </section>
       )}
+
+      <SouvenirCard a={a} p={p} locale={locale} t={t} team={team} rank={rank ?? ''} stars={stars} cityName={cityName} />
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         {!lost && (

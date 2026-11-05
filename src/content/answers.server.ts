@@ -15,6 +15,11 @@ const board = (person: string, ...cards: string[]) => boardAnswer(person, cards)
 
 export const answerKeys: Record<string, AnswerKey> = {
   'lost-manuscript': {
+    // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
+    'lead:anna-alibi': { accepted: ['duty-log:0'] },
+    'lead:night': { accepted: ['katg'] },
+    'lead:house': { accepted: ['vii', '7', 'seven', 'sieben', 'zeven', 'sept', 'سبعة', 'سبع'] },
+    'lead:voicemail': { accepted: ['midnight', 'at midnight', 'mitternacht', 'um mitternacht', 'middernacht', 'om middernacht', 'منتصف الليل', 'عند منتصف الليل', '12', '00:00', '24:00', 'twelve', 'zwölf', 'twaalf'] },
     'board:liar': { accepted: [board('anna', 'item:brass-key', 'clue:witnesses-0')] },
     'board:who-is-k': {
       accepted: [
