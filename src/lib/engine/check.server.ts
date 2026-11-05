@@ -3,8 +3,9 @@ import type { Adventure } from '@/content/types';
 import { getAdventure } from '@/content/adventures';
 import { answerKeys } from '@/content/answers.server';
 import { matchesAnswer } from './normalize';
+import { gradeReport } from './report';
 
-export type CheckResult = { ok: true; correct: boolean } | { ok: false; status: 400 | 404; error: string };
+export type CheckResult = { ok: true; correct: boolean; confirmed?: string[] } | { ok: false; status: 400 | 404; error: string };
 
 /** A validated guess: the adventure, which chapter it targets (and its index for order gating), the
  *  accepted answers for that chapter, and the player's typed answer. */
@@ -39,6 +40,11 @@ export function resolveGuess(slug: string, body: unknown): ResolvedGuess | Resol
   // Extras are not chapters: board questions ("board:<id>") and leads ("lead:<id>") unlock after their
   // chapter, so for order gating they count as the chapter after it (every chapter up to and including
   // `after` must be solved); winning back what the pursuer took ("recover") can happen at any point.
+  // The case report comes after the last chapter: every chapter must be solved first.
+  if (chapterId === 'report') {
+    if (!adventure.report) return { ok: false, status: 404, error: 'unknown chapter' };
+    return { ok: true, adventure, chapterId, chapterIndex: adventure.chapters.length, accepted, answer, board: true };
+  }
   if (chapterId === 'recover') {
     if (!adventure.pursuit?.caught) return { ok: false, status: 404, error: 'unknown chapter' };
     return { ok: true, adventure, chapterId, chapterIndex: 0, accepted, answer, board: true };
@@ -63,5 +69,11 @@ export function resolveGuess(slug: string, body: unknown): ResolvedGuess | Resol
 export function checkAnswer(slug: string, body: unknown): CheckResult {
   const r = resolveGuess(slug, body);
   if (!r.ok) return r;
+  return grade(r);
+}
+
+/** The verdict for a resolved guess: a case report is graded slot by slot, everything else matched. */
+export function grade(r: ResolvedGuess): { ok: true; correct: boolean; confirmed?: string[] } {
+  if (r.chapterId === 'report') return { ok: true, ...gradeReport(r.answer, r.accepted[0] ?? '') };
   return { ok: true, correct: matchesAnswer(r.answer, r.accepted) };
 }

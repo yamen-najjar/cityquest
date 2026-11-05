@@ -380,6 +380,15 @@ export interface Lead {
   outcome: Localized;
 }
 
+/**
+ * The case report, filed before the truth is revealed: questions with options (who, how, why…). The game
+ * confirms nothing until at least `REPORT_CONFIRM` answers are right together; then it says which ones.
+ * The right answers live server-side (answers.server.ts, key "report", as "slot=option;slot=option").
+ */
+export interface CaseReport {
+  slots: { id: string; question: Localized; options: { id: string; label: Localized }[] }[];
+}
+
 /** An optional secret: found by looking closely (a document row, a spot in the imagined view). */
 export interface Secret {
   id: string;
@@ -460,6 +469,8 @@ export interface Adventure {
   pages?: WebPage[];
   leads?: Lead[];
   secrets?: Secret[];
+  /** The case report the team files before the reveal. */
+  report?: CaseReport;
   ending: Ending;
 }
 

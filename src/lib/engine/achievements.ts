@@ -2,7 +2,7 @@ import type { Adventure, PuzzleType } from '@/content/types';
 import type { Progress } from './progress';
 import { isFinished, isLost, totalHints } from './progress';
 
-export type AchievementId = 'first-clue' | 'codebreaker' | 'clear-thinker' | 'mystery-solved' | 'no-hints' | 'heidelberg-explorer' | 'arnhem-explorer' | 'sharp-eye';
+export type AchievementId = 'first-clue' | 'codebreaker' | 'clear-thinker' | 'mystery-solved' | 'no-hints' | 'heidelberg-explorer' | 'arnhem-explorer' | 'sharp-eye' | 'case-closed';
 
 export const ACHIEVEMENTS: AchievementId[] = [
   'first-clue',
@@ -13,6 +13,7 @@ export const ACHIEVEMENTS: AchievementId[] = [
   'heidelberg-explorer',
   'arnhem-explorer',
   'sharp-eye',
+  'case-closed',
 ];
 
 /** What the rules need to know about an adventure; small enough to pass to the dashboard. */
@@ -40,6 +41,7 @@ export function earned(p: Progress, ctx: AchievementContext): AchievementId[] {
   if (solvedOfType(CODE_TYPES).length) out.push('codebreaker');
   if (solvedOfType(['logic']).some((c) => !(p.wrongAttempts[c.id] ?? 0))) out.push('clear-thinker');
   if (ctx.board.length && ctx.board.every((id) => p.deductions.includes(id))) out.push('sharp-eye');
+  if (p.reportDone === 'solved') out.push('case-closed');
   // A lost case is over, but it is not a solved one.
   if (isFinished(p) && !isLost(p)) {
     out.push('mystery-solved');

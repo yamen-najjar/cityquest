@@ -51,6 +51,11 @@ export interface Progress {
   leadsSolved: string[];
   /** Secrets found, by id. */
   secrets: string[];
+  /** The case report: the options picked so far, the slots the game confirmed, tries, and how it ended. */
+  reportPicks: Record<string, string>;
+  reportConfirmed: string[];
+  reportTries: number;
+  reportDone: 'solved' | 'revealed' | null;
   decision: string | null;
   team: Team;
   startedAt: number;
@@ -76,6 +81,9 @@ export type Action =
   | { type: 'reply'; messageId: string; replyId: string }
   | { type: 'lead'; leadId: string }
   | { type: 'discover'; secretId: string }
+  | { type: 'reportPick'; slotId: string; optionId: string }
+  | { type: 'reportResult'; confirmed: string[]; solved: boolean }
+  | { type: 'reportReveal' }
   | { type: 'next'; chapterCount: number }
   | { type: 'decide'; choiceId: string; chapterCount: number; now: number }
   | { type: 'tick'; now: number }
@@ -107,6 +115,10 @@ export function newProgress(adventure: string, team: Team, now: number, mode: Mo
     replies: {},
     leadsSolved: [],
     secrets: [],
+    reportPicks: {},
+    reportConfirmed: [],
+    reportTries: 0,
+    reportDone: null,
     decision: null,
     team: clampTeam(team),
     startedAt: now,
@@ -185,6 +197,20 @@ export function reduce(p: Progress, a: Action): Progress {
       return p.replies[a.messageId] ? p : { ...p, replies: { ...p.replies, [a.messageId]: a.replyId } };
     case 'lead':
       return p.leadsSolved.includes(a.leadId) ? p : { ...p, leadsSolved: [...p.leadsSolved, a.leadId] };
+    case 'reportPick':
+      // A confirmed slot is settled; the rest stay open until the report is done.
+      if (p.reportDone || p.reportConfirmed.includes(a.slotId)) return p;
+      return { ...p, reportPicks: { ...p.reportPicks, [a.slotId]: a.optionId } };
+    case 'reportResult':
+      if (p.reportDone) return p;
+      return {
+        ...p,
+        reportTries: p.reportTries + 1,
+        reportConfirmed: [...new Set([...p.reportConfirmed, ...a.confirmed])],
+        reportDone: a.solved ? 'solved' : null,
+      };
+    case 'reportReveal':
+      return p.reportDone ? p : { ...p, reportDone: 'revealed' };
     case 'discover':
       return p.secrets.includes(a.secretId) ? p : { ...p, secrets: [...p.secrets, a.secretId] };
     case 'deduce':
@@ -285,13 +311,15 @@ export function rankFor(stars: number, chapters: number): 0 | 1 | 2 | 3 {
 
 /**
  * Experience: 100 a chapter, 15 less a hint in classic mode (never below 40), 25 a star, 30 a deduction on
- * the evidence board, 40 a lead, 20 a secret, 200 for finishing (300 in expert mode).
+ * the evidence board, 40 a lead, 20 a secret, 100 for a case report filed without giving up, 200 for
+ * finishing (300 in expert mode).
  */
 export function xpFor(p: Progress): number {
   let xp = 0;
   const hintCost = p.mode === 'classic' ? 15 : 0;
   for (const id of p.solved) xp += Math.max(40, 100 - hintCost * (p.hintsUsed[id] ?? 0)) + 25 * starsFor(p, id);
   xp += 30 * p.deductions.length + 40 * p.leadsSolved.length + 20 * p.secrets.length;
+  if (p.reportDone === 'solved') xp += 100;
   if (isFinished(p) && !isLost(p)) xp += p.mode === 'expert' ? 300 : 200;
   return xp;
 }
@@ -378,6 +406,10 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
     replies: choiceMap(p.replies),
     leadsSolved: idList(p.leadsSolved),
     secrets: idList(p.secrets),
+    reportPicks: choiceMap(p.reportPicks),
+    reportConfirmed: idList(p.reportConfirmed),
+    reportTries: typeof p.reportTries === 'number' && Number.isInteger(p.reportTries) && p.reportTries >= 0 ? Math.min(p.reportTries, 1000) : 0,
+    reportDone: p.reportDone === 'solved' || p.reportDone === 'revealed' ? p.reportDone : null,
     decision: isId(p.decision) ? p.decision : null,
     team: clampTeam({ name: team.name, players: Number(team.players) }),
     startedAt,

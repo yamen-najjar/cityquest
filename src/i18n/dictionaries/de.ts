@@ -208,6 +208,19 @@ const de: Dictionary = {
     emptyAnswer: 'Gib zuerst eine Antwort ein.',
     networkError: 'Deine Antwort konnte nicht geprüft werden. Prüfe die Verbindung und versuch es erneut.',
     tooFast: 'Zu viele Versuche in kurzer Zeit. Warte einen Moment und versuche es dann noch einmal.',
+    caseReport: {
+      title: 'Ermittlungsbericht',
+      intro: 'Bevor die Wahrheit ans Licht kommt, reiche deinen Bericht ein. Das Spiel bestätigt nichts, solange nicht mindestens drei Antworten zusammen stimmen – dann sagt es, welche.',
+      file: 'Bericht einreichen',
+      pick: 'Beantworte zuerst jede Frage.',
+      none: 'Noch stimmt nicht genug, um etwas zu bestätigen.',
+      some: '{n} Antworten bestätigt. Die anderen sind noch falsch.',
+      solved: 'Bericht bestätigt. Fall abgeschlossen.',
+      reveal: 'Zeig mir die Wahrheit',
+      revealNote: 'Nach drei Versuchen darfst du aufgeben. Der Bericht bringt dann nichts.',
+      confirmed: 'Bestätigt',
+      tries: 'Versuche: {n}',
+    },
     phone: {
       open: 'Handy',
       title: 'Handy',
@@ -483,6 +496,7 @@ const de: Dictionary = {
     'heidelberg-explorer': { name: 'Heidelberg-Entdecker', text: 'Schließe ein Abenteuer in Heidelberg ab.' },
     'arnhem-explorer': { name: 'Arnheim-Entdecker', text: 'Schließe ein Abenteuer in Arnheim ab.' },
     'sharp-eye': { name: 'Scharfer Blick', text: 'Löse jede Frage auf einer Pinnwand.' },
+    'case-closed': { name: 'Fall abgeschlossen', text: 'Reiche einen fehlerfreien Ermittlungsbericht ein, ohne aufzugeben.' },
   },
   legal: {
     placeholder: 'Platzhalter',

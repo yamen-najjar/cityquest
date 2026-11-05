@@ -922,6 +922,61 @@ export const neckarRing: Authored<Adventure> = {
     { id: 'kind-wish', title: { de: 'Heddas Wunsch', en: 'Hedda’s wish', ar: 'أمنية هيدا' }, text: { de: 'Neben der letzten Zeile, in Heddas Hand: „Bitte, lass diesen Menschen freundlicher sein als mich.“', en: 'Next to the last line, in Hedda’s hand: “Please let this one be kinder than me.”', ar: 'بجانب السطر الأخير، بخط هيدا: «أرجوك، ليكن هذا الشخص ألطف مني».' } },
     { id: 'mirror-niche', title: { de: 'Der Spiegel in der Nische', en: 'The mirror in the niche', ar: 'المرآة في الكوّة' }, text: { de: 'Hinter der kleinen Figur in der Nische: ein Spiegel, so groß wie eine Hand. Schon damals hat er zugesehen.', en: 'Behind the little figure in the niche: a mirror no bigger than a hand. Even then, he was watching.', ar: 'خلف التمثال الصغير في الكوّة: مرآة بحجم الكفّ. حتى في ذلك الوقت، كان يراقب.' } },
   ],
+  // The case report filed before the reveal (see CaseReport); the right answers are in answers.server.ts.
+  report: {
+    slots: [
+      {
+        id: 'who',
+        question: { de: 'Wer hat dir den Fluch weitergegeben?', en: 'Who passed the curse on to you?', ar: 'مَن نقل إليك اللعنة؟' },
+        options: [
+          { id: 'hedda', label: { de: 'Hedda Lorenz', en: 'Hedda Lorenz', ar: 'هيدا لورنتس' } },
+          { id: 'kaspar', label: { de: 'Kaspar Wendt', en: 'Kaspar Wendt', ar: 'كاسبار فِنت' } },
+          { id: 'mira', label: { de: 'Mira Falk', en: 'Mira Falk', ar: 'ميرا فالك' } },
+          { id: 'collector', label: { de: 'Der Graue Sammler selbst', en: 'The Grey Collector himself', ar: 'الجامع الرمادي نفسه' } },
+        ],
+      },
+      {
+        id: 'how',
+        question: { de: 'Wie?', en: 'How?', ar: 'كيف؟' },
+        options: [
+          { id: 'sleep', label: { de: 'Sie steckte dir den Ring im Schlaf an', en: 'She put the ring on you while you slept', ar: 'وضعت الخاتم في إصبعك وأنت نائم' } },
+          { id: 'free-will', label: { de: 'Sie ließ dich das Kästchen freiwillig nehmen', en: 'She let you take the box of your own free will', ar: 'جعلتك تأخذ الصندوق بإرادتك' } },
+          { id: 'ledger', label: { de: 'Sie schrieb deinen Namen ins Zunftbuch', en: 'She wrote your name in the guild ledger', ar: 'كتبت اسمك في سجل النقابة' } },
+          { id: 'spell', label: { de: 'Ein Zauber an der Ladentür', en: 'A spell on the shop door', ar: 'تعويذة على باب المحل' } },
+        ],
+      },
+      {
+        id: 'why',
+        question: { de: 'Warum?', en: 'Why?', ar: 'لماذا؟' },
+        options: [
+          { id: 'money', label: { de: 'Für Geld', en: 'For money', ar: 'من أجل المال' } },
+          { id: 'fear', label: { de: 'Aus Angst, um ihn loszuwerden', en: 'Out of fear, to be free of him', ar: 'بدافع الخوف، لتتحرر منه' } },
+          { id: 'mira', label: { de: 'Um Mira zu schützen', en: 'To protect Mira', ar: 'لتحمي ميرا' } },
+          { id: 'orders', label: { de: 'Auf Befehl des Sammlers', en: 'On the Collector’s orders', ar: 'بأمر من الجامع' } },
+        ],
+      },
+      {
+        id: 'name',
+        question: { de: 'Wessen Namen hält der Sammler?', en: 'Whose name does the Collector hold?', ar: 'اسم مَن يحتفظ به الجامع؟' },
+        options: [
+          { id: 'valen', label: { de: 'Valen, des Goldschmieds', en: 'Valen’s, the goldsmith’s', ar: 'اسم فالين، الصائغ' } },
+          { id: 'kaspar', label: { de: 'Kaspars', en: 'Kaspar’s', ar: 'اسم كاسبار' } },
+          { id: 'hedda', label: { de: 'Heddas', en: 'Hedda’s', ar: 'اسم هيدا' } },
+          { id: 'mira', label: { de: 'Miras', en: 'Mira’s', ar: 'اسم ميرا' } },
+        ],
+      },
+      {
+        id: 'weakness',
+        question: { de: 'Wo kann er dir nicht folgen?', en: 'Where can he not follow you?', ar: 'أين لا يستطيع أن يتبعك؟' },
+        options: [
+          { id: 'church', label: { de: 'In eine Kirche', en: 'Into a church', ar: 'إلى كنيسة' } },
+          { id: 'dry', label: { de: 'Wo es weder Glas noch Wasser gibt', en: 'Where there is neither glass nor water', ar: 'حيث لا زجاج ولا ماء' } },
+          { id: 'light', label: { de: 'Ins Kerzenlicht', en: 'Into candlelight', ar: 'إلى ضوء الشموع' } },
+          { id: 'crowd', label: { de: 'In eine Menschenmenge', en: 'Into a crowd', ar: 'إلى وسط الزحام' } },
+        ],
+      },
+    ],
+  },
   ending: {
     artifact: { kind: 'ring', hallmarks: ['N5', 'L3', 'V1', 'E4', 'A2'] },
     revealIf: [

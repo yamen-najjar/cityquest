@@ -3,6 +3,7 @@
 // edited in the console, the console must be able to say what "valid" means. Pure, so it is unit-tested.
 import type { Adventure, AnswerKey } from '@/content/types';
 import { locales } from '@/i18n/config';
+import { decodeReport } from '@/lib/engine/report';
 
 export type Issue = { level: 'error' | 'warning'; where: string; message: string };
 
@@ -111,6 +112,15 @@ export function checkAdventure(a: Adventure, key: AnswerKey | undefined): Conten
   }
   for (const l of a.leads ?? []) if (!key?.[`lead:${l.id}`]?.accepted.length) error(`lead “${l.id}”`, 'No accepted answer: the lead can never be followed up.');
   if ((a.secrets?.length ?? 0) < 2) missing('secrets', 'Needs at least 2 secrets to find.');
+  // The case report before the reveal: enough questions that "three right together" means something.
+  if ((a.report?.slots.length ?? 0) < 5) missing('report', 'Needs a case report with at least 5 questions (see CaseReport).');
+  if (a.report) {
+    const right = decodeReport(key?.report?.accepted[0] ?? '');
+    for (const slot of a.report.slots) {
+      if (slot.options.length < 3) error(`report “${slot.id}”`, 'A question needs at least 3 options.');
+      if (!slot.options.some((o) => o.id === right[slot.id])) error(`report “${slot.id}”`, 'No right answer in the "report" key of answers.server.ts.');
+    }
+  }
   // A pursuer is a matter of tone, not a feature: the family story deliberately has none. But a pursuer
   // must have real stakes: what he takes when he catches the team, how to win it back, and the lost ending.
   if (a.pursuit && !a.pursuit.caught) missing('pursuer', 'Has a pursuer but no catch: add Pursuit.caught (the scene, the puzzle to win the item back, the lost ending).');

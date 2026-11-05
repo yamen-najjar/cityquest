@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { answer, arrive, correct, fresh, next, noHorizontalScroll, setCode } from './helpers';
+import { answer, arrive, correct, fresh, next, noHorizontalScroll, setCode, fileReport } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await fresh(page, '/en/play/neckar-ring');
@@ -97,6 +97,15 @@ test('The Neckar Ring in expert mode: interrogation, torn strips, cipher wheel, 
   await expect(page.getByRole('dialog').getByText('You chose to forgive her.')).toHaveCount(0);
   await page.getByRole('button', { name: 'Close' }).click();
   await next(page);
+
+  // The case report, right at the first try.
+  await fileReport(page, [
+    [/passed the curse on/, 'Hedda Lorenz'],
+    [/^\d\. How/, 'She let you take the box of your own free will'],
+    [/^\d\. Why/, 'Out of fear, to be free of him'],
+    [/Whose name/, 'Valen’s, the goldsmith’s'],
+    [/not follow you/, 'Where there is neither glass nor water'],
+  ]);
 
   // The bridge scene follows the decision.
   await expect(page.getByText('“Why me?” you ask.', { exact: false })).toBeVisible();

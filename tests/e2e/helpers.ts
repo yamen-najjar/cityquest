@@ -45,3 +45,11 @@ export async function noHorizontalScroll(page: Page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 }
+
+/** Answers case-report questions: pairs of [question text, option label], then files the report. */
+export async function fileReport(page: Page, picks: [RegExp | string, string][]) {
+  for (const [question, option] of picks) {
+    await page.getByRole('group', { name: question }).getByRole('button', { name: option, exact: true }).click();
+  }
+  await page.getByRole('button', { name: 'File the report' }).click();
+}
