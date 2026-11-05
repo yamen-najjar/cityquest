@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adventures } from '@/content/adventures';
 import { cities } from '@/content/cities';
+import { meta } from '@/content/meta';
 import { missingTranslations } from '@/content/translations';
 import { locales, swapLocale } from '@/i18n/config';
 import { fmt, getDictionary } from '@/i18n/dictionary';
@@ -65,6 +66,7 @@ describe('content translations', () => {
   });
 
   it('have a Dutch translation for every English text (nothing falls back to English)', () => {
+    expect(meta.title.nl).toBe('De Lantaarnhoeders'); // the meta-mystery is localized too
     expect(missingTranslations.nl).toEqual([]);
   });
 

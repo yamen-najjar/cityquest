@@ -13,6 +13,7 @@ import type { HeadingRef } from './ChapterView';
 import { SkylineArt } from '../SkylineArt';
 import { Artifact3D } from './lazy';
 import { initials } from './puzzles/Interrogation';
+import { tokenEarned } from '@/lib/engine/meta';
 import { DetectiveReport, SouvenirCard } from './Report';
 
 export function StartScreen({
@@ -134,7 +135,7 @@ export function StartScreen({
           </fieldset>
           <fieldset>
             <legend className="text-sm">{t.modes.title}</legend>
-            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {MODES.map((m) => (
                 <label key={m} className={`cursor-pointer rounded-xl border p-3 transition ${mode === m ? 'border-gold bg-gold/10' : 'border-white/15 hover:border-white/30'}`}>
                   <input type="radio" name="mode" value={m} checked={mode === m} onChange={() => setMode(m)} className="sr-only" />
@@ -353,6 +354,29 @@ export function Results({
       </section>
 
       <DetectiveReport a={a} p={p} locale={locale} t={t} />
+
+      {!lost && (a.token || a.ending.letter) && (
+        <section className="mt-10 space-y-3" aria-label={t.extras.title}>
+          {a.token &&
+            (tokenEarned(p, (a.secrets ?? []).map((s) => s.id)) ? (
+              <p className="rounded-2xl border border-gold/40 bg-gold/[0.07] p-4 text-sm">
+                <span aria-hidden="true">🏮 </span>
+                {fmt(t.extras.tokenFound, { fragment: a.token.fragment[locale] })}
+              </p>
+            ) : (
+              <p className="rounded-2xl border border-white/10 p-4 text-sm text-ivory-dim">
+                <span aria-hidden="true">🏮 </span>
+                {t.extras.tokenHidden}
+              </p>
+            ))}
+          {a.ending.letter && (
+            <p className="rounded-2xl border border-white/10 p-4 text-sm text-ivory-dim">
+              <span aria-hidden="true">✉️ </span>
+              {t.extras.letterSoon}
+            </p>
+          )}
+        </section>
+      )}
 
       {/* A certificate says the case was solved, so a lost case gets none. */}
       {!lost && (

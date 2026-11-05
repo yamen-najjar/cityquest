@@ -7,7 +7,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { sfx, speak, stopSpeaking } from '@/lib/audio';
-import { threatLevel, type Action, type Progress } from '@/lib/engine/progress';
+import { threatLevel, type Action, type Progress, gentle } from '@/lib/engine/progress';
 import { prefersReducedMotion } from '../three/support';
 import { DemoMap } from './DemoMap';
 import { CheckpointArrival } from './CheckpointArrival';
@@ -102,7 +102,7 @@ export function ChapterView({
   const pursuitLevels = a.pursuit?.levels.length ?? 0;
   const hintCatches =
     !!a.pursuit?.caught &&
-    p.mode !== 'relaxed' &&
+    !gentle(p.mode) &&
     p.caught < 2 &&
     threatLevel({ ...p, hintsUsed: { ...p.hintsUsed, [chapter.id]: hintsShown + 1 } }, pursuitLevels) >= pursuitLevels - 1;
   const takeHint = () => {
@@ -310,6 +310,15 @@ export function ChapterView({
             )}
 
             <p className="text-lg text-ivory">{puzzle.prompt[locale]}</p>
+            {p.mode === 'junior' && puzzle.junior && (
+              <p className="flex gap-3 rounded-2xl border border-sky-300/30 bg-sky-300/[0.07] p-4 text-base text-ivory">
+                <span aria-hidden="true" className="text-2xl">🔍</span>
+                <span>
+                  <span className="block text-xs font-semibold uppercase tracking-wider text-sky-200 rtl:tracking-normal">{t.junior.label}</span>
+                  {puzzle.junior[locale]}
+                </span>
+              </p>
+            )}
 
             {puzzle.type === 'reveal' && puzzle.material ? (
               <Reveal lines={puzzle.material[locale]} mirrored={puzzle.revealMirrored} locale={locale} surface={a.pursuit ? 'wall' : 'paper'} labels={{ touch: t.puzzles.revealTouch, sweep: t.puzzles.revealSweep }} />

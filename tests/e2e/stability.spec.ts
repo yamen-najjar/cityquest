@@ -41,7 +41,7 @@ test('a corrupt save for one adventure does not break the others', async ({ page
   });
 
   await page.goto('/en/dashboard');
-  await expect(page.getByText('The Lost Manuscript')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The Lost Manuscript' })).toBeVisible();
 
   // The save pointing past the last chapter starts at chapter 1 instead of jumping to the finale.
   await page.goto('/en/play/het-duivelshuis');

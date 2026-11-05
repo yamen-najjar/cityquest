@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { ACHIEVEMENTS, earned, type AchievementContext, type AchievementId } from '@/lib/engine/achievements';
+import { daysUntil, letterAt, tokenEarned } from '@/lib/engine/meta';
 import { isFinished, xpFor, type Progress } from '@/lib/engine/progress';
 import { localProgressStore } from '@/lib/engine/storage';
 import { SYNCED_EVENT } from '@/lib/engine/sync-events';
@@ -15,12 +16,39 @@ export interface DashboardAdventure {
   title: string;
   chapters: number;
   context: AchievementContext;
+  secrets: string[];
+  token?: { order: number; fragment: string };
+  letter?: { from: string; text: string[] };
 }
 
-export function Dashboard({ locale, t, achievements, adventures }: { locale: Locale; t: Dictionary['dashboard']; achievements: Dictionary['achievements']; adventures: DashboardAdventure[] }) {
+export interface DashboardMeta {
+  title: string;
+  intro: string;
+  from: string;
+  solved: string[];
+}
+
+export function Dashboard({
+  locale,
+  t,
+  achievements,
+  adventures,
+  meta,
+}: {
+  locale: Locale;
+  t: Dictionary['dashboard'];
+  achievements: Dictionary['achievements'];
+  adventures: DashboardAdventure[];
+  meta: DashboardMeta;
+}) {
   const [saved, setSaved] = useState<Progress[] | null>(null);
+  const [now, setNow] = useState(0);
+  const [openLetter, setOpenLetter] = useState<string | null>(null);
   useEffect(() => {
-    const refresh = () => setSaved(localProgressStore.all());
+    const refresh = () => {
+      setSaved(localProgressStore.all());
+      setNow(Date.now());
+    };
     refresh();
     // A sign-in reconcile may pull in adventures played on other devices; reflect them live.
     window.addEventListener(SYNCED_EVENT, refresh);
@@ -37,6 +65,14 @@ export function Dashboard({ locale, t, achievements, adventures }: { locale: Loc
       return ctx ? earned(p, ctx) : [];
     }),
   );
+  const signs = adventures
+    .filter((a) => a.token)
+    .sort((x, y) => x.token!.order - y.token!.order)
+    .map((a) => {
+      const p = known.find((s) => s.adventure === a.slug);
+      return { slug: a.slug, title: a.title, fragment: a.token!.fragment, found: !!p && tokenEarned(p, a.secrets) };
+    });
+  const foundSigns = signs.filter((s) => s.found).length;
 
   return (
     <div className="mt-8 space-y-12">
@@ -52,6 +88,8 @@ export function Dashboard({ locale, t, achievements, adventures }: { locale: Loc
           {known.map((p) => {
             const a = adventures.find((x) => x.slug === p.adventure)!;
             const done = isFinished(p);
+            const at = a.letter ? letterAt(p) : null;
+            const arrived = at !== null && now >= at;
             return (
               <li key={p.adventure} className="card p-6">
                 <span className={`chip ${done ? 'border-gold/40 text-gold' : ''}`}>{done ? t.completed : t.inProgress}</span>
@@ -66,10 +104,75 @@ export function Dashboard({ locale, t, achievements, adventures }: { locale: Loc
                     {done ? t.view : t.continue}
                   </Link>
                 </div>
+                {at !== null &&
+                  a.letter &&
+                  (arrived ? (
+                    <div className="mt-5 border-t border-white/10 pt-4">
+                      <button
+                        type="button"
+                        aria-expanded={openLetter === a.slug}
+                        onClick={() => setOpenLetter(openLetter === a.slug ? null : a.slug)}
+                        className="flex w-full items-center gap-2 text-start text-sm font-semibold text-gold"
+                      >
+                        <span aria-hidden="true">✉️</span> {openLetter === a.slug ? t.letterClose : t.letterArrived}
+                      </button>
+                      {openLetter === a.slug && (
+                        <div className="mt-4 rounded-xl bg-[#efe6d2] p-5 font-display text-lg leading-relaxed text-[#2b2116]">
+                          {a.letter.text.map((line, i) => (
+                            <p key={i} className="mt-3 first:mt-0">
+                              {line}
+                            </p>
+                          ))}
+                          <p className="mt-4 text-end italic">— {a.letter.from}</p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="mt-5 border-t border-white/10 pt-4 text-xs text-ivory-mute">
+                      <span aria-hidden="true">✉️ </span>
+                      {fmt(t.letterOnWay, { n: daysUntil(at, now) })}
+                    </p>
+                  ))}
               </li>
             );
           })}
         </ul>
+      )}
+
+      {signs.length > 0 && (
+        <section aria-labelledby="meta-title" className="rounded-3xl border border-gold/25 bg-gold/[0.03] p-6">
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <h2 id="meta-title" className="font-display text-3xl font-semibold">
+              <span aria-hidden="true">🏮 </span>
+              {meta.title}
+            </h2>
+            <p className="text-sm text-ivory-dim">{fmt(t.metaProgress, { n: foundSigns, total: signs.length })}</p>
+          </div>
+          <p className="mt-3 text-ivory-dim">{meta.intro}</p>
+          <ol className="mt-5 grid gap-3 sm:grid-cols-3">
+            {signs.map((s) => (
+              <li key={s.slug} className={`rounded-2xl border p-4 text-center ${s.found ? 'border-gold/50 bg-gold/10' : 'border-dashed border-white/15'}`}>
+                <p className={`font-display text-xl ${s.found ? 'text-gold' : 'text-ivory-mute'}`}>{s.found ? s.fragment : '· · ·'}</p>
+                <p className="mt-1 text-xs text-ivory-mute">
+                  {s.title}
+                  {!s.found && ` · ${t.metaLocked}`}
+                </p>
+              </li>
+            ))}
+          </ol>
+          {foundSigns === signs.length ? (
+            <div className="mt-6 rounded-xl bg-[#efe6d2] p-5 font-display text-lg leading-relaxed text-[#2b2116]">
+              {meta.solved.map((line, i) => (
+                <p key={i} className="mt-3 first:mt-0">
+                  {line}
+                </p>
+              ))}
+              <p className="mt-4 text-end italic">— {meta.from}</p>
+            </div>
+          ) : (
+            <p className="mt-4 text-xs text-ivory-mute">{t.metaHint}</p>
+          )}
+        </section>
       )}
 
       <section aria-labelledby="ach">

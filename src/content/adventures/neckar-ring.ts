@@ -307,6 +307,7 @@ export const neckarRing: Authored<Adventure> = {
         },
         input: 'numeric',
         lock: { digits: 3 },
+        junior: { de: 'Lest jede Zeile langsam. Ein Dreieck hat drei Ecken. Dann rechnet Schritt für Schritt.', en: 'Read each line slowly. A triangle has three corners. Then do the sums one at a time.', ar: 'اقرؤوا كل سطر ببطء. للمثلث ثلاث زوايا. ثم احسبوا خطوة خطوة.' },
         hints: [
           { de: 'Ein Dreieck hat drei Seiten.', en: 'A triangle has three sides.', ar: 'للمثلث ثلاثة أضلاع.' },
           { de: '3, dann 6, dann 3 + 6.', en: '3, then 6, then 3 + 6.', ar: '3، ثم 6، ثم 3 + 6.' },
@@ -357,6 +358,7 @@ export const neckarRing: Authored<Adventure> = {
         },
         material: { de: ['Finde den, der Bücher bindet.'], en: ['Find the one who binds books.'], ar: ['ابحث عمّن يجلّد الكتب.'] },
         input: 'text',
+        junior: { de: 'Bewegt das Licht langsam über die Wand. Die Schrift ist verkehrt herum, wie im Spiegel.', en: 'Move the light slowly over the wall. The writing is back to front, like in a mirror.', ar: 'حرّكوا الضوء ببطء على الجدار. الكتابة معكوسة، كما في المرآة.' },
         hints: [
           {
             de: 'Fahre langsam über die ganze Mauer. Die Schrift steht in der Mitte.',
@@ -457,6 +459,7 @@ export const neckarRing: Authored<Adventure> = {
           { id: 'kaspar', label: { de: 'Kaspar, der Nachtwächter', en: 'Kaspar, the night watchman', ar: 'كاسبار، الحارس الليلي' } },
           { id: 'valen', label: { de: 'Ein Goldschmied', en: 'A goldsmith', ar: 'صائغ' } },
         ],
+        junior: { de: 'Stellt dem Wächter jede Frage. Zwei Antworten zusammen verraten, wer es war.', en: 'Ask the watchman every question. Two answers together tell you who it was.', ar: 'اسألوا الحارس كل الأسئلة. جوابان معاً يخبرانكم من كان.' },
         hints: [
           { de: 'Stell alle Fragen. Die Antwort setzt sich aus zwei Aussagen zusammen.', en: 'Ask every question. The answer comes from two statements together.', ar: 'اطرح كل الأسئلة. الجواب يأتي من قولين معاً.' },
           { de: 'Die junge Frau eröffnete später einen Antiquitätenladen.', en: 'The young woman later opened an antique shop.', ar: 'الشابة افتتحت لاحقاً محل أنتيكات.' },
@@ -508,6 +511,7 @@ export const neckarRing: Authored<Adventure> = {
           { id: 'stone', label: { de: 'Steingasse', en: 'Stone Lane', ar: 'زقاق الحجر' } },
           { id: 'narrow', label: { de: 'Schmale Gasse', en: 'Narrow Lane', ar: 'الزقاق الضيّق' } },
         ],
+        junior: { de: 'Der Geist kann nur dorthin, wo man sein Spiegelbild sieht. Welche Gasse hat weder Glas noch Wasser?', en: 'The ghost can only go where you can see your reflection. Which lane has no glass and no water?', ar: 'الشبح لا يذهب إلا حيث ترون انعكاسكم. أي زقاق ليس فيه زجاج ولا ماء؟' },
         hints: [
           { de: 'Er braucht eine Oberfläche, in der man sich spiegelt: Glas oder Wasser.', en: 'He needs a surface you can see your reflection in: glass or water.', ar: 'يحتاج إلى سطح ترى فيه انعكاسك: زجاج أو ماء.' },
           { de: 'Ein zugemauertes Fenster hat kein Glas mehr.', en: 'A bricked-up window has no glass left.', ar: 'النافذة المسدودة بالطوب لم يعد فيها زجاج.' },
@@ -560,6 +564,7 @@ export const neckarRing: Authored<Adventure> = {
           { id: 'd', text: { de: 'und seither singt das Silber in seinen Händen. Der Name: siehe die Punzen.', en: 'and ever since, silver has sung in his hands. The name: see the hallmarks.', ar: 'ومنذ ذلك الحين صارت الفضة تغنّي بين يديه. الاسم: انظر الأختام.' } },
           { id: 'b', text: { de: 'Im Jahr der großen Flut ging der Goldschmied hinaus,', en: 'In the year of the great flood the goldsmith went out,', ar: 'في سنة الطوفان الكبير خرج الصائغ،' } },
         ],
+        junior: { de: 'Legt die Streifen wie eine Geschichte: Was kommt zuerst, was danach?', en: 'Put the strips in order like a story: what comes first, and what comes next?', ar: 'رتّبوا القطع كأنها قصة: ماذا يأتي أولاً، وماذا بعده؟' },
         hints: [
           { de: 'Ein Eintrag beginnt mit dem Jahr.', en: 'An entry starts with the year.', ar: 'كل قيد يبدأ بالسنة.' },
           { de: 'Nach dem Jahr kommt der Ort, dann was er verkaufte, dann was er bekam.', en: 'After the year comes the place, then what he sold, then what he got.', ar: 'بعد السنة يأتي المكان، ثم ما باعه، ثم ما ناله.' },
@@ -609,6 +614,7 @@ export const neckarRing: Authored<Adventure> = {
         material: { de: ['N5 · L3 · V1 · E4 · A2'], en: ['N5 · L3 · V1 · E4 · A2'], ar: ['N5 · L3 · V1 · E4 · A2'] },
         model: { kind: 'ring', hallmarks: ['N5', 'L3', 'V1', 'E4', 'A2'] },
         input: 'text',
+        junior: { de: 'Jedes Zeichen hat einen Buchstaben und eine Zahl. Legt die Buchstaben nach den Zahlen: 1, 2, 3, 4, 5.', en: 'Each mark has a letter and a number. Put the letters in number order: 1, 2, 3, 4, 5.', ar: 'لكل علامة حرف ورقم. رتّبوا الحروف حسب الأرقام: 1، 2، 3، 4، 5.' },
         hints: [
           { de: 'Drehe den Ring und schau hinein. Beginne mit der Punze, die die 1 trägt.', en: 'Turn the ring and look inside. Start with the hallmark that carries the 1.', ar: 'أدر الخاتم وانظر في داخله. ابدأ بالختم الذي يحمل الرقم 1.' },
           { de: 'V, dann A, dann L …', en: 'V, then A, then L…', ar: 'V ثم A ثم L…' },
@@ -654,6 +660,7 @@ export const neckarRing: Authored<Adventure> = {
         },
         material: { de: ['AJWEJNM RNW. NHM MFYYJ FSLXY.'], en: ['KTWLNAJ RJ. N BFX FKWFNI.'], ar: ['ظحازبج يهش سند'] },
         input: 'text',
+        junior: { de: 'Dreht am Rad, damit sich jeder Buchstabe verschiebt. Probiert so lange, bis Wörter herauskommen.', en: 'Turn the wheel to shift every letter. Keep trying until real words appear.', ar: 'أديروا العجلة لتحرّكوا كل حرف. جرّبوا حتى تظهر كلمات حقيقية.' },
         hints: [
           { de: 'Der Schlüssel ist eine Zahl, die du im Ring zählen kannst.', en: 'The key is a number you can count on the ring.', ar: 'المفتاح رقم يمكنك عدّه على الخاتم.' },
           { de: 'Im Ring stehen fünf Punzen. Stell das Rad auf 5.', en: 'There are five hallmarks in the ring. Set the wheel to 5.', ar: 'في الخاتم خمسة أختام. اضبط العجلة على 5.' },
@@ -722,6 +729,7 @@ export const neckarRing: Authored<Adventure> = {
           { id: 'mira', label: { de: 'Mira Falk', en: 'Mira Falk', ar: 'ميرا فالك' } },
           { id: 'kaspar', label: { de: 'Kaspar Wendt', en: 'Kaspar Wendt', ar: 'كاسبار فِنت' } },
         ],
+        junior: { de: 'Wer hat vor langer Zeit seinen Namen verschenkt? Denkt an alles, was ihr erfahren habt.', en: 'Who gave their name away a long time ago? Think back over everything you learned.', ar: 'من تخلّى عن اسمه منذ زمن بعيد؟ تذكّروا كل ما عرفتموه.' },
         hints: [
           { de: 'Wer hat hier, auf dieser Brücke, seinen Namen verkauft?', en: 'Who sold their name here, on this bridge?', ar: 'من باع اسمه هنا، على هذا الجسر؟' },
           { de: 'Der Beweis ist der Name, wie er im Ring steht.', en: 'The proof is the name as it stands in the ring.', ar: 'الدليل هو الاسم كما هو مختوم في الخاتم.' },
@@ -1037,7 +1045,23 @@ export const neckarRing: Authored<Adventure> = {
       },
     ],
   },
+  // The meta-mystery's lantern sign (content/meta.ts) and the printable dossier's brief.
+  token: { order: 2, fragment: { de: 'geht nie verloren,', en: 'is never lost', ar: 'لا يضيع أبداً' } },
+  dossier: {
+      de: ['Heidelberg, die Altstadt am Fluss. In einem Antiquitätenladen wartet ein Kästchen, das niemand kaufen will, und darin ein Ring.', 'Die Leute sagen, nach Einbruch der Dunkelheit sieht man in den Schaufenstern manchmal einen Mann in Grau, der nicht dort steht. Geht trotzdem hin. Und schaut nicht zu lange in Fenster.'],
+      en: ['Heidelberg, the old town by the river. In an antiques shop waits a little box nobody wants to buy, and in it a ring.', 'People say that after dark you sometimes see a man in grey in the shop windows who is not standing there. Go anyway. And do not look into windows for too long.'],
+      ar: ['هايدلبرغ، البلدة القديمة على النهر. في محل تحف ينتظر صندوق صغير لا يريد أحد شراءه، وفيه خاتم.', 'يقول الناس إنكم بعد حلول الظلام قد ترون أحياناً في واجهات المحلات رجلاً رمادياً لا يقف هناك. اذهبوا رغم ذلك. ولا تحدّقوا في النوافذ طويلاً.'],
+    },
   ending: {
+    // Arrives in the dashboard a week after the case is solved.
+    letter: {
+      from: { de: 'Mira Falk', en: 'Mira Falk', ar: 'ميرا فالك' },
+      text: {
+        de: ['Eine Woche danach. Die Spiegel in meiner Werkstatt zeigen wieder nur mich, und ich habe gelernt, ihnen dafür zu danken.', 'Ich habe die zerrissene Seite meiner Großmutter neu gebunden. Valens Name steht jetzt in einem Buch, das niemand mehr verkaufen kann.', 'Kommt vorbei, wenn ihr wieder in der Stadt seid. Die Tür klemmt, aber sie geht auf.'],
+        en: ['A week later. The mirrors in my workshop show only me again, and I have learned to be grateful to them for it.', 'I have rebound my grandmother’s torn page. Valen’s name now sits in a book that no one can ever sell again.', 'Come by when you are in town again. The door sticks, but it opens.'],
+        ar: ['بعد أسبوع. لم تعد المرايا في ورشتي تُظهر سواي، وتعلّمت أن أكون ممتنّة لها على ذلك.', 'أعدت تجليد الصفحة الممزقة لجدتي. اسم فالين صار الآن في كتاب لا يستطيع أحد أن يبيعه بعد اليوم.', 'مرّوا بي حين تعودون إلى المدينة. الباب يعلق قليلاً، لكنه ينفتح.'],
+      },
+    },
     artifact: { kind: 'ring', hallmarks: ['N5', 'L3', 'V1', 'E4', 'A2'] },
     revealIf: [
       {

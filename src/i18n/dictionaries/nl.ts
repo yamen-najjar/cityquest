@@ -150,6 +150,7 @@ const nl: Dictionary = {
       'Dit is een demo. Alle controlepunten zijn gesimuleerd en er is nog geen wandelroute gecontroleerd. Gebruik het alsjeblieft niet als routebeschrijving in de stad.',
     purchaseLater: 'Kopen wordt in een latere fase mogelijk, met veilige betaling.',
     breadcrumb: 'Kruimelpad',
+    dossier: 'Zaakdossier printen',
   },
   game: {
     exit: 'Spel verlaten',
@@ -198,6 +199,13 @@ const nl: Dictionary = {
     emptyAnswer: 'Typ eerst een antwoord.',
     networkError: 'Je antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer het opnieuw.',
     tooFast: 'Te veel pogingen in korte tijd. Wacht even en probeer het dan opnieuw.',
+    junior: { label: 'Voor jonge speurders' },
+    extras: {
+      title: 'Nog meer te ontdekken',
+      tokenFound: 'Je hebt een lantaarnteken gevonden: ‘{fragment}’. Verzamel alle tekens in je dashboard.',
+      tokenHidden: 'In deze zaak is een lantaarnteken verborgen. Vind elk geheim om het te winnen.',
+      letterSoon: 'Over een week komt er een brief. Kijk ernaar uit in je dashboard.',
+    },
     trust: { trusts: 'Vertrouwt je', wary: 'Is op zijn hoede', remembers: '{name} zal dat onthouden.' },
     walk: { title: 'Onderweg', play: 'Luister onder het lopen', stop: 'Stop' },
     caseReport: {
@@ -375,6 +383,7 @@ const nl: Dictionary = {
     expertNoHints: 'Expertmodus: geen hints. Je kunt het.',
     modes: {
       title: 'Moeilijkheid',
+      junior: { name: 'Junior', text: 'Voor jonge speurders vanaf 8: elke puzzel uitgelegd, gratis hints, niemand wordt gepakt.' },
       relaxed: { name: 'Ontspannen', text: 'Hints zijn gratis. Voor gezinnen en het eerste avontuur.' },
       classic: { name: 'Klassiek', text: 'Hints kosten ervaring. Zo is het bedoeld.' },
       expert: { name: 'Expert', text: 'Geen hints, de klok loopt altijd mee. Voor doorgewinterde puzzelaars.' },
@@ -421,6 +430,19 @@ const nl: Dictionary = {
       stop: 'Stoppen met voorlezen',
     },
   },
+  dossier: {
+    title: 'Zaakdossier',
+    confidential: 'Vertrouwelijk',
+    brief: 'Opdracht',
+    facts: 'De zaak in één oogopslag',
+    bring: 'Meenemen',
+    bringList: ['Een opgeladen telefoon', 'Comfortabele schoenen', 'Een pen voor dit blad', 'Nieuwsgierigheid, en iemand om mee te discussiëren'],
+    notes: 'Notities',
+    detective: 'Namen van de speurders',
+    print: 'Printen',
+    back: 'Terug naar het avontuur',
+    noSpoilers: 'Geen spoilers: alles hier is bekend voordat het eerste bericht binnenkomt.',
+  },
   dashboard: {
     title: 'Mijn avonturen',
     intro: 'Je voortgang wordt op dit toestel bewaard en gesynchroniseerd met je account op al je toestellen zodra je bent ingelogd.',
@@ -434,6 +456,13 @@ const nl: Dictionary = {
     totalXp: 'Totale ervaring',
     achievements: 'Prestaties',
     locked: 'Nog niet behaald',
+    letterArrived: 'Er is een brief gekomen',
+    letterOnWay: 'Er is een brief onderweg · {n} dagen',
+    letterFrom: 'Van: {from}',
+    letterClose: 'Brief dichtvouwen',
+    metaLocked: 'Nog niet gevonden',
+    metaProgress: '{n} van {total} lantaarntekens',
+    metaHint: 'Elk teken win je door een zaak af te ronden met alle geheimen gevonden.',
   },
   account: {
     title: 'Jouw account',

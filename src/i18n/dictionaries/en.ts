@@ -157,6 +157,7 @@ const en = {
       'This is a demo. All checkpoints are simulated and no walking route has been validated yet. Please do not use it as directions in the city.',
     purchaseLater: 'Purchases open in a later phase, with secure payment.',
     breadcrumb: 'Breadcrumb',
+    dossier: 'Print the case dossier',
   },
   game: {
     exit: 'Leave game',
@@ -205,6 +206,13 @@ const en = {
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
     tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
+    junior: { label: 'For young detectives' },
+    extras: {
+      title: 'More to discover',
+      tokenFound: 'You found a lantern sign: “{fragment}”. Collect every sign in your dashboard.',
+      tokenHidden: 'A lantern sign is hidden in this case. Find every secret to win it.',
+      letterSoon: 'In a week, a letter will arrive. Look for it in your dashboard.',
+    },
     trust: { trusts: 'Trusts you', wary: 'Wary of you', remembers: '{name} will remember that.' },
     walk: { title: 'On the way', play: 'Listen while you walk', stop: 'Stop' },
     caseReport: {
@@ -382,6 +390,7 @@ const en = {
     expertNoHints: 'Expert mode: no hints. You can do this.',
     modes: {
       title: 'Difficulty',
+      junior: { name: 'Junior', text: 'For young detectives from 8: every puzzle explained, free hints, no getting caught.' },
       relaxed: { name: 'Relaxed', text: 'Hints are free. For families and first adventures.' },
       classic: { name: 'Classic', text: 'Hints cost experience. The way it is meant to be played.' },
       expert: { name: 'Expert', text: 'No hints, the clock always running. For seasoned puzzlers.' },
@@ -428,6 +437,19 @@ const en = {
       stop: 'Stop reading',
     },
   },
+  dossier: {
+    title: 'Case dossier',
+    confidential: 'Confidential',
+    brief: 'Brief',
+    facts: 'The case at a glance',
+    bring: 'Bring along',
+    bringList: ['A charged phone', 'Comfortable shoes', 'A pen for this sheet', 'Curiosity, and someone to argue with'],
+    notes: 'Notes',
+    detective: 'Detective names',
+    print: 'Print',
+    back: 'Back to the adventure',
+    noSpoilers: 'No spoilers: everything here is known before the first message arrives.',
+  },
   dashboard: {
     title: 'My adventures',
     intro: 'Your progress is saved on this device, and synced to your account across your devices once you sign in.',
@@ -441,6 +463,13 @@ const en = {
     totalXp: 'Total experience',
     achievements: 'Achievements',
     locked: 'Not yet earned',
+    letterArrived: 'A letter has arrived',
+    letterOnWay: 'A letter is on its way · {n} days',
+    letterFrom: 'From: {from}',
+    letterClose: 'Fold the letter',
+    metaLocked: 'Not yet found',
+    metaProgress: '{n} of {total} lantern signs',
+    metaHint: 'Each sign is won by finishing a case with every secret found.',
   },
   account: {
     title: 'Your account',

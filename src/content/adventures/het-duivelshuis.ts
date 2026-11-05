@@ -293,6 +293,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
         },
         material: { de: ['20 · 5 · 21 · 6 · 5 · 12'], en: ['4 · 5 · 22 · 9 · 12 · 19'], ar: ['13 · 28 · 1 · 16 · 28 · 25'] },
         input: 'text',
+        junior: { de: 'Zahlen sind Buchstaben! 1 ist A, 2 ist B, 3 ist C. Zählt an den Fingern ab, welcher Buchstabe zu jeder Zahl gehört.', en: 'Numbers are letters! 1 is A, 2 is B, 3 is C. Count on your fingers to turn each number into a letter.', ar: 'الأرقام حروف! 1 هو A، و2 هو B، و3 هو C. عُدّوا على أصابعكم لتحوّلوا كل رقم إلى حرف.' },
         hints: [
           { de: 'Zähle das Alphabet ab: A = 1, B = 2, C = 3 … Z = 26.', en: 'Count through the alphabet: A = 1, B = 2, C = 3 … Z = 26.', ar: 'عُدّ الحروف بالترتيب: أ ب ت ث ج ح خ د ذ ر …' },
           { de: 'Der erste Buchstabe ist T (20). Es sind die steinernen Figuren, nach denen das Haus benannt ist.', en: 'The first letter is D (4). It is the stone figures the house is named after.', ar: 'الحرف الأول هو ش (13). إنها التماثيل الحجرية التي سُمّي البيت باسمها.' },
@@ -365,6 +366,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
           { id: 'middle', label: { de: 'Mittlerer Teufel', en: 'Middle devil', ar: 'الشيطان الأوسط' } },
           { id: 'right', label: { de: 'Rechter Teufel', en: 'Right devil', ar: 'الشيطان الأيمن' } },
         ],
+        junior: { de: 'Nur ein Teufel sagt die Wahrheit. Tut so, als wäre jeder einmal der Ehrliche, und schaut, was passt.', en: 'Only one devil tells the truth. Pretend each one is the honest one, and see what works.', ar: 'شيطان واحد فقط يقول الحقيقة. تخيّلوا أن كل واحد منهم هو الصادق، وانظروا ما الذي ينجح.' },
         hints: [
           { de: 'Der linke und der rechte Teufel widersprechen sich: Genau einer von beiden sagt die Wahrheit.', en: 'The left and right devils contradict each other: exactly one of the two tells the truth.', ar: 'الشيطان الأيسر والأيمن يناقض أحدهما الآخر: واحد منهما فقط صادق.' },
           { de: 'Dann muss die Aussage des mittleren Teufels falsch sein. Was bedeutet das für sein Versteck?', en: 'Then the middle devil’s statement must be false. What does that mean for his hiding place?', ar: 'إذن عبارة الشيطان الأوسط لا بد أن تكون كاذبة. فماذا يعني ذلك عن مخبئه؟' },
@@ -440,6 +442,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
           { id: 'market', label: { de: 'Zurück zum Korenmarkt', en: 'Back to the Korenmarkt', ar: 'العودة إلى كورنمارخت' } },
           { id: 'quay', label: { de: 'Hinunter zum Rhein', en: 'Down to the Rhine', ar: 'النزول إلى نهر الراين' } },
         ],
+        junior: { de: 'Stellt Bram alle Fragen. Er weiß mehr, als er zuerst sagt.', en: 'Ask Bram all the questions. He knows more than he says at first.', ar: 'اسألوا برام كل الأسئلة. هو يعرف أكثر مما يقول في البداية.' },
         hints: [
           { de: 'Stell alle drei Fragen; Bram weiß mehr, als er zuerst sagt.', en: 'Ask all three questions; Bram knows more than he first says.', ar: 'اطرح الأسئلة الثلاثة؛ برام يعرف أكثر مما يقول أولاً.' },
           { de: 'Sie trug einen Schlüssel und stieg Stufen in eine große Kirche hinauf.', en: 'She carried a key and climbed steps into a great church.', ar: 'كانت تحمل مفتاحاً وصعدت درجاً إلى كنيسة كبيرة.' },
@@ -527,6 +530,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
         },
         input: 'numeric',
         lock: { digits: 4 },
+        junior: { de: 'Manche Figuren stammen von heute, nicht aus alter Zeit. Welche konnten die alten Baumeister gar nicht kennen?', en: 'Some figures are from today, not from long ago. Which ones could the old builders never have known?', ar: 'بعض الأشكال من زمننا، لا من الماضي البعيد. أيّها لم يكن البنّاؤون القدماء ليعرفوه أبداً؟' },
         hints: [
           {
             de: 'Löwen, Apostel und gehörnte Fratzen kannten schon die Baumeister des Mittelalters. Was davon konnte damals niemand kennen?',
@@ -597,6 +601,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
         prompt: { de: 'Streiche mit dem Licht über den Stein. Wohin will der Sammler als Nächstes?', en: 'Sweep the light across the stone. Where is the Collector heading next?', ar: 'مرّر الضوء على الحجر. إلى أين يتجه الجامع تالياً؟' },
         material: { de: ['Zum Rhein', 'vor Mitternacht'], en: ['To the Rhine', 'before midnight'], ar: ['إلى نهر الراين', 'قبل منتصف الليل'] },
         input: 'text',
+        junior: { de: 'Bewegt das Licht über den Stein. Die Wörter stehen verkehrt herum, wie im Spiegel.', en: 'Move the light over the stone. The words are back to front, like in a mirror.', ar: 'حرّكوا الضوء على الحجر. الكلمات معكوسة، كما في المرآة.' },
         hints: [
           { de: 'Fahre über die Mitte des Steins. Die Schrift ist spiegelverkehrt.', en: 'Move over the middle of the stone. The writing is mirrored.', ar: 'مرّر الضوء على وسط الحجر. الكتابة معكوسة.' },
           { de: 'Es ist der Fluss, der im Süden an der Stadt entlangfließt.', en: 'It is the river that runs along the south of the city.', ar: 'إنه النهر الذي يجري جنوب المدينة.' },
@@ -648,6 +653,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
         prompt: { de: 'Lies die vier Ziffern aus dem Signal. Sie öffnen die Seitentür des Museums.', en: 'Read the four digits in the signal. They open the museum’s side door.', ar: 'اقرأ الأرقام الأربعة من الإشارة. إنها تفتح الباب الجانبي للمتحف.' },
         input: 'numeric',
         lock: { digits: 4 },
+        junior: { de: 'Das Licht blinkt kurz und lang. Malt einen Punkt für kurz und einen Strich für lang – und zählt dann.', en: 'The light blinks short and long. Draw a dot for short and a dash for long, then count them.', ar: 'يومض الضوء قصيراً وطويلاً. ارسموا نقطة للقصير وشرطة للطويل، ثم عُدّوها.' },
         hints: [
           { de: 'Jede Gruppe von fünf Blinkern ist eine Ziffer. Achte auf kurz und lang.', en: 'Each group of five flashes is one digit. Watch for short and long.', ar: 'كل مجموعة من خمس ومضات رقم واحد. انتبه للقصير والطويل.' },
           { de: 'Die erste Ziffer ist 1: einmal kurz, viermal lang. Es ist das Baujahr des Teufelshauses.', en: 'The first digit is 1: one short, four long. It is the year the Devil’s House was built.', ar: 'الرقم الأول 1: ومضة قصيرة ثم أربع طويلة. إنه عام بناء بيت الشيطان.' },
@@ -695,6 +701,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
         type: 'item-use',
         fromInventory: true,
         prompt: { de: 'Welchen Gegenstand aus deinem Inventar steckst du in die mittlere Schublade?', en: 'Which item from your inventory do you put into the middle drawer?', ar: 'أي غرض من حقيبتك تضعه في الدرج الأوسط؟' },
+        junior: { de: 'Die Schublade hat ein Schlüsselloch. Welches eurer Dinge passt hinein?', en: 'The drawer has a keyhole. Which of your things fits?', ar: 'في الدرج ثقب مفتاح. أي شيء من أغراضكم يناسبه؟' },
         hints: [
           { de: 'Die Schublade ist aus Eisen, mit einem Schlüsselloch.', en: 'The drawer is iron, with a keyhole.', ar: 'الدرج من حديد، وفيه ثقب مفتاح.' },
           { de: 'Hinter dem mittleren Teufel hast du genau dafür etwas gefunden.', en: 'Behind the middle devil you found something for exactly this.', ar: 'خلف الشيطان الأوسط وجدت شيئاً لهذا بالضبط.' },
@@ -766,6 +773,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
           { id: 'bram', label: { de: 'Bram', en: 'Bram', ar: 'برام' } },
           { id: 'lena', label: { de: 'Lena Verhoef', en: 'Lena Verhoef', ar: 'لينا فرهوف' } },
         ],
+        junior: { de: 'Wer war euch immer einen Schritt hinterher? Nehmt die Spuren, die ihr gesammelt habt.', en: 'Who was always one step behind you? Use the clues you collected.', ar: 'من كان دائماً خلفكم بخطوة؟ استعملوا الأدلة التي جمعتموها.' },
         hints: [
           { de: 'Wer war vor dir am Stein und roch nach alten Büchern?', en: 'Who was at the stone before you and smelled of old books?', ar: 'من كان عند الحجر قبلك وفاحت منه رائحة الكتب القديمة؟' },
           { de: 'Der Beweis ist die Hauptbuchseite — füge in der Akte beide Hälften zusammen.', en: 'The proof is the ledger page — join its two halves in the journal.', ar: 'الدليل صفحة الدفتر — اجمع نصفيها في الملف.' },
@@ -1074,7 +1082,23 @@ export const hetDuivelshuis: Authored<Adventure> = {
       },
     ],
   },
+  // The meta-mystery's lantern sign (content/meta.ts) and the printable dossier's brief.
+  token: { order: 3, fragment: { de: 'solange jemand liest.', en: 'while someone reads.', ar: 'ما دام أحدٌ يقرأ.' } },
+  dossier: {
+      de: ['Arnheim, ein Abend am Korenmarkt. Eine Frau, die alte Häuser restauriert, ist verschwunden – und hat zuvor geschrieben, sie habe im Teufelshaus etwas gefunden.', 'Drei steinerne Teufel bewachen dieses Haus seit fünfhundert Jahren. Fragt sie. Fragt die Musiker am Tor. Und traut keinem, der sich Sammler nennt.'],
+      en: ['Arnhem, an evening at the Korenmarkt. A woman who restores old houses has disappeared — after writing that she had found something in the Devil’s House.', 'Three stone devils have guarded that house for five hundred years. Ask them. Ask the musicians at the gate. And trust no one who calls himself a collector.'],
+      ar: ['أرنم، مساء في ساحة كورنمارخت. اختفت امرأة ترمّم البيوت القديمة — بعد أن كتبت أنها وجدت شيئاً في بيت الشيطان.', 'ثلاثة شياطين حجرية تحرس ذلك البيت منذ خمسمئة عام. اسألوها. اسألوا العازفين عند البوابة. ولا تثقوا بأحد يسمّي نفسه جامعاً.'],
+    },
   ending: {
+    // Arrives in the dashboard a week after the case is solved.
+    letter: {
+      from: { de: 'Lena Verhoef', en: 'Lena Verhoef', ar: 'لينا فرهوف' },
+      text: {
+        de: ['Eine Woche ist vergangen. Ich gehe wieder jeden Morgen am Teufelshaus vorbei, und die Teufel sehen mich an, als wüssten sie Bescheid.', 'Eine alte Frau hat mich auf dem Markt angesprochen. Ihr Urgroßvater stand im Hauptbuch. Sie hat geweint, und ich auch.', 'Danke, dass ihr mir gefolgt seid, als ich verschwunden war.'],
+        en: ['A week has passed. I walk past the Devil’s House every morning again, and the devils look at me as if they know.', 'An old woman stopped me at the market. Her great-grandfather was in the ledger. She cried, and so did I.', 'Thank you for following me when I had disappeared.'],
+        ar: ['مرّ أسبوع. عدت أمرّ كل صباح ببيت الشيطان، والشياطين تنظر إليّ كأنها تعرف.', 'استوقفتني امرأة عجوز في السوق. كان جدّ أبيها مذكوراً في الدفتر. بكت، وبكيت أنا أيضاً.', 'شكراً لأنكم تبعتموني حين اختفيت.'],
+      },
+    },
     artifact: { kind: 'book' },
     revealIf: [
       { when: 'archief:police', text: { de: 'Blaues Licht streift über den Hof: Saars Anruf hat die Polizei gebracht. Koster rennt nicht weg. Er streckt die Hände aus, bevor ihn jemand darum bittet.', en: 'Blue light sweeps across the courtyard: Saar’s call has brought the police. Koster does not run. He holds out his wrists before anyone asks.', ar: 'يمسح ضوء أزرق الفناء: اتصال سار جاء بالشرطة. لا يهرب كوستر، بل يمدّ معصميه قبل أن يطلب منه أحد.' } },
