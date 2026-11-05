@@ -48,6 +48,11 @@ export const answerKeys: Record<string, AnswerKey> = {
     verdict: { accepted: ['kehl+second-half', 'kehl+whole-letter'] },
   },
   'het-duivelshuis': {
+    // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
+    'lead:koster-claim': { accepted: ['koster-list:1'] },
+    'lead:evening': { accepted: ['fvtd'] },
+    'lead:facade': { accepted: ['1545'] },
+    'lead:overheard': { accepted: ['courtyard', 'the courtyard', 'in the courtyard', 'hof', 'im hof', 'der hof', 'innenhof', 'binnenplaats', 'de binnenplaats', 'op de binnenplaats', 'الفناء', 'فناء', 'في الفناء', 'الساحة الخلفية', 'behind the house', 'hinter dem haus', 'achter het huis', 'خلف البيت'] },
     // What the pursuer took at the first catch comes back with the pawn ticket number (see Pursuit.caught).
     recover: { accepted: ['42'] },
     'board:tower': { accepted: [board('lena', 'clue:sabelspoort-0', 'clue:carillon-0'), board('lena', 'said:sabelspoort-where', 'clue:carillon-0')] },
@@ -83,6 +88,11 @@ export const answerKeys: Record<string, AnswerKey> = {
     aanklacht: { accepted: ['koster+whole-ledger', 'koster+ledger-left'] },
   },
   'neckar-ring': {
+    // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
+    'lead:hedda-claim': { accepted: ['given-book:0', 'given-book:2'] },
+    'lead:sightings': { accepted: ['hbsl'] },
+    'lead:workshop': { accepted: ['1882'] },
+    'lead:whisper': { accepted: ['glass', 'water', 'glas', 'wasser', 'zeewater', 'زجاج', 'الزجاج', 'ماء', 'الماء', 'glass and water', 'glas und wasser', 'glas en water'] },
     // What the pursuer took at the first catch comes back with this word (see Pursuit.caught).
     recover: { accepted: ['mirror', 'the mirror', 'spiegel', 'der spiegel', 'de spiegel', 'مرآة', 'المرآة', 'مراية'] },
     'board:pursuer': {

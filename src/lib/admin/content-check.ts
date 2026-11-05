@@ -8,6 +8,8 @@ export type Issue = { level: 'error' | 'warning'; where: string; message: string
 
 /** The fewest evidence-board questions a published adventure may have. */
 export const MIN_BOARD = 3;
+/** The fewest phone messages a published adventure may have. */
+export const MIN_MESSAGES = 6;
 
 export interface ContentReport {
   slug: string;
@@ -96,6 +98,19 @@ export function checkAdventure(a: Adventure, key: AnswerKey | undefined): Conten
     }
   }
   if (!a.ending.artifact) missing('ending', 'No 3D artifact for the finale.');
+  // The investigation kit (phone, documents, a fictional website, one lead of each kind, secrets).
+  const phone = a.phone ?? [];
+  if (phone.length < MIN_MESSAGES) missing('phone', `The phone needs at least ${MIN_MESSAGES} messages (has ${phone.length}).`);
+  if (!phone.some((m) => m.kind === 'call')) missing('phone', 'No voice message on the phone.');
+  if (!phone.some((m) => m.replies?.length)) missing('phone', 'No message the team can reply to.');
+  if (!phone.some((m) => m.from === 'unknown')) missing('phone', 'No message from a withheld number (a threat or a warning).');
+  if ((a.documents?.length ?? 0) < 2) missing('documents', 'Needs at least 2 documents (receipt, ticket, call log, note or newspaper).');
+  if (!a.pages?.length) missing('pages', 'Needs a fictional website page.');
+  for (const kind of ['confront', 'timeline', 'echo', 'listen'] as const) {
+    if (!(a.leads ?? []).some((l) => l.kind === kind)) missing('leads', `No "${kind}" lead: every adventure has one lead of each kind.`);
+  }
+  for (const l of a.leads ?? []) if (!key?.[`lead:${l.id}`]?.accepted.length) error(`lead “${l.id}”`, 'No accepted answer: the lead can never be followed up.');
+  if ((a.secrets?.length ?? 0) < 2) missing('secrets', 'Needs at least 2 secrets to find.');
   // A pursuer is a matter of tone, not a feature: the family story deliberately has none. But a pursuer
   // must have real stakes: what he takes when he catches the team, how to win it back, and the lost ending.
   if (a.pursuit && !a.pursuit.caught) missing('pursuer', 'Has a pursuer but no catch: add Pursuit.caught (the scene, the puzzle to win the item back, the lost ending).');
