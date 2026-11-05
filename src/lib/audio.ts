@@ -72,7 +72,7 @@ function tone(freq: number, start: number, dur: number, type: OscillatorType = '
   o.stop(start + dur + 0.05);
 }
 
-export type Sfx = 'correct' | 'wrong' | 'unlock' | 'item' | 'page' | 'hint' | 'stinger';
+export type Sfx = 'correct' | 'wrong' | 'unlock' | 'item' | 'page' | 'hint' | 'stinger' | 'heartbeat';
 
 export function sfx(kind: Sfx) {
   const c = unlockAudio();
@@ -100,6 +100,10 @@ export function sfx(kind: Sfx) {
       break;
     case 'hint':
       tone(659.25, t, 0.3, 'sine', 0.1);
+      break;
+    case 'heartbeat':
+      tone(55, t, 0.16, 'sine', 0.35);
+      tone(50, t + 0.24, 0.2, 'sine', 0.28);
       break;
     case 'stinger':
       tone(98, t, 2.2, 'sawtooth', 0.05);

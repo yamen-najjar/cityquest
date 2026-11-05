@@ -15,7 +15,7 @@ export type ResolvedGuess = {
   chapterIndex: number;
   accepted: string[];
   answer: string;
-  /** An evidence-board question rather than a chapter puzzle: optional, so never recorded as a solve. */
+  /** Not a chapter puzzle (a board question, a lead, winning back a stolen item): never recorded as a solve. */
   board: boolean;
 };
 export type ResolveError = { ok: false; status: 400 | 404; error: string };
@@ -35,14 +35,24 @@ export function resolveGuess(slug: string, body: unknown): ResolvedGuess | Resol
     return { ok: false, status: 400, error: 'invalid body' };
   }
   const accepted = key[chapterId]?.accepted;
-  // Board questions ("board:<id>") unlock after their chapter, so for order gating they count as the
-  // chapter after it: every chapter up to and including `after` must be solved.
-  const question = chapterId.startsWith('board:') ? adventure.board?.find((q) => `board:${q.id}` === chapterId) : undefined;
-  const chapterIndex = question
-    ? adventure.chapters.findIndex((c) => c.id === question.after) + 1
+  if (!accepted) return { ok: false, status: 404, error: 'unknown chapter' };
+  // Extras are not chapters: board questions ("board:<id>") and leads ("lead:<id>") unlock after their
+  // chapter, so for order gating they count as the chapter after it (every chapter up to and including
+  // `after` must be solved); winning back what the pursuer took ("recover") can happen at any point.
+  if (chapterId === 'recover') {
+    if (!adventure.pursuit?.caught) return { ok: false, status: 404, error: 'unknown chapter' };
+    return { ok: true, adventure, chapterId, chapterIndex: 0, accepted, answer, board: true };
+  }
+  const extra = chapterId.startsWith('board:')
+    ? adventure.board?.find((q) => `board:${q.id}` === chapterId)
+    : chapterId.startsWith('lead:')
+      ? adventure.leads?.find((l) => `lead:${l.id}` === chapterId)
+      : undefined;
+  const chapterIndex = extra
+    ? adventure.chapters.findIndex((c) => c.id === extra.after) + 1
     : adventure.chapters.findIndex((c) => c.id === chapterId);
-  if (chapterIndex < (question ? 1 : 0) || chapterIndex === -1 || !accepted) return { ok: false, status: 404, error: 'unknown chapter' };
-  return { ok: true, adventure, chapterId, chapterIndex, accepted, answer, board: !!question };
+  if (chapterIndex < (extra ? 1 : 0)) return { ok: false, status: 404, error: 'unknown chapter' };
+  return { ok: true, adventure, chapterId, chapterIndex, accepted, answer, board: !!extra };
 }
 
 /**

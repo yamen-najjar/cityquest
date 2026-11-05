@@ -287,6 +287,106 @@ export interface BoardQuestion {
   deduction: Localized;
 }
 
+// ---------------------------------------------------------------------------------------------------
+// The investigation kit: the phone, documents, leads, the "imagined view" and secrets. All of it is data,
+// unlocked by the same triggers, so every adventure uses the same engine.
+
+/**
+ * When something unlocks: 'start' (the game began), a chapter id (that chapter is solved), 'board:<id>'
+ * (that deduction is made), 'lead:<id>' (that lead is solved) or 'choice:<chapterId>:<optionId>'.
+ */
+export type Trigger = string;
+
+/** A document the team can read: a receipt, a ticket, a call log, a note or a newspaper cutting. */
+export interface CaseDocument {
+  id: string;
+  style: 'receipt' | 'ticket' | 'calllog' | 'note' | 'newspaper';
+  title: Localized;
+  /** Label and value rows. Values (times, amounts, names) are the same in every language. */
+  rows: { label: Localized; value: string; /** Looking closer at this row finds a secret. */ secret?: string }[];
+  /** A note under the rows (the small print, a handwritten remark). */
+  note?: Localized;
+}
+
+/** A page of an in-world website, opened in the phone's browser. Every site is fictional. */
+export interface WebPage {
+  id: string;
+  site: string;
+  address: string;
+  title: Localized;
+  body: Localized<string[]>;
+}
+
+/**
+ * A message on the in-game phone. 'text' is a chat message, 'call' a voice message played with the
+ * character's acted voice (read aloud until real recordings replace it), 'web' a link to a WebPage.
+ * Replies let the team answer; the answer they pick changes what comes back.
+ */
+export interface PhoneMessage {
+  id: string;
+  /** A person id, or 'unknown' for a withheld number. */
+  from: string;
+  when: Trigger;
+  kind: 'text' | 'call' | 'web';
+  text: Localized;
+  /** call: what is said, in order. */
+  lines?: { voice: Voice; text: Localized }[];
+  document?: string;
+  page?: string;
+  replies?: { id: string; label: Localized; answer: Localized }[];
+}
+
+/** One frame of the imagined view: a façade drawn as data (or a photo of a public place, later). */
+export interface Facade {
+  /** A photo replaces the drawing when given (a public place, photographed by the team). */
+  src?: string;
+  floors: number;
+  bays: number;
+  door: 'arch' | 'square';
+  roof: 'gable' | 'flat' | 'tower';
+  /** Extra details on top, in percent of the width and height. */
+  marks: { x: number; y: number; kind: 'window' | 'symbol' | 'lamp' | 'sign' | 'statue'; text?: string }[];
+  tone: 'stone' | 'brick' | 'plaster';
+}
+
+/**
+ * A lead: a side investigation that unlocks after chapter `after`. It is checked on the server like every
+ * puzzle (answers.server.ts, key `lead:<id>`), never needed to finish, and counted in the detective report.
+ *   confront  – a person's claim, and the documents that might contradict it: pick the one that does.
+ *   timeline  – events to put in the order they happened, from the times in the documents.
+ *   echo      – the place as it is and as the author imagines it: find what differs.
+ *   listen    – a voice recording: catch the word spoken under the rest.
+ */
+export interface Lead {
+  id: string;
+  after: string;
+  kind: 'confront' | 'timeline' | 'echo' | 'listen';
+  title: Localized;
+  brief: Localized;
+  /** confront: who claims what. */
+  person?: string;
+  claim?: Localized;
+  /** confront: the documents to choose from (ids); timeline: the documents to read the times in. */
+  documents?: string[];
+  /** timeline: the events, listed in the scrambled order they are first shown. */
+  events?: { id: string; text: Localized }[];
+  /** echo: the place now, and as the author imagines it. */
+  echo?: { now: Facade; imagined: Facade; secret?: { x: number; y: number; id: string } };
+  /** listen: the recording; the line marked `quiet` is spoken softly under the rest. */
+  recording?: { voice: Voice; text: Localized; quiet?: boolean }[];
+  input?: 'text' | 'numeric';
+  hints: Localized[];
+  /** What the team learns when it is solved. */
+  outcome: Localized;
+}
+
+/** An optional secret: found by looking closely (a document row, a spot in the imagined view). */
+export interface Secret {
+  id: string;
+  title: Localized;
+  text: Localized;
+}
+
 export interface Ending {
   /** The object the story was about, shown in 3D at the finale. */
   artifact?: ModelSpec;
@@ -308,6 +408,16 @@ export interface Pursuit {
   hintLabel: Localized;
   closer: Localized;
   levels: Localized[];
+  /**
+   * What happens when the pursuer reaches the team (classic and expert mode; relaxed mode only shows the
+   * danger). The first time he takes the newest item, which a short puzzle wins back (answer key
+   * "recover"); the second time the case is lost and `lost` replaces the ending.
+   */
+  caught?: {
+    text: Localized;
+    recover: { prompt: Localized; material?: Localized<string[]>; input?: 'text' | 'numeric'; hints: Localized[]; success: Localized };
+    lost: { title: Localized; text: Localized };
+  };
 }
 
 export interface Adventure {
@@ -344,6 +454,12 @@ export interface Adventure {
   chapters: Chapter[];
   /** Optional deductions for the evidence board in the case journal. */
   board?: BoardQuestion[];
+  /** The investigation kit (see above). */
+  phone?: PhoneMessage[];
+  documents?: CaseDocument[];
+  pages?: WebPage[];
+  leads?: Lead[];
+  secrets?: Secret[];
   ending: Ending;
 }
 

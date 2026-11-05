@@ -35,6 +35,14 @@ export interface Progress {
   deductions: string[];
   /** Story choices made, as chapterId -> optionId. */
   choices: Record<string, string>;
+  /** Times the pursuer caught the team (0-2; the second time the case is lost). */
+  caught: number;
+  /** Steps the pursuer was pushed back after catching the team, so the danger starts over from there. */
+  relief: number;
+  /** The item the pursuer took at the first catch, until the team wins it back. */
+  seized: string | null;
+  /** The first catch is being dealt with (the recovery puzzle is open). */
+  recovering: boolean;
   decision: string | null;
   team: Team;
   startedAt: number;
@@ -54,6 +62,8 @@ export type Action =
   | { type: 'notes'; text: string }
   | { type: 'deduce'; questionId: string }
   | { type: 'choose'; chapterId: string; optionId: string }
+  | { type: 'caught'; now: number }
+  | { type: 'recover' }
   | { type: 'next'; chapterCount: number }
   | { type: 'decide'; choiceId: string; chapterCount: number; now: number }
   | { type: 'tick'; now: number }
@@ -77,6 +87,10 @@ export function newProgress(adventure: string, team: Team, now: number, mode: Mo
     notes: '',
     deductions: [],
     choices: {},
+    caught: 0,
+    relief: 0,
+    seized: null,
+    recovering: false,
     decision: null,
     team: clampTeam(team),
     startedAt: now,
@@ -129,6 +143,23 @@ export function reduce(p: Progress, a: Action): Progress {
       // Made once, after the chapter is solved; a choice is never changed afterwards.
       if (!p.solved.includes(a.chapterId) || p.choices[a.chapterId]) return p;
       return { ...p, choices: { ...p.choices, [a.chapterId]: a.optionId } };
+    case 'caught': {
+      if (p.decision || p.caught >= 2) return p;
+      if (p.caught === 1) return { ...p, caught: 2, recovering: false, decision: LOST, finishedAt: a.now };
+      // First catch: the pursuer takes the newest item and falls back to the second level.
+      const item = p.inventory.at(-1) ?? null;
+      return {
+        ...p,
+        caught: 1,
+        recovering: true,
+        seized: item,
+        inventory: item ? p.inventory.slice(0, -1) : p.inventory,
+        relief: p.relief + Math.max(0, pressure(p) - 2),
+      };
+    }
+    case 'recover':
+      if (!p.recovering) return p;
+      return { ...p, recovering: false, seized: null, inventory: p.seized && !p.inventory.includes(p.seized) ? [...p.inventory, p.seized] : p.inventory };
     case 'deduce':
       return p.deductions.includes(a.questionId) ? p : { ...p, deductions: [...p.deductions, a.questionId] };
     case 'next':
@@ -153,6 +184,32 @@ export function chose(p: Pick<Progress, 'choices'>, when: string | undefined): b
   if (!when) return true;
   const [chapterId, optionId] = when.split(':');
   return !!chapterId && p.choices[chapterId] === optionId;
+}
+
+/** The decision recorded when the pursuer caught the team a second time: the case is lost. */
+export const LOST = 'lost';
+
+export function isLost(p: Pick<Progress, 'decision'>): boolean {
+  return p.decision === LOST;
+}
+
+/**
+ * What feeds the pursuer: every hint, and in expert mode (no hints) every third wrong answer, less the
+ * steps he was pushed back after a catch.
+ */
+export function pressure(p: Progress): number {
+  const wrong = Object.values(p.wrongAttempts).reduce((a, b) => a + b, 0);
+  return Math.max(0, totalHints(p) + (p.mode === 'expert' ? Math.floor(wrong / 3) : 0) - p.relief);
+}
+
+/** How close the pursuer is now, 0 (far) to levels - 1 (right behind you). */
+export function threatLevel(p: Progress, levels: number): number {
+  return pursuitLevel(pressure(p), levels);
+}
+
+/** True when the pursuer has reached the team and may catch them (never in relaxed mode). */
+export function canCatch(p: Progress, levels: number): boolean {
+  return p.mode !== 'relaxed' && !p.decision && p.caught < 2 && !p.recovering && threatLevel(p, levels) >= levels - 1;
 }
 
 export function isFinished(p: Progress): boolean {
@@ -205,7 +262,7 @@ export function xpFor(p: Progress): number {
   const hintCost = p.mode === 'classic' ? 15 : 0;
   for (const id of p.solved) xp += Math.max(40, 100 - hintCost * (p.hintsUsed[id] ?? 0)) + 25 * starsFor(p, id);
   xp += 30 * p.deductions.length;
-  if (isFinished(p)) xp += p.mode === 'expert' ? 300 : 200;
+  if (isFinished(p) && !isLost(p)) xp += p.mode === 'expert' ? 300 : 200;
   return xp;
 }
 
@@ -283,6 +340,10 @@ export function parseProgress(raw: unknown, adventure: string): Progress | null 
     // Older saves have no board yet: an empty one.
     deductions: idList(p.deductions),
     choices: choiceMap(p.choices),
+    caught: typeof p.caught === 'number' && Number.isInteger(p.caught) ? Math.min(2, Math.max(0, p.caught)) : 0,
+    relief: typeof p.relief === 'number' && Number.isInteger(p.relief) && p.relief >= 0 ? Math.min(p.relief, 1000) : 0,
+    seized: isId(p.seized) ? p.seized : null,
+    recovering: p.recovering === true,
     decision: isId(p.decision) ? p.decision : null,
     team: clampTeam({ name: team.name, players: Number(team.players) }),
     startedAt,
@@ -311,13 +372,15 @@ export function fitToAdventure(p: Progress, chapterIds: readonly string[], itemI
   // Pulled back to the first open chapter: start it from its checkpoint.
   if (chapter === count || chapter < p.chapter) stage = 'travel';
   else if (stage === 'solved' && !solved.includes(chapterIds[chapter]!)) stage = 'puzzle';
-  const finished = p.decision !== null && chapter === count;
+  // A lost case is finished wherever it stopped; any other decision only stands at the end.
+  const finished = p.decision === LOST || (p.decision !== null && chapter === count);
   return {
     ...p,
     chapter,
     stage,
     solved,
     inventory: p.inventory.filter((id) => items.has(id)),
+    seized: p.seized && items.has(p.seized) ? p.seized : null,
     deductions: p.deductions.filter((id) => boardIds.includes(id)),
     // A choice only stands for a chapter that is still solved.
     choices: Object.fromEntries(Object.entries(p.choices).filter(([id]) => solved.includes(id))),

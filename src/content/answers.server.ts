@@ -43,6 +43,8 @@ export const answerKeys: Record<string, AnswerKey> = {
     verdict: { accepted: ['kehl+second-half', 'kehl+whole-letter'] },
   },
   'het-duivelshuis': {
+    // What the pursuer took at the first catch comes back with the pawn ticket number (see Pursuit.caught).
+    recover: { accepted: ['42'] },
     'board:tower': { accepted: [board('lena', 'clue:sabelspoort-0', 'clue:carillon-0'), board('lena', 'said:sabelspoort-where', 'clue:carillon-0')] },
     'board:honest': { accepted: [board('devries', 'clue:archief-0', 'item:iron-key'), board('devries', 'clue:archief-0', 'clue:duivels-0')] },
     'board:velvet': {
@@ -76,6 +78,8 @@ export const answerKeys: Record<string, AnswerKey> = {
     aanklacht: { accepted: ['koster+whole-ledger', 'koster+ledger-left'] },
   },
   'neckar-ring': {
+    // What the pursuer took at the first catch comes back with this word (see Pursuit.caught).
+    recover: { accepted: ['mirror', 'the mirror', 'spiegel', 'der spiegel', 'de spiegel', 'مرآة', 'المرآة', 'مراية'] },
     'board:pursuer': {
       accepted: [
         board('collector', 'clue:whispers-1', 'said:watchman-grey'),
