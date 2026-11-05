@@ -15,6 +15,9 @@ const board = (person: string, ...cards: string[]) => boardAnswer(person, cards)
 
 export const answerKeys: Record<string, AnswerKey> = {
   'lost-manuscript': {
+    // Second truths (variants): only the answers that change.
+    'verdict@anna': { accepted: ['anna+brass-key'] },
+    'report@anna': { accepted: ['helper=anna;how=door;when=between;who=anna;why=sell'] },
     // The case report: "slot=option;…" (see lib/engine/report.ts).
     report: { accepted: ['helper=anna;how=door;when=between;who=kehl;why=lock'] },
     // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
@@ -50,6 +53,9 @@ export const answerKeys: Record<string, AnswerKey> = {
     verdict: { accepted: ['kehl+second-half', 'kehl+whole-letter'] },
   },
   'het-duivelshuis': {
+    // Second truths (variants): only the answers that change.
+    'aanklacht@saar': { accepted: ['devries+iron-key'] },
+    'report@saar': { accepted: ['ledger=names;proof=glove;since=gate;who=devries;why=sell'] },
     // The case report: "slot=option;…" (see lib/engine/report.ts).
     report: { accepted: ['ledger=names;proof=glove;since=gate;who=koster;why=sell'] },
     // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.
@@ -92,6 +98,8 @@ export const answerKeys: Record<string, AnswerKey> = {
     aanklacht: { accepted: ['koster+whole-ledger', 'koster+ledger-left'] },
   },
   'neckar-ring': {
+    // Second truths (variants): only the answers that change.
+    'report@kaspar': { accepted: ['how=free-will;name=valen;weakness=dry;who=kaspar;why=fear'] },
     // The case report: "slot=option;…" (see lib/engine/report.ts).
     report: { accepted: ['how=free-will;name=valen;weakness=dry;who=hedda;why=fear'] },
     // Leads (see Lead in types.ts): confront "documentId:row", timeline the event ids in order.

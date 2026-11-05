@@ -149,7 +149,7 @@ function Investigation({
       const res = await fetch(`/api/game/${a.slug}/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chapterId: `board:${q.id}`, answer: boardAnswer(person, pinned) }),
+        body: JSON.stringify({ chapterId: `board:${q.id}`, answer: boardAnswer(person, pinned), variant: p.variant ?? undefined }),
       });
       if (res.status === 429) return setStatus('slow');
       if (!res.ok) throw new Error(String(res.status));

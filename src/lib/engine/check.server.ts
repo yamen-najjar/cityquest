@@ -31,11 +31,15 @@ export function resolveGuess(slug: string, body: unknown): ResolvedGuess | Resol
   const key = answerKeys[slug];
   if (!adventure || !key) return { ok: false, status: 404, error: 'unknown adventure' };
   if (!body || typeof body !== 'object') return { ok: false, status: 400, error: 'invalid body' };
-  const { chapterId, answer } = body as { chapterId?: unknown; answer?: unknown };
+  const { chapterId, answer, variant } = body as { chapterId?: unknown; answer?: unknown; variant?: unknown };
   if (typeof chapterId !== 'string' || typeof answer !== 'string' || answer.length > 200) {
     return { ok: false, status: 400, error: 'invalid body' };
   }
-  const accepted = key[chapterId]?.accepted;
+  // A replay's second truth: its own answers where they differ ("<key>@<variant>"), the original elsewhere.
+  if (variant !== undefined && (typeof variant !== 'string' || !adventure.variants?.some((v) => v.id === variant))) {
+    return { ok: false, status: 400, error: 'unknown variant' };
+  }
+  const accepted = (typeof variant === 'string' ? key[`${chapterId}@${variant}`]?.accepted : undefined) ?? key[chapterId]?.accepted;
   if (!accepted) return { ok: false, status: 404, error: 'unknown chapter' };
   // Extras are not chapters: board questions ("board:<id>") and leads ("lead:<id>") unlock after their
   // chapter, so for order gating they count as the chapter after it (every chapter up to and including

@@ -631,6 +631,7 @@ export const lostManuscript: Authored<Adventure> = {
           { id: 'clara', label: { de: 'Clara', en: 'Clara', ar: 'كلارا' } },
           { id: 'ben', label: { de: 'Ben', en: 'Ben', ar: 'بن' } },
           { id: 'elise', label: { de: 'Elise Brandt', en: 'Elise Brandt', ar: 'إليزه برانت' } },
+          { id: 'anna', label: { de: 'Anna', en: 'Anna', ar: 'آنا' } },
         ],
         junior: { de: 'Denkt wie Detektive: Wer wusste ein Geheimnis, das er gar nicht wissen durfte?', en: 'Think like detectives: who knew a secret they should never have known?', ar: 'فكّروا كالمحققين: من عرف سرّاً ما كان يجب أن يعرفه؟' },
         hints: [
@@ -965,7 +966,7 @@ export const lostManuscript: Authored<Adventure> = {
       },
       {
         id: 'how',
-        question: { de: 'Wie kam er hinein?', en: 'How did he get in?', ar: 'كيف دخل؟' },
+        question: { de: 'Wie kam der Täter hinein?', en: 'How did the thief get in?', ar: 'كيف دخل اللص؟' },
         options: [
           { id: 'key', label: { de: 'Mit dem Schlüssel aus dem Schrank', en: 'With the key from the cabinet', ar: 'بالمفتاح من الخزانة' } },
           { id: 'door', label: { de: 'Er brach die Hintertür auf', en: 'He forced the back door', ar: 'كسر الباب الخلفي' } },
@@ -1012,6 +1013,48 @@ export const lostManuscript: Authored<Adventure> = {
       en: ['Heidelberg, an autumn evening. A codex that no one has been shown for centuries has vanished from the university archive.', 'Someone who signs only as VII has chosen you to find it. Follow the numbers, do not trust every witness — and keep an eye on the clock.'],
       ar: ['هايدلبرغ، مساء خريفي. اختفت من أرشيف الجامعة مخطوطة لم يُطلَع عليها أحد منذ قرون.', 'شخص يوقّع باسم VII فقط اختاركم للعثور عليها. اتبعوا الأرقام، ولا تثقوا بكل شاهد — وراقبوا الساعة.'],
     },
+  // Second truths for replays (see Variant): another culprit, the same clues and a few new ones.
+  variants: [
+    {
+      id: 'anna',
+      title: { de: 'Die Nachtwache', en: 'The Night Guard', ar: 'حارسة الليل' },
+      culprit: 'anna',
+      chapters: {
+        verdict: {
+          story: {
+            de: ['Elise führt dich zur Hintertür. Das Schloss ist aufgebrochen. Davor wartet Kehl, bleich. „Ich wollte ihn kaufen, nicht stehlen“, sagt er. „Jemand sollte ihn mir am Fluss bringen. Niemand kam.“ Elise sieht dich an. „Wer hat diese Tür aufgebrochen?“'],
+            en: ['Elise leads you to the back door. The lock has been forced. Kehl is waiting in front of it, pale. “I came to buy it, not to steal it,” he says. “Someone was meant to bring it to me at the river. Nobody came.” Elise looks at you. “Who forced this door?”'],
+            ar: ['تقودك إليزه إلى الباب الخلفي. القفل مكسور. أمامه ينتظر كيل شاحباً. «جئت لأشتريها، لا لأسرقها»، يقول. «كان على أحدهم أن يحضرها لي عند النهر. لم يأتِ أحد». تنظر إليزه إليك. «من كسر هذا الباب؟»'],
+          },
+          hints: [
+            { de: 'Wer hat gleich am Anfang über den Schlüssel gelogen – und wer verließ in jener Nacht das Tor?', en: 'Who lied about the key right at the start — and who left the gate that night?', ar: 'من كذب بشأن المفتاح منذ البداية — ومن غادر البوابة تلك الليلة؟' },
+            { de: 'Der Beweis ist der Schlüssel, über den sie gelogen hat. Sieh in deinen Gegenständen nach.', en: 'The proof is the key she lied about. Look among your items.', ar: 'الدليل هو المفتاح الذي كذبت بشأنه. ابحث بين أغراضك.' },
+            { de: 'Anna, mit dem Messingschlüssel.', en: 'Anna, with the brass key.', ar: 'آنا، مع المفتاح النحاسي.' },
+          ],
+          junior: { de: 'Wer hat gleich am Anfang gelogen? Wer einmal lügt, versteckt vielleicht noch mehr.', en: 'Who told a lie at the very beginning? Someone who lies once may be hiding more.', ar: 'من كذب في البداية تماماً؟ من يكذب مرة قد يخفي أكثر.' },
+          success: { de: 'Anna. Sie log über den Schlüssel, um alle auf Ben zu hetzen, verließ das Tor genau in der Stunde, in der das Schloss brach, und wollte den Codex am Fluss an Kehl verkaufen. Als sie den Messingschlüssel in deiner Hand sieht, hört sie auf, sich zu verstellen.', en: 'Anna. She lied about the key to set everyone on Ben, left the gate in the very hour the lock was forced, and meant to sell the codex to Kehl by the river. When she sees the brass key in your hand, she stops pretending.', ar: 'آنا. كذبت بشأن المفتاح لتوجّه الجميع نحو بن، وغادرت البوابة في الساعة نفسها التي كُسر فيها القفل، وكانت تنوي بيع المخطوطة لكيل عند النهر. حين ترى المفتاح النحاسي في يدك، تكفّ عن التظاهر.' },
+        },
+      },
+      phone: [
+        { id: 'ben-anna', from: 'ben', when: 'study', kind: 'text', text: { de: 'Etwas lässt mich nicht los: Letzte Woche fragte mich Anna, was ein altes Buch wie der Codex wohl wert wäre. Ich dachte, sie macht Witze.', en: 'Something keeps bothering me: last week Anna asked me what an old book like the codex might be worth. I thought she was joking.', ar: 'شيء ما يقلقني: الأسبوع الماضي سألتني آنا كم قد تساوي كتاب قديم مثل المخطوطة. ظننتها تمزح.' } },
+        { id: 'clara-river', from: 'clara', when: 'chest', kind: 'text', text: { de: 'Ich habe Anna heute Abend unten am Fluss gesehen, ganz in der Nähe der Laterne. Sie sagte, sie warte „auf einen Käufer“ – und lachte dann zu laut.', en: 'I saw Anna down by the river this evening, close to the lantern. She said she was waiting “for a buyer” — and then laughed too loudly.', ar: 'رأيت آنا هذا المساء قرب النهر، قريباً من الفانوس. قالت إنها تنتظر «مشترياً» — ثم ضحكت بصوت عالٍ أكثر من اللازم.' } },
+      ],
+      phoneText: {
+        'kehl-sorry': { de: 'Es tut mir leid, dass ich ihn überhaupt kaufen wollte. Ich würde ihn trotzdem gern eines Tages lesen – wenn du mich lässt.', en: 'I am sorry I ever wanted to buy it. I would still like to read it one day — if you let me.', ar: 'آسف لأنني أردت شراءها أصلاً. ما زلت أودّ أن أقرأها يوماً — إن سمحت لي.' },
+      },
+      notes: {
+        anna: [{ after: 'verdict', text: { de: 'Brach die Hintertür auf, um den Codex an Kehl zu verkaufen.', en: 'Forced the back door to sell the codex to Kehl.', ar: 'كسرت الباب الخلفي لتبيع المخطوطة لكيل.' } }],
+        kehl: [{ after: 'verdict', text: { de: 'Wartete am Fluss, um den Codex zu kaufen – nicht, um ihn zu stehlen.', en: 'Waited by the river to buy the codex — not to steal it.', ar: 'انتظر عند النهر ليشتري المخطوطة — لا ليسرقها.' } }],
+      },
+      ending: {
+        reveal: {
+          de: ['„Der Codex Lumen ist keine Schatzkarte“, sagt Elise. „Seine Seiten sind leer bis auf die erste: Wer ihn findet, soll die Geschichten dieser Stadt sammeln, bevor sie vergessen werden.“', '„Albrecht wollte ihn für seine Vitrine kaufen. Und Anna war bereit, ihn ihm zu verkaufen.“', 'Anna starrt auf den Boden. „Ein Jahreslohn“, murmelt sie. „Für ein Buch, das niemand liest.“ Elise schüttelt den Kopf. „Dann lies es, bevor du es verkaufst.“'],
+          en: ['“The Codex Lumen is no treasure map,” says Elise. “Its pages are blank except the first: whoever finds it is to gather the stories of this city before they are forgotten.”', '“Albrecht wanted to buy it for his glass case. And Anna was ready to sell it to him.”', 'Anna stares at the ground. “A year’s wages,” she mutters. “For a book nobody reads.” Elise shakes her head. “Then read it before you sell it.”'],
+          ar: ['«مخطوطة لومن ليست خريطة كنز»، تقول إليزه. «صفحاتها فارغة إلا الأولى: من يجدها عليه أن يجمع حكايات هذه المدينة قبل أن تُنسى».', '«أراد ألبرشت أن يشتريها لخزانته الزجاجية. وكانت آنا مستعدة لأن تبيعها له».', 'تحدّق آنا في الأرض. «أجر سنة كاملة»، تتمتم. «مقابل كتاب لا يقرؤه أحد». تهزّ إليزه رأسها. «إذن اقرئيه قبل أن تبيعيه».'],
+        },
+      },
+    },
+  ],
   ending: {
     // Arrives in the dashboard a week after the case is solved.
     letter: {

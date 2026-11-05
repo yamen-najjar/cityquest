@@ -199,6 +199,7 @@ const nl: Dictionary = {
     emptyAnswer: 'Typ eerst een antwoord.',
     networkError: 'Je antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer het opnieuw.',
     tooFast: 'Te veel pogingen in korte tijd. Wacht even en probeer het dan opnieuw.',
+    variant: { title: 'Een andere waarheid', text: 'Je hebt deze zaak al eens opgelost. Dezelfde stad, dezelfde getuigen — maar deze keer leiden de sporen misschien naar iemand anders.' },
     junior: { label: 'Voor jonge speurders' },
     extras: {
       title: 'Nog meer te ontdekken',

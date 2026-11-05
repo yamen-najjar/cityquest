@@ -1089,6 +1089,49 @@ export const hetDuivelshuis: Authored<Adventure> = {
       en: ['Arnhem, an evening at the Korenmarkt. A woman who restores old houses has disappeared — after writing that she had found something in the Devil’s House.', 'Three stone devils have guarded that house for five hundred years. Ask them. Ask the musicians at the gate. And trust no one who calls himself a collector.'],
       ar: ['أرنم، مساء في ساحة كورنمارخت. اختفت امرأة ترمّم البيوت القديمة — بعد أن كتبت أنها وجدت شيئاً في بيت الشيطان.', 'ثلاثة شياطين حجرية تحرس ذلك البيت منذ خمسمئة عام. اسألوها. اسألوا العازفين عند البوابة. ولا تثقوا بأحد يسمّي نفسه جامعاً.'],
     },
+  // Second truths for replays (see Variant): another culprit, the same clues and a few new ones.
+  variants: [
+    {
+      id: 'saar',
+      title: { de: 'Der Schlüssel der Kuratorin', en: 'The Curator’s Key', ar: 'مفتاح أمينة المتحف' },
+      culprit: 'devries',
+      chapters: {
+        aanklacht: {
+          story: {
+            de: ['Im Hof hinter dem Teufelshaus steht Koster, ein Handschuh fehlt ihm, und er lacht dich aus. „Ja, ich bin dir gefolgt. Aber einen Schlüssel zu dieser Schublade hatte ich nie.“ Lena tritt aus dem Schatten. „Er hat recht“, sagt sie leise. „Wer hat das Archiv geöffnet – und was ist dein Beweis?“'],
+            en: ['On the courtyard behind the Devil’s House stands Koster, missing one glove, and he laughs at you. “Yes, I followed you. But I never had a key to that drawer.” Lena steps out of the shadow. “He is right,” she says quietly. “Who opened the archive — and what is your proof?”'],
+            ar: ['في الفناء خلف بيت الشيطان يقف كوستر، ينقصه قفاز، ويضحك منك. «نعم، تبعتك. لكنني لم أملك قط مفتاحاً لذلك الدرج». تخرج لينا من الظل. «إنه محق»، تقول بهدوء. «من فتح الأرشيف — وما دليلك؟»'],
+          },
+          prompt: { de: 'Wer hat die Schublade im Archiv geöffnet? Nenne die Person und lege den Beweis vor.', en: 'Who opened the drawer in the archive? Name them and lay down the proof.', ar: 'من فتح الدرج في الأرشيف؟ سمِّ الشخص وقدّم الدليل.' },
+          hints: [
+            { de: 'Wer sagte, die Schublade sei aufgebrochen – und wer hätte sie ohne Gewalt öffnen können?', en: 'Who said the drawer had been forced — and who could have opened it without force?', ar: 'من قال إن الدرج كُسر — ومن كان يستطيع فتحه بلا كسر؟' },
+            { de: 'Der Beweis ist der Schlüssel, der sich ohne einen Kratzer dreht. Sieh in deinen Gegenständen nach.', en: 'The proof is the key that turns without a scratch. Look among your items.', ar: 'الدليل هو المفتاح الذي يدور بلا خدش واحد. ابحث بين أغراضك.' },
+            { de: 'Saar de Vries, mit dem alten Eisenschlüssel.', en: 'Saar de Vries, with the old iron key.', ar: 'سار دي فريس، مع المفتاح الحديدي القديم.' },
+          ],
+          junior: { de: 'Wer hat gesagt, die Schublade sei kaputt? Prüft, ob das wirklich stimmt.', en: 'Who said the drawer was broken? Check whether that was really true.', ar: 'من قال إن الدرج مكسور؟ تحقّقوا إن كان ذلك صحيحاً فعلاً.' },
+          success: { de: 'Saar. Der Eisenschlüssel dreht sich ohne einen einzigen Kratzer: Die Schublade wurde nie aufgebrochen, sondern aufgeschlossen – mit dem Zweitschlüssel des Museums. Koster war ihr Käufer, und seinen Handschuh hat sie hingelegt, um sich hinter ihm zu verstecken. Sie sagt kein Wort.', en: 'Saar. The iron key turns without a single scratch: the drawer was never forced, it was unlocked — with the museum’s own spare key. Koster was her buyer, and she left his glove there to hide behind him. She does not say a word.', ar: 'سار. يدور المفتاح الحديدي بلا خدش واحد: الدرج لم يُكسر قط، بل فُتح — بالمفتاح الاحتياطي للمتحف نفسه. كان كوستر مشتريها، وتركت قفازه هناك لتختبئ خلفه. لا تقول كلمة.' },
+        },
+      },
+      phone: [
+        { id: 'bram-saar', from: 'bram', when: 'carillon', kind: 'text', text: { de: 'Komisch: Die Dame vom Museum kam um 21:10 am Tor vorbei, lange nach Feierabend, und sehr eilig. Sie sah durch mich hindurch.', en: 'Funny thing: the lady from the museum passed the gate at 21:10, long after closing, in a great hurry. She looked straight through me.', ar: 'أمر غريب: مرّت السيدة من المتحف بالبوابة الساعة 21:10، بعد الإغلاق بكثير، وهي مستعجلة جداً. نظرت من خلالي كأنني غير موجود.' } },
+        { id: 'alarm-log', from: 'unknown', when: 'archief', kind: 'text', text: { de: 'Frag die Kuratorin, warum das Alarmprotokoll ihre Karte um 21:40 zeigt – zwanzig Minuten bevor sie dich anrief.', en: 'Ask the curator why the alarm log shows her pass at 21:40 — twenty minutes before she called you.', ar: 'اسأل أمينة المتحف لماذا يُظهر سجل الإنذار بطاقتها الساعة 21:40 — قبل عشرين دقيقة من اتصالها بك.' } },
+      ],
+      notes: {
+        devries: [{ after: 'aanklacht', text: { de: 'Öffnete die Schublade mit dem Zweitschlüssel des Museums und legte Kosters Handschuh hin.', en: 'Opened the drawer with the museum’s spare key and planted Koster’s glove.', ar: 'فتحت الدرج بالمفتاح الاحتياطي للمتحف ودسّت قفاز كوستر.' } }],
+      },
+      ending: {
+        reveal: {
+          de: ['„Das Hauptbuch ist keine Schatzliste“, wird Lena dir später erklären. „Es ist ein Versprechen. Maarten van Rossum ließ die Teufel an sein Haus setzen, damit die Leute wegsehen – und versteckte dahinter ein Hauptbuch: Wer in dieser Stadt kein Dach hatte, fand hier eines.“', '„Die Teufel bewachen kein Gold. Sie bewachen die Namen aller, die Arnheim einst aufnahm.“', 'Saar hatte es Koster versprochen, Seite für Seite, und sich hinter seinem Handschuh versteckt. Du hast beide durchschaut.'],
+          en: ['“The ledger is no treasure list,” Lena will explain to you later. “It is a promise. Maarten van Rossum had the devils set on his house so that people would look away — and hid a ledger behind them: whoever had no roof in this city found one here.”', '“The devils guard no gold. They guard the names of everyone Arnhem once took in.”', 'Saar had promised it to Koster, page by page, and hid behind his glove. You saw through them both.'],
+          ar: ['«الدفتر ليس قائمة كنوز»، ستشرح لك لينا لاحقاً. «إنه وعد. وضع مارتن فان روسوم الشياطين على بيته كي يشيح الناس بأنظارهم — وخبّأ خلفها دفتراً: من لم يكن له سقف في هذه المدينة وجد هنا سقفاً».', '«الشياطين لا تحرس ذهباً. إنها تحرس أسماء كل من آوتهم أرنم يوماً».', 'كانت سار قد وعدت كوستر به، صفحةً صفحة، واختبأت خلف قفازه. لقد كشفتهما معاً.'],
+        },
+        revealIf: [
+          { when: 'archief:police', text: { de: 'Blaulicht fegt über den Hof: Saar hat die Polizei selbst gerufen, um Koster fassen zu lassen. Jetzt bleiben die Beamten vor ihr stehen.', en: 'Blue light sweeps across the courtyard: Saar called the police herself, to have Koster caught. Now the officers stop in front of her.', ar: 'يكنس الضوء الأزرق الفناء: سار نفسها استدعت الشرطة لتوقع بكوستر. والآن يتوقف الشرطيون أمامها هي.' } },
+          { when: 'archief:wait', text: { de: 'Keine Sirenen, kein Licht: nur du, Lena, Koster – und Saar, die eine Minute später kommt und stehen bleibt, als sie eure Gesichter sieht.', en: 'No sirens, no lights: only you, Lena, Koster — and Saar, who arrives a minute later and stops when she sees your faces.', ar: 'لا صفارات ولا أضواء: أنت ولينا وكوستر فقط — وسار التي تصل بعد دقيقة وتتجمّد حين ترى وجوهكم.' } },
+        ],
+      },
+    },
+  ],
   ending: {
     // Arrives in the dashboard a week after the case is solved.
     letter: {

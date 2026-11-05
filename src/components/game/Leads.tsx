@@ -14,12 +14,12 @@ import { OrderStrips } from './puzzles/OrderStrips';
 type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network';
 
 /** Sends a lead's answer to the server, like every puzzle. */
-async function checkLead(slug: string, leadId: string, answer: string): Promise<Status | 'correct'> {
+async function checkLead(slug: string, leadId: string, answer: string, variant: string | null): Promise<Status | 'correct'> {
   try {
     const res = await fetch(`/api/game/${slug}/check`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chapterId: `lead:${leadId}`, answer }),
+      body: JSON.stringify({ chapterId: `lead:${leadId}`, answer, variant: variant ?? undefined }),
     });
     if (res.status === 429) return 'slow';
     if (!res.ok) return 'network';
@@ -160,7 +160,7 @@ function LeadView({
 
   async function submit(answer: string) {
     setStatus('checking');
-    const r = await checkLead(a.slug, lead.id, answer);
+    const r = await checkLead(a.slug, lead.id, answer, p.variant);
     if (r === 'correct') {
       sfx('correct');
       dispatch({ type: 'lead', leadId: lead.id });

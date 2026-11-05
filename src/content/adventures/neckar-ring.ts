@@ -1052,6 +1052,28 @@ export const neckarRing: Authored<Adventure> = {
       en: ['Heidelberg, the old town by the river. In an antiques shop waits a little box nobody wants to buy, and in it a ring.', 'People say that after dark you sometimes see a man in grey in the shop windows who is not standing there. Go anyway. And do not look into windows for too long.'],
       ar: ['هايدلبرغ، البلدة القديمة على النهر. في محل تحف ينتظر صندوق صغير لا يريد أحد شراءه، وفيه خاتم.', 'يقول الناس إنكم بعد حلول الظلام قد ترون أحياناً في واجهات المحلات رجلاً رمادياً لا يقف هناك. اذهبوا رغم ذلك. ولا تحدّقوا في النوافذ طويلاً.'],
     },
+  // Second truths for replays (see Variant): another culprit, the same clues and a few new ones.
+  variants: [
+    {
+      id: 'kaspar',
+      title: { de: 'Die Last des Wächters', en: 'The Watchman’s Burden', ar: 'عبء الحارس' },
+      culprit: 'kaspar',
+      phone: [
+        { id: 'hedda-brought', from: 'hedda', when: 'watchman', kind: 'text', text: { de: 'Das Kästchen war bis letzte Woche nicht in meinem Laden. Jemand hat es zurückgebracht. Seinen Namen kann ich nicht schreiben – er hört durch Glas.', en: 'The box was not in my shop until last week. Someone brought it back. I cannot write his name — he hears through glass.', ar: 'لم يكن الصندوق في محلي حتى الأسبوع الماضي. أحدهم أعاده. لا أستطيع أن أكتب اسمه — فهو يسمع عبر الزجاج.' } },
+        { id: 'collector-watchman', from: 'unknown', when: 'ledger', kind: 'text', text: { de: 'Der Wächter glaubt, er sei jetzt frei. Niemand, der mich weitergibt, ist frei.', en: 'The watchman thinks he is free now. Nobody who passes me on is free.', ar: 'يظنّ الحارس أنه صار حراً. لا أحد يمرّرني إلى غيره يصبح حراً.' } },
+      ],
+      notes: {
+        kaspar: [{ after: 'bridge', text: { de: 'Trug den Ring nach Hedda vierzig Jahre lang. Brachte ihn letzte Woche in ihren Laden zurück und zwang sie, ihn weiterzugeben.', en: 'Wore the ring after Hedda, for forty years. Brought it back to her shop last week and made her pass it on.', ar: 'لبس الخاتم بعد هيدا أربعين عاماً. أعاده إلى محلها الأسبوع الماضي وأجبرها على تمريره.' } }],
+      },
+      ending: {
+        reveal: {
+          de: ['Eine zweite, sanfte Stimme flüstert: „Hundert Jahre habe ich gewartet, dass mich jemand bei meinem Namen ruft.“', 'Plötzlich steht Hedda auf der Brücke, und hinter ihr Kaspar, seine Wächterlaterne zittert. „Vierzig Jahre habe ich ihn nach ihr getragen“, sagt er. „Letzte Woche konnte ich nicht mehr. Ich habe sie gezwungen, ihn wegzugeben. Es tut mir leid.“', 'Der Ring gleitet von deinem Finger und liegt in deiner Hand. Die Wahl liegt bei dir.'],
+          en: ['A second, gentle voice whispers: “For a hundred years I have waited for someone to call me by my name.”', 'Suddenly Hedda is on the bridge, and behind her Kaspar, his watchman’s lantern shaking. “Forty years I carried it after her,” he says. “Last week I could not anymore. I made her give it away. I am sorry.”', 'The ring slides off your finger and lies in your hand. The choice is yours.'],
+          ar: ['يهمس صوت ثانٍ رقيق: «مئة عام وأنا أنتظر أن يناديني أحد باسمي».', 'فجأة تظهر هيدا على الجسر، وخلفها كاسبار، وفانوس الحارس يرتجف في يده. «أربعين عاماً حملته بعدها»، يقول. «الأسبوع الماضي لم أعد أحتمل. أجبرتها على أن تعطيه لغيري. أنا آسف».', 'ينزلق الخاتم من إصبعك ويستقر في يدك. القرار لك.'],
+        },
+      },
+    },
+  ],
   ending: {
     // Arrives in the dashboard a week after the case is solved.
     letter: {

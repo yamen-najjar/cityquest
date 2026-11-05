@@ -23,6 +23,7 @@ import { CaughtDialog, DangerPulse } from './Danger';
 import { Phone, senderName } from './Phone';
 import { Journal, combinedToast } from './Journal';
 import { Artifact3D } from './lazy';
+import { applyVariant, nextVariant } from '@/lib/engine/variant';
 import { Finale, PursuitMeter, Results, StartScreen } from './Screens';
 
 const PLAYING_KEY = 'cityquest:playing';
@@ -38,9 +39,13 @@ export interface GameProps {
   languageLabel: string;
 }
 
-export function GameClient({ adventure: a, locale, cityName, t, achievements, languageLabel }: GameProps) {
+export function GameClient({ adventure: base, locale, cityName, t, achievements, languageLabel }: GameProps) {
   const [loaded, setLoaded] = useState(false);
   const [p, setP] = useState<Progress | null>(null);
+  // The truth the next new game tells: a replay of a solved case draws the next variant.
+  const [upcoming, setUpcoming] = useState<string | null>(null);
+  const variantId = p ? p.variant : upcoming;
+  const a = useMemo(() => applyVariant(base, variantId), [base, variantId]);
   const [onStart, setOnStart] = useState(true);
   const [now, setNow] = useState(() => Date.now());
   const [showTimer, setShowTimer] = useState(false);
@@ -62,11 +67,11 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
       saved &&
       fitToAdventure(
         saved,
-        a.chapters.map((c) => c.id),
-        a.items.map((i) => i.id),
-        (a.board ?? []).map((q) => q.id),
+        base.chapters.map((c) => c.id),
+        base.items.map((i) => i.id),
+        (base.board ?? []).map((q) => q.id),
       ),
-    [a],
+    [base],
   );
 
   // Load saved progress once, in the browser. A reload or a language switch in the same tab goes straight
@@ -235,6 +240,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
   }, [stepKey]);
 
   const restart = () => {
+    setUpcoming(p ? (isFinished(p) ? nextVariant(base, p.variant) : p.variant) : upcoming);
     store.clear(a.slug);
     void remoteDelete(a.slug); // also drop the account save, so the next reconcile cannot resurrect it
     earnedRef.current = null;
@@ -339,7 +345,7 @@ export function GameClient({ adventure: a, locale, cityName, t, achievements, la
             headingRef={headingRef}
             onBegin={(team, mode) => {
               unlockAudio();
-              if (!p) setP(newProgress(a.slug, team, Date.now(), mode));
+              if (!p) setP(newProgress(a.slug, team, Date.now(), mode, upcoming));
               else setP(reduce(p, { type: 'tick', now: Date.now() }));
               setOnStart(false);
             }}

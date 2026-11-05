@@ -443,6 +443,27 @@ export interface Pursuit {
   };
 }
 
+/**
+ * A second truth for replays: the same city and clues, another culprit. It overrides parts of the story by
+ * id; answers that change are in answers.server.ts as "<key>@<variant id>" (at least the last chapter's
+ * or the case report's).
+ */
+export interface Variant {
+  id: string;
+  /** Named on the start screen and in the results when a replay draws it. */
+  title: Localized;
+  /** The person behind it this time. */
+  culprit: string;
+  chapters?: Record<string, { story?: Localized<string[]>; prompt?: Localized; hints?: Localized[]; junior?: Localized; success?: Localized }>;
+  /** Messages only this truth sends. */
+  phone?: PhoneMessage[];
+  /** Messages whose text changes, by id. */
+  phoneText?: Record<string, Localized>;
+  /** Notes added to people in the journal, by person id. */
+  notes?: Record<string, NonNullable<Person['notes']>>;
+  ending?: { reveal?: Localized<string[]>; revealIf?: WhenChosen[] };
+}
+
 export interface Adventure {
   slug: string;
   city: string;
@@ -492,6 +513,10 @@ export interface Adventure {
   token?: { order: number; fragment: Localized };
   /** The printable case dossier's in-world brief, read before playing. No spoilers. */
   dossier?: Localized<string[]>;
+  /** Second truths for replays (see Variant). */
+  variants?: Variant[];
+  /** Set by applyVariant on the adventure as a variant tells it; never authored. */
+  appliedVariant?: string;
   ending: Ending;
 }
 

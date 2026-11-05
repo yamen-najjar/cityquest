@@ -23,6 +23,15 @@ feature.
 | **One lead of each kind**: `confront`, `timeline`, `echo`, `listen` | `leads`, with `lead:<id>` keys in `answers.server.ts` | Answers: confront `documentId:row`, timeline the event ids in order (shown scrambled), echo and listen the word or number. The echo view is drawn from a `Facade` and can take a photo of a **public place** (`src`). The imagined view is always labelled "from the author's imagination", never presented as history. |
 | **At least 2 secrets** | `secrets` | Hidden in a document row or the echo view; every hiding place must name a real secret. |
 | If there is a pursuer: **the catch** | `pursuit.caught`, plus the `recover` key in `answers.server.ts` | What he takes, the puzzle to win it back, and the lost ending. |
+| **A case report** of at least 5 questions (each with 3+ options) | `report`, plus the `report` key (`slot=option;…`) in `answers.server.ts` | Nothing is confirmed until 3 answers are right together. Base every answer on something the team can find. |
+| **Walk narration** for every chapter after the first | `chapters[].walk` | A line or two heard on the way to the checkpoint. |
+| **Trust**: a reply that changes trust, and a message that only trust brings | `replies[].trust`, `phone[].trust` | Warm `+1`, cold `-1`. |
+| **Seasons**: a Halloween and a winter message | `phone[].season` | Halloween 25 Oct–2 Nov, winter 1 Dec–6 Jan. |
+| **Junior mode**: a kid-friendly line for every puzzle | `puzzle.junior` | Explain the idea, never the answer. |
+| **A letter** a week after the case is solved | `ending.letter` | From a character; true for every ending. |
+| **A lantern sign** for the meta-mystery | `token` (`order`, `fragment`) | The fragments of all stories form one sentence (see `content/meta.ts`); a new story extends it. |
+| **A dossier brief** for the printable case file | `dossier` | Nothing the team should not know before the first message. |
+| **A second truth** for replays | `variants`, plus `<last chapter>@<id>` and/or `report@<id>` keys | Another culprit, built on the existing clues, with at least one new phone clue. Add the culprit to the final deduction's choices. |
 | Every text in German, English and Arabic | the story and scene files | Arabic is written out, not machine-transliterated. |
 | Every English text translated into Dutch | `content/translations/nl.ts`, keyed by the exact English text | `missingTranslations.nl` must stay empty. If you edit an English sentence, edit its Dutch key too. |
 | Simulated checkpoints until the route is walked | `checkpoint.simulated: true` | Never present an unvalidated route as tested. |

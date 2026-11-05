@@ -31,7 +31,7 @@ export function CaseReportView({ a, p, locale, t, headingRef, dispatch }: { a: A
       const res = await fetch(`/api/game/${a.slug}/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chapterId: 'report', answer: encodeReport(p.reportPicks) }),
+        body: JSON.stringify({ chapterId: 'report', answer: encodeReport(p.reportPicks), variant: p.variant ?? undefined }),
       });
       if (res.status === 429) return setStatus('slow');
       if (!res.ok) throw new Error(String(res.status));

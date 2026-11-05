@@ -155,7 +155,7 @@ export function ChapterView({
       const res = await fetch(`/api/game/${a.slug}/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chapterId: chapter.id, answer: guess }),
+        body: JSON.stringify({ chapterId: chapter.id, answer: guess, variant: p.variant ?? undefined }),
       });
       if (res.status === 429) {
         setFeedback('slow');
