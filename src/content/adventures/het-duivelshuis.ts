@@ -59,19 +59,19 @@ export const hetDuivelshuis: Authored<Adventure> = {
     de: [
       'Acht Kapitel, acht Rätselarten: eine Zahlenchiffre, ein Logikrätsel am Teufelshaus, ein Zeuge zum Befragen, die Fremden aus Stein an der Eusebiuskirche, unsichtbare Schrift im Sonsbeek-Park, ein Signal über den Rhein, ein Fund aus dem Inventar und eine Anklage mit Beweis.',
       'Die Ermittlungsakte sammelt Spuren, Verdächtige und eure Notizen. Wer aufmerksam ist, entdeckt dort ein zusätzliches Beweisstück.',
-      'Drei Schwierigkeitsstufen und Sterne für jedes Kapitel.',
+      'Vier Schwierigkeitsstufen und Sterne für jedes Kapitel.',
       'Am Ende entscheidest du, was mit dem Hauptbuch geschieht.',
     ],
     en: [
       'Eight chapters, eight kinds of puzzle: a number cipher, a logic riddle at the Devil’s House, a witness to question, the strangers in stone on the Eusebius church, invisible writing in Sonsbeek park, a signal across the Rhine, an item from your inventory and an accusation with proof.',
       'The case journal collects clues, suspects and your notes. Attentive players discover an extra piece of evidence there.',
-      'Three difficulty levels and stars for every chapter.',
+      'Four difficulty levels and stars for every chapter.',
       'At the end you decide what becomes of the ledger.',
     ],
     ar: [
       'ثمانية فصول وثمانية أنواع من الألغاز: شيفرة أرقام، ولغز منطقي عند بيت الشيطان، وشاهد تستجوبه، والغرباء الحجريون على كنيسة أوزيبيوس، وكتابة خفية في حديقة سونسبيك، وإشارة عبر نهر الراين، وغرض من حقيبتك، واتهام بالدليل.',
       'ملف القضية يجمع الأدلة والمشتبه بهم وملاحظاتك. ومن ينتبه يكتشف فيه دليلاً إضافياً.',
-      'ثلاثة مستويات صعوبة ونجوم لكل فصل.',
+      'أربعة مستويات صعوبة ونجوم لكل فصل.',
       'في النهاية تقرر مصير الدفتر.',
     ],
   },
@@ -1085,9 +1085,9 @@ export const hetDuivelshuis: Authored<Adventure> = {
   // The meta-mystery's lantern sign (content/meta.ts) and the printable dossier's brief.
   token: { order: 3, fragment: { de: 'solange jemand liest.', en: 'while someone reads.', ar: 'ما دام أحدٌ يقرأ.' } },
   dossier: {
-      de: ['Arnheim, ein Abend am Korenmarkt. Eine Frau, die alte Häuser restauriert, ist verschwunden – und hat zuvor geschrieben, sie habe im Teufelshaus etwas gefunden.', 'Drei steinerne Teufel bewachen dieses Haus seit fünfhundert Jahren. Fragt sie. Fragt die Musiker am Tor. Und traut keinem, der sich Sammler nennt.'],
-      en: ['Arnhem, an evening at the Korenmarkt. A woman who restores old houses has disappeared — after writing that she had found something in the Devil’s House.', 'Three stone devils have guarded that house for five hundred years. Ask them. Ask the musicians at the gate. And trust no one who calls himself a collector.'],
-      ar: ['أرنم، مساء في ساحة كورنمارخت. اختفت امرأة ترمّم البيوت القديمة — بعد أن كتبت أنها وجدت شيئاً في بيت الشيطان.', 'ثلاثة شياطين حجرية تحرس ذلك البيت منذ خمسمئة عام. اسألوها. اسألوا العازفين عند البوابة. ولا تثقوا بأحد يسمّي نفسه جامعاً.'],
+      de: ['Arnheim, ein Abend am Korenmarkt. Stadtarchivarin Lena Verhoef ist verschwunden – und hat zuvor geschrieben, sie habe im Teufelshaus etwas gefunden.', 'Drei steinerne Teufel bewachen dieses Haus seit fünfhundert Jahren. Fragt sie. Fragt die Musiker am Tor. Und traut keinem, der sich Sammler nennt.'],
+      en: ['Arnhem, an evening at the Korenmarkt. The city archivist Lena Verhoef has disappeared — after writing that she had found something in the Devil’s House.', 'Three stone devils have guarded that house for five hundred years. Ask them. Ask the musicians at the gate. And trust no one who calls himself a collector.'],
+      ar: ['أرنم، مساء في ساحة كورنمارخت. اختفت أمينة أرشيف المدينة لينا فرهوف — بعد أن كتبت أنها وجدت شيئاً في بيت الشيطان.', 'ثلاثة شياطين حجرية تحرس ذلك البيت منذ خمسمئة عام. اسألوها. اسألوا العازفين عند البوابة. ولا تثقوا بأحد يسمّي نفسه جامعاً.'],
     },
   // Second truths for replays (see Variant): another culprit, the same clues and a few new ones.
   variants: [

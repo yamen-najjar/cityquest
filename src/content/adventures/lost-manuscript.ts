@@ -28,7 +28,7 @@ export const lostManuscript: Authored<Adventure> = {
   distanceKm: 4,
   teamSize: { min: 1, max: 5 },
   minAge: 10,
-  languages: ['de', 'en', 'ar'],
+  languages: ['de', 'en', 'nl', 'ar'],
   priceCents: 2490,
   tier: 'standard',
   meetingPoint: {
@@ -45,19 +45,19 @@ export const lostManuscript: Authored<Adventure> = {
     de: [
       'Acht Kapitel, acht Rätselarten: Zahlenchiffre, Logikrätsel, Symbolschloss, unsichtbare Schrift auf Löschpapier, ein Fund aus dem Inventar, ein Morsesignal, Spiegelschrift und eine Anklage mit Beweis.',
       'Die Ermittlungsakte sammelt Spuren, Verdächtige und eure Notizen. Wer aufmerksam ist, entdeckt dort ein zusätzliches Beweisstück.',
-      'Drei Schwierigkeitsstufen und Sterne für jedes Kapitel.',
+      'Vier Schwierigkeitsstufen und Sterne für jedes Kapitel.',
       'Am Ende entscheidest du, was mit dem Codex geschieht.',
     ],
     en: [
       'Eight chapters, eight kinds of puzzle: a number cipher, a logic puzzle, a symbol lock, invisible writing on blotting paper, an item from your inventory, a Morse signal, mirrored letters and an accusation with proof.',
       'The case journal collects clues, suspects and your notes. Attentive players discover an extra piece of evidence there.',
-      'Three difficulty levels and stars for every chapter.',
+      'Four difficulty levels and stars for every chapter.',
       'At the end you decide what happens to the codex.',
     ],
     ar: [
       'ثمانية فصول وثمانية أنواع من الألغاز: شيفرة أرقام، ولغز منطقي، وقفل رموز، وكتابة خفية على ورق نشّاف، وغرض من حقيبتك، وإشارة مورس، وحروف معكوسة، واتهام بالدليل.',
       'ملف القضية يجمع الأدلة والمشتبه بهم وملاحظاتك. ومن ينتبه يكتشف فيه دليلاً إضافياً.',
-      'ثلاثة مستويات صعوبة ونجوم لكل فصل.',
+      'أربعة مستويات صعوبة ونجوم لكل فصل.',
       'في النهاية تقرر مصير المخطوطة.',
     ],
   },
