@@ -48,7 +48,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
   meetingPoint: {
     de: 'Arnheimer Innenstadt, am Korenmarkt. Der genaue Treffpunkt wird nach der Validierung der Route vor Ort festgelegt.',
     en: 'Arnhem city centre, at the Korenmarkt. The exact meeting point will be set once the route has been validated on foot.',
-    ar: 'وسط مدينة أرنم، عند ساحة كورنمارخت. سيُحدَّد مكان اللقاء بدقة بعد التحقق من المسار على أرض الواقع.',
+    ar: 'وسط مدينة أرنم، عند ساحة كورنماركت. سيُحدَّد مكان اللقاء بدقة بعد التحقق من المسار على أرض الواقع.',
   },
   accessibility: {
     de: 'Die Demo lässt sich überall spielen, auch im Sitzen. Für die Outdoor-Version werden Stufen, Steigungen und Untergründe bei der Begehung erfasst und hier veröffentlicht.',
@@ -270,14 +270,14 @@ export const hetDuivelshuis: Authored<Adventure> = {
           'Below it, nothing but a row of numbers — and a tiny devil’s head stamped beside them.',
         ],
         ar: [
-          'بعد الثامنة بقليل عند ساحة كورنمارخت، يضيء هاتفك. لا اسم مرسل.',
+          'بعد الثامنة بقليل عند ساحة كورنماركت، يضيء هاتفك. لا اسم مرسل.',
           '«وجدتُ في بيت الشيطان شيئاً يخفيه أحدهم منذ خمسمئة عام. والآن أنا من عليها أن تختفي. لا تثق بأيّ جامع. اتبع الأرقام».',
           'وتحتها لا شيء سوى سطر من الأرقام — وختمٌ صغير لرأس شيطان بجانبها.',
         ],
       },
       checkpoint: {
         id: 'cp-korenmarkt',
-        name: { de: 'Am Korenmarkt', en: 'At the Korenmarkt', ar: 'عند كورنمارخت' },
+        name: { de: 'Am Korenmarkt', en: 'At the Korenmarkt', ar: 'عند كورنماركت' },
         simulated: true,
         mapPosition: { x: 16, y: 58 },
         verification: ['gps', 'qr', 'manual'],
@@ -315,7 +315,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
       id: 'duivels',
       // Heard on the way to the checkpoint (see Chapter.walk).
       walk: [
-        { voice: 'narrator', text: { de: 'Vom Korenmarkt aus werden die Gassen enger. Vor dir bewachen drei steinerne Teufel die Straße, wie seit fünfhundert Jahren.', en: 'From the Korenmarkt the lanes grow narrow. Ahead, three stone devils watch the street, as they have for five hundred years.', ar: 'من ساحة كورنمارخت تضيق الأزقة. أمامك ثلاثة شياطين حجرية تراقب الشارع، كما تفعل منذ خمسمئة عام.' } },
+        { voice: 'narrator', text: { de: 'Vom Korenmarkt aus werden die Gassen enger. Vor dir bewachen drei steinerne Teufel die Straße, wie seit fünfhundert Jahren.', en: 'From the Korenmarkt the lanes grow narrow. Ahead, three stone devils watch the street, as they have for five hundred years.', ar: 'من ساحة كورنماركت تضيق الأزقة. أمامك ثلاثة شياطين حجرية تراقب الشارع، كما تفعل منذ خمسمئة عام.' } },
       ],
       title: { de: 'Die drei Teufel', en: 'The Three Devils', ar: 'الشياطين الثلاثة' },
       story: {
@@ -439,7 +439,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
         },
         choices: [
           { id: 'eusebius', label: { de: 'Die Eusebiuskirche', en: 'The Eusebius church', ar: 'كنيسة أوزيبيوس' } },
-          { id: 'market', label: { de: 'Zurück zum Korenmarkt', en: 'Back to the Korenmarkt', ar: 'العودة إلى كورنمارخت' } },
+          { id: 'market', label: { de: 'Zurück zum Korenmarkt', en: 'Back to the Korenmarkt', ar: 'العودة إلى كورنماركت' } },
           { id: 'quay', label: { de: 'Hinunter zum Rhein', en: 'Down to the Rhine', ar: 'النزول إلى نهر الراين' } },
         ],
         junior: { de: 'Stellt Bram alle Fragen. Er weiß mehr, als er zuerst sagt.', en: 'Ask Bram all the questions. He knows more than he says at first.', ar: 'اسألوا برام كل الأسئلة. هو يعرف أكثر مما يقول في البداية.' },
@@ -857,7 +857,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
       from: 'unknown',
       when: 'start',
       kind: 'text',
-      text: { de: 'Wenn du das liest, konnte ich nicht selbst kommen. Fang am Korenmarkt an.', en: 'If you are reading this, I could not come myself. Start at the Korenmarkt.', ar: 'إن كنت تقرأ هذا، فلم أستطع المجيء بنفسي. ابدأ من ساحة كورنمارخت.' },
+      text: { de: 'Wenn du das liest, konnte ich nicht selbst kommen. Fang am Korenmarkt an.', en: 'If you are reading this, I could not come myself. Start at the Korenmarkt.', ar: 'إن كنت تقرأ هذا، فلم أستطع المجيء بنفسي. ابدأ من ساحة كورنماركت.' },
     },
     {
       id: 'courant',
@@ -1054,7 +1054,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
         id: 'since',
         question: { de: 'Seit wann folgte er Lena?', en: 'Since when was he following Lena?', ar: 'منذ متى كان يتبع لينا؟' },
         options: [
-          { id: 'market', label: { de: 'Seit dem Korenmarkt', en: 'Since the Korenmarkt', ar: 'منذ ساحة كورنمارخت' } },
+          { id: 'market', label: { de: 'Seit dem Korenmarkt', en: 'Since the Korenmarkt', ar: 'منذ ساحة كورنماركت' } },
           { id: 'gate', label: { de: 'Seit der Sabelspoort, kurz nach ihr', en: 'Since the Sabelspoort, just after her', ar: 'منذ بوابة سابلسبورت، بعدها بقليل' } },
           { id: 'tower', label: { de: 'Seit der Glockenstube', en: 'Since the bell chamber', ar: 'منذ غرفة الأجراس' } },
           { id: 'river', label: { de: 'Seit dem Rhein', en: 'Since the Rhine', ar: 'منذ نهر الراين' } },
@@ -1087,7 +1087,7 @@ export const hetDuivelshuis: Authored<Adventure> = {
   dossier: {
       de: ['Arnheim, ein Abend am Korenmarkt. Stadtarchivarin Lena Verhoef ist verschwunden – und hat zuvor geschrieben, sie habe im Teufelshaus etwas gefunden.', 'Drei steinerne Teufel bewachen dieses Haus seit fünfhundert Jahren. Fragt sie. Fragt die Musiker am Tor. Und traut keinem, der sich Sammler nennt.'],
       en: ['Arnhem, an evening at the Korenmarkt. The city archivist Lena Verhoef has disappeared — after writing that she had found something in the Devil’s House.', 'Three stone devils have guarded that house for five hundred years. Ask them. Ask the musicians at the gate. And trust no one who calls himself a collector.'],
-      ar: ['أرنم، مساء في ساحة كورنمارخت. اختفت أمينة أرشيف المدينة لينا فرهوف — بعد أن كتبت أنها وجدت شيئاً في بيت الشيطان.', 'ثلاثة شياطين حجرية تحرس ذلك البيت منذ خمسمئة عام. اسألوها. اسألوا العازفين عند البوابة. ولا تثقوا بأحد يسمّي نفسه جامعاً.'],
+      ar: ['أرنم، مساء في ساحة كورنماركت. اختفت أمينة أرشيف المدينة لينا فرهوف — بعد أن كتبت أنها وجدت شيئاً في بيت الشيطان.', 'ثلاثة شياطين حجرية تحرس ذلك البيت منذ خمسمئة عام. اسألوها. اسألوا العازفين عند البوابة. ولا تثقوا بأحد يسمّي نفسه جامعاً.'],
     },
   // Second truths for replays (see Variant): another culprit, the same clues and a few new ones.
   variants: [
@@ -1182,11 +1182,11 @@ export const hetDuivelshuis: Authored<Adventure> = {
         },
         {
           id: 'read',
-          label: { de: 'Die erste Seite laut am Korenmarkt vorlesen', en: 'Read the first page aloud at the Korenmarkt', ar: 'قراءة الصفحة الأولى بصوت عالٍ عند كورنمارخت' },
+          label: { de: 'Die erste Seite laut am Korenmarkt vorlesen', en: 'Read the first page aloud at the Korenmarkt', ar: 'قراءة الصفحة الأولى بصوت عالٍ عند كورنماركت' },
           epilogue: {
             de: 'Am Korenmarkt liest du die ersten Namen laut vor. Vorübergehende bleiben stehen. Eine ältere Frau nickt: Ihren Urgroßvater hat die Stadt damals aufgenommen. Die Geschichte gehört wieder allen.',
             en: 'At the Korenmarkt you read out the first names aloud. Passers-by stop to listen. An older woman nods: the city once took in her great-grandfather. The story belongs to everyone again.',
-            ar: 'عند كورنمارخت تقرأ الأسماء الأولى بصوت عالٍ. يتوقف المارّة للإصغاء. تومئ امرأة مسنّة برأسها: آوت المدينة جدّ جدّها يوماً. وتعود الحكاية مُلكاً للجميع.',
+            ar: 'عند كورنماركت تقرأ الأسماء الأولى بصوت عالٍ. يتوقف المارّة للإصغاء. تومئ امرأة مسنّة برأسها: آوت المدينة جدّ جدّها يوماً. وتعود الحكاية مُلكاً للجميع.',
           },
           epilogueIf: [
             { when: 'archief:police', text: { de: 'Der Polizist, der Koster abgeführt hat, kommt zurück und hört zu, die Mütze in der Hand.', en: 'The officer who led Koster away comes back to listen, cap in hand.', ar: 'يعود الشرطي الذي اقتاد كوستر ليستمع، وقبعته في يده.' } },

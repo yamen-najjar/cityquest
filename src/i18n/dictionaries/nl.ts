@@ -545,7 +545,7 @@ const nl: Dictionary = {
     routeProgress: 'Route: {n} van {total} hoofdstukken opgelost',
     recordLabel: 'Jouw dossier',
     achievementsCount: '{n} van {total} behaald',
-    continueSoFar: '{stars} sterren en {xp} XP tot nu toe.',
+    continueSoFar: '{stars} van {max} sterren en {xp} XP tot nu toe.',
   },
   account: {
     title: 'Jouw account',
