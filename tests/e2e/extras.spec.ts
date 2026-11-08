@@ -67,6 +67,17 @@ test('the dashboard: a letter after a week, and the lantern signs of every case'
   await noHorizontalScroll(page);
 });
 
+test('the dashboard: a saved game shows in the logbook with a way to continue', async ({ page }) => {
+  const now = Date.now();
+  const inProgress = { ...finished('het-duivelshuis', ['message', 'duivels', 'sabelspoort'], [], 'archive', now), decision: null, finishedAt: null, stage: 'travel', chapter: 3, startedAt: now - 2 * 3_600_000, lastActiveAt: now - 60_000 };
+  await seed(page, [inProgress]);
+  const log = page.getByRole('region', { name: 'Logbook' });
+  await expect(log.getByRole('heading', { level: 3, name: 'The Devil’s House Secret started' })).toBeVisible();
+  await expect(log.getByText('3 of 8 chapters')).toBeVisible();
+  await log.getByRole('link', { name: 'Continue' }).click();
+  await expect(page).toHaveURL(/\/en\/play\/het-duivelshuis$/);
+});
+
 test('all three signs reveal the Lantern Keepers’ message', async ({ page }) => {
   const now = Date.now();
   await seed(page, [

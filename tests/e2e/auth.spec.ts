@@ -61,11 +61,11 @@ test('progress is mirrored to the account and restored on another device', { tag
     localStorage.setItem('cityquest:progress:lost-manuscript', JSON.stringify(p));
   });
   await page.goto('/en/dashboard');
-  await expect(page.getByRole('heading', { name: 'The Lost Manuscript' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The Lost Manuscript' }).first()).toBeVisible();
 
   // Simulate a fresh device: clear local storage. The reconcile on reload pulls the save back.
   await page.evaluate(() => localStorage.clear());
   await page.goto('/en/dashboard');
-  await expect(page.getByRole('heading', { name: 'The Lost Manuscript' })).toBeVisible();
-  await expect(page.getByText('1 of 8 chapters')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The Lost Manuscript' }).first()).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Logbook' }).getByText(/1 of 8 chapters,/)).toBeVisible();
 });

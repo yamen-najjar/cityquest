@@ -9,6 +9,10 @@ export type PhotoId =
   | 'arnhem-duivelshuis-2024'
   | 'arnhem-eusebius'
   | 'arnhem-eusebius-duivelshuis'
+  | 'arnhem-korenmarkt'
+  | 'arnhem-sabelspoort'
+  | 'arnhem-sonsbeek'
+  | 'arnhem-rijnkade-avond'
   | 'heidelberg-bridge-night'
   | 'heidelberg-bridge-night-2'
   | 'heidelberg-bridge-night-3'
@@ -133,6 +137,98 @@ const photos: Photo[] = [
       ar: 'هي المكان الذي تقرأ فيه الأجراس.',
     },
     place: { nl: 'Eusebiuskerk, Arnhem', de: 'Eusebiuskirche, Arnheim', en: 'Eusebius church, Arnhem', ar: 'كنيسة أوزيبيوس، أرنم' },
+  },
+  {
+    id: 'arnhem-korenmarkt',
+    src: '/photos/arnhem-korenmarkt.jpg',
+    width: 2000,
+    height: 1500,
+    author: 'G.Lanting',
+    licence: 'CC BY-SA 3.0',
+    commonsTitle: 'Korenmarkt (Arnhem) P1060372.JPG',
+    alt: {
+      nl: 'De Korenmarkt in Arnhem op een zonnige dag: terrassen op het plein voor bakstenen gevels met trapgevels, links het gebouw van filmtheater Focus.',
+      de: 'Der Korenmarkt in Arnheim an einem sonnigen Tag: Terrassen auf dem Platz vor Backsteinfassaden mit Treppengiebeln, links das Gebäude des Filmtheaters Focus.',
+      en: 'The Korenmarkt in Arnhem on a sunny day: café terraces on the square in front of brick façades with stepped gables, the Focus film theatre building on the left.',
+      ar: 'ساحة كورنمارخت في أرنم في يوم مشمس: مقاهٍ على الساحة أمام واجهات من الطوب بجملونات مدرّجة، وعلى اليسار مبنى سينما فوكس.',
+    },
+    title: { nl: 'De Korenmarkt', de: 'Der Korenmarkt', en: 'The Korenmarkt', ar: 'ساحة كورنمارخت' },
+    text: {
+      nl: 'is waar het avontuur begint.',
+      de: 'ist der Ort, an dem das Abenteuer beginnt.',
+      en: 'is where the adventure starts.',
+      ar: 'هي المكان الذي تبدأ منه المغامرة.',
+    },
+    place: { nl: 'Korenmarkt, Arnhem', de: 'Korenmarkt, Arnheim', en: 'Korenmarkt, Arnhem', ar: 'ساحة كورنمارخت، أرنم' },
+  },
+  {
+    id: 'arnhem-sabelspoort',
+    src: '/photos/arnhem-sabelspoort.jpg',
+    width: 2000,
+    height: 1333,
+    author: 'Pompidom',
+    licence: 'CC BY-SA 3.0',
+    commonsTitle: 'Arnhem - Sabelspoort-3.jpg',
+    alt: {
+      nl: 'De Sabelspoort in Arnhem van onderaf gezien: twee ronde bakstenen torens met kantelen en spitse leien daken tegen een blauwe lucht.',
+      de: 'Die Sabelspoort in Arnheim von unten gesehen: zwei runde Backsteintürme mit Zinnen und spitzen Schieferdächern vor blauem Himmel.',
+      en: 'The Sabelspoort in Arnhem seen from below: two round brick towers with battlements and pointed slate roofs against a blue sky.',
+      ar: 'بوابة سابلسبورت في أرنم من الأسفل: برجان مستديران من الطوب بشرفات وسقوف مدببة من الأردواز تحت سماء زرقاء.',
+    },
+    title: { nl: 'De Sabelspoort', de: 'Die Sabelspoort', en: 'The Sabelspoort', ar: 'بوابة سابلسبورت' },
+    text: {
+      nl: 'is de plek van hoofdstuk 3, waar je de getuige spreekt.',
+      de: 'ist der Ort von Kapitel 3, an dem du den Zeugen sprichst.',
+      en: 'is the place of chapter 3, where you speak to the witness.',
+      ar: 'هي مكان الفصل 3، حيث تتحدث إلى الشاهد.',
+    },
+    place: { nl: 'Sabelspoort, Arnhem', de: 'Sabelspoort, Arnheim', en: 'Sabelspoort, Arnhem', ar: 'بوابة سابلسبورت، أرنم' },
+  },
+  {
+    id: 'arnhem-sonsbeek',
+    src: '/photos/arnhem-sonsbeek.jpg',
+    width: 2000,
+    height: 1196,
+    author: 'Wouter Hagens',
+    licence: 'CC BY-SA 3.0',
+    commonsTitle: 'Arnhem Sonsbeek A.jpg',
+    alt: {
+      nl: 'Park Sonsbeek in Arnhem: een brug met witte zwanen in het hekwerk over een vijver, hoge bomen erachter en rechts het witte paviljoen.',
+      de: 'Der Park Sonsbeek in Arnheim: eine Brücke mit weißen Schwänen im Geländer über einem Teich, dahinter hohe Bäume und rechts der weiße Pavillon.',
+      en: 'Sonsbeek park in Arnhem: a bridge with white swans in its railing over a pond, tall trees behind it and the white pavilion on the right.',
+      ar: 'حديقة سونسبيك في أرنم: جسر بدرابزين عليه بجع أبيض فوق بركة، وخلفه أشجار عالية، وعلى اليمين الجناح الأبيض.',
+    },
+    title: { nl: 'Park Sonsbeek', de: 'Der Park Sonsbeek', en: 'Sonsbeek park', ar: 'حديقة سونسبيك' },
+    text: {
+      nl: 'hoort bij de route: hoofdstuk 5 speelt bij de waterval in het park.',
+      de: 'gehört zur Route: Kapitel 5 spielt am Wasserfall im Park.',
+      en: 'is part of the route: chapter 5 is set at the waterfall in the park.',
+      ar: 'جزء من المسار: الفصل 5 يدور عند الشلّال في الحديقة.',
+    },
+    place: { nl: 'Park Sonsbeek, Arnhem', de: 'Park Sonsbeek, Arnheim', en: 'Sonsbeek park, Arnhem', ar: 'حديقة سونسبيك، أرنم' },
+  },
+  {
+    id: 'arnhem-rijnkade-avond',
+    src: '/photos/arnhem-rijnkade-avond.jpg',
+    width: 2000,
+    height: 1172,
+    author: 'Michielverbeek',
+    licence: 'CC BY-SA 4.0',
+    commonsTitle: 'Arnhem, stadszicht vanaf de Mandelabrug in de avond IMG 5002 2020-04-23 20.05.jpg',
+    alt: {
+      nl: 'De kade van Arnhem aan de Nederrijn in het avondlicht: woonblokken en een kerktoren langs het water, links een rondvaartboot, rechts een boogbrug in de verte.',
+      de: 'Das Ufer von Arnheim am Nederrijn im Abendlicht: Wohnblöcke und ein Kirchturm am Wasser, links ein Ausflugsschiff, rechts in der Ferne eine Bogenbrücke.',
+      en: 'The Arnhem waterfront on the Lower Rhine in evening light: apartment blocks and a church tower along the water, a tour boat on the left and an arched bridge in the distance on the right.',
+      ar: 'ضفة أرنم على نهر الراين السفلي في ضوء المساء: كتل سكنية وبرج كنيسة على الماء، وعلى اليسار قارب سياحي، وعلى اليمين جسر مقوّس في البعيد.',
+    },
+    title: { nl: 'Gezicht op de Rijnkade', de: 'Blick auf die Rijnkade', en: 'View of the Rijnkade', ar: 'منظر لرصيف الراين' },
+    text: {
+      nl: 'vanaf de Mandelabrug, in de avond. Hoofdstuk 6 speelt aan de Rijnkade.',
+      de: 'von der Mandelabrug aus, am Abend. Kapitel 6 spielt an der Rijnkade.',
+      en: 'from the Mandelabrug, in the evening. Chapter 6 is set on the Rijnkade.',
+      ar: 'من جسر مانديلا، في المساء. الفصل 6 يدور على رصيف الراين.',
+    },
+    place: { nl: 'Rijnkade, Arnhem', de: 'Rijnkade, Arnheim', en: 'Rijnkade, Arnhem', ar: 'رصيف الراين، أرنم' },
   },
   {
     id: 'heidelberg-bridge-night-2',

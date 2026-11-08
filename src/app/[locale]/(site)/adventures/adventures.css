@@ -1,0 +1,63 @@
+/* Adventures list (Ter plaatse): filter bar, then photo bands grouped per city. */
+.av-head { padding-block: clamp(48px, 6vw, 96px) clamp(28px, 3vw, 44px); display: grid; gap: 18px 64px; align-items: end; }
+.av-head h1 { font-size: clamp(3rem, 1.2rem + 4.4vw, 5.25rem); line-height: 0.95; letter-spacing: -0.035em; font-weight: 800; hyphens: auto; overflow-wrap: break-word; }
+.av-head__lead { font-size: var(--fs-lead); line-height: 1.4; max-width: 30ch; }
+@media (min-width: 900px) { .av-head { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+
+/* Filter bar: quiet, stays at the top while scrolling on desktop */
+.av-bar { position: relative; border-block-start: 1px solid var(--rule-strong); border-block-end: 1px solid var(--rule); }
+@media (min-width: 900px) { .av-bar { position: sticky; top: 64px; z-index: 5; background: var(--ground); } }
+.av-filter { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding-block: 14px; }
+.av-f { display: grid; gap: 6px; font-size: var(--fs-caption); color: var(--muted); min-width: 0; }
+.av-f--q { grid-column: 1 / -1; }
+.av-f input, .av-f select { width: 100%; min-width: 0; min-height: 44px; padding-inline: 14px; background: transparent; color: var(--text); border: 1.5px solid var(--control); border-radius: 3px; font: inherit; font-size: var(--fs-small); color-scheme: dark; }
+.av-f select { padding-inline-end: 8px; }
+.av-f select option { background: var(--ground-2); color: var(--text); }
+.av-f input::placeholder { color: var(--muted); opacity: 1; }
+.av-f input:focus, .av-f select:focus { outline: 2px solid var(--text); outline-offset: 2px; border-color: var(--text); }
+.av-filter__go { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 24px; }
+.av-filter button { min-height: 44px; padding-inline: 20px; background: transparent; color: var(--text); border: 1.5px solid var(--control); border-radius: 3px; font: inherit; font-weight: 600; cursor: pointer; }
+.av-filter button:hover { border-color: var(--text); }
+@media (min-width: 900px) {
+  .av-filter { grid-template-columns: minmax(0, 1.4fr) repeat(5, minmax(0, 1fr)) auto; align-items: end; }
+  .av-f--q { grid-column: auto; }
+  .av-filter__go { grid-column: auto; flex-wrap: nowrap; }
+}
+.av-count { padding-block: 16px 0; font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; }
+.av-empty { padding-block: 40px 0; font-size: var(--fs-lead); line-height: 1.4; max-width: 34ch; }
+
+/* One band per city, one photograph per story */
+.av-city { padding-block-start: clamp(56px, 7vw, 104px); }
+.av-cityhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px; padding-block-end: 20px; }
+.av-cityhead h2 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); font-weight: 750; letter-spacing: -0.015em; }
+.av-cityhead p { color: var(--muted); font-size: var(--fs-small); }
+.av-stories { display: grid; gap: clamp(56px, 7vw, 104px); }
+.av-photo { margin: 0; }
+.av-photo img { display: block; width: 100%; height: clamp(240px, 52vw, 440px); object-fit: cover; filter: saturate(0.62) brightness(0.7) contrast(1.1); }
+.av-photo figcaption { margin-block-start: 10px; }
+.av-frame { position: relative; overflow: hidden; }
+.av-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(var(--c-navy) / 0.5), rgb(var(--c-navy) / 0) 45%); pointer-events: none; }
+.av-body { margin-block-start: 28px; display: grid; gap: 28px; }
+.av-dateline { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: var(--fs-small); }
+.av-dateline__sep { color: var(--muted); }
+.av-title { font-size: clamp(2.25rem, 1.2rem + 3.2vw, 4.25rem); line-height: 0.98; letter-spacing: -0.03em; font-weight: 800; margin-block-start: 14px; hyphens: auto; overflow-wrap: break-word; }
+.av-title a { text-decoration: none; }
+.av-title a:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 10px; }
+.av-hook { margin-block-start: 18px; font-size: var(--fs-lead); line-height: 1.38; max-width: 30ch; font-weight: 500; }
+.av-more { margin-block-start: 14px; }
+.av-facts dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.av-facts dl > div { border-block-start: 1px solid var(--rule); padding-block: 12px 14px; }
+.av-facts dt { color: var(--muted); font-size: var(--fs-small); }
+.av-facts dd { margin: 2px 0 0; }
+.av-wide { grid-column: 1 / -1; }
+.av-priceRow dd { font-size: 1.25rem; }
+.av-priceRow strong { font-weight: 750; font-variant-numeric: tabular-nums; }
+.av-demo { color: var(--amber); font-size: var(--fs-small); margin-inline-start: 14px; }
+.av-facts .tp-route { margin-block: 22px 0; max-width: 360px; }
+@media (min-width: 900px) {
+  .av-body { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: 72px; align-items: start; }
+  .av-facts dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.av-more-cities { padding-block: clamp(48px, 6vw, 80px) 0; max-width: 48ch; color: var(--muted); }
+
+[dir='rtl'] .av-head h1, [dir='rtl'] .av-title, [dir='rtl'] .av-priceRow strong { line-height: 1.3; }
