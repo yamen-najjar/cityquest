@@ -15,7 +15,7 @@ test('the game in Dutch: the Dutch cipher, a Dutch answer and the journal', asyn
   await page.getByRole('textbox', { name: 'Jouw antwoord' }).fill('toren');
   await page.getByRole('button', { name: 'Antwoord controleren' }).click();
   await expect(page.getByRole('heading', { name: 'Goed zo!' })).toBeVisible();
-  await expect(page.getByText('Nieuw spoor in het dossier').first()).toBeVisible();
+  await expect(page.getByText('Nieuwe aanwijzing in het dossier').first()).toBeVisible();
 
   await page.getByRole('button', { name: /Dossier/ }).click();
   await expect(page.getByRole('dialog').getByText('VII stuurde het bericht om 21:07.')).toBeVisible();
