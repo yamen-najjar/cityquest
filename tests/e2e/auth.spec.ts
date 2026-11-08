@@ -33,16 +33,33 @@ async function signIn(page: import('@playwright/test').Page, request: APIRequest
   await expect(page).toHaveURL(/\/en\/account$/);
 }
 
-test('sign in with a magic link, then sign out', { tag: '@backend' }, async ({ page, request }) => {
+/** On a phone the header links sit in the collapsed menu: open it before looking for them. */
+async function openMenu(page: import('@playwright/test').Page, isMobile: boolean) {
+  if (!isMobile) return;
+  const toggle = page.getByRole('button', { name: 'Menu' });
+  if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
+}
+
+/** Close the phone menu again (Escape), so it does not cover the page. */
+async function closeMenu(page: import('@playwright/test').Page, isMobile: boolean) {
+  if (!isMobile) return;
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button', { name: 'Menu' })).toHaveAttribute('aria-expanded', 'false');
+}
+
+test('sign in with a magic link, then sign out', { tag: '@backend' }, async ({ page, request, isMobile }) => {
   const address = `e2e-auth-${Date.now()}@test.local`;
   await signIn(page, request, address);
 
   // Signed-in view and header reflect the session.
   await expect(page.getByText(address)).toBeVisible();
+  await openMenu(page, isMobile);
   await expect(page.getByRole('link', { name: 'Account' })).toBeVisible();
+  await closeMenu(page, isMobile);
 
   await page.getByRole('button', { name: 'Sign out' }).click();
   await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
+  await openMenu(page, isMobile);
   await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();
 });
 
