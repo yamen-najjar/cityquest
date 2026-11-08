@@ -83,6 +83,7 @@ const ar: Dictionary = {
     all: 'الكل',
     availableOnly: 'متاحة الآن',
     adventureCount: 'عدد المغامرات: {n}',
+    adventureCountOne: 'عدد المغامرات: {n}',
     pilot: 'مدينة تجريبية',
     available: 'متاحة',
     comingSoon: 'قريباً',

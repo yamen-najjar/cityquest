@@ -70,7 +70,7 @@ export default async function CitiesPage({ params, searchParams }: Props) {
                   <p className="text-sm text-ivory-mute">{c.region[locale]}</p>
                   <p className="mt-3 text-sm text-ivory-dim">{c.intro[locale]}</p>
                   <p className="mt-4 text-sm">
-                    {fmt(t.cities.adventureCount, { n: advs.length })}
+                    {fmt(advs.length === 1 ? t.cities.adventureCountOne : t.cities.adventureCount, { n: advs.length })}
                     {themes.length > 0 && (
                       <span className="text-ivory-mute">
                         {' · '}

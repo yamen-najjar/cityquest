@@ -38,7 +38,7 @@ export function NewsletterForm({ t, locale }: { t: Dictionary['home']; locale: L
   const tone = state === 'invalid' || state === 'error' || state === 'unavailable' ? 'text-danger' : 'text-ivory-dim';
 
   return (
-    <form noValidate className="mt-6 flex flex-col gap-3 sm:flex-row" onSubmit={onSubmit}>
+    <form noValidate className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap" onSubmit={onSubmit}>
       <label htmlFor="newsletter-email" className="sr-only">
         {t.newsletterLabel}
       </label>
