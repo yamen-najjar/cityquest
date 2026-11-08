@@ -7,10 +7,10 @@ async function noHorizontalScroll(page: Page) {
 
 test('the home page loads in all three languages, Arabic right to left', async ({ page }) => {
   for (const [path, lang, dir, title] of [
-    ['/de', 'de', 'ltr', 'Jede Stadt hat ein Geheimnis'],
-    ['/en', 'en', 'ltr', 'Every City Has a Secret'],
-    ['/nl', 'nl', 'ltr', 'Elke stad heeft een geheim'],
-    ['/ar', 'ar', 'rtl', 'لكل مدينة سرّ'],
+    ['/de', 'de', 'ltr', 'Eine Detektivgeschichte, die du dort spielst'],
+    ['/en', 'en', 'ltr', 'A detective story you play where it happens'],
+    ['/nl', 'nl', 'ltr', 'Een detectiveverhaal dat je speelt'],
+    ['/ar', 'ar', 'rtl', 'قصة بوليسية تلعبها في المكان'],
   ] as const) {
     await page.goto(path);
     await expect(page.locator('html')).toHaveAttribute('lang', lang);
