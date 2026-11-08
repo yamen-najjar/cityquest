@@ -1,0 +1,79 @@
+/* Cities (Ter plaatse): shared by the overview and a city's own page. */
+.ct-h1 { font-size: var(--fs-title); line-height: 0.96; letter-spacing: -0.035em; font-weight: 800; hyphens: auto; overflow-wrap: break-word; }
+.ct-lead { margin-block-start: 22px; font-size: var(--fs-lead); line-height: 1.38; max-width: 32ch; font-weight: 500; }
+.ct-dateline { font-size: var(--fs-small); color: var(--muted); line-height: 1.6; }
+.ct-dateline b { color: var(--text); font-weight: 600; }
+.ct-dateline .tp-sep { color: var(--rule-strong); }
+.ct-fig { margin: 0; }
+.ct-fig img { display: block; width: 100%; height: auto; object-fit: cover; }
+.ct-fig figcaption { margin-block-start: 10px; max-width: 62ch; }
+.ct-fig figcaption strong { color: var(--text); font-weight: 600; }
+.ct-band img { filter: saturate(0.66) brightness(0.84) contrast(1.08); }
+.ct-hero img { filter: saturate(0.72) brightness(0.86) contrast(1.06); }
+.ct-places img { filter: saturate(0.82) brightness(0.9) contrast(1.04); }
+.ct-facts { font-size: var(--fs-small); line-height: 1.6; border-block-start: 1px solid var(--rule); padding-block-start: 14px; max-width: 58ch; }
+.ct-facts .tp-sep { color: var(--rule-strong); padding-inline: 0.12em; }
+.ct-facts > span { white-space: normal; }
+.ct-facts > span > span:not(.tp-sep) { white-space: normal; }
+
+/* Rows of adventures */
+.ct-lines { list-style: none; margin: 0; padding: 0; border-block-start: 1px solid var(--rule-strong); }
+.ct-lines li { border-block-end: 1px solid var(--rule); }
+.ct-lines a { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px 16px; align-items: baseline; padding-block: 14px; min-height: 56px; text-decoration: none; }
+.ct-lines__t { font-size: clamp(1.1875rem, 1rem + 0.7vw, 1.5rem); font-weight: 650; letter-spacing: -0.01em; line-height: 1.2; }
+.ct-lines__m { font-size: var(--fs-small); color: var(--muted); }
+.ct-lines__m .tp-sep { padding-inline: 0; color: var(--rule-strong); }
+.ct-lines a:hover .ct-lines__t { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+@media (min-width: 640px) { .ct-lines a { grid-template-columns: minmax(0, 1fr) auto; } }
+
+/* The schematic of the cities. A diagram, not a map. */
+.cs-map { display: block; width: 100%; height: auto; max-width: 520px; overflow: visible; direction: ltr; unicode-bidi: isolate; }
+.cs-link { stroke: var(--rule-strong); stroke-width: 1.5; stroke-dasharray: 3 7; stroke-linecap: round; }
+.cs-zone { fill: var(--muted); font: 500 15px var(--font); }
+.cs-north path { fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cs-pt__ring { fill: var(--ground); stroke: var(--amber); stroke-width: 3; }
+.cs-pt__dot { fill: var(--amber); }
+.cs-pt__name { fill: var(--text); font: 700 22px var(--font); letter-spacing: -0.01em; }
+.cs-pt__sub { fill: var(--muted); font: 500 15px var(--font); }
+.cs-pt--dim .cs-pt__ring { stroke: var(--rule-strong); }
+.cs-pt--dim .cs-pt__dot { fill: var(--rule-strong); }
+.cs-pt--dim .cs-pt__name { fill: var(--muted); font-weight: 600; }
+.cs-map a:hover .cs-pt__name { text-decoration: underline; }
+.cs-map a:focus-visible { outline: 2px solid var(--text); outline-offset: 6px; border-radius: 3px; }
+.cs-note { margin-block-start: 14px; font-size: var(--fs-caption); color: var(--muted); max-width: 44ch; }
+
+/* Overview */
+.ct-open { padding-block: clamp(48px, 6vw, 96px) clamp(36px, 4vw, 56px); }
+.ct-search { margin-block-start: 32px; max-width: 520px; display: grid; gap: 12px; }
+.ct-search__row { display: grid; gap: 6px; }
+.ct-search__label { font-size: var(--fs-small); color: var(--muted); }
+.ct-search input[type='search'] { min-height: 48px; padding-inline: 14px; background: transparent; color: var(--text); border: 1.5px solid var(--control); border-radius: 3px; font: inherit; font-size: 1rem; width: 100%; min-width: 0; }
+.ct-search input[type='search']::placeholder { color: var(--muted); opacity: 1; }
+.ct-search input[type='search']:focus { outline: 2px solid var(--text); outline-offset: 2px; border-color: var(--text); }
+.ct-check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: var(--fs-small); cursor: pointer; }
+.ct-check input { width: 20px; height: 20px; accent-color: var(--amber); margin: 0; }
+.ct-search button { justify-self: start; min-height: 48px; padding-inline: 20px; background: transparent; color: var(--text); border: 1.5px solid var(--control); border-radius: 3px; font: inherit; font-weight: 600; cursor: pointer; }
+.ct-search button:hover { border-color: var(--text); }
+@media (min-width: 760px) { .ct-search { grid-template-columns: minmax(0, 1fr) auto auto; align-items: end; column-gap: 20px; max-width: 760px; } .ct-search__row { grid-column: 1; } }
+.ct-grid { display: grid; gap: 40px; padding-block-end: clamp(40px, 5vw, 72px); }
+.ct-aside { padding-block-start: 8px; border-block-start: 1px solid var(--rule-strong); }
+.ct-aside h2 { font-size: var(--fs-small); font-weight: 700; margin-block: 14px 8px; }
+@media (min-width: 960px) {
+  .ct-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(48px, 6vw, 104px); align-items: start; }
+  .ct-aside { position: sticky; top: 96px; }
+}
+.ct-city { display: grid; gap: 18px; padding-block: 28px 40px; border-block-start: 1px solid var(--rule-strong); scroll-margin-top: 90px; }
+.ct-city:first-child { border-block-start: 0; padding-block-start: 0; }
+.ct-city__photo { aspect-ratio: 3 / 2; }
+.ct-fig .ct-city__photo img { height: 100%; }
+.ct-city h2 { font-size: clamp(2.25rem, 1.2rem + 3.4vw, 4rem); line-height: 0.96; letter-spacing: -0.035em; font-weight: 800; margin-block-start: 6px; hyphens: auto; overflow-wrap: break-word; }
+.ct-city h2 a { text-decoration: none; }
+.ct-city h2 a:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 8px; }
+.ct-city__status { font-size: var(--fs-small); font-weight: 600; margin-block-start: 10px; }
+.ct-city__intro { color: var(--muted); max-width: 52ch; margin-block-start: 10px; }
+.ct-city .ct-lines { margin-block-start: 18px; }
+.ct-more { margin-block-start: 20px; font-weight: 600; }
+.ct-none { margin-block-start: 8px; color: var(--muted); }
+.ct-soon { margin-block-start: 8px; padding-block-start: 18px; border-block-start: 1px solid var(--rule); font-size: var(--fs-small); color: var(--muted); max-width: 60ch; }
+
+[dir='rtl'] .ct-h1, [dir='rtl'] .ct-city h2 { line-height: 1.3; }
