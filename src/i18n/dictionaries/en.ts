@@ -536,7 +536,6 @@ const en = {
     notStartedWhen: 'Not yet',
     notStartedSub: 'Not started',
     notStartedLine: '{total} chapters. {city}, {duration}, {age}.',
-    ahead: 'Soon',
     eyebrowWay: 'On its way',
     eyebrowArrived: 'Arrived',
     routeProgress: 'Route: {n} of {total} chapters solved',

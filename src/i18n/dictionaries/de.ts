@@ -542,7 +542,6 @@ const de: Dictionary = {
     notStartedWhen: 'Noch nicht',
     notStartedSub: 'Nicht begonnen',
     notStartedLine: '{total} Kapitel. {city}, {duration}, {age}.',
-    ahead: 'Demnächst',
     eyebrowWay: 'Unterwegs',
     eyebrowArrived: 'Angekommen',
     routeProgress: 'Route: {n} von {total} Kapiteln gelöst',

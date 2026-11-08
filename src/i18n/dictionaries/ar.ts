@@ -533,7 +533,6 @@ const ar: Dictionary = {
     notStartedWhen: 'ليس بعد',
     notStartedSub: 'لم تبدأ',
     notStartedLine: '{total} فصول. {city}، {duration}، {age}.',
-    ahead: 'قريباً',
     eyebrowWay: 'في الطريق',
     eyebrowArrived: 'وصلت',
     routeProgress: 'المسار: حُلّ {n} من {total} فصول',

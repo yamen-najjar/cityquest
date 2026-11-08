@@ -540,7 +540,6 @@ const nl: Dictionary = {
     notStartedWhen: 'Nog niet',
     notStartedSub: 'Niet begonnen',
     notStartedLine: '{total} hoofdstukken. {city}, {duration}, {age}.',
-    ahead: 'Straks',
     eyebrowWay: 'Onderweg',
     eyebrowArrived: 'Aangekomen',
     routeProgress: 'Route: {n} van {total} hoofdstukken opgelost',
