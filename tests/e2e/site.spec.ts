@@ -34,7 +34,7 @@ test('navigation, search and filters work', async ({ page, isMobile }) => {
 
   await page.getByLabel('Theme').selectOption('treasure');
   await expect(page.getByText('No adventure matches these filters yet.')).toBeVisible();
-  await page.getByRole('link', { name: 'Reset filters' }).click();
+  await page.getByRole('link', { name: 'Reset filters' }).first().click();
   await expect(page.getByRole('status').filter({ hasText: 'adventure' })).toHaveText('3 adventures');
 
   if (isMobile) await page.getByRole('button', { name: 'Menu' }).click();
@@ -57,7 +57,7 @@ test('the adventures list: filters narrow it, grouped per city, and an empty res
   await expect(page.getByRole('heading', { level: 2, name: 'Arnhem' })).toBeVisible();
 
   // A city filter keeps only that city's band
-  await page.getByLabel('City').selectOption('arnhem');
+  await page.locator('#av-city').selectOption('arnhem');
   await expect(page).toHaveURL(/city=arnhem/);
   await expect(page.getByRole('status').filter({ hasText: 'adventure' })).toHaveText('1 adventure');
   await expect(page.getByRole('heading', { level: 3, name: 'The Devil’s House Secret' })).toBeVisible();

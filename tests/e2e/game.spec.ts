@@ -157,7 +157,7 @@ test('The Lost Manuscript: all eight chapters, journal, combining, Morse, the ac
   // The notes survived, and the dashboard counts the whole adventure
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('cityquest:progress:lost-manuscript')!).notes)).toBe('Kehl is hiding something.');
   await page.goto('/en/dashboard');
-  await expect(page.getByText('8 of 8 chapters')).toBeVisible();
+  await expect(page.getByText(/8 of 8 chapters,/)).toBeVisible();
 
   // Play again
   await page.goto(`/en${PLAY}`);
