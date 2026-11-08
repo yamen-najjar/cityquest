@@ -11,7 +11,7 @@ import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { ACHIEVEMENTS, earned, type AchievementContext, type AchievementId } from '@/lib/engine/achievements';
 import { daysUntil, letterAt, tokenEarned } from '@/lib/engine/meta';
-import { isFinished, rankFor, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
+import { isFinished, isLost, rankFor, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
 import { localProgressStore } from '@/lib/engine/storage';
 import { SYNCED_EVENT } from '@/lib/engine/sync-events';
 
@@ -41,6 +41,8 @@ export interface DashboardMeta {
 export interface DashboardLabels {
   modes: Record<Mode, string>;
   ranks: string[];
+  /** The label of a case that was lost. */
+  lost: string;
   routeStart: string;
   credit: string;
 }
@@ -131,7 +133,9 @@ export function Dashboard({
     const at = a.letter ? letterAt(p) : null;
     if (at !== null) entries.push({ key: `${p.adventure}:letter`, at, kind: now >= at ? 'letter' : 'ahead-letter', p, a });
   }
-  entries.sort((x, y) => (y.at ?? 0) - (x.at ?? 0));
+  // Newest first; when times tie (a fresh case starts and is last played at the same moment) the state comes before the start.
+  const rankOf: Record<Entry['kind'], number> = { 'ahead-letter': 0, progress: 1, letter: 2, started: 3, unstarted: 4 };
+  entries.sort((x, y) => (y.at ?? 0) - (x.at ?? 0) || rankOf[x.kind] - rankOf[y.kind]);
   for (const a of adventures) if (!known.some((p) => p.adventure === a.slug)) entries.push({ key: `${a.slug}:none`, at: null, kind: 'unstarted', a });
 
   const dateFmt = new Intl.DateTimeFormat(intlLocale[locale], { day: 'numeric', month: 'long' });
@@ -140,7 +144,7 @@ export function Dashboard({
   const thisYear = new Date(now).getFullYear();
   const dayOf = (at: number) => (new Date(at).getFullYear() === thisYear ? dateFmt : dateYearFmt).format(at);
   const duration = (ms: number) => {
-    const minutes = Math.max(1, Math.round(ms / 60000));
+    const minutes = Math.round(ms / 60000);
     const h = Math.floor(minutes / 60);
     return h > 0 ? fmt(t.hoursMinutes, { h, m: minutes % 60 }) : fmt(t.minutesOnly, { m: minutes });
   };
@@ -160,13 +164,13 @@ export function Dashboard({
   const teamFacts = (p: Progress) => [
     fmt(p.team.players === 1 ? t.teamLineOne : t.teamLine, { name: p.team.name, n: p.team.players }),
     labels.modes[p.mode],
-    duration(p.elapsedMs),
+    ...(p.elapsedMs >= 60000 ? [duration(p.elapsedMs)] : []),
   ];
 
   const renderEntry = (e: Entry) => {
     const { a, p } = e;
     const isAhead = e.kind === 'ahead-letter';
-    const when = e.at === null ? { day: t.notStartedWhen, sub: t.notStartedSub } : { day: dayOf(e.at), sub: isAhead ? t.ahead : timeFmt.format(e.at) };
+    const when = e.at === null ? { day: t.notStartedWhen, sub: t.notStartedSub } : { day: dayOf(e.at), sub: isAhead ? '' : timeFmt.format(e.at) };
     let body: React.ReactNode = null;
 
     if (e.kind === 'started' && p) {
@@ -177,13 +181,14 @@ export function Dashboard({
         </>
       );
     } else if (e.kind === 'progress' && p) {
-      const done = isFinished(p);
+      const lost = isLost(p);
+      const done = isFinished(p) && !lost;
       const stars = totalStars(p);
       const rank = labels.ranks[rankFor(stars, a.chapters)];
       const sign = a.token && tokenEarned(p, a.secrets) ? a.token.fragment : null;
       body = (
         <>
-          <span className="db-eyebrow">{done ? t.completed : t.inProgress}</span>
+          <span className="db-eyebrow">{lost ? labels.lost : done ? t.completed : t.inProgress}</span>
           <h3>
             <Link href={playHref(a.slug)}>{a.title}</Link>
           </h3>
@@ -202,8 +207,8 @@ export function Dashboard({
           {done && <RouteSchematic slug={a.slug} solved={p.solved.length} labels={routeLabels(p.solved.length, a.chapters)} />}
           <div className="db-actions">
             <Link className={done ? 'tp-btn tp-btn--quiet' : 'tp-textlink'} href={playHref(a.slug)}>
-              {done ? t.view : t.continue}
-              {!done && <Arrow />}
+              {lost || done ? t.view : t.continue}
+              {!done && !lost && <Arrow />}
             </Link>
           </div>
         </>
@@ -220,18 +225,16 @@ export function Dashboard({
           ) : (
             <>
               <div className="db-actions">
-                <button type="button" className="tp-textlink db-fold" aria-expanded={open} onClick={() => setOpenLetter(open ? null : a.slug)}>
+                <button type="button" className="tp-textlink db-fold" aria-expanded={open} aria-controls={`letter-${a.slug}`} onClick={() => setOpenLetter(open ? null : a.slug)}>
                   {open ? t.letterClose : t.letterArrived}
                 </button>
               </div>
-              {open && (
-                <div className="db-letter">
-                  {a.letter.text.map((line, i) => (
-                    <p key={i}>{line}</p>
-                  ))}
-                  <p className="db-letter__from">— {a.letter.from}</p>
-                </div>
-              )}
+              <div className="db-letter" id={`letter-${a.slug}`} hidden={!open}>
+                {a.letter.text.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+                <p className="db-letter__from">— {a.letter.from}</p>
+              </div>
             </>
           )}
         </>
@@ -276,8 +279,8 @@ export function Dashboard({
                 {nextAdventure.title}
               </h2>
               <p className="db-lead db-next__lead">
-                {fmt(t.continueLead, { n: Math.min(next.solved.length + 1, nextAdventure.chapters), total: nextAdventure.chapters })}{' '}
-                {fmt(t.chapters, { n: next.solved.length, total: nextAdventure.chapters })}
+                {fmt(t.continueLead, { n: Math.min(next.solved.length + 1, nextAdventure.chapters), total: nextAdventure.chapters })}
+                {totalStars(next) > 0 || xpFor(next) > 0 ? ` ${fmt(t.continueSoFar, { stars: totalStars(next), xp: xpFor(next) })}` : ''}
               </p>
               <div className="db-actions db-actions--band">
                 <Link className="tp-btn" href={playHref(next.adventure)}>

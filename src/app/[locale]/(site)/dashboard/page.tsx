@@ -35,6 +35,7 @@ export default async function DashboardPage({ params }: Props) {
           expert: t.game.modes.expert.name,
         },
         ranks: t.game.ranks,
+        lost: t.game.danger.lost,
         routeStart: t.home.routeStart,
         credit: t.site.photoCredit,
       }}

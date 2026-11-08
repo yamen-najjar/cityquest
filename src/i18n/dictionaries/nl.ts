@@ -528,7 +528,7 @@ const nl: Dictionary = {
     metaHint: 'Elk teken win je door een zaak af te ronden met alle geheimen gevonden.',
     logbook: 'Logboek',
     logbookNote: 'Het logboek toont alleen wat de opgeslagen voortgang bevat: wanneer een zaak begon, wanneer je voor het laatst speelde en wanneer ze werd afgerond.',
-    continueLead: 'Hoofdstuk {n} van {total} wacht op jullie.',
+    continueLead: 'Hoofdstuk {n} van {total} wacht op je.',
     started: '{title} begonnen',
     progressLine: '{done} van {total} hoofdstukken, {stars} van {max} sterren. {xp} XP.',
     rankLine: 'Rang: {rank}.',
@@ -546,6 +546,7 @@ const nl: Dictionary = {
     routeProgress: 'Route: {n} van {total} hoofdstukken opgelost',
     recordLabel: 'Jouw dossier',
     achievementsCount: '{n} van {total} behaald',
+    continueSoFar: '{stars} sterren en {xp} XP tot nu toe.',
   },
   account: {
     title: 'Jouw account',

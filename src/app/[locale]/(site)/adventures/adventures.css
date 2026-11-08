@@ -36,7 +36,7 @@
 .av-photo img { display: block; width: 100%; height: clamp(240px, 52vw, 440px); object-fit: cover; filter: saturate(0.62) brightness(0.7) contrast(1.1); }
 .av-photo figcaption { margin-block-start: 10px; }
 .av-frame { position: relative; overflow: hidden; }
-.av-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(18, 25, 34, 0.5), rgba(18, 25, 34, 0) 45%); pointer-events: none; }
+.av-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(var(--c-navy) / 0.5), rgb(var(--c-navy) / 0) 45%); pointer-events: none; }
 .av-body { margin-block-start: 28px; display: grid; gap: 28px; }
 .av-dateline { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: var(--fs-small); }
 .av-dateline__sep { color: var(--muted); }

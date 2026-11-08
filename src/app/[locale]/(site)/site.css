@@ -32,6 +32,8 @@
   --amber-hover: #f6b25c;
   --ink: #121922;
   --river: #2d4256;
+  --paper: #efe6d2; /* a letter on paper */
+  --paper-ink: #2b2116;
   --gutter: clamp(16px, 4.4vw, 64px);
   --max: 1400px;
   --stack: 'Helvetica Neue', Helvetica, 'Segoe UI', system-ui, sans-serif;

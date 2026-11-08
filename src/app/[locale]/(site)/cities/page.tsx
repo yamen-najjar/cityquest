@@ -67,7 +67,7 @@ export default async function CitiesPage({ params, searchParams }: Props) {
 
         <div>
           {list.length === 0 && <p className="ct-none">{t.cities.noResults}</p>}
-          {list.map((c) => {
+          {list.map((c, index) => {
             const advs = adventuresIn(c.slug);
             const pres = getCityPresentation(c.slug);
             const href = `/${locale}/cities/${c.slug}`;
@@ -82,7 +82,7 @@ export default async function CitiesPage({ params, searchParams }: Props) {
               <article key={c.slug} className="ct-city" id={c.slug} aria-labelledby={`city-${c.slug}`}>
                 <figure className="ct-fig ct-band">
                   <div className="ct-city__photo">
-                    <PhotoImage id={pres.photo} locale={locale} sizes="(max-width: 960px) 100vw, 58vw" />
+                    <PhotoImage id={pres.photo} locale={locale} sizes="(max-width: 960px) 100vw, 58vw" priority={index === 0} />
                   </div>
                   <PhotoCaption id={pres.photo} locale={locale} template={credit} />
                 </figure>

@@ -107,7 +107,7 @@ export default async function CatalogPage({ params, searchParams }: Props) {
         </div>
       )}
 
-      {groups.map(([citySlug, items]) => {
+      {groups.map(([citySlug, items], groupIndex) => {
         const city = getCity(citySlug);
         const meta = [city?.region[locale], city?.pilot ? t.cities.pilot : null, fmt(items.length === 1 ? t.cities.adventureCountOne : t.cities.adventureCount, { n: items.length })].filter(Boolean).join(' · ');
         return (
@@ -117,7 +117,7 @@ export default async function CatalogPage({ params, searchParams }: Props) {
               <p>{meta}</p>
             </div>
             <div className="av-stories">
-              {items.map((a) => {
+              {items.map((a, itemIndex) => {
                 const p = getPresentation(a.slug);
                 const photo = p.homePhoto ?? p.photo;
                 const href = `/${locale}/adventures/${a.slug}`;
@@ -134,7 +134,7 @@ export default async function CatalogPage({ params, searchParams }: Props) {
                   <article key={a.slug} className="av-story" aria-labelledby={`t-${a.slug}`}>
                     <figure className="av-photo">
                       <div className="av-frame">
-                        <PhotoImage id={photo} locale={locale} sizes="100vw" style={{ objectPosition: bandPosition[a.slug] }} />
+                        <PhotoImage id={photo} locale={locale} sizes="100vw" priority={groupIndex === 0 && itemIndex === 0} style={{ objectPosition: bandPosition[a.slug] }} />
                       </div>
                       <PhotoCaption id={photo} locale={locale} template={credit} className="tp-wrap" />
                     </figure>

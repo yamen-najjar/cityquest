@@ -542,6 +542,7 @@ const en = {
     routeProgress: 'Route: {n} of {total} chapters solved',
     recordLabel: 'Your record',
     achievementsCount: '{n} of {total} earned',
+    continueSoFar: '{stars} stars and {xp} XP so far.',
   },
   account: {
     title: 'Your account',

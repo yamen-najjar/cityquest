@@ -530,7 +530,7 @@ const de: Dictionary = {
     metaHint: 'Jedes Zeichen gewinnt, wer einen Fall mit allen gefundenen Geheimnissen abschließt.',
     logbook: 'Logbuch',
     logbookNote: 'Das Logbuch zeigt nur, was im gespeicherten Fortschritt steht: wann ein Fall begann, wann du zuletzt gespielt hast und wann er abgeschlossen wurde.',
-    continueLead: 'Kapitel {n} von {total} wartet auf euch.',
+    continueLead: 'Kapitel {n} von {total} wartet auf dich.',
     started: '{title} begonnen',
     progressLine: '{done} von {total} Kapiteln, {stars} von {max} Sternen. {xp} XP.',
     rankLine: 'Rang: {rank}.',
@@ -548,6 +548,7 @@ const de: Dictionary = {
     routeProgress: 'Route: {n} von {total} Kapiteln gelöst',
     recordLabel: 'Dein Dossier',
     achievementsCount: '{n} von {total} erreicht',
+    continueSoFar: '{stars} Sterne und {xp} XP bisher.',
   },
   account: {
     title: 'Dein Konto',
