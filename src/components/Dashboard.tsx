@@ -280,7 +280,7 @@ export function Dashboard({
               </h2>
               <p className="db-lead db-next__lead">
                 {fmt(t.continueLead, { n: Math.min(next.solved.length + 1, nextAdventure.chapters), total: nextAdventure.chapters })}
-                {totalStars(next) > 0 || xpFor(next) > 0 ? ` ${fmt(t.continueSoFar, { stars: totalStars(next), xp: xpFor(next) })}` : ''}
+                {totalStars(next) > 0 || xpFor(next) > 0 ? ` ${fmt(t.continueSoFar, { stars: totalStars(next), max: nextAdventure.chapters * 3, xp: xpFor(next) })}` : ''}
               </p>
               <div className="db-actions db-actions--band">
                 <Link className="tp-btn" href={playHref(next.adventure)}>
