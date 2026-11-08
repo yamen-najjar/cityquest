@@ -3,9 +3,9 @@ import type { Dictionary } from '../dictionary';
 const nl: Dictionary = {
   meta: {
     siteName: 'CityQuest',
-    slogan: 'Elke stad heeft een geheim. Ontdek het.',
+    slogan: 'Detectiveverhalen op straat',
     description:
-      'Locatiegebonden mysterie-avonturen: los puzzels op, verzamel aanwijzingen en ontdek de verhalen die in echte steden verborgen zitten. We beginnen in Heidelberg.',
+      'Detectiveverhalen die je speelt op de plek waar ze gebeuren, in Heidelberg en Arnhem. Eén telefoon voor het hele team, en de demo is gratis.',
   },
   nav: {
     home: 'Home',
@@ -48,11 +48,13 @@ const nl: Dictionary = {
       'Tussendoor sturen personages je berichten, en zit een achtervolger je op de hielen. Aan het eind wijs je met bewijs iemand aan.',
     ],
     phoneChapterCaption: 'Hoofdstuk 1 van {title}. {line}',
-    phoneChapterAlt: 'Spelscherm van hoofdstuk 1: een foto van een tafel met een briefje, met daaronder de eerste regel van het verhaal.',
+    phoneChapterAlt:
+      'Spelscherm van hoofdstuk 1: de titel en de eerste regels van het verhaal, met daaronder de kaart van het volgende controlepunt.',
     phoneGameCaption: 'De telefoon in het spel: berichten van personages, bestanden en een browser.',
     phoneGameAlt:
-      'Spelscherm: de telefoon in het spel, met de tabbladen Berichten, Bestanden en Browser en een bericht van VII dat zegt niet te antwoorden en de getallen te volgen.',
-    demoNote: 'Deze demo is {title}. De controlepunten zijn gesimuleerd, dus je kunt hem overal spelen, ook thuis.',
+      'Spelscherm: het telefoonvenster in het spel, met de tabbladen Berichten, Bestanden en Browser en een eerste bericht van een onbekend nummer.',
+    demoNote:
+      'De demo hierboven is {title}; ook de andere verhalen hebben een demo. De controlepunten zijn gesimuleerd, dus je kunt ze overal spelen, ook thuis.',
     practicalTitle: 'Praktisch',
     bringLabel: 'Meenemen',
     bring: 'Een opgeladen telefoon, schoenen om in te lopen, een pen als je het zaakdossier print, en iemand om mee te discussiëren.',
@@ -73,7 +75,7 @@ const nl: Dictionary = {
       { q: 'Wat heb ik nodig om te spelen?', a: 'Een smartphone met een browser. Een app is niet nodig. De demo kun je overal spelen.' },
       { q: 'Moeten we in {cities} zijn?', a: 'Voor de demo niet: de controlepunten zijn gesimuleerd. De buitenversie speel je ter plaatse, zodra de route te voet is getest.' },
       { q: 'Met hoeveel personen kun je spelen?', a: 'Eén team van {team} deelt één toestel.' },
-      { q: 'Wat als we vastlopen?', a: 'Elke puzzel heeft drie hints; de derde toont de oplossing. In de stand {relaxed} zijn hints gratis.' },
+      { q: 'Wat als we vastlopen?', a: 'Je kunt hints vragen. In {junior} en {relaxed} zijn ze gratis, in {classic} kosten ze ervaring en in {expert} zijn er geen hints.' },
       { q: 'Wordt onze voortgang bewaard?', a: 'Ja, na elke stap, op dit toestel. Ook als je de browser sluit of van taal wisselt.' },
       { q: 'Wanneer kunnen we een ticket kopen?', a: 'Zodra de route in Heidelberg is gelopen en gecontroleerd. Tot die tijd is de demo gratis.' },
       { q: 'Is het eng?', a: 'Spannend, maar zonder geweld. De ‘duivels’ in Arnhem zijn stenen figuren op een gevel. {title} is duisterder, zonder schrikeffecten, en daarom vanaf {age} jaar.' },
@@ -175,18 +177,16 @@ const nl: Dictionary = {
     routePlacesInvented: 'De plekken in dit verhaal zijn verzonnen. De foto’s hieronder laten alleen de omgeving zien.',
     legendStart: 'Start en verzamelpunt',
     legendCheckpoint: 'Controlepunt, in de demo gesimuleerd',
-    legendPlace: 'Bekende plek onderweg',
     factStart: 'Start',
     factStartNote: 'Het precieze punt volgt',
     factSimulated: 'in de demo gesimuleerd',
     factOneDevice: 'op één toestel',
     pricePer: 'per team, tot {max} personen',
     demoFree: 'De demo kost niets en kan overal gespeeld worden, ook zittend.',
-    playIntro:
-      'Je kiest een teamnaam, het aantal spelers en een speelstand: {modes}. Daarna volgen {n} hoofdstukken, elk met een eigen soort puzzel.',
+    playIntro: 'Je kiest een teamnaam, het aantal spelers en een speelstand: {modes}.',
     phoneCaption: 'Het startscherm: teamnaam, aantal spelers en speelstand.',
     phoneAlt:
-      'Startscherm van het spel, in het Nederlands: velden voor een teamnaam en het aantal spelers, vier speelstanden en onderaan de knop om het avontuur te starten.',
+      'Startscherm van het spel: velden voor een teamnaam en het aantal spelers, de speelstanden en onderaan de knop om het avontuur te starten.',
     heroPlace: '{theme}, {n} hoofdstukken',
     dossierTitle: 'Zaakdossier',
     dossierText:

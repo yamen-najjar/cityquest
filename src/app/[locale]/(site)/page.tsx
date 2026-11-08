@@ -17,8 +17,6 @@ import { groupBy, joinList, languageList } from '@/lib/lists';
 import './home.css';
 
 const heroSlug = 'het-duivelshuis';
-/** The story whose chapter 1 is shown on a phone in "what happens on the street". */
-const phoneSlug = 'lost-manuscript';
 
 function Arrow() {
   return (
@@ -49,8 +47,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const credit = t.site.photoCredit;
 
   const hero = getAdventure(heroSlug);
-  const phoneStory = getAdventure(phoneSlug);
-  if (!hero || !phoneStory) notFound();
+  if (!hero) notFound();
   const stories = presentedSlugs
     .map((slug) => getAdventure(slug))
     .filter((a): a is Adventure => !!a);
@@ -74,7 +71,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const languageGroups = [...groupBy(adventures, (a) => a.languages.join())].map(([, list]) =>
     fmt(t.home.languagesGroup, { titles: joinList(list.map((a) => a.title[locale]), locale), languages: languageList(list[0]?.languages ?? [], locale) }),
   );
-  const faqVars = { cities: citiesLine, team, relaxed: t.game.modes.relaxed.name, title: darkest.title[locale], age: darkest.minAge };
+  const modeNames = { junior: t.game.modes.junior.name, relaxed: t.game.modes.relaxed.name, classic: t.game.modes.classic.name, expert: t.game.modes.expert.name };
+  const faqVars = { cities: citiesLine, team, ...modeNames, title: darkest.title[locale], age: darkest.minAge };
   const practical: [string, string][] = [
     [t.home.bringLabel, t.home.bring],
     [t.home.whoLabel, fmt(t.home.who, { team })],
@@ -182,7 +180,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <p className="tp-facts hm-facts">
               {facts.map((f, k) => (
                 <Fragment key={k}>
-                  {k > 0 && <span className="tp-sep" aria-hidden="true"> · </span>}
+                  {k > 0 && <span className="tp-sep" aria-hidden="true">&nbsp;· </span>}
                   <span>{f}</span>
                 </Fragment>
               ))}
@@ -209,14 +207,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             </p>
           );
           const languages = <p className="hm-story__lang">{fmt(t.home.languagesLine, { languages: languageList(a.languages, locale) })}</p>;
-          const caption = <PhotoCaption id={p.photo} locale={locale} template={credit} />;
+          const bandPhoto = p.homePhoto ?? p.photo;
+          const caption = <PhotoCaption id={bandPhoto} locale={locale} template={credit} />;
 
           if (layout === 'full') {
             return (
               <article key={a.slug} className="hm-story hm-story--full" id={a.slug} aria-labelledby={`${a.slug}-title`}>
                 <figure className="hm-story__photo">
                   <div className="hm-story__frame">
-                    <PhotoImage id={p.photo} locale={locale} sizes="100vw" />
+                    <PhotoImage id={bandPhoto} locale={locale} sizes="100vw" />
                   </div>
                   {caption}
                 </figure>
@@ -271,15 +270,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <figure className="hm-phone">
               <div className="hm-phone__frame">
                 <div className="hm-phone__screen">
-                  <Image src="/photos/game/game-chapter.jpg" width={780} height={1688} alt={t.home.phoneChapterAlt} sizes="(max-width: 760px) 45vw, 300px" style={{ objectPosition: 'top' }} />
+                  <Image src={`/photos/game/duivelshuis-chapter-${locale}.jpg`} width={600} height={1300} alt={t.home.phoneChapterAlt} sizes="(max-width: 760px) 45vw, 300px" style={{ objectPosition: 'top' }} />
                 </div>
               </div>
-              <figcaption>{fmt(t.home.phoneChapterCaption, { title: phoneStory.title[locale], line: phoneStory.chapters[0]?.story[locale][0] ?? '' })}</figcaption>
+              <figcaption>{fmt(t.home.phoneChapterCaption, { title: hero.title[locale], line: hero.chapters[0]?.story[locale][0] ?? '' })}</figcaption>
             </figure>
             <figure className="hm-phone hm-phone--low">
               <div className="hm-phone__frame">
                 <div className="hm-phone__screen">
-                  <Image src="/photos/game/terplaatse-game-phone.jpg" width={780} height={1688} alt={t.home.phoneGameAlt} sizes="(max-width: 760px) 45vw, 300px" style={{ objectPosition: 'bottom' }} />
+                  <Image src={`/photos/game/duivelshuis-phone-${locale}.jpg`} width={600} height={1300} alt={t.home.phoneGameAlt} sizes="(max-width: 760px) 45vw, 300px" style={{ objectPosition: 'bottom' }} />
                 </div>
               </div>
               <figcaption>{t.home.phoneGameCaption}</figcaption>

@@ -1,9 +1,9 @@
 const en = {
   meta: {
     siteName: 'CityQuest',
-    slogan: 'Every City Has a Secret. Discover It.',
+    slogan: 'Detective stories for the street',
     description:
-      'Location-based mystery adventures: solve puzzles, collect clues and uncover the stories hidden in real cities. Starting in Heidelberg.',
+      'Detective stories you play where they happen, in Heidelberg and Arnhem. One phone for the whole team, and the demo is free.',
   },
   nav: {
     home: 'Home',
@@ -46,12 +46,12 @@ const en = {
       'In between, characters send you messages and a pursuer is on your heels. At the end you accuse someone, with proof.',
     ],
     phoneChapterCaption: 'Chapter 1 of {title}. {line}',
-    phoneChapterAlt:
-      'Game screen of chapter 1: a photo of a table with a note, with the first line of the story below it (Dutch interface).',
+    phoneChapterAlt: 'Game screen of chapter 1: the title and the first lines of the story, with the map of the next checkpoint below.',
     phoneGameCaption: 'The phone in the game: messages from characters, files and a browser.',
     phoneGameAlt:
-      'Game screen: the phone in the game, with the tabs Messages, Files and Browser and a message from VII saying not to reply and to follow the numbers (Dutch interface).',
-    demoNote: 'This demo is {title}. The checkpoints are simulated, so you can play it anywhere, at home too.',
+      'Game screen: the phone window in the game, with the tabs Messages, Files and Browser and a first message from an unknown number.',
+    demoNote:
+      'The demo above is {title}; the other stories have a demo too. The checkpoints are simulated, so you can play them anywhere, at home too.',
     practicalTitle: 'Practical',
     bringLabel: 'What to bring',
     bring: 'A charged phone, shoes you can walk in, a pen if you print the case dossier, and someone to argue with.',
@@ -72,7 +72,7 @@ const en = {
       { q: 'What do I need to play?', a: 'A smartphone with a browser. No app is needed. You can play the demo anywhere.' },
       { q: 'Do we have to be in {cities}?', a: 'Not for the demo: the checkpoints are simulated. You play the outdoor version on the spot, once the route has been tested on foot.' },
       { q: 'How many people can play?', a: 'One team of {team} shares one device.' },
-      { q: 'What if we get stuck?', a: 'Every puzzle has three hints; the third shows the solution. In {relaxed} mode, hints are free.' },
+      { q: 'What if we get stuck?', a: 'You can ask for hints. In {junior} and {relaxed} mode they are free, in {classic} they cost experience, and in {expert} there are no hints.' },
       { q: 'Is our progress saved?', a: 'Yes, after every step, on this device. Even if you close the browser or change language.' },
       { q: 'When can we buy a ticket?', a: 'Once the route in Heidelberg has been walked and checked. Until then the demo is free.' },
       { q: 'Is it scary?', a: 'Tense, but without violence. The “devils” in Arnhem are stone figures on a façade. {title} is darker, without jump scares, and therefore from age {age}.' },
@@ -174,18 +174,16 @@ const en = {
     routePlacesInvented: 'The places in this story are invented. The photographs below show only the surroundings.',
     legendStart: 'Start and meeting point',
     legendCheckpoint: 'Checkpoint, simulated in the demo',
-    legendPlace: 'Known place on the way',
     factStart: 'Start',
     factStartNote: 'The exact point follows',
     factSimulated: 'simulated in the demo',
     factOneDevice: 'on one device',
     pricePer: 'per team, up to {max} people',
     demoFree: 'The demo costs nothing and can be played anywhere, seated included.',
-    playIntro:
-      'You choose a team name, the number of players and a mode: {modes}. Then come {n} chapters, each with its own kind of puzzle.',
+    playIntro: 'You choose a team name, the number of players and a mode: {modes}.',
     phoneCaption: 'The start screen: team name, number of players and mode.',
     phoneAlt:
-      'The start screen of the game, in Dutch: fields for a team name and the number of players, four modes and, at the bottom, the button that starts the adventure.',
+      'The start screen of the game: fields for a team name and the number of players, the modes and, at the bottom, the button that starts the adventure.',
     heroPlace: '{theme}, {n} chapters',
     dossierTitle: 'Case dossier',
     dossierText: 'One A4 sheet with the brief, the facts and room for the detectives’ names and your notes. Take it along, with a pen.',

@@ -7,6 +7,8 @@ import type { Localized } from './types';
 export interface StoryPresentation {
   /** The photograph that stands for the story on the home page and on its own page. */
   photo: PhotoId;
+  /** A different photograph for the story's band on the home page, when the main one is already the hero there. */
+  homePhoto?: PhotoId;
   /** Further photographs on the story page, in reading order. */
   settingPhotos: PhotoId[];
   /**
@@ -32,6 +34,7 @@ export interface StoryPresentation {
 const presentationBySlug: Record<string, StoryPresentation> = {
   'het-duivelshuis': {
     photo: 'arnhem-duivelshuis-detail',
+    homePhoto: 'arnhem-duivelshuis-2024',
     settingPhotos: ['arnhem-eusebius-duivelshuis', 'arnhem-duivelshuis-2024', 'arnhem-eusebius'],
     realPlaces: true,
     start: {

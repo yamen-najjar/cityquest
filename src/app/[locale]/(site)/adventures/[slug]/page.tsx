@@ -142,7 +142,7 @@ export default async function AdventurePage({ params }: Props) {
           <p className="tp-facts ad-facts">
             {heroFacts.map((f, i) => (
               <Fragment key={i}>
-                {i > 0 && <span className="tp-sep" aria-hidden="true"> · </span>}
+                {i > 0 && <span className="tp-sep" aria-hidden="true">&nbsp;· </span>}
                 <span>{f}</span>
               </Fragment>
             ))}
@@ -171,23 +171,31 @@ export default async function AdventurePage({ params }: Props) {
           <div className="ad-case__prose">
             <p>{a.description[locale]}</p>
           </div>
-          {person && quote && (
-            <figure className="ad-message" aria-label={`${person.name[locale]} · ${isMessage ? t.adventure.firstMessage : t.adventure.openingScene}`}>
-              <figcaption className="ad-message__from">
-                <span className="ad-message__mono" aria-hidden="true">
-                  {initials(person.name[locale])}
-                </span>
-                <span>
-                  <span className="ad-message__name">{person.name[locale]}</span>
-                  <br />
-                  <span className="ad-message__role">
-                    {person.role[locale]} · {isMessage ? t.adventure.firstMessage : t.adventure.openingScene}
+          {quote && (
+            <figure className="ad-message" aria-label={isMessage && person ? `${person.name[locale]} · ${t.adventure.firstMessage}` : t.adventure.openingScene}>
+              {isMessage && person ? (
+                <figcaption className="ad-message__from">
+                  <span className="ad-message__mono" aria-hidden="true">
+                    {initials(person.name[locale])}
                   </span>
-                </span>
-              </figcaption>
-              <blockquote className={isMessage ? '' : 'ad-message__scene'}>
-                <p>{quote}</p>
-              </blockquote>
+                  <span>
+                    <span className="ad-message__name">{person.name[locale]}</span>
+                    <br />
+                    <span className="ad-message__role">
+                      {person.role[locale]} · {t.adventure.firstMessage}
+                    </span>
+                  </span>
+                </figcaption>
+              ) : (
+                <figcaption className="ad-message__from ad-message__from--scene">{t.adventure.openingScene}</figcaption>
+              )}
+              {isMessage ? (
+                <blockquote>
+                  <p>{quote}</p>
+                </blockquote>
+              ) : (
+                <p className="ad-narration">{quote}</p>
+              )}
               {after && <p className="ad-message__after">{after}</p>}
             </figure>
           )}
@@ -234,14 +242,6 @@ export default async function AdventurePage({ params }: Props) {
               </svg>
               {t.adventure.legendCheckpoint}
             </li>
-            {p.realPlaces && (
-              <li>
-                <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-                  <rect x="5" y="5" width="12" height="12" fill="#e7e9e6" />
-                </svg>
-                {t.adventure.legendPlace}
-              </li>
-            )}
           </ul>
         </div>
 
@@ -279,7 +279,7 @@ export default async function AdventurePage({ params }: Props) {
           <aside className="ad-price" aria-label={t.adventure.price}>
             <p className="ad-price__amount">{price}</p>
             <p className="ad-price__per">{fmt(t.adventure.pricePer, { max: a.teamSize.max })}</p>
-            <p className="ad-price__note">{fmt(t.adventure.priceNote, { max: a.teamSize.max, vat: formatPrice(vatShare(a.priceCents), locale) })}</p>
+            <p className="ad-price__note">{fmt(t.adventure.priceNote, { max: a.teamSize.max, vat: formatPrice(vatShare(a.priceCents), locale) }).replace(/(\d) %/, '$1\u00a0%')}</p>
             <p className="ad-price__note">{t.adventure.purchaseLater}</p>
             <PlayButton href={playHref} slug={a.slug} labels={playLabels} className="tp-btn" suffix={<Arrow />} />
             <p className="ad-price__note">{t.adventure.demoFree}</p>
@@ -293,7 +293,7 @@ export default async function AdventurePage({ params }: Props) {
           <figure className="ad-phone">
             <div className="ad-phone__frame">
               <div className="ad-phone__screen">
-                <Image src="/photos/game/game-start.jpg" width={780} height={1688} alt={t.adventure.phoneAlt} sizes="(max-width: 960px) 300px, 320px" />
+                <Image src={`/photos/game/duivelshuis-start-${locale}.jpg`} width={600} height={1300} alt={t.adventure.phoneAlt} sizes="(max-width: 960px) 300px, 320px" />
               </div>
             </div>
             <figcaption>{t.adventure.phoneCaption}</figcaption>

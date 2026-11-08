@@ -50,7 +50,8 @@
   .ad-route-head { display: grid; gap: 16px; }
   .ad-route-head p { color: var(--muted); max-width: 56ch; }
   .ad-map { margin-block-start: 48px; border-block: 1px solid var(--rule); padding-block: 36px 28px; }
-  .ad-map > svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .ad-map > svg { display: block; width: 100%; height: auto; overflow: visible; direction: ltr; unicode-bidi: isolate; }
+  .ad-m-startring { fill: none; stroke: var(--amber); stroke-width: 4; }
   .ad-map .ad-map--tall { display: block; max-width: 420px; margin-inline: auto; }
   .ad-map .ad-map--wide { display: none; }
   @media (min-width: 760px) { .ad-map .ad-map--tall { display: none; } .ad-map .ad-map--wide { display: block; } }
@@ -59,9 +60,6 @@
   .ad-m-cp circle { fill: var(--amber); }
   .ad-m-cp text { fill: var(--ink); font: 800 15px var(--font); text-anchor: middle; dominant-baseline: central; }
   .ad-map--tall .ad-m-cp text { font-size: 13px; }
-  .ad-m-start circle:first-child { fill: var(--ground); stroke: var(--amber); stroke-width: 4; }
-  .ad-m-start circle:last-child { fill: var(--amber); }
-  .ad-m-place { fill: var(--text); stroke: var(--ground); stroke-width: 3; }
   .ad-m-label { fill: var(--text); font: 600 16px var(--font); }
   .ad-m-label--river { fill: var(--muted); font-weight: 500; }
   .ad-map--tall .ad-m-label { font-size: 15px; }
@@ -111,10 +109,7 @@
   .ad-play__text { display: grid; gap: 20px; align-content: start; }
   .ad-play__text > p { max-width: 58ch; }
   .ad-play__text > p:first-of-type { font-size: var(--fs-lead); line-height: 1.42; }
-  .ad-puzzles { list-style: none; padding: 0; display: grid; gap: 0 40px; border-block-start: 1px solid var(--rule); }
-  .ad-puzzles li { border-block-end: 1px solid var(--rule); padding-block: 12px; }
   .ad-play__end { color: var(--muted); }
-  @media (min-width: 700px) { .ad-puzzles { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 960px) {
     .ad-play__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: clamp(48px, 7vw, 120px); align-items: start; }
     .ad-phone { max-width: 320px; }
@@ -130,7 +125,6 @@
   .ad-coords svg { flex: none; }
   .ad-coords__place { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem); font-weight: 750; line-height: 1.1; letter-spacing: -0.015em; }
   .ad-coords__num { margin-block-start: 6px; font-size: var(--fs-lead); }
-  .ad-where p.muted { margin-block-start: 18px; max-width: 48ch; }
   .ad-access p { margin-block-start: 22px; max-width: 52ch; }
   @media (min-width: 960px) { .ad-where { grid-template-columns: 1fr 1fr; column-gap: clamp(48px, 7vw, 120px); } }
 
@@ -146,12 +140,11 @@
   /* The place line is a breadcrumb: links look like text until hovered */
   .ad-case-hero__place a { text-decoration: none; }
   .ad-case-hero__place a:hover { text-decoration: underline; text-underline-offset: 4px; }
-  .ad-case-hero__place a { display: inline-flex; align-items: center; min-height: 32px; }
+  .ad-case-hero__place a { display: inline-flex; align-items: center; min-height: 44px; }
   .ad-case-hero__photo { margin: 0; }
 
   /* Schematic route of the stories whose places are invented */
   .ad-map .ad-route-schematic { max-width: 640px; margin-block: 0; }
-  .ad-message__scene p { font-size: clamp(1.1875rem, 1rem + 0.7vw, 1.5rem); line-height: 1.45; text-indent: 0; max-width: 34ch; }
   .ad-price__amount { font-variant-numeric: tabular-nums; }
   .ad-places figcaption strong { color: var(--text); font-weight: 600; }
 
@@ -172,3 +165,10 @@
   }
 
   .ad-h2 { font-size: var(--fs-h2); line-height: 1.05; letter-spacing: -0.02em; }
+
+  /* Meeting point text sits a little below the coordinates */
+  .ad-where .tp-muted { margin-block-start: 18px; max-width: 48ch; }
+  /* Narration (stories that open with a scene, not a message) */
+  .ad-narration { margin: 0; max-width: 34ch; font-size: clamp(1.1875rem, 1rem + 0.7vw, 1.5rem); line-height: 1.45; }
+  .ad-message__from--scene { color: var(--muted); font-size: var(--fs-small); }
+  .ad-message__from--scene::first-letter { text-transform: uppercase; }

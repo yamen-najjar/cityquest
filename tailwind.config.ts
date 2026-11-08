@@ -25,12 +25,6 @@ export default {
         },
         danger: '#F08A7E',
         success: '#8FD3A8',
-        // Ter plaatse: photo-documentary palette of the site pages.
-        ground: { DEFAULT: '#121922', 2: '#18212b' },
-        rule: { DEFAULT: '#2a3542', strong: '#4f5c6c' },
-        ink: '#e7e9e6',
-        muted: '#a3adb7',
-        amber: '#f29f3a',
       },
       fontFamily: {
         display: ['var(--font-display)', 'Georgia', 'serif'],

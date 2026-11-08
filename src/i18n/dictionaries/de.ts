@@ -3,9 +3,9 @@ import type { Dictionary } from '../dictionary';
 const de: Dictionary = {
   meta: {
     siteName: 'CityQuest',
-    slogan: 'Jede Stadt hat ein Geheimnis. Entdecke es.',
+    slogan: 'Detektivgeschichten für draußen',
     description:
-      'Ortsbasierte Rätselabenteuer: Löse Rätsel, sammle Hinweise und entdecke die Geschichten, die in echten Städten verborgen sind. Los geht es in Heidelberg.',
+      'Detektivgeschichten, die du dort spielst, wo sie geschehen, in Heidelberg und Arnheim. Ein Telefon für das ganze Team, die Demo ist kostenlos.',
   },
   nav: {
     home: 'Start',
@@ -43,26 +43,27 @@ const de: Dictionary = {
     routeStart: 'Start',
     playTitle: 'Was auf der Straße passiert',
     playSteps: [
-      'Das ganze Team spielt an einem Telefon. Eine Person liest vor, die anderen rätseln mit.',
-      'Jedes Kapitel schickt euch an einen Ort in der Stadt. Seid ihr da, bestätigt ihr es mit einem Tipp.',
-      'Die Rätsel drehen sich um das, was ihr um euch seht: steinerne Figuren an einer Fassade, die Glocken einer Kirche, ein Signal über das Wasser.',
-      'Zwischendurch schicken Figuren euch Nachrichten, und ein Verfolger ist euch auf den Fersen. Am Ende beschuldigt ihr mit Beweisen jemanden.',
+      'Dein ganzes Team spielt an einem Telefon. Eine Person liest vor, die anderen rätseln mit.',
+      'Jedes Kapitel schickt dich zu einem Ort in der Stadt. Bist du da, bestätigst du es mit einem Tipp.',
+      'Die Rätsel drehen sich um das, was du um dich herum siehst: steinerne Figuren an einer Fassade, die Glocken einer Kirche, ein Signal über das Wasser.',
+      'Zwischendurch schicken dir Figuren Nachrichten, und ein Verfolger ist dir auf den Fersen. Am Ende beschuldigst du mit Beweisen jemanden.',
     ],
     phoneChapterCaption: 'Kapitel 1 von {title}. {line}',
     phoneChapterAlt:
-      'Spielbildschirm von Kapitel 1: ein Foto von einem Tisch mit einem Zettel, darunter die erste Zeile der Geschichte (Bildschirm auf Niederländisch).',
+      'Spielbildschirm von Kapitel 1: der Titel und die ersten Zeilen der Geschichte, darunter die Karte des nächsten Kontrollpunkts.',
     phoneGameCaption: 'Das Telefon im Spiel: Nachrichten von Figuren, Dateien und ein Browser.',
     phoneGameAlt:
-      'Spielbildschirm: das Telefon im Spiel mit den Reitern Nachrichten, Dateien und Browser und einer Nachricht von VII, nicht zu antworten und den Zahlen zu folgen (Bildschirm auf Niederländisch).',
-    demoNote: 'Diese Demo ist {title}. Die Kontrollpunkte sind simuliert, du kannst sie also überall spielen, auch zu Hause.',
+      'Spielbildschirm: das Telefonfenster im Spiel mit den Reitern Nachrichten, Dateien und Browser und einer ersten Nachricht von einer unbekannten Nummer.',
+    demoNote:
+      'Die Demo oben ist {title}; auch die anderen Geschichten haben eine Demo. Die Kontrollpunkte sind simuliert, du kannst sie also überall spielen, auch zu Hause.',
     practicalTitle: 'Praktisches',
     bringLabel: 'Mitbringen',
-    bring: 'Ein aufgeladenes Telefon, Schuhe zum Laufen, einen Stift, wenn ihr die Ermittlungsakte druckt, und jemanden zum Diskutieren.',
+    bring: 'Ein aufgeladenes Telefon, Schuhe zum Laufen, einen Stift, wenn du die Ermittlungsakte druckst, und jemanden zum Diskutieren.',
     whoLabel: 'Wer',
     who: 'Ein Team mit {team}, zusammen an einem Gerät. Keine App nötig: Das Spiel läuft im Browser.',
     safetyLabel: 'Sicherheit',
     safety:
-      'Ihr spielt auf der Straße. Bleibt auf öffentlichen Wegen, achtet auf den Verkehr und betretet nie Privatgelände oder abgesperrte Bereiche.',
+      'Du spielst auf der Straße. Bleib auf öffentlichen Wegen, achte auf den Verkehr und betritt nie Privatgelände oder abgesperrte Bereiche.',
     costLabel: 'Was es kostet',
     cost: 'Die Demo ist kostenlos. Geplant für die Outdoor-Version, pro Team: {prices}. Bis zu {max} Personen, inklusive Mehrwertsteuer.',
     costGroup: '{price} für {titles}',
@@ -74,11 +75,11 @@ const de: Dictionary = {
     faqTitle: 'Fragen',
     faq: [
       { q: 'Was brauche ich zum Spielen?', a: 'Ein Smartphone mit Browser. Eine App ist nicht nötig. Die Demo kannst du überall spielen.' },
-      { q: 'Müssen wir in {cities} sein?', a: 'Für die Demo nicht: Die Kontrollpunkte sind simuliert. Die Outdoor-Version spielt ihr vor Ort, sobald die Route zu Fuß getestet ist.' },
+      { q: 'Muss ich in {cities} sein?', a: 'Für die Demo nicht: Die Kontrollpunkte sind simuliert. Die Outdoor-Version spielst du vor Ort, sobald die Route zu Fuß getestet ist.' },
       { q: 'Mit wie vielen Personen kann man spielen?', a: 'Ein Team mit {team} teilt sich ein Gerät.' },
-      { q: 'Was, wenn wir nicht weiterkommen?', a: 'Jedes Rätsel hat drei Hinweise; der dritte zeigt die Lösung. Im Modus {relaxed} sind Hinweise kostenlos.' },
-      { q: 'Wird unser Fortschritt gespeichert?', a: 'Ja, nach jedem Schritt, auf diesem Gerät. Auch wenn du den Browser schließt oder die Sprache wechselst.' },
-      { q: 'Wann können wir ein Ticket kaufen?', a: 'Sobald die Route in Heidelberg abgelaufen und geprüft ist. Bis dahin ist die Demo kostenlos.' },
+      { q: 'Was, wenn ich nicht weiterkomme?', a: 'Du kannst Hinweise anfordern. In {junior} und {relaxed} sind sie kostenlos, in {classic} kosten sie Erfahrung, und in {expert} gibt es keine Hinweise.' },
+      { q: 'Wird mein Fortschritt gespeichert?', a: 'Ja, nach jedem Schritt, auf diesem Gerät. Auch wenn du den Browser schließt oder die Sprache wechselst.' },
+      { q: 'Wann kann ich ein Ticket kaufen?', a: 'Sobald die Route in Heidelberg abgelaufen und geprüft ist. Bis dahin ist die Demo kostenlos.' },
       { q: 'Ist es gruselig?', a: 'Spannend, aber ohne Gewalt. Die „Teufel“ in Arnheim sind steinerne Figuren an einer Fassade. {title} ist düsterer, ohne Schreckeffekte, und deshalb ab {age} Jahren.' },
     ],
     searchLabel: 'Abenteuer suchen',
@@ -174,26 +175,24 @@ const de: Dictionary = {
     routeTitle: 'Die Route',
     routeIntro:
       'Ein Spaziergang von {distance} mit {n} Kontrollpunkten. Das ist ein Schema, keine Karte: Die genaue Route folgt, sobald sie zu Fuß geprüft ist.',
-    routePlacesReal: 'Unterwegs kommt ihr an Orten vorbei, die ihr vielleicht schon kennt.',
+    routePlacesReal: 'Unterwegs kommst du an Orten vorbei, die du vielleicht schon kennst.',
     routePlacesInvented: 'Die Orte in dieser Geschichte sind erfunden. Die Fotos unten zeigen nur die Umgebung.',
     legendStart: 'Start und Treffpunkt',
     legendCheckpoint: 'Kontrollpunkt, in der Demo simuliert',
-    legendPlace: 'Bekannter Ort unterwegs',
     factStart: 'Start',
     factStartNote: 'Der genaue Punkt folgt',
     factSimulated: 'in der Demo simuliert',
     factOneDevice: 'an einem Gerät',
     pricePer: 'pro Team, bis zu {max} Personen',
     demoFree: 'Die Demo kostet nichts und lässt sich überall spielen, auch im Sitzen.',
-    playIntro:
-      'Du wählst einen Teamnamen, die Spielerzahl und einen Spielmodus: {modes}. Danach folgen {n} Kapitel, jedes mit einer eigenen Rätselart.',
+    playIntro: 'Du wählst einen Teamnamen, die Spielerzahl und einen Spielmodus: {modes}.',
     phoneCaption: 'Der Startbildschirm: Teamname, Spielerzahl und Spielmodus.',
     phoneAlt:
-      'Startbildschirm des Spiels, auf Niederländisch: Felder für den Teamnamen und die Spielerzahl, vier Spielmodi und unten die Schaltfläche zum Start des Abenteuers.',
+      'Startbildschirm des Spiels: Felder für den Teamnamen und die Spielerzahl, die Spielmodi und unten die Schaltfläche zum Start des Abenteuers.',
     heroPlace: '{theme}, {n} Kapitel',
     dossierTitle: 'Ermittlungsakte',
     dossierText:
-      'Ein A4-Blatt mit dem Auftrag, den Fakten und Platz für die Namen der Ermittler und eure Notizen. Nehmt es mit, samt Stift.',
+      'Ein A4-Blatt mit dem Auftrag, den Fakten und Platz für die Namen der Ermittler und deine Notizen. Nimm es mit, samt Stift.',
     map: {
       aria: 'Schema der Route: Start am Korenmarkt, {n} Kontrollpunkte, unterwegs das Teufelshaus, die Eusebiuskirche, der Sonsbeek-Park und der Rhein.',
       devilsHouse: 'Teufelshaus',

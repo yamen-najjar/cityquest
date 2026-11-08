@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { createClient } from '@/lib/supabase/client';
@@ -13,7 +13,20 @@ import { RouteMark } from './Logo';
 export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['nav'] }) {
   const pathname = usePathname() ?? '';
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   useEffect(() => setOpen(false), [pathname]);
+
+  // Escape closes the menu and hands focus back to the button that opened it.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setOpen(false);
+      toggleRef.current?.focus();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
 
   // Auth state is read in the browser so the site pages stay statically rendered (no per-request cookie
   // read in the layout). The label updates live on sign-in and sign-out without a full navigation.
@@ -61,7 +74,7 @@ export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['n
           <div className="tp-header__lang">
             <LanguageSwitcher locale={locale} label={nav.language} variant="site" />
           </div>
-          <button type="button" className="tp-menu-button" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
+          <button ref={toggleRef} type="button" className="tp-menu-button" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
             <span className="sr-only">{open ? nav.close : nav.menu}</span>
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
               {open ? (
@@ -74,8 +87,7 @@ export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['n
         </div>
       </div>
 
-      {open && (
-        <div id="mobile-menu" className="tp-mobile-menu">
+      <div id="mobile-menu" className="tp-mobile-menu" hidden={!open}>
           <nav aria-label={nav.mainNav} className="tp-wrap">
             <ul>
               {links.map((l) => (
@@ -91,7 +103,6 @@ export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['n
             </div>
           </nav>
         </div>
-      )}
     </header>
   );
 }

@@ -267,6 +267,8 @@ body:has(.theme-site) {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
   padding-inline: 10px;
   text-decoration: none;
   white-space: nowrap;
@@ -469,4 +471,21 @@ body:has(.theme-site) {
 .tp-route__label {
   fill: var(--muted);
   font: 500 11px var(--font);
+}
+
+/* The skip link lives in the root layout, outside .theme-site, so the site theme is applied through :has().
+   It appears below the header bar, fully visible and not on top of the logo. */
+html:has(.theme-site) .skip-link:focus {
+  position: fixed;
+  top: 72px;
+  inset-inline-start: clamp(16px, 4.4vw, 64px);
+  z-index: 60;
+  padding: 12px 16px;
+  border-radius: 3px;
+  background: #e7e9e6;
+  color: #121922;
+  font-weight: 700;
+  outline: 2px solid #121922;
+  outline-offset: -4px;
+  box-shadow: 0 0 0 2px #e7e9e6;
 }
