@@ -5,11 +5,32 @@ export default {
   theme: {
     extend: {
       colors: {
-        navy: { DEFAULT: '#0B1324', 800: '#142238', 700: '#1C2E4A', 600: '#273C5E' },
-        gold: { DEFAULT: '#DDB66A', soft: '#E8CC93', deep: '#B8914A' },
-        ivory: { DEFAULT: '#F8F4EC', dim: '#C9C3B8', mute: '#9AA3B5' },
+        // The game, the admin console and the legacy pages read these from the channels in globals.css, so
+        // the site theme (.theme-site) can point the same names at the Ter plaatse palette.
+        navy: {
+          DEFAULT: 'rgb(var(--c-navy) / <alpha-value>)',
+          800: 'rgb(var(--c-navy-800) / <alpha-value>)',
+          700: 'rgb(var(--c-navy-700) / <alpha-value>)',
+          600: 'rgb(var(--c-navy-600) / <alpha-value>)',
+        },
+        gold: {
+          DEFAULT: 'rgb(var(--c-gold) / <alpha-value>)',
+          soft: 'rgb(var(--c-gold-soft) / <alpha-value>)',
+          deep: 'rgb(var(--c-gold-deep) / <alpha-value>)',
+        },
+        ivory: {
+          DEFAULT: 'rgb(var(--c-ivory) / <alpha-value>)',
+          dim: 'rgb(var(--c-ivory-dim) / <alpha-value>)',
+          mute: 'rgb(var(--c-ivory-mute) / <alpha-value>)',
+        },
         danger: '#F08A7E',
         success: '#8FD3A8',
+        // Ter plaatse: photo-documentary palette of the site pages.
+        ground: { DEFAULT: '#121922', 2: '#18212b' },
+        rule: { DEFAULT: '#2a3542', strong: '#4f5c6c' },
+        ink: '#e7e9e6',
+        muted: '#a3adb7',
+        amber: '#f29f3a',
       },
       fontFamily: {
         display: ['var(--font-display)', 'Georgia', 'serif'],
