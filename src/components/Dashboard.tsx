@@ -1,20 +1,30 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import type { Locale } from '@/i18n/config';
+import { Fragment, useEffect, useState } from 'react';
+import { Arrow } from '@/components/Marks';
+import { PhotoCaption, PhotoImage } from '@/components/Photo';
+import { RouteSchematic } from '@/components/RouteSchematic';
+import type { PhotoId } from '@/content/photos';
+import { intlLocale, type Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { ACHIEVEMENTS, earned, type AchievementContext, type AchievementId } from '@/lib/engine/achievements';
 import { daysUntil, letterAt, tokenEarned } from '@/lib/engine/meta';
-import { isFinished, xpFor, type Progress } from '@/lib/engine/progress';
+import { isFinished, rankFor, totalStars, xpFor, type Mode, type Progress } from '@/lib/engine/progress';
 import { localProgressStore } from '@/lib/engine/storage';
 import { SYNCED_EVENT } from '@/lib/engine/sync-events';
 
 export interface DashboardAdventure {
   slug: string;
   title: string;
+  city: string;
   chapters: number;
+  photo: PhotoId;
+  /** Where the team starts, short ("Korenmarkt, Arnhem"). */
+  start: string;
+  /** The line shown for a story that has not been started: chapters, city, duration, age. */
+  notStartedLine: string;
   context: AchievementContext;
   secrets: string[];
   token?: { order: number; fragment: string };
@@ -28,18 +38,35 @@ export interface DashboardMeta {
   solved: string[];
 }
 
+export interface DashboardLabels {
+  modes: Record<Mode, string>;
+  ranks: string[];
+  routeStart: string;
+  credit: string;
+}
+
+type Entry = {
+  key: string;
+  at: number | null;
+  kind: 'started' | 'progress' | 'letter' | 'ahead-letter' | 'unstarted';
+  p?: Progress;
+  a: DashboardAdventure;
+};
+
 export function Dashboard({
   locale,
   t,
   achievements,
   adventures,
   meta,
+  labels,
 }: {
   locale: Locale;
   t: Dictionary['dashboard'];
   achievements: Dictionary['achievements'];
   adventures: DashboardAdventure[];
   meta: DashboardMeta;
+  labels: DashboardLabels;
 }) {
   const [saved, setSaved] = useState<Progress[] | null>(null);
   const [now, setNow] = useState(0);
@@ -55,14 +82,31 @@ export function Dashboard({
     return () => window.removeEventListener(SYNCED_EVENT, refresh);
   }, []);
 
-  if (!saved) return <div className="min-h-[40vh]" aria-busy="true" />;
+  const lead = <p className="db-lead">{t.intro}</p>;
+
+  if (!saved) {
+    return (
+      <div className="db" aria-busy="true">
+        <header className="db-top tp-wrap">
+          <h1 className="db-h1">{t.title}</h1>
+          {lead}
+        </header>
+        <div className="tp-wrap db-skel" aria-hidden="true">
+          <span className="db-skel__row" />
+          <span className="db-skel__row" />
+          <span className="db-skel__row" />
+        </div>
+      </div>
+    );
+  }
 
   const known = saved.filter((p) => adventures.some((a) => a.slug === p.adventure));
+  const byAdventure = (slug: string) => adventures.find((a) => a.slug === slug)!;
   const totalXp = known.reduce((s, p) => s + xpFor(p), 0);
   const got = new Set<AchievementId>(
     known.flatMap((p) => {
-      const ctx = adventures.find((a) => a.slug === p.adventure)?.context;
-      return ctx ? earned(p, ctx) : [];
+      const ctx = byAdventure(p.adventure).context;
+      return earned(p, ctx);
     }),
   );
   const signs = adventures
@@ -74,132 +118,274 @@ export function Dashboard({
     });
   const foundSigns = signs.filter((s) => s.found).length;
 
-  return (
-    <div className="mt-8 space-y-12">
-      {known.length === 0 ? (
-        <div className="card p-8">
-          <p className="text-ivory-dim">{t.empty}</p>
-          <Link href={`/${locale}/adventures`} className="btn-gold mt-5">
-            {t.start}
-          </Link>
-        </div>
-      ) : (
-        <ul className="grid gap-5 md:grid-cols-2">
-          {known.map((p) => {
-            const a = adventures.find((x) => x.slug === p.adventure)!;
-            const done = isFinished(p);
-            const at = a.letter ? letterAt(p) : null;
-            const arrived = at !== null && now >= at;
-            return (
-              <li key={p.adventure} className="card p-6">
-                <span className={`chip ${done ? 'border-gold/40 text-gold' : ''}`}>{done ? t.completed : t.inProgress}</span>
-                <h2 className="mt-3 font-display text-2xl font-semibold">{a.title}</h2>
-                <p className="mt-1 text-sm text-ivory-dim">{fmt(t.chapters, { n: p.solved.length, total: a.chapters })}</p>
-                <div className="mt-4 h-1.5 rounded-full bg-white/10">
-                  <div className="h-full rounded-full bg-gold" style={{ width: `${(p.solved.length / a.chapters) * 100}%` }} />
-                </div>
-                <div className="mt-5 flex items-center justify-between gap-3">
-                  <span className="font-display text-xl text-gold">{xpFor(p)} XP</span>
-                  <Link href={`/${locale}/play/${p.adventure}`} className="btn-gold">
-                    {done ? t.view : t.continue}
-                  </Link>
-                </div>
-                {at !== null &&
-                  a.letter &&
-                  (arrived ? (
-                    <div className="mt-5 border-t border-white/10 pt-4">
-                      <button
-                        type="button"
-                        aria-expanded={openLetter === a.slug}
-                        onClick={() => setOpenLetter(openLetter === a.slug ? null : a.slug)}
-                        className="flex w-full items-center gap-2 text-start text-sm font-semibold text-gold"
-                      >
-                        <span aria-hidden="true">✉️</span> {openLetter === a.slug ? t.letterClose : t.letterArrived}
-                      </button>
-                      {openLetter === a.slug && (
-                        <div className="mt-4 rounded-xl bg-[#efe6d2] p-5 font-display text-lg leading-relaxed text-[#2b2116]">
-                          {a.letter.text.map((line, i) => (
-                            <p key={i} className="mt-3 first:mt-0">
-                              {line}
-                            </p>
-                          ))}
-                          <p className="mt-4 text-end italic">— {a.letter.from}</p>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="mt-5 border-t border-white/10 pt-4 text-xs text-ivory-mute">
-                      <span aria-hidden="true">✉️ </span>
-                      {fmt(t.letterOnWay, { n: daysUntil(at, now) })}
-                    </p>
+  // The page's one big thing: the unfinished adventure played most recently.
+  const next = known.filter((p) => !isFinished(p)).sort((x, y) => y.lastActiveAt - x.lastActiveAt)[0];
+  const nextAdventure = next ? byAdventure(next.adventure) : null;
+
+  // The logbook: everything the saved progress says happened, newest first; stories not begun at the end.
+  const entries: Entry[] = [];
+  for (const p of known) {
+    const a = byAdventure(p.adventure);
+    entries.push({ key: `${p.adventure}:start`, at: p.startedAt, kind: 'started', p, a });
+    entries.push({ key: `${p.adventure}:progress`, at: isFinished(p) ? (p.finishedAt ?? p.lastActiveAt) : p.lastActiveAt, kind: 'progress', p, a });
+    const at = a.letter ? letterAt(p) : null;
+    if (at !== null) entries.push({ key: `${p.adventure}:letter`, at, kind: now >= at ? 'letter' : 'ahead-letter', p, a });
+  }
+  entries.sort((x, y) => (y.at ?? 0) - (x.at ?? 0));
+  for (const a of adventures) if (!known.some((p) => p.adventure === a.slug)) entries.push({ key: `${a.slug}:none`, at: null, kind: 'unstarted', a });
+
+  const dateFmt = new Intl.DateTimeFormat(intlLocale[locale], { day: 'numeric', month: 'long' });
+  const dateYearFmt = new Intl.DateTimeFormat(intlLocale[locale], { day: 'numeric', month: 'long', year: 'numeric' });
+  const timeFmt = new Intl.DateTimeFormat(intlLocale[locale], { hour: '2-digit', minute: '2-digit' });
+  const thisYear = new Date(now).getFullYear();
+  const dayOf = (at: number) => (new Date(at).getFullYear() === thisYear ? dateFmt : dateYearFmt).format(at);
+  const duration = (ms: number) => {
+    const minutes = Math.max(1, Math.round(ms / 60000));
+    const h = Math.floor(minutes / 60);
+    return h > 0 ? fmt(t.hoursMinutes, { h, m: minutes % 60 }) : fmt(t.minutesOnly, { m: minutes });
+  };
+  const playHref = (slug: string) => `/${locale}/play/${slug}`;
+  const routeLabels = (n: number, total: number) => ({ aria: fmt(t.routeProgress, { n, total }), start: labels.routeStart, endings: '' });
+
+  const facts = (items: string[]) => (
+    <p className="tp-facts">
+      {items.map((f, i) => (
+        <Fragment key={i}>
+          {i > 0 && <span className="tp-sep" aria-hidden="true">&nbsp;· </span>}
+          <span>{f}</span>
+        </Fragment>
+      ))}
+    </p>
+  );
+  const teamFacts = (p: Progress) => [
+    fmt(p.team.players === 1 ? t.teamLineOne : t.teamLine, { name: p.team.name, n: p.team.players }),
+    labels.modes[p.mode],
+    duration(p.elapsedMs),
+  ];
+
+  const renderEntry = (e: Entry) => {
+    const { a, p } = e;
+    const isAhead = e.kind === 'ahead-letter';
+    const when = e.at === null ? { day: t.notStartedWhen, sub: t.notStartedSub } : { day: dayOf(e.at), sub: isAhead ? t.ahead : timeFmt.format(e.at) };
+    let body: React.ReactNode = null;
+
+    if (e.kind === 'started' && p) {
+      body = (
+        <>
+          <h3>{fmt(t.started, { title: a.title })}</h3>
+          <p className="tp-muted">{a.start}.</p>
+        </>
+      );
+    } else if (e.kind === 'progress' && p) {
+      const done = isFinished(p);
+      const stars = totalStars(p);
+      const rank = labels.ranks[rankFor(stars, a.chapters)];
+      const sign = a.token && tokenEarned(p, a.secrets) ? a.token.fragment : null;
+      body = (
+        <>
+          <span className="db-eyebrow">{done ? t.completed : t.inProgress}</span>
+          <h3>
+            <Link href={playHref(a.slug)}>{a.title}</Link>
+          </h3>
+          <p>
+            {fmt(t.progressLine, { done: p.solved.length, total: a.chapters, stars, max: a.chapters * 3, xp: xpFor(p) })}
+            {done && rank ? ` ${fmt(t.rankLine, { rank })}` : ''}
+          </p>
+          {facts(teamFacts(p))}
+          {sign && <p className="db-sign">{fmt(t.tokenFound, { fragment: sign })}</p>}
+          {done && (
+            <figure className="db-fig">
+              <PhotoImage id={a.photo} locale={locale} sizes="(max-width: 900px) 100vw, 420px" />
+              <PhotoCaption id={a.photo} locale={locale} template={labels.credit} />
+            </figure>
+          )}
+          {done && <RouteSchematic slug={a.slug} solved={p.solved.length} labels={routeLabels(p.solved.length, a.chapters)} />}
+          <div className="db-actions">
+            <Link className={done ? 'tp-btn tp-btn--quiet' : 'tp-textlink'} href={playHref(a.slug)}>
+              {done ? t.view : t.continue}
+              {!done && <Arrow />}
+            </Link>
+          </div>
+        </>
+      );
+    } else if ((e.kind === 'letter' || e.kind === 'ahead-letter') && p && a.letter) {
+      const at = letterAt(p)!;
+      const open = openLetter === a.slug;
+      body = (
+        <>
+          <span className="db-eyebrow">{isAhead ? t.eyebrowWay : t.eyebrowArrived}</span>
+          <h3>{fmt(t.letterFrom, { from: a.letter.from })}</h3>
+          {isAhead ? (
+            <p>{fmt(t.letterOnWay, { n: daysUntil(at, now) })}</p>
+          ) : (
+            <>
+              <div className="db-actions">
+                <button type="button" className="tp-textlink db-fold" aria-expanded={open} onClick={() => setOpenLetter(open ? null : a.slug)}>
+                  {open ? t.letterClose : t.letterArrived}
+                </button>
+              </div>
+              {open && (
+                <div className="db-letter">
+                  {a.letter.text.map((line, i) => (
+                    <p key={i}>{line}</p>
                   ))}
-              </li>
-            );
-          })}
-        </ul>
+                  <p className="db-letter__from">— {a.letter.from}</p>
+                </div>
+              )}
+            </>
+          )}
+        </>
+      );
+    } else {
+      body = (
+        <>
+          <h3>
+            <Link href={`/${locale}/adventures/${a.slug}`}>{a.title}</Link>
+          </h3>
+          <p className="tp-muted">{a.notStartedLine}</p>
+          <figure className="db-fig">
+            <PhotoImage id={a.photo} locale={locale} sizes="(max-width: 900px) 100vw, 420px" />
+            <PhotoCaption id={a.photo} locale={locale} template={labels.credit} />
+          </figure>
+          <RouteSchematic slug={a.slug} solved={0} labels={routeLabels(0, a.chapters)} />
+        </>
+      );
+    }
+
+    return (
+      <li key={e.key} className={`db-ent${isAhead ? ' db-ent--ahead' : ''}`}>
+        <div className="db-when">
+          <strong>{when.day}</strong>
+          {when.sub}
+        </div>
+        <div className="db-what">{body}</div>
+      </li>
+    );
+  };
+
+  return (
+    <div className="db">
+      {next && nextAdventure ? (
+        <section className="db-next" aria-labelledby="volgende">
+          <PhotoImage id={nextAdventure.photo} locale={locale} sizes="100vw" className="db-next__img" priority />
+          <PhotoCaption id={nextAdventure.photo} locale={locale} template={labels.credit} as="p" />
+          <div className="tp-wrap db-next__in">
+            <div>
+              <h1 className="db-eyebrow db-next__h1">{t.title}</h1>
+              <h2 id="volgende" className="db-next__title">
+                {nextAdventure.title}
+              </h2>
+              <p className="db-lead db-next__lead">
+                {fmt(t.continueLead, { n: Math.min(next.solved.length + 1, nextAdventure.chapters), total: nextAdventure.chapters })}{' '}
+                {fmt(t.chapters, { n: next.solved.length, total: nextAdventure.chapters })}
+              </p>
+              <div className="db-actions db-actions--band">
+                <Link className="tp-btn" href={playHref(next.adventure)}>
+                  {t.continue}
+                  <Arrow />
+                </Link>
+                <span className="db-status">
+                  {t.inProgress} · {nextAdventure.city} · {labels.modes[next.mode]}
+                </span>
+              </div>
+            </div>
+            <div className="db-next__rt">
+              <RouteSchematic slug={next.adventure} solved={next.solved.length} labels={routeLabels(next.solved.length, nextAdventure.chapters)} />
+            </div>
+          </div>
+        </section>
+      ) : (
+        <header className="db-top tp-wrap">
+          <h1 className="db-h1">{t.title}</h1>
+          {lead}
+        </header>
       )}
 
-      {signs.length > 0 && (
-        <section aria-labelledby="meta-title" className="rounded-3xl border border-gold/25 bg-gold/[0.03] p-6">
-          <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <h2 id="meta-title" className="font-display text-3xl font-semibold">
-              <span aria-hidden="true">🏮 </span>
-              {meta.title}
-            </h2>
-            <p className="text-sm text-ivory-dim">{fmt(t.metaProgress, { n: foundSigns, total: signs.length })}</p>
-          </div>
-          <p className="mt-3 text-ivory-dim">{meta.intro}</p>
-          <ol className="mt-5 grid gap-3 sm:grid-cols-3">
-            {signs.map((s) => (
-              <li key={s.slug} className={`rounded-2xl border p-4 text-center ${s.found ? 'border-gold/50 bg-gold/10' : 'border-dashed border-white/15'}`}>
-                <p className={`font-display text-xl ${s.found ? 'text-gold' : 'text-ivory-mute'}`}>{s.found ? s.fragment : '· · ·'}</p>
-                <p className="mt-1 text-xs text-ivory-mute">
-                  {s.title}
-                  {!s.found && ` · ${t.metaLocked}`}
-                </p>
-              </li>
-            ))}
-          </ol>
-          {foundSigns === signs.length ? (
-            <div className="mt-6 rounded-xl bg-[#efe6d2] p-5 font-display text-lg leading-relaxed text-[#2b2116]">
-              {meta.solved.map((line, i) => (
-                <p key={i} className="mt-3 first:mt-0">
-                  {line}
-                </p>
-              ))}
-              <p className="mt-4 text-end italic">— {meta.from}</p>
-            </div>
-          ) : (
-            <p className="mt-4 text-xs text-ivory-mute">{t.metaHint}</p>
-          )}
+      {known.length === 0 && (
+        <section className="tp-wrap db-empty" aria-label={t.empty}>
+          <p className="db-empty__text">{t.empty}</p>
+          <Link href={`/${locale}/adventures`} className="tp-btn">
+            {t.start}
+            <Arrow />
+          </Link>
         </section>
       )}
 
-      <section aria-labelledby="ach">
-        <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <h2 id="ach" className="font-display text-3xl font-semibold">
+      {known.length > 0 && (
+        <section className="tp-wrap" aria-labelledby="logboek">
+          <div className="db-head">
+            <h2 id="logboek" className="db-h2">
+              {t.logbook}
+            </h2>
+            {next && <p className="db-lead db-lead--small">{t.intro}</p>}
+          </div>
+          <ol className="db-log">{entries.map(renderEntry)}</ol>
+          <p className="db-note">{t.logbookNote}</p>
+        </section>
+      )}
+
+      <section className="tp-wrap db-record" aria-label={t.recordLabel}>
+        {signs.length > 0 && (
+          <div aria-labelledby="meta-title" role="group">
+            <h2 id="meta-title" className="db-h2 db-h2--sub">
+              {meta.title}
+            </h2>
+            <p className="db-sub">{fmt(t.metaProgress, { n: foundSigns, total: signs.length })}</p>
+            <p className="tp-muted db-intro">{meta.intro}</p>
+            <ol className="db-signs">
+              {signs.map((s) => (
+                <li key={s.slug} className={s.found ? 'is-found' : ''}>
+                  <p className="db-signs__frag">{s.found ? s.fragment : '· · ·'}</p>
+                  <p className="db-signs__story">
+                    {s.title}
+                    {!s.found && ` · ${t.metaLocked}`}
+                  </p>
+                </li>
+              ))}
+            </ol>
+            {foundSigns === signs.length ? (
+              <div className="db-letter">
+                {meta.solved.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+                <p className="db-letter__from">— {meta.from}</p>
+              </div>
+            ) : (
+              <p className="db-note">{t.metaHint}</p>
+            )}
+          </div>
+        )}
+        <div aria-labelledby="ach" role="group" className="db-record__ach">
+          <h2 id="ach" className="db-h2 db-h2--sub">
             {t.achievements}
           </h2>
-          <p className="text-sm text-ivory-dim">
-            {t.totalXp}: <span className="font-display text-xl text-gold">{totalXp} XP</span>
+          <p className="db-sub">
+            {t.totalXp}: <strong className="db-xp">{totalXp} XP</strong> · {fmt(t.achievementsCount, { n: got.size, total: ACHIEVEMENTS.length })}
           </p>
+          <ul className="db-ach">
+            {ACHIEVEMENTS.map((id) => {
+              const has = got.has(id);
+              return (
+                <li key={id} className={has ? '' : 'is-locked'}>
+                  {has ? (
+                    <svg className="db-mark db-mark--yes" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <circle cx="12" cy="12" r="9.5" />
+                      <path d="M7.8 12.3l3 3 5.6-6" />
+                    </svg>
+                  ) : (
+                    <svg className="db-mark" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <circle cx="12" cy="12" r="9" />
+                    </svg>
+                  )}
+                  <div>
+                    <p className="db-ach__name">{achievements[id].name}</p>
+                    <p className="db-ach__text">{has ? achievements[id].text : `${t.locked} · ${achievements[id].text}`}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-        <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {ACHIEVEMENTS.map((id) => {
-            const has = got.has(id);
-            return (
-              <li key={id} className={`card flex items-center gap-3 p-4 ${has ? '' : 'opacity-50'}`}>
-                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${has ? 'bg-gold/15 text-gold' : 'bg-white/5 text-ivory-mute'}`} aria-hidden="true">
-                  {has ? '★' : '☆'}
-                </span>
-                <div>
-                  <p className="font-semibold">{achievements[id].name}</p>
-                  <p className="text-xs text-ivory-dim">{has ? achievements[id].text : `${t.locked} · ${achievements[id].text}`}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
       </section>
     </div>
   );
