@@ -8,11 +8,11 @@ import { localeNames, localeShort, locales, swapLocale, type Locale } from '@/i1
  * Links to the same page in the other languages. Game progress is stored per adventure, not per
  * language, so switching in the middle of a chapter carries on where the player was.
  */
-export function LanguageSwitcher({ locale, label }: { locale: Locale; label: string }) {
+export function LanguageSwitcher({ locale, label, variant = 'pill' }: { locale: Locale; label: string; variant?: 'pill' | 'site' }) {
   const pathname = usePathname() || `/${locale}`;
   const router = useRouter();
   return (
-    <nav aria-label={label} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1">
+    <nav aria-label={label} className={variant === 'site' ? 'tp-lang' : 'flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1'}>
       {locales.map((l) => {
         const href = swapLocale(pathname, l);
         const active = l === locale;
@@ -32,9 +32,13 @@ export function LanguageSwitcher({ locale, label }: { locale: Locale; label: str
                 router.push(href + search);
               }
             }}
-            className={`min-w-[40px] rounded-full px-2.5 py-1.5 text-center text-xs font-semibold transition ${
-              active ? 'bg-gold text-navy' : 'text-ivory-dim hover:text-ivory'
-            }`}
+            className={
+              variant === 'site'
+                ? 'tp-lang__link'
+                : `min-w-[40px] rounded-full px-2.5 py-1.5 text-center text-xs font-semibold transition ${
+                    active ? 'bg-gold text-navy' : 'text-ivory-dim hover:text-ivory'
+                  }`
+            }
           >
             <span aria-hidden="true">{localeShort[l]}</span>
             <span className="sr-only">{localeNames[l]}</span>

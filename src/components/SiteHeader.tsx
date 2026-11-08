@@ -2,18 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { LogoMark } from './Logo';
+import { RouteMark } from './Logo';
 
 export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['nav'] }) {
   const pathname = usePathname() ?? '';
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   useEffect(() => setOpen(false), [pathname]);
+
+  // Escape closes the menu and hands focus back to the button that opened it.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setOpen(false);
+      toggleRef.current?.focus();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
 
   // Auth state is read in the browser so the site pages stay statically rendered (no per-request cookie
   // read in the layout). The label updates live on sign-in and sign-out without a full navigation.
@@ -38,72 +51,58 @@ export function SiteHeader({ locale, nav }: { locale: Locale; nav: Dictionary['n
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/5 bg-navy/85 backdrop-blur-md">
-      <div className="container-cq flex h-16 items-center justify-between gap-4">
-        <Link href={`/${locale}`} className="flex items-center gap-2.5" aria-label={`CityQuest – ${nav.home}`}>
-          <LogoMark />
-          <span className="font-display text-xl font-semibold tracking-wide" dir="ltr">
-            City<span className="text-gold">Quest</span>
-          </span>
+    <header className="tp-header">
+      <div className="tp-wrap tp-header__bar">
+        <Link href={`/${locale}`} className="tp-brand" aria-label={`CityQuest – ${nav.home}`}>
+          <RouteMark />
+          <span dir="ltr">CityQuest</span>
         </Link>
 
-        <nav aria-label={nav.mainNav} className="hidden items-center gap-1 md:flex">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              aria-current={isActive(l.href) ? 'page' : undefined}
-              className={`rounded-full px-4 py-2 text-sm transition ${
-                isActive(l.href) ? 'text-gold' : 'text-ivory-dim hover:text-ivory'
-              }`}
-            >
-              {l.label}
-            </Link>
-          ))}
+        <nav aria-label={nav.mainNav} className="tp-nav">
+          <ul>
+            {links.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:block">
-            <LanguageSwitcher locale={locale} label={nav.language} />
+        <div className="tp-header__tools">
+          <div className="tp-header__lang">
+            <LanguageSwitcher locale={locale} label={nav.language} variant="site" />
           </div>
-          <button
-            type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 md:hidden"
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            onClick={() => setOpen((o) => !o)}
-          >
+          <button ref={toggleRef} type="button" className="tp-menu-button" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
             <span className="sr-only">{open ? nav.close : nav.menu}</span>
-            <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
               {open ? (
-                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
               ) : (
-                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
               )}
             </svg>
           </button>
         </div>
       </div>
 
-      {open && (
-        <div id="mobile-menu" className="border-t border-white/5 bg-navy md:hidden">
-          <nav aria-label={nav.mainNav} className="container-cq flex flex-col gap-1 py-4">
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                aria-current={isActive(l.href) ? 'page' : undefined}
-                className={`rounded-xl px-4 py-3 text-base ${isActive(l.href) ? 'bg-gold/10 text-gold' : 'text-ivory'}`}
-              >
-                {l.label}
-              </Link>
-            ))}
-            <div className="mt-3 px-1 sm:hidden">
-              <LanguageSwitcher locale={locale} label={nav.language} />
+      <div id="mobile-menu" className="tp-mobile-menu" hidden={!open}>
+          <nav aria-label={nav.mainNav} className="tp-wrap">
+            <ul>
+              {links.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="tp-mobile-menu__lang">
+              <LanguageSwitcher locale={locale} label={nav.language} variant="site" />
             </div>
           </nav>
         </div>
-      )}
     </header>
   );
 }

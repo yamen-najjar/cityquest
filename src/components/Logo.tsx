@@ -8,3 +8,14 @@ export function LogoMark({ className = 'h-8 w-8' }: { className?: string }) {
     </svg>
   );
 }
+
+/** The site's mark: a route that ends in a dot. Drawn with the current amber of the site theme. */
+export function RouteMark({ className = 'h-6 w-6' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" focusable="false">
+      <circle cx="5" cy="18" r="3" fill="none" stroke="rgb(var(--c-gold))" strokeWidth="2" />
+      <polyline points="8,18 12,18 18,12 18,8" fill="none" stroke="rgb(var(--c-gold))" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx="18" cy="5" r="2.6" fill="rgb(var(--c-gold))" />
+    </svg>
+  );
+}

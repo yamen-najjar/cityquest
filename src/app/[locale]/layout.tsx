@@ -46,7 +46,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   return (
     <html lang={locale} dir={dirOf(locale)} className={`${display.variable} ${sans.variable} ${arabic.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
-        <a href="#main" className="sr-only z-50 rounded-full bg-gold px-4 py-2 text-navy focus:not-sr-only focus:fixed focus:start-4 focus:top-4">
+        <a href="#main" className="skip-link sr-only z-50 rounded-full bg-gold px-4 py-2 text-navy focus:not-sr-only focus:fixed focus:start-4 focus:top-4">
           {t.nav.skip}
         </a>
         <ProgressSync />

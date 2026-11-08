@@ -1,0 +1,491 @@
+/*
+ * Ter plaatse: the theme of the site pages (photo-documentary, Schibsted Grotesk, one amber accent).
+ * Everything here hangs on .theme-site or on tp-/hm-/ad- classes, so the game and the admin console, which
+ * never render inside .theme-site, look exactly as before.
+ */
+
+.theme-site {
+  /* Re-point the legacy names (navy/gold/ivory) at the Ter plaatse palette, for pages that are not rebuilt. */
+  --c-navy: 18 25 34;
+  --c-navy-800: 24 33 43;
+  --c-navy-700: 42 53 66;
+  --c-navy-600: 58 71 87;
+  --c-gold: 242 159 58;
+  --c-gold-soft: 246 178 92;
+  --c-gold-deep: 213 139 42;
+  --c-ivory: 231 233 230;
+  --c-ivory-dim: 193 200 207;
+  --c-ivory-mute: 163 173 183;
+  --navy: #121922;
+  --navy-800: #18212b;
+  --gold: #f29f3a;
+  --ivory: #e7e9e6;
+
+  --ground: #121922;
+  --ground-2: #18212b;
+  --rule: #2a3542;
+  --rule-strong: #4f5c6c;
+  --control: #6f7c89; /* borders of inputs and buttons: at least 3:1 on the ground */
+  --text: #e7e9e6;
+  --muted: #a3adb7;
+  --amber: #f29f3a;
+  --amber-hover: #f6b25c;
+  --ink: #121922;
+  --river: #2d4256;
+  --gutter: clamp(16px, 4.4vw, 64px);
+  --max: 1400px;
+  --stack: 'Helvetica Neue', Helvetica, 'Segoe UI', system-ui, sans-serif;
+  --font-display: var(--font-grotesk-latin), var(--font-grotesk-latin-ext), var(--stack);
+  --font-sans: var(--font-grotesk-latin), var(--font-grotesk-latin-ext), var(--stack);
+  --font: var(--font-sans);
+  --fs-caption: 0.8125rem;
+  --fs-small: 0.9375rem;
+  --fs-body: 1.0625rem;
+  --fs-lead: clamp(1.3125rem, 1.05rem + 0.9vw, 1.75rem);
+  --fs-h2: clamp(2rem, 1.35rem + 2.4vw, 3.25rem);
+  --fs-title: clamp(2.75rem, 1.4rem + 5.2vw, 6.25rem);
+  --fs-hero: clamp(2.125rem, 1.15rem + 3.5vw, 4.375rem);
+
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  background: var(--ground);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+}
+@media (min-width: 760px) {
+  .theme-site {
+    --fs-body: 1.125rem;
+  }
+}
+[dir='rtl'] .theme-site {
+  font-family: var(--font-arabic), var(--font-grotesk-latin), var(--stack);
+  line-height: 1.7;
+}
+/* Tracking is a Latin habit; it pulls Arabic letters apart. */
+[dir='rtl'] .theme-site * {
+  letter-spacing: 0 !important;
+}
+
+html:has(.theme-site),
+body:has(.theme-site) {
+  background: #121922;
+}
+
+:where(.theme-site) :is(h1, h2, h3) {
+  text-wrap: balance;
+  font-weight: 750;
+}
+:where(.theme-site) p {
+  text-wrap: pretty;
+}
+
+.theme-site :focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.theme-site ::selection {
+  background: rgba(242, 159, 58, 0.4);
+}
+
+/* ---- Pages that are not rebuilt: the same names, the Ter plaatse look ---- */
+.theme-site .container-cq {
+  max-width: var(--max);
+  padding-inline: var(--gutter);
+}
+.theme-site .btn {
+  border-radius: 3px;
+}
+.theme-site .btn-gold {
+  box-shadow: none;
+  font-weight: 700;
+}
+.theme-site .btn-ghost {
+  border-color: var(--control);
+}
+.theme-site .btn-ghost:hover {
+  border-color: var(--text);
+  background: transparent;
+}
+.theme-site .card {
+  border-radius: 6px;
+  border-color: var(--rule);
+  background: var(--ground-2);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.theme-site .eyebrow {
+  font-size: var(--fs-small);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+}
+.theme-site .gold-rule {
+  display: none;
+}
+.theme-site .chip {
+  border-radius: 3px;
+}
+.theme-site .field {
+  border-radius: 3px;
+  border-color: var(--control);
+}
+.theme-site .hover\:shadow-glow:hover {
+  box-shadow: none;
+}
+
+/* ---- Shared bits ---- */
+.tp-wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.tp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding-inline: 22px;
+  background: var(--amber);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  text-decoration: none;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.tp-btn:hover {
+  background: var(--amber-hover);
+}
+.tp-btn svg {
+  flex: none;
+}
+.tp-btn--quiet {
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid var(--control);
+}
+.tp-btn--quiet:hover {
+  background: transparent;
+  border-color: var(--text);
+}
+.tp-textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+.tp-textlink:hover {
+  text-decoration-color: var(--text);
+}
+.tp-credit {
+  color: var(--muted);
+  font-size: var(--fs-caption);
+  line-height: 1.45;
+}
+.tp-credit a {
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 3px;
+}
+.tp-credit a:hover {
+  text-decoration-color: var(--text);
+}
+.tp-muted {
+  color: var(--muted);
+}
+.tp-arrow {
+  flex: none;
+}
+[dir='rtl'] .tp-arrow {
+  transform: scaleX(-1);
+}
+.tp-facts {
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+.tp-facts .tp-sep {
+  color: var(--rule-strong);
+  padding-inline: 0.12em;
+}
+.tp-facts > span:not(.tp-sep) {
+  white-space: nowrap;
+}
+
+/* ---- Header ---- */
+.tp-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--ground);
+  border-block-end: 1px solid var(--rule);
+}
+.tp-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+}
+.tp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.1875rem;
+  letter-spacing: -0.01em;
+}
+.tp-nav {
+  display: none;
+}
+.tp-nav ul,
+.tp-mobile-menu ul,
+.tp-footer__links {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tp-nav ul {
+  gap: 10px;
+}
+.tp-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+  padding-inline: 10px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tp-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.tp-nav a[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+.tp-header__tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tp-header__lang {
+  display: none;
+}
+.tp-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--control);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.tp-lang {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.tp-lang__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+}
+.tp-lang__link:hover {
+  color: var(--text);
+}
+.tp-lang__link[aria-current='true'] {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.tp-mobile-menu {
+  background: var(--ground);
+  border-block-start: 1px solid var(--rule);
+}
+.tp-mobile-menu ul {
+  flex-direction: column;
+}
+.tp-mobile-menu li {
+  border-block-end: 1px solid var(--rule);
+}
+.tp-mobile-menu li a {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  font-size: 1.125rem;
+  text-decoration: none;
+}
+.tp-mobile-menu li a[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+.tp-mobile-menu__lang {
+  padding-block: 8px 16px;
+}
+@media (min-width: 900px) {
+  .tp-nav {
+    display: block;
+  }
+  .tp-header__lang {
+    display: block;
+  }
+  .tp-menu-button,
+  .tp-mobile-menu {
+    display: none;
+  }
+}
+
+.tp-banner {
+  background: var(--ground-2);
+  border-block-end: 1px solid var(--rule);
+}
+.tp-banner p {
+  padding-block: 10px;
+  font-size: var(--fs-caption);
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* ---- Footer ---- */
+.tp-footer {
+  margin-block-start: clamp(64px, 8vw, 120px);
+  border-block-start: 1px solid var(--rule);
+  padding-block: 40px 32px;
+  font-size: var(--fs-small);
+}
+.tp-footer__top {
+  display: grid;
+  gap: 20px 48px;
+}
+.tp-footer__top > p {
+  color: var(--muted);
+  max-width: 40ch;
+}
+.tp-footer__links {
+  flex-wrap: wrap;
+  column-gap: 20px;
+}
+.tp-footer__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+.tp-footer__links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.tp-footer__fine {
+  margin-block-start: 24px;
+  padding-block-start: 12px;
+  border-block-start: 1px solid var(--rule);
+  display: grid;
+  gap: 4px 40px;
+  color: var(--muted);
+  font-size: var(--fs-caption);
+  line-height: 1.5;
+}
+.tp-footer__fine p {
+  max-width: 60ch;
+}
+@media (min-width: 900px) {
+  .tp-footer__top {
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+}
+
+/* ---- Schematic routes (home and story pages) ---- */
+.tp-route {
+  direction: ltr;
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin-block: 32px 22px;
+  overflow: visible;
+}
+.tp-route__line {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.tp-route__cp circle {
+  fill: var(--amber);
+}
+.tp-route__cp text {
+  fill: var(--ink);
+  font: 800 11px var(--font);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-variant-numeric: tabular-nums;
+}
+.tp-route__start circle:first-child {
+  fill: var(--ground);
+  stroke: var(--amber);
+  stroke-width: 3;
+}
+.tp-route__start circle:last-child {
+  fill: var(--amber);
+}
+.tp-route__end {
+  fill: var(--ground);
+  stroke: var(--amber);
+  stroke-width: 2.5;
+}
+.tp-route__label {
+  fill: var(--muted);
+  font: 500 11px var(--font);
+}
+
+/* The skip link lives in the root layout, outside .theme-site, so the site theme is applied through :has().
+   It appears below the header bar, fully visible and not on top of the logo. */
+html:has(.theme-site) .skip-link:focus {
+  position: fixed;
+  top: 72px;
+  inset-inline-start: clamp(16px, 4.4vw, 64px);
+  z-index: 60;
+  padding: 12px 16px;
+  border-radius: 3px;
+  background: #e7e9e6;
+  color: #121922;
+  font-weight: 700;
+  outline: 2px solid #121922;
+  outline-offset: -4px;
+  box-shadow: 0 0 0 2px #e7e9e6;
+}

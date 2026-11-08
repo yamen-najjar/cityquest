@@ -7,6 +7,17 @@
   --navy-800: #142238;
   --gold: #ddb66a;
   --ivory: #f8f4ec;
+  /* Colour channels behind the Tailwind names navy/gold/ivory (so alpha utilities such as bg-gold/10 work). */
+  --c-navy: 11 19 36;
+  --c-navy-800: 20 34 56;
+  --c-navy-700: 28 46 74;
+  --c-navy-600: 39 60 94;
+  --c-gold: 221 182 106;
+  --c-gold-soft: 232 204 147;
+  --c-gold-deep: 184 145 74;
+  --c-ivory: 248 244 236;
+  --c-ivory-dim: 201 195 184;
+  --c-ivory-mute: 154 163 181;
   color-scheme: dark;
 }
 
