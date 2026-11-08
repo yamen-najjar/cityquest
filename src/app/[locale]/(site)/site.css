@@ -489,3 +489,16 @@ html:has(.theme-site) .skip-link:focus {
   outline-offset: -4px;
   box-shadow: 0 0 0 2px #e7e9e6;
 }
+
+/* ---- Place mark (dateline) ---- */
+.tp-mark {
+  flex: none;
+}
+.tp-mark__ring {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 2;
+}
+.tp-mark__dot {
+  fill: var(--amber);
+}

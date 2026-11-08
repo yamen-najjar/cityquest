@@ -72,6 +72,39 @@ const presentationBySlug: Record<string, StoryPresentation> = {
   },
 };
 
+/** How a city is shown on the cities pages: its photographs. Heidelberg's stories use invented places, so its photographs show the setting only. */
+export interface CityPresentation {
+  /** The photograph beside the city on the cities overview. */
+  photo: PhotoId;
+  /** The large photograph on the city's own page. */
+  hero: PhotoId;
+  /** Photographs of places, in reading order (for Arnhem: the places of the route, in route order). */
+  places: PhotoId[];
+  /** True when the places are the chapters' real places, so a caption may name the chapter. */
+  realPlaces: boolean;
+}
+
+const presentationByCity: Record<string, CityPresentation> = {
+  arnhem: {
+    photo: 'arnhem-eusebius-duivelshuis',
+    hero: 'arnhem-eusebius-duivelshuis',
+    places: ['arnhem-korenmarkt', 'arnhem-duivelshuis-2024', 'arnhem-sabelspoort', 'arnhem-eusebius', 'arnhem-sonsbeek', 'arnhem-rijnkade-avond'],
+    realPlaces: true,
+  },
+  heidelberg: {
+    photo: 'heidelberg-bridge-night-2',
+    hero: 'heidelberg-bridge-night',
+    places: ['heidelberg-bridgegate-night'],
+    realPlaces: false,
+  },
+};
+
+export function getCityPresentation(slug: string): CityPresentation {
+  const p = presentationByCity[slug];
+  if (!p) throw new Error(`No presentation for city: ${slug}`);
+  return p;
+}
+
 /** The slugs that have a page layout, in the order the home page shows them. */
 export const presentedSlugs = Object.keys(presentationBySlug);
 
