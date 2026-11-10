@@ -11,7 +11,9 @@
  * (Supabase included): those go straight to the network. Answers are never cached here; the game keeps
  * its own answer pack in localStorage (see src/lib/engine/answer-client.ts).
  *
- * Bump VERSION to throw every cache away on the next activation.
+ * Bump VERSION to throw every cache away on the next activation. A new deploy needs no bump: its pages and
+ * chunks have new names, and the trimming below drops the oldest first, so a stored old page keeps its
+ * chunks until hundreds of newer files have come in after it.
  */
 const VERSION = 'v1';
 const STATIC = `cq-static-${VERSION}`;
@@ -115,9 +117,10 @@ async function cacheReferencedAssets(html, cache) {
 
 // ---- helpers ------------------------------------------------------------------------------------------
 
+// Oldest first. The remembered locale is not a page and is never trimmed.
 async function trim(cacheName, max) {
   const cache = await caches.open(cacheName);
-  const keys = await cache.keys();
+  const keys = (await cache.keys()).filter((key) => !key.url.endsWith('/__locale'));
   for (const key of keys.slice(0, Math.max(0, keys.length - max))) await cache.delete(key);
 }
 
@@ -135,14 +138,14 @@ function withTimeout(promise, ms) {
 
 // ---- strategies ---------------------------------------------------------------------------------------
 
-async function cacheFirst(request, cacheName, max) {
+async function cacheFirst(event, request, cacheName, max) {
   const cache = await caches.open(cacheName);
   const hit = await cache.match(request, IGNORE_VARY);
   if (hit) return hit;
   const res = await fetch(request);
   if (cacheable(res)) {
     await cache.put(request, res.clone());
-    trim(cacheName, max);
+    event.waitUntil(trim(cacheName, max));
   }
   return res;
 }
@@ -154,7 +157,7 @@ async function staleWhileRevalidate(event, request, cacheName, max) {
     .then(async (res) => {
       if (cacheable(res)) {
         await cache.put(request, res.clone());
-        trim(cacheName, max);
+        await trim(cacheName, max);
       }
       return res;
     })
@@ -176,7 +179,7 @@ async function tile(request) {
     const res = await fetch(request);
     if (cacheable(res)) {
       await cache.put(request, res.clone());
-      trim(TILES, MAX_TILES);
+      await trim(TILES, MAX_TILES);
     }
     return res;
   } catch (err) {
@@ -188,22 +191,32 @@ async function tile(request) {
 async function navigate(event, request) {
   const url = new URL(request.url);
   const pages = await caches.open(PAGES);
-  const key = url.pathname; // the page, whatever the query string
+  // Keyed by path and query: the catalogue and city pages differ by their filters.
+  const key = url.pathname + url.search;
   const network = fetch(request).then(async (res) => {
     if (res.ok && res.type === 'basic' && !res.redirected && !PRIVATE_PATH.test(url.pathname)) {
       await pages.put(key, res.clone());
       const locale = localeOf(url.pathname);
       if (locale) await pages.put('/__locale', new Response(locale));
-      trim(PAGES, MAX_PAGES);
+      await trim(PAGES, MAX_PAGES);
     }
     return res;
   });
+  const cached = await pages.match(key, IGNORE_VARY);
+  if (!cached) {
+    // Nothing stored: a slow network is just slow. The offline page only when the request fails.
+    try {
+      return await network;
+    } catch {
+      return offlineFallback(pages, url);
+    }
+  }
+  // Something stored: wait a moment for fresh content, then show what is stored while the request finishes.
   try {
     return await withTimeout(network, NETWORK_TIMEOUT_MS);
   } catch {
-    // Slow or gone. A slow request keeps going and refreshes the cache for next time.
     event.waitUntil(network.catch(() => undefined));
-    return (await pages.match(key, IGNORE_VARY)) || (await offlineFallback(pages, url));
+    return cached;
   }
 }
 
@@ -245,7 +258,7 @@ self.addEventListener('fetch', (event) => {
   if (request.headers.get('RSC') === '1' || url.searchParams.has('_rsc')) return;
 
   if (path.startsWith('/_next/static/')) {
-    event.respondWith(cacheFirst(request, STATIC, MAX_STATIC));
+    event.respondWith(cacheFirst(event, request, STATIC, MAX_STATIC));
     return;
   }
   if (request.mode === 'navigate') {
