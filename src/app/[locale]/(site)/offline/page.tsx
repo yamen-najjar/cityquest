@@ -20,10 +20,7 @@ export default async function OfflinePage({ params }: Props) {
   const t = getDictionary(locale);
   return (
     <div className="container-cq flex min-h-[50vh] flex-col items-start justify-center py-20">
-      <p className="eyebrow" aria-hidden="true">
-        ◌
-      </p>
-      <h1 className="mt-3 font-display text-5xl font-semibold">{t.offlinePage.title}</h1>
+      <h1 className="font-display text-5xl font-semibold">{t.offlinePage.title}</h1>
       <p className="mt-4 max-w-prose text-ivory-dim">{t.offlinePage.text}</p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href={`/${locale}/dashboard`} className="btn-gold">
