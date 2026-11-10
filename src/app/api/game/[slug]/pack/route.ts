@@ -9,9 +9,10 @@ import { clientKey, createLimiter } from '@/lib/rate-limit';
 // Never cached: every response carries its own salt, and a paid pack must not outlive the purchase check.
 const noStore = { 'Cache-Control': 'no-store' };
 
-// A player fetches one pack per adventure per visit; the limit only stops a script from collecting
-// packs (each with a different salt) in bulk.
-const perClient = createLimiter(30, 60_000);
+// A player fetches one pack each time a game opens (and when reception returns); many teams can share one
+// mobile-network address, and the browser tests open a game every few seconds. The limit only stops a
+// script from collecting packs (each with a different salt) in bulk, so it matches the check route's.
+const perClient = createLimiter(120, 60_000);
 
 export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

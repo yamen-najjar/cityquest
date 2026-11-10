@@ -70,8 +70,8 @@ describe('GET /api/game/[slug]/pack', () => {
   it('rate limits a client collecting packs', async () => {
     const bot = '203.0.113.9';
     const statuses: number[] = [];
-    for (let i = 0; i < 32; i++) statuses.push((await call('lost-manuscript', bot)).status);
-    expect(statuses.slice(0, 30).every((s) => s === 200)).toBe(true);
-    expect(statuses.slice(30)).toEqual([429, 429]);
+    for (let i = 0; i < 122; i++) statuses.push((await call('lost-manuscript', bot)).status);
+    expect(statuses.slice(0, 120).every((s) => s === 200)).toBe(true);
+    expect(statuses.slice(120)).toEqual([429, 429]);
   });
 });
