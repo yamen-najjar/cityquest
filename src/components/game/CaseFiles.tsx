@@ -37,7 +37,7 @@ export function CaseDocumentView({
 }) {
   return (
     <article className={`rounded-lg p-5 ${PAPER[doc.style]}`} aria-label={doc.title[locale]}>
-      <h4 className={`text-center font-semibold ${doc.style === 'newspaper' ? 'border-b-2 border-current pb-2 text-2xl' : 'text-sm uppercase tracking-widest rtl:tracking-normal'}`}>{doc.title[locale]}</h4>
+      <h3 className={`text-center font-semibold ${doc.style === 'newspaper' ? 'border-b-2 border-current pb-2 text-2xl' : 'text-sm uppercase tracking-widest rtl:tracking-normal'}`}>{doc.title[locale]}</h3>
       <ul className="mt-4 space-y-1">
         {doc.rows.map((row, i) => {
           const picked = pickedRow === i;
@@ -65,8 +65,8 @@ export function CaseDocumentView({
                 <div className="flex gap-3 px-2 py-1.5 text-sm">{content}</div>
               )}
               {secret && (
-                <button type="button" onClick={() => onSecret!(secret)} className="ms-2 text-xs font-semibold underline decoration-dotted opacity-70 hover:opacity-100">
-                  🔍 {t.phone.lookCloser}
+                <button type="button" onClick={() => onSecret!(secret)} className="ms-2 inline-flex min-h-[32px] items-center gap-1 text-xs font-semibold underline decoration-dotted hover:opacity-100">
+                  <span aria-hidden="true">🔍</span> {t.phone.lookCloser}
                 </button>
               )}
             </li>
@@ -92,13 +92,13 @@ export function WebPageView({ page, locale, t }: { page: WebPage; locale: Locale
       </div>
       <div className="p-5">
         <p className="text-xs font-semibold uppercase tracking-widest text-[#8a2b2b]">{page.site}</p>
-        <h4 className="mt-2 font-display text-2xl leading-tight">{page.title[locale]}</h4>
+        <h3 className="mt-2 font-display text-2xl leading-tight">{page.title[locale]}</h3>
         <div className="mt-3 space-y-3 text-sm leading-relaxed">
           {page.body[locale].map((para) => (
             <p key={para}>{para}</p>
           ))}
         </div>
-        <p className="mt-5 border-t border-black/10 pt-2 text-[11px] text-black/50">{t.phone.fictional}</p>
+        <p className="mt-5 border-t border-black/10 pt-2 text-[11px] text-black/70">{t.phone.fictional}</p>
       </div>
     </article>
   );

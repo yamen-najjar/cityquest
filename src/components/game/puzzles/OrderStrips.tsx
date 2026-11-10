@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import type { Locale } from '@/i18n/config';
 import { sfx } from '@/lib/audio';
 
@@ -20,16 +21,21 @@ export function OrderStrips({
   locale: Locale;
   labels: { up: string; down: string; strip: string };
 }) {
+  // The strip keeps its arrow focused while it moves (the list re-orders its items), and an arrow at the end
+  // of the list is aria-disabled rather than disabled so focus is not thrown away when it gets there.
+  const list = useRef<HTMLOListElement>(null);
   const move = (i: number, d: -1 | 1) => {
     const j = i + d;
     if (j < 0 || j >= order.length) return;
+    const moved = order[i]!;
     const next = [...order];
     [next[i], next[j]] = [next[j]!, next[i]!];
     onChange(next);
     sfx('page');
+    window.requestAnimationFrame(() => list.current?.querySelector<HTMLElement>(`[data-strip="${moved}"][data-dir="${d}"]`)?.focus());
   };
   return (
-    <ol className="space-y-2">
+    <ol ref={list} className="space-y-2">
       {order.map((id, i) => {
         const piece = pieces.find((p) => p.id === id);
         if (!piece) return null;
@@ -43,10 +49,10 @@ export function OrderStrips({
               {piece.text[locale]}
             </p>
             <div className="flex flex-col gap-1">
-              <button type="button" className="h-1/2 min-h-[36px] w-11 rounded-lg border border-white/15 hover:border-gold disabled:opacity-30" onClick={() => move(i, -1)} disabled={i === 0} aria-label={`${labels.up}: ${label}`}>
+              <button type="button" data-strip={id} data-dir="-1" className={`h-1/2 min-h-[36px] w-11 rounded-lg border border-white/15 hover:border-gold ${i === 0 ? 'opacity-30' : ''}`} onClick={() => move(i, -1)} aria-disabled={i === 0 || undefined} aria-label={`${labels.up}: ${label}`}>
                 ▲
               </button>
-              <button type="button" className="h-1/2 min-h-[36px] w-11 rounded-lg border border-white/15 hover:border-gold disabled:opacity-30" onClick={() => move(i, 1)} disabled={i === order.length - 1} aria-label={`${labels.down}: ${label}`}>
+              <button type="button" data-strip={id} data-dir="1" className={`h-1/2 min-h-[36px] w-11 rounded-lg border border-white/15 hover:border-gold ${i === order.length - 1 ? 'opacity-30' : ''}`} onClick={() => move(i, 1)} aria-disabled={i === order.length - 1 || undefined} aria-label={`${labels.down}: ${label}`}>
                 ▼
               </button>
             </div>

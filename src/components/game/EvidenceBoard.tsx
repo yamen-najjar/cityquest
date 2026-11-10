@@ -39,8 +39,12 @@ export function EvidenceBoard({
   const current = open.find((q) => q.id === active);
   // Opening or leaving a question starts the panel from the top, not halfway down the last view.
   const top = useRef<HTMLDivElement>(null);
+  // Keyboard and screen reader users land on the new view instead of on a button that no longer exists.
+  const mounted = useRef(false);
   useEffect(() => {
     top.current?.closest('[role="tabpanel"]')?.scrollTo({ top: 0 });
+    if (mounted.current) top.current?.focus({ preventScroll: true });
+    mounted.current = true;
   }, [active]);
 
   if (!questions.length) {
@@ -54,14 +58,14 @@ export function EvidenceBoard({
 
   if (current) {
     return (
-      <div ref={top}>
+      <div ref={top} tabIndex={-1}>
         <Investigation key={current.id} a={a} p={p} q={current} locale={locale} t={t} onBack={() => setActive(null)} onDeduced={onDeduced} />
       </div>
     );
   }
 
   return (
-    <div ref={top} className="space-y-6">
+    <div ref={top} tabIndex={-1} className="space-y-6">
       <p className="text-sm text-ivory-dim">{b.intro}</p>
       {open.length > 0 && (
         <section aria-labelledby="board-open">
@@ -171,7 +175,7 @@ function Investigation({
 
   return (
     <div className="space-y-5">
-      <button type="button" onClick={onBack} className="text-sm font-semibold text-gold hover:underline">
+      <button type="button" onClick={onBack} className="min-h-[44px] text-sm font-semibold text-gold hover:underline">
         <span className="inline-block rtl:rotate-180" aria-hidden="true">
           ←
         </span>{' '}
@@ -219,11 +223,7 @@ function Investigation({
       </fieldset>
 
       <div className="sticky bottom-0 -mx-5 border-t border-white/10 bg-[#13100c]/95 px-5 py-3 backdrop-blur">
-        {message && (
-          <p role="status" className="mb-2 text-sm text-danger">
-            {message}
-          </p>
-        )}
+        <div role="status">{message && <p className="mb-2 text-sm text-danger">{message}</p>}</div>
         <button type="button" className="btn-gold w-full" disabled={!person || pinned.length !== 2 || status === 'checking'} onClick={connect}>
           {status === 'checking' ? b.checking : b.connect}
         </button>

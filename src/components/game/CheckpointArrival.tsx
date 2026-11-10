@@ -54,6 +54,18 @@ export function CheckpointArrival({
   const [distance, setDistance] = useState<number | null>(null);
   const [scanning, setScanning] = useState(false);
   const stallTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const continueRef = useRef<HTMLButtonElement>(null);
+  const scanRef = useRef<HTMLButtonElement>(null);
+  const wasScanning = useRef(false);
+
+  // The button that was pressed gives way to another: hand focus on instead of dropping it.
+  useEffect(() => {
+    if (state === 'arrived') continueRef.current?.focus();
+  }, [state]);
+  useEffect(() => {
+    if (wasScanning.current && !scanning) scanRef.current?.focus();
+    wasScanning.current = scanning;
+  }, [scanning]);
 
   useEffect(() => () => clearTimeout(stallTimer.current), []);
 
@@ -117,14 +129,10 @@ export function CheckpointArrival({
 
   return (
     <div className="mt-5 space-y-3">
-      {message && (
-        <p role="status" className={`text-sm ${message.tone}`}>
-          {message.text}
-        </p>
-      )}
+      <div role="status">{message && <p className={`text-sm ${message.tone}`}>{message.text}</p>}</div>
       <div className="flex flex-wrap items-center gap-3">
         {state === 'arrived' ? (
-          <button type="button" className="btn-gold" onClick={onArrive}>
+          <button ref={continueRef} type="button" className="btn-gold" onClick={onArrive}>
             {t.gpsContinue}
           </button>
         ) : (
@@ -135,7 +143,7 @@ export function CheckpointArrival({
               </button>
             )}
             {qrAvailable && (
-              <button type="button" className={gpsAvailable ? 'btn-ghost' : 'btn-gold'} onClick={() => setScanning(true)}>
+              <button ref={scanRef} type="button" className={gpsAvailable ? 'btn-ghost' : 'btn-gold'} onClick={() => setScanning(true)}>
                 {t.qrScan}
               </button>
             )}

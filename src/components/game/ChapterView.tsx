@@ -215,8 +215,8 @@ export function ChapterView({
     <article className="animate-rise" aria-labelledby="chapter-title">
       <div className="flex items-start justify-between gap-3">
         <p className="eyebrow">{fmt(t.chapterOf, { n: index + 1, total })}</p>
-        <button type="button" onClick={readAloud} className="chip min-h-[32px] hover:border-gold/50" aria-pressed={reading}>
-          {reading ? `■ ${t.sound.stop}` : `🔊 ${t.sound.read}`}
+        <button type="button" onClick={readAloud} className="chip min-h-[44px] hover:border-gold/50" aria-pressed={reading}>
+          <span aria-hidden="true">{reading ? '■' : '🔊'}</span> {reading ? t.sound.stop : t.sound.read}
         </button>
       </div>
       <h1 id="chapter-title" ref={headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold leading-tight sm:text-5xl">
@@ -270,7 +270,7 @@ export function ChapterView({
               <body>: the chapter's entrance animation (a transform) would otherwise pin it to the article. */}
           {!arrivalInView &&
             createPortal(
-              <div className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/25 bg-navy/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:hidden">
+              <div role="region" aria-label={t.checkpoint} className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/25 bg-navy/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:hidden">
                 <div className="mx-auto flex max-w-3xl items-center gap-3">
                   <p className="min-w-0 flex-1 truncate text-sm">
                     <span className="text-gold" aria-hidden="true">
@@ -375,7 +375,7 @@ export function ChapterView({
                   open={opening}
                   labels={{ dial: t.threeD.dial, up: t.threeD.up, down: t.threeD.down, hint: t.threeD.lockHint }}
                 />
-                <button type="button" className="mt-2 text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(true)}>
+                <button type="button" className="mt-2 min-h-[32px] text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(true)}>
                   {t.threeD.typeCode}
                 </button>
               </div>
@@ -409,7 +409,7 @@ export function ChapterView({
                   aria-describedby="feedback"
                 />
                 {three && digits > 0 && (
-                  <button type="button" className="justify-self-start text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(false)}>
+                  <button type="button" className="min-h-[32px] justify-self-start text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(false)}>
                     {t.threeD.useDials}
                   </button>
                 )}
@@ -472,6 +472,12 @@ export function ChapterView({
                 )}
               </>
             )}
+          {/* A hint that appears is announced; the cards themselves stay plain content. */}
+          <p className="sr-only" role="status">
+            {hintsShown > 0 && puzzle.hints[hintsShown - 1]
+              ? `${hintsShown - 1 === lastHint ? t.solutionLabel : fmt(t.hintLabel, { n: hintsShown, total: puzzle.hints.length })}: ${puzzle.hints[hintsShown - 1]![locale]}`
+              : ''}
+          </p>
           </div>
         </section>
       )}
@@ -545,10 +551,10 @@ function WalkAudio({ lines, locale, t }: { lines: NonNullable<Chapter['walk']>; 
     <section className="mt-8 rounded-2xl border border-gold/25 bg-gold/[0.04] p-4" aria-labelledby="walk-title">
       <div className="flex items-center justify-between gap-3">
         <h2 id="walk-title" className="eyebrow">
-          🎧 {t.walk.title}
+          <span aria-hidden="true">🎧</span> {t.walk.title}
         </h2>
         <button type="button" className="btn-ghost min-h-[40px] px-4 py-1.5 text-sm" onClick={toggle}>
-          {playing ? `■ ${t.walk.stop}` : `▶ ${t.walk.play}`}
+          <span aria-hidden="true">{playing ? '■' : '▶'}</span> {playing ? t.walk.stop : t.walk.play}
         </button>
       </div>
       <div className="mt-3 space-y-1 font-display text-lg italic text-ivory-dim">

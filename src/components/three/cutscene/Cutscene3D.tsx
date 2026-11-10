@@ -139,12 +139,12 @@ export default function Cutscene3D({
       )}
       <div className="absolute bottom-3 end-3 flex gap-2">
         {status === 'loading' ? null : status === 'playing' ? (
-          <button type="button" className="rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold text-ivory backdrop-blur hover:bg-black/80" onClick={() => control.current?.skip()}>
-            {labels.skip} ⏭
+          <button type="button" className="min-h-[36px] rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold text-ivory backdrop-blur hover:bg-black/80" onClick={() => control.current?.skip()}>
+            {labels.skip} <span aria-hidden="true">⏭</span>
           </button>
         ) : (
-          <button type="button" className="rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold text-gold backdrop-blur hover:bg-black/80" onClick={() => control.current?.play()}>
-            ↻ {labels.replay}
+          <button type="button" className="min-h-[36px] rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold text-gold backdrop-blur hover:bg-black/80" onClick={() => control.current?.play()}>
+            <span aria-hidden="true">↻</span> {labels.replay}
           </button>
         )}
       </div>

@@ -46,6 +46,12 @@ body {
   border-radius: 6px;
 }
 
+/* A radio hidden inside a styled card (sr-only): the card shows the keyboard focus the radio cannot. */
+.focus-card:has(:focus-visible) {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
 /* Headings focused by code (each new game step) are not keyboard targets and need no ring. */
 [tabindex='-1']:focus {
   outline: none;
@@ -80,7 +86,7 @@ body {
     @apply tracking-normal;
   }
   .field {
-    @apply min-h-[44px] w-full rounded-xl border border-white/15 bg-navy px-4 py-2.5 text-ivory placeholder:text-ivory-mute
+    @apply min-h-[44px] w-full rounded-xl border border-ivory-mute/65 bg-navy px-4 py-2.5 text-ivory placeholder:text-ivory-mute
       focus:border-gold focus:outline-none;
   }
   .chip {

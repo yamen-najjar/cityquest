@@ -51,13 +51,17 @@ export function LeadsPanel({
   const leads = visibleLeads(a, p);
   const [active, setActive] = useState<string | null>(null);
   const top = useRef<HTMLDivElement>(null);
+  // Keyboard and screen reader users land on the new view instead of on a button that no longer exists.
+  const mounted = useRef(false);
   useEffect(() => {
     top.current?.closest('[role="tabpanel"]')?.scrollTo({ top: 0 });
+    if (mounted.current) top.current?.focus({ preventScroll: true });
+    mounted.current = true;
   }, [active]);
   const current = leads.find((l) => l.id === active && !p.leadsSolved.includes(l.id));
   if (current) {
     return (
-      <div ref={top}>
+      <div ref={top} tabIndex={-1}>
         <LeadView key={current.id} a={a} p={p} lead={current} locale={locale} t={t} dispatch={dispatch} onNotice={onNotice} onBack={() => setActive(null)} />
       </div>
     );
@@ -65,7 +69,7 @@ export function LeadsPanel({
   const open = leads.filter((l) => !p.leadsSolved.includes(l.id));
   const solved = leads.filter((l) => p.leadsSolved.includes(l.id));
   return (
-    <div ref={top} className="space-y-6">
+    <div ref={top} tabIndex={-1} className="space-y-6">
       <p className="text-sm text-ivory-dim">{t.leads.intro}</p>
       {leads.length === 0 && <p className="rounded-2xl border border-dashed border-white/15 p-4 text-sm text-ivory-mute">{t.leads.empty}</p>}
       {open.length > 0 && (
@@ -182,7 +186,7 @@ function LeadView({
 
   return (
     <div className="space-y-5">
-      <button type="button" onClick={onBack} className="text-sm font-semibold text-gold hover:underline">
+      <button type="button" onClick={onBack} className="min-h-[44px] text-sm font-semibold text-gold hover:underline">
         <span className="inline-block rtl:rotate-180" aria-hidden="true">
           ←
         </span>{' '}
@@ -233,7 +237,7 @@ function LeadView({
           <div className="space-y-2">
             {docs.map((d) => (
               <details key={d.id} className="rounded-xl border border-white/10 p-3">
-                <summary className="cursor-pointer text-sm text-gold">📄 {d.title[locale]}</summary>
+                <summary className="cursor-pointer text-sm text-gold"><span aria-hidden="true">📄</span> {d.title[locale]}</summary>
                 <div className="mt-3">
                   <CaseDocumentView doc={d} locale={locale} t={t} found={p.secrets} onSecret={discover} />
                 </div>
@@ -294,6 +298,9 @@ function LeadView({
       )}
 
       <div className="space-y-2">
+        <p className="sr-only" role="status">
+          {hints > 0 ? lead.hints[hints - 1]?.[locale] : ''}
+        </p>
         {lead.hints.slice(0, hints).map((h, i) => (
           <p key={i} className="rounded-xl border border-gold/25 bg-gold/[0.06] p-3 text-sm text-ivory">
             {h[locale]}
@@ -312,11 +319,7 @@ function LeadView({
 function Footer({ message, children }: { message: string | null; children: React.ReactNode }) {
   return (
     <div>
-      {message && (
-        <p role="status" className="mb-2 text-sm text-danger">
-          {message}
-        </p>
-      )}
+      <div role="status">{message && <p className="mb-2 text-sm text-danger">{message}</p>}</div>
       {children}
     </div>
   );
@@ -335,7 +338,7 @@ function Recording({ lead, locale, t }: { lead: Lead; locale: Locale; t: Diction
   return (
     <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#101826] p-4">
       <button type="button" className="btn-gold min-h-[48px] shrink-0" onClick={play}>
-        ▶ {played ? t.leads.again : t.leads.play}
+        <span aria-hidden="true">▶</span> {played ? t.leads.again : t.leads.play}
       </button>
       <span className="flex h-8 flex-1 items-center gap-0.5" aria-hidden="true">
         {Array.from({ length: 32 }, (_, i) => (

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { useModal } from '@/lib/use-modal';
 import type { Adventure } from '@/content/types';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
@@ -57,6 +58,9 @@ export function CaughtDialog({
   const [hints, setHints] = useState(0);
   const [status, setStatus] = useState<'idle' | 'checking' | 'wrong' | 'slow' | 'network'>('idle');
   const name = pursuit.name[locale];
+  const dialogRef = useRef<HTMLElement>(null);
+  // Must be answered: it keeps focus inside, but Escape does not dismiss it.
+  useModal(dialogRef);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -87,7 +91,7 @@ export function CaughtDialog({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center bg-black/80 sm:items-center sm:p-4">
-      <section role="alertdialog" aria-modal="true" aria-labelledby="caught-title" className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-danger/50 bg-[#140b0b] p-6 shadow-card sm:rounded-3xl">
+      <section ref={dialogRef} tabIndex={-1} role="alertdialog" aria-modal="true" aria-labelledby="caught-title" className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-danger/50 bg-[#140b0b] p-6 shadow-card sm:rounded-3xl">
         <h2 id="caught-title" className="font-display text-4xl text-danger" tabIndex={-1} ref={(el) => el?.focus()}>
           {t.danger.caught}
         </h2>
@@ -119,8 +123,11 @@ export function CaughtDialog({
                 dir="auto"
               />
             </label>
+            <p role="status" className="sr-only">
+              {message}
+            </p>
             {message && (
-              <p role="status" className="text-sm text-danger">
+              <p aria-hidden="true" className="text-sm text-danger">
                 {message}
               </p>
             )}
@@ -128,6 +135,9 @@ export function CaughtDialog({
               {status === 'checking' ? t.checking : t.submit}
             </button>
             {/* Free hints here: the catch was the price already. */}
+            <p role="status" className="sr-only">
+              {hints > 0 ? caught.recover.hints[hints - 1]?.[locale] : ''}
+            </p>
             {caught.recover.hints.slice(0, hints).map((h, i) => (
               <p key={i} className="rounded-xl border border-gold/25 bg-gold/[0.06] p-3 text-sm text-ivory">
                 {h[locale]}

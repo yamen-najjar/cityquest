@@ -32,7 +32,7 @@ export function Deduction({
             const person = people.find((p) => p.id === s.id);
             const active = value.suspect === s.id;
             return (
-              <label key={s.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${active ? 'border-gold bg-gold/10' : 'border-white/15 hover:border-white/30'}`}>
+              <label key={s.id} className={`focus-card flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${active ? 'border-gold bg-gold/10' : 'border-ivory-mute/65 hover:border-ivory-mute'}`}>
                 <input type="radio" name="suspect" className="sr-only" checked={active} onChange={() => onChange({ ...value, suspect: s.id })} />
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold/15 font-display text-lg text-gold" aria-hidden="true">
                   {initials(s.label[locale])}
@@ -52,7 +52,7 @@ export function Deduction({
           {items.map((it) => {
             const active = value.proof === it.id;
             return (
-              <label key={it.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${active ? 'border-gold bg-gold/10' : 'border-white/15 hover:border-white/30'}`}>
+              <label key={it.id} className={`focus-card flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${active ? 'border-gold bg-gold/10' : 'border-ivory-mute/65 hover:border-ivory-mute'}`}>
                 <input type="radio" name="proof" className="sr-only" checked={active} onChange={() => onChange({ ...value, proof: it.id })} />
                 <ItemIcon icon={it.icon} className="h-7 w-7" />
                 <span className="text-sm">{it.name[locale]}</span>
