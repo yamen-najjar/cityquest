@@ -21,7 +21,8 @@ describe('answer pack', () => {
     expect(a.keys.clockmaker).not.toEqual(b.keys.clockmaker);
     const text = JSON.stringify(Object.values(a.keys));
     for (const key of Object.values(answerKeys['lost-manuscript']!)) {
-      for (const plain of key.accepted) if (plain.length > 3) expect(text).not.toContain(plain);
+      // Answers made only of hex digits ("1847") could show up inside a hash by chance, so they are skipped.
+      for (const plain of key.accepted) if (plain.length > 3 && /[^0-9a-f]/.test(plain)) expect(text).not.toContain(plain);
     }
     expect(a.keys.clockmaker!.every((h) => /^[0-9a-f]{64}$/.test(h))).toBe(true);
     expect(a.version).toBe(packVersion('lost-manuscript'));
