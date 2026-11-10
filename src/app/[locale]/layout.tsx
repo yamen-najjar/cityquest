@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import '../globals.css';
 import { ProgressSync } from '@/components/ProgressSync';
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import { dirOf, isLocale, locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionary';
 import { arabic, display, sans } from '@/lib/fonts';
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: t.meta.description,
     alternates: alternates(locale, ''),
     manifest: '/manifest.webmanifest',
-    icons: { icon: '/icon.svg' },
+    icons: { icon: '/icon.svg', apple: '/apple-touch-icon.png' },
     openGraph: {
       type: 'website',
       siteName: 'CityQuest',
@@ -50,6 +51,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
           {t.nav.skip}
         </a>
         <ProgressSync />
+        <ServiceWorkerRegister />
         {children}
       </body>
     </html>

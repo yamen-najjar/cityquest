@@ -25,6 +25,7 @@ import { Journal, combinedToast } from './Journal';
 import { Artifact3D } from './lazy';
 import { applyVariant, nextVariant } from '@/lib/engine/variant';
 import { Finale, PursuitMeter, Results, StartScreen } from './Screens';
+import { useOfflineSupport } from './useOfflineSupport';
 
 const PLAYING_KEY = 'cityquest:playing';
 
@@ -58,6 +59,8 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
   const headingRef = useRef<HTMLHeadingElement>(null);
   const ctx = useMemo(() => contextOf(a), [a]);
   const [three, setThree] = use3D();
+  // Gets the adventure ready for play without reception, and tells when there is none.
+  const offlineSupport = useOfflineSupport(base);
   const [viewing, setViewing] = useState<string | null>(null);
   // The save as last written, for writes that cannot wait for a render (the page being closed).
   const latest = useRef<Progress | null>(null);
@@ -296,6 +299,11 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
           </button>
           <LanguageSwitcher locale={locale} label={languageLabel} />
         </div>
+        {offlineSupport.offline && (
+          <p role="status" className="border-t border-gold/20 bg-gold/10 px-4 py-1.5 text-center text-xs text-gold">
+            {t.offline.active}
+          </p>
+        )}
         {p && !onStart && (
           <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 pb-3">
             <ol className="flex flex-1 gap-1" aria-label={t.progress}>
@@ -342,6 +350,7 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
             locale={locale}
             t={t}
             saved={p}
+            offlineReady={offlineSupport.ready}
             headingRef={headingRef}
             onBegin={(team, mode) => {
               unlockAudio();
