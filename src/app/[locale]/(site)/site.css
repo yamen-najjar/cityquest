@@ -84,6 +84,12 @@ body:has(.theme-site) {
   text-wrap: pretty;
 }
 
+/* Long compounds (Dutch, German) must wrap instead of pushing the page wider than a 320px screen. */
+:where(.theme-site) :is(h1, h2, h3, h4) {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
 .theme-site :focus-visible {
   outline: 2px solid var(--text);
   outline-offset: 3px;
