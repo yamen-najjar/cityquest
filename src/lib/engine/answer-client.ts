@@ -54,29 +54,64 @@ const browserEnv: Env = {
   isOnline: () => typeof navigator === 'undefined' || navigator.onLine !== false,
   log: (message, detail) => console.warn(message, detail),
   async getUserId() {
-    try {
-      const [{ isSupabaseConfigured }, { createClient }] = await Promise.all([import('@/lib/supabase/config'), import('@/lib/supabase/client')]);
-      if (!isSupabaseConfigured()) return null;
-      const { data } = await createClient().auth.getSession();
-      return data.session?.user?.id ?? null;
-    } catch {
-      return null;
-    }
+    return userIdWithFallback(async () => {
+      try {
+        const [{ isSupabaseConfigured }, { createClient }] = await Promise.all([import('@/lib/supabase/config'), import('@/lib/supabase/client')]);
+        if (!isSupabaseConfigured()) return null;
+        const { data } = await createClient().auth.getSession();
+        return data.session?.user?.id ?? null;
+      } catch {
+        return null;
+      }
+    }, browserEnv);
   },
   onDiverged(slug, chapterId) {
     void (async () => {
-      try {
-        const [{ getAdventure }, { localProgressStore }] = await Promise.all([import('@/content/adventures'), import('./storage')]);
-        const adventure = getAdventure(slug);
-        const saved = localProgressStore.load(slug);
-        if (adventure && saved) localProgressStore.save(rewindTo(saved, adventure.chapters.map((c) => c.id), chapterId));
-      } catch {
-        /* the game screen rewinds its own copy too */
-      }
+      await rewindLocalSave(slug, chapterId);
       window.dispatchEvent(new CustomEvent<DivergedDetail>(DIVERGED_EVENT, { detail: { slug, chapterId } }));
     })();
   },
 };
+
+const LAST_USER_KEY = 'cityquest:last-user';
+
+/**
+ * The signed-in user's id. Offline with an expired access token the session cannot be refreshed and reads
+ * as signed out; then the last user seen on this device stands in, so a paid pack keeps grading for its
+ * owner for the whole walk. Sign-out removes it (clearOfflineData), and it grants nothing by itself: the
+ * server still checks every request that gets through.
+ */
+export async function userIdWithFallback(read: () => Promise<string | null>, env: Pick<Env, 'storage' | 'isOnline'>): Promise<string | null> {
+  const id = await read();
+  try {
+    if (id) env.storage?.setItem(LAST_USER_KEY, id);
+    else if (!env.isOnline()) return env.storage?.getItem(LAST_USER_KEY) ?? null;
+  } catch {
+    /* storage unavailable */
+  }
+  return id;
+}
+
+/**
+ * Takes this device's saved game back to `chapterId` and makes the account follow. The account copy is
+ * deleted before the next sync merges anything (the "start over" mechanism, pendingRestarts), because the
+ * merge keeps whichever save is further, and the account's still holds the solves the server refused: the
+ * game would jump ahead again, be refused again, and go round in circles.
+ */
+export async function rewindLocalSave(slug: string, chapterId: string): Promise<void> {
+  try {
+    const [{ getAdventure }, { localProgressStore, pendingRestarts }] = await Promise.all([import('@/content/adventures'), import('./storage')]);
+    const adventure = getAdventure(slug);
+    const saved = localProgressStore.load(slug);
+    if (!adventure || !saved) return;
+    localProgressStore.save(rewindTo(saved, adventure.chapters.map((c) => c.id), chapterId));
+    pendingRestarts.add(slug);
+    const { reconcileNow } = await import('./sync');
+    void reconcileNow();
+  } catch {
+    /* the game screen rewinds its own copy too */
+  }
+}
 
 const PACK_PREFIX = 'cityquest:pack:';
 const QUEUE_PREFIX = 'cityquest:queue:';
@@ -183,6 +218,7 @@ export function clearOfflineData(env: Env = browserEnv): void {
       if (key && (key.startsWith(PACK_PREFIX) || key.startsWith(QUEUE_PREFIX))) doomed.push(key);
     }
     for (const key of doomed) storage.removeItem(key);
+    storage.removeItem(LAST_USER_KEY);
   } catch {
     /* storage unavailable */
   }
@@ -205,7 +241,9 @@ function enqueue(env: Env, slug: string, entry: Queued) {
   if (!queue.some((e) => e.chapterId === entry.chapterId && e.variant === entry.variant)) saveQueue(env, slug, [...queue, entry]);
 }
 
-const flushing = new Map<string, Promise<void>>();
+/** done: nothing left to send. pending: stopped with entries still queued. diverged: the server refused one. */
+type FlushResult = 'done' | 'pending' | 'diverged';
+const flushing = new Map<string, Promise<FlushResult>>();
 
 type Refusal = { chapterId: string };
 
@@ -220,16 +258,15 @@ type Refusal = { chapterId: string };
  *  - 401, 429, 5xx or no network: kept, and the rest waits behind it, so the order is never broken.
  * Only the signed-in user's own entries are sent; anyone else's are discarded.
  */
-export function flushQueue(slug: string, env: Env = browserEnv): Promise<void> {
+export function flushQueue(slug: string, env: Env = browserEnv): Promise<FlushResult> {
   const running = flushing.get(slug);
   if (running) return running;
-  const job = (async () => {
-    if (!env.isOnline() || !loadQueue(slug, env).length) return;
+  const job = (async (): Promise<FlushResult> => {
+    if (!loadQueue(slug, env).length) return 'done';
+    if (!env.isOnline()) return 'pending';
     const userId = await env.getUserId();
-    if (!userId) return;
+    if (!userId) return 'pending';
     const started = epoch;
-    // A pack from before an answer-key change would keep grading wrongly: refresh it first.
-    await refreshPack(slug, env);
     const mine = loadQueue(slug, env).filter((e) => e.userId === userId);
     if (mine.length !== loadQueue(slug, env).length) saveQueue(env, slug, mine);
     for (let queue = mine; queue.length && epoch === started; queue = loadQueue(slug, env)) {
@@ -246,21 +283,24 @@ export function flushQueue(slug: string, env: Env = browserEnv): Promise<void> {
         status = res.status;
         body = await res.json().catch(() => ({}));
       } catch {
-        return; // no network: keep everything
+        return 'pending'; // no network: keep everything
       }
-      if (epoch !== started) return; // signed out meanwhile: the queue is already gone
-      if (status >= 500 || status === 429 || status === 401) return;
-      const accepted = status < 300 && body.correct === true;
-      if (accepted) {
+      if (epoch !== started) return 'done'; // signed out meanwhile: the queue is already gone
+      if (status >= 500 || status === 429 || status === 401) return 'pending';
+      if (status < 300 && body.correct === true) {
         saveQueue(env, slug, queue.slice(1));
         continue;
       }
-      const refusal: Refusal = { chapterId: body.firstUnsolved ?? first.chapterId };
-      env.log('queued answer refused by the server, taking the game back', { slug, answered: first.chapterId, status, backTo: refusal.chapterId });
+      const backTo = body.firstUnsolved ?? first.chapterId;
+      env.log('queued answer refused by the server, taking the game back', { slug, answered: first.chapterId, status, backTo });
       saveQueue(env, slug, []);
-      env.onDiverged(slug, refusal.chapterId);
-      return;
+      env.onDiverged(slug, backTo);
+      return 'diverged';
     }
+    // Sent. A pack from before an answer-key change would keep grading wrongly: fetch the current one now,
+    // after the answers, so it can never hold them up.
+    void refreshPack(slug, env);
+    return 'done';
   })().finally(() => flushing.delete(slug));
   flushing.set(slug, job);
   return job;
@@ -286,31 +326,43 @@ async function gradeLocally(env: Env, slug: string, body: CheckBody): Promise<Ch
   return { status: 'ok', correct: verdict.correct, ...(verdict.confirmed ? { confirmed: verdict.confirmed } : {}), offline: true };
 }
 
+type Sent = { status: number; body: { error?: string; firstUnsolved?: string; correct?: boolean; confirmed?: string[] } };
+
+async function postCheck(env: Env, slug: string, body: CheckBody): Promise<Sent> {
+  const res = await env.fetch(`/api/game/${slug}/check`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chapterId: body.chapterId, answer: body.answer, variant: body.variant ?? undefined }),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+  return { status: res.status, body: await res.json().catch(() => ({})) };
+}
+
+const orderRefusal = (r: Sent) => r.status === 403 && r.body.error === 'previous chapter not solved' && !!r.body.firstUnsolved;
+
 export async function checkAnswer(slug: string, body: CheckBody, env: Env = browserEnv): Promise<CheckOutcome> {
   if (env.isOnline()) {
     try {
       // Whatever was solved offline reaches the server before this check, but never holds it up for long.
       await Promise.race([flushQueue(slug, env), new Promise((resolve) => setTimeout(resolve, FLUSH_BUDGET_MS))]);
-      const res = await env.fetch(`/api/game/${slug}/check`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chapterId: body.chapterId, answer: body.answer, variant: body.variant ?? undefined }),
-        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-      });
-      if (res.status === 429) return { status: 'slow' };
-      if (res.status === 403) {
-        // The server lacks an earlier solve (offline play that never reached it): go back to that chapter.
-        const refused = (await res.json().catch(() => ({}))) as { error?: string; firstUnsolved?: string };
-        if (refused.error === 'previous chapter not solved' && refused.firstUnsolved) {
-          saveQueue(env, slug, []);
-          env.onDiverged(slug, refused.firstUnsolved);
+      let sent = await postCheck(env, slug, body);
+      if (orderRefusal(sent)) {
+        // The server lacks an earlier chapter. Usually only because the queue has not been sent yet (the
+        // wait above ran out): finish that first, then ask again. Only when everything has been sent and a
+        // fresh check is still refused does the game go back; the queue is owned by the flush, never cleared here.
+        const flushed = await flushQueue(slug, env);
+        if (flushed === 'diverged') return { status: 'failed', reason: 'diverged' };
+        if (flushed === 'pending') return { status: 'failed', reason: 'network' };
+        sent = await postCheck(env, slug, body);
+        if (orderRefusal(sent)) {
+          env.onDiverged(slug, sent.body.firstUnsolved!);
           return { status: 'failed', reason: 'diverged' };
         }
-        return { status: 'failed', reason: 'network' };
       }
-      if (!res.ok) return { status: 'failed', reason: 'network' };
-      const { correct, confirmed } = (await res.json()) as Verdict;
-      return { status: 'ok', correct, ...(confirmed ? { confirmed } : {}), offline: false };
+      if (sent.status === 429) return { status: 'slow' };
+      if (sent.status < 200 || sent.status >= 300) return { status: 'failed', reason: 'network' };
+      const { correct, confirmed } = sent.body;
+      return { status: 'ok', correct: correct === true, ...(confirmed ? { confirmed } : {}), offline: false };
     } catch {
       // The request never got an answer: treat it like having no reception.
     }

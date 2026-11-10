@@ -1,6 +1,6 @@
 // The shared answer helper: online-first, local grading offline, and the queue of offline solves.
 import { beforeEach, describe, expect, it } from 'vitest';
-import { checkAnswer, clearOfflineData, flushQueue, loadPack, loadQueue, loadUsablePack, refreshPack, type Env } from '@/lib/engine/answer-client';
+import { checkAnswer, clearOfflineData, userIdWithFallback, flushQueue, loadPack, loadQueue, loadUsablePack, refreshPack, type Env } from '@/lib/engine/answer-client';
 import { buildAnswerPack } from '@/lib/engine/answer-pack.server';
 import type { AnswerPack } from '@/lib/engine/answer-pack';
 import { encodeReport } from '@/lib/engine/report';
@@ -175,13 +175,14 @@ describe('the queue of a paid adventure', () => {
     }
   });
 
-  it('refreshes the pack before it flushes', async () => {
+  it('refreshes the pack after it flushes, never in front of the answers', async () => {
     const offline = makeEnv({ online: false });
     await playOffline(offline.env, offline.store);
     const online = makeEnv({ respond: (c) => (c.url.endsWith('/pack') ? json({ ...paidPack, version: 'newer' }) : json({ correct: true })) });
     for (const [k, v] of offline.store) online.store.set(k, v);
     await flushQueue('lost-manuscript', online.env);
-    expect(online.calls[0]!.url).toBe('/api/game/lost-manuscript/pack');
+    await new Promise((r) => setTimeout(r, 0));
+    expect(online.calls.map((c) => c.url.split('/').pop())).toEqual(['check', 'check', 'check', 'pack']);
     expect(loadPack('lost-manuscript', online.env)?.version).toBe('newer');
   });
 
@@ -318,5 +319,78 @@ describe('the server lacks an earlier solve (online)', () => {
     expect(await checkAnswer('lost-manuscript', { chapterId: 'clockmaker', answer: '7347' }, env)).toEqual({ status: 'failed', reason: 'diverged' });
     expect(diverged).toEqual([['lost-manuscript', 'witnesses']]);
     expect(loadQueue('lost-manuscript', env)).toEqual([]);
+  });
+});
+
+describe('a slow flush must not lose progress', () => {
+  const ORDER = ['message', 'witnesses', 'clockmaker', 'signal'];
+
+  it('3 queued, the first send is slow, the next check is refused for order: the queue is finished, the check retried, nothing rewound or lost', async () => {
+    const offline = makeEnv({ online: false });
+    storePack(offline.store, 'lost-manuscript', paidPack);
+    for (const [chapterId, answer] of [['message', 'tower'], ['witnesses', 'clara'], ['clockmaker', '7347']] as const) {
+      await checkAnswer('lost-manuscript', { chapterId, answer }, offline.env);
+    }
+    expect(loadQueue('lost-manuscript', offline.env)).toHaveLength(3);
+
+    const solved = new Set<string>();
+    let first = true;
+    const online = makeEnv({
+      respond: async (c) => {
+        if (c.url.endsWith('/pack')) return json({ ...paidPack, version: 'newer' });
+        const id = c.body!.chapterId;
+        if (first && id === 'message') {
+          first = false;
+          await new Promise((r) => setTimeout(r, 2800)); // longer than the flush budget
+        }
+        const missing = ORDER.slice(0, ORDER.indexOf(id)).find((x) => !solved.has(x));
+        if (missing) return json({ error: 'previous chapter not solved', firstUnsolved: missing }, 403);
+        solved.add(id);
+        return json({ correct: true });
+      },
+    });
+    for (const [k, v] of offline.store) online.store.set(k, v);
+
+    const outcome = await checkAnswer('lost-manuscript', { chapterId: 'signal', answer: '1847' }, online.env);
+    expect(outcome).toEqual({ status: 'ok', correct: true, offline: false });
+    expect(online.diverged).toEqual([]);
+    expect(loadQueue('lost-manuscript', online.env)).toEqual([]);
+    expect([...solved]).toEqual(['message', 'witnesses', 'clockmaker', 'signal']);
+  }, 15_000);
+
+  it('rewinds only when everything is sent and a fresh check is still refused; the flush owns the queue', async () => {
+    const offline = makeEnv({ online: false });
+    storePack(offline.store, 'lost-manuscript', paidPack);
+    await checkAnswer('lost-manuscript', { chapterId: 'message', answer: 'tower' }, offline.env);
+    const online = makeEnv({ respond: (c) => (c.body?.chapterId === 'signal' ? json({ error: 'previous chapter not solved', firstUnsolved: 'witnesses' }, 403) : json({ correct: true })) });
+    for (const [k, v] of offline.store) online.store.set(k, v);
+    expect(await checkAnswer('lost-manuscript', { chapterId: 'signal', answer: '1847' }, online.env)).toEqual({ status: 'failed', reason: 'diverged' });
+    expect(online.diverged).toEqual([['lost-manuscript', 'witnesses']]);
+    expect(checks(online.calls)).toEqual(['message', 'signal', 'signal']);
+  });
+
+  it('does not rewind while the queue cannot be sent (still entries queued)', async () => {
+    const offline = makeEnv({ online: false });
+    storePack(offline.store, 'lost-manuscript', paidPack);
+    await checkAnswer('lost-manuscript', { chapterId: 'message', answer: 'tower' }, offline.env);
+    const online = makeEnv({ respond: (c) => (c.body?.chapterId === 'message' ? json({}, 503) : json({ error: 'previous chapter not solved', firstUnsolved: 'message' }, 403)) });
+    for (const [k, v] of offline.store) online.store.set(k, v);
+    expect(await checkAnswer('lost-manuscript', { chapterId: 'witnesses', answer: 'clara' }, online.env)).toEqual({ status: 'failed', reason: 'network' });
+    expect(online.diverged).toEqual([]);
+    expect(loadQueue('lost-manuscript', online.env)).toHaveLength(1);
+  });
+});
+
+describe('the user id offline', () => {
+  it('falls back to the last known user when offline and the session cannot be read, and forgets it on sign-out', async () => {
+    const { env } = makeEnv({ online: true });
+    expect(await userIdWithFallback(async () => 'u1', env)).toBe('u1');
+    env.online = false;
+    expect(await userIdWithFallback(async () => null, env)).toBe('u1');
+    env.online = true; // online and signed out is really signed out
+    expect(await userIdWithFallback(async () => null, env)).toBeNull();
+    env.online = false;
+    clearOfflineData(env);
+    expect(await userIdWithFallback(async () => null, env)).toBeNull();
   });
 });
