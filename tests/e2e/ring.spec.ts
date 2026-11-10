@@ -126,5 +126,5 @@ test('The Neckar Ring in expert mode: interrogation, torn strips, cipher wheel, 
 test('The Neckar Ring is listed under Outdoor escape with its premium price', async ({ page }) => {
   await page.goto('/de/adventures?theme=escape');
   await page.getByRole('link', { name: 'Der Ring vom Neckar' }).click();
-  await expect(page.locator('aside').getByText('34,90 €')).toBeVisible();
+  await expect(page.locator('.ad-price').getByText('34,90 €')).toBeVisible();
 });
