@@ -111,4 +111,32 @@ describe('a rewound save and the account', () => {
     expect(localProgressStore.load('lost-manuscript')!.solved).toEqual([ids[0]]);
     expect((remote.get('lost-manuscript') as Progress).solved).toEqual([ids[0]]);
   });
+
+  it('does not wait for ever on a reconcile that stalls on bad reception', async () => {
+    const { reconcileNow } = await import('@/lib/engine/sync');
+    const { localProgressStore } = await import('@/lib/engine/storage');
+    const { rewindLocalSave } = await import('@/lib/engine/answer-client');
+
+    localProgressStore.save(playedThrough(3));
+    let release: () => void = () => {};
+    pullGate = new Promise<void>((r) => (release = r));
+    const stalled = reconcileNow();
+
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      let done = false;
+      const rewinding = rewindLocalSave('lost-manuscript', ids[1]!).then(() => (done = true));
+      for (let i = 0; i < 5; i++) await new Promise((r) => setImmediate(r)); // let its imports resolve
+      await vi.advanceTimersByTimeAsync(4999);
+      expect(done).toBe(false);
+      await vi.advanceTimersByTimeAsync(1);
+      await rewinding;
+      expect(localProgressStore.load('lost-manuscript')!.solved).toEqual([ids[0]]);
+    } finally {
+      vi.useRealTimers();
+      pullGate = null;
+      release();
+      await stalled;
+    }
+  });
 });

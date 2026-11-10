@@ -75,6 +75,9 @@ const browserEnv: Env = {
 
 const LAST_USER_KEY = 'cityquest:last-user';
 
+/** How long a rewind waits for a running account sync before it goes ahead anyway. */
+const RECONCILE_WAIT_MS = 5000;
+
 /**
  * The signed-in user's id. Offline with an expired access token the session cannot be refreshed and reads
  * as signed out; then the last user seen on this device stands in, so a paid pack keeps grading for its
@@ -106,8 +109,12 @@ export async function rewindLocalSave(slug: string, chapterId: string): Promise<
     const [{ getAdventure }, { localProgressStore, pendingRestarts }] = await Promise.all([import('@/content/adventures'), import('./storage')]);
     const { reconcileNow, reconcileSettled } = await import('./sync');
     // A reconcile that is already running has pulled the account's (ahead) copy and will write it over the
-    // device when it merges: let it finish first, then rewind, so nothing of ours is overwritten.
-    await reconcileSettled();
+    // device when it merges: let it finish first, then rewind, so nothing of ours is overwritten. Its
+    // requests have no timeout, so on bad reception it can stall: wait at most RECONCILE_WAIT_MS. If it
+    // then still overwrites the rewind, the next check is refused again and rewinds again.
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    await Promise.race([reconcileSettled(), new Promise<void>((resolve) => (timer = setTimeout(resolve, RECONCILE_WAIT_MS)))]);
+    clearTimeout(timer);
     const adventure = getAdventure(slug);
     const saved = localProgressStore.load(slug);
     if (!adventure || !saved) return;

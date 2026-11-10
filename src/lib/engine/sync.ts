@@ -69,15 +69,15 @@ const firstReconcile = new Promise<void>((resolve) => {
   firstReconcileResolve = resolve;
 });
 
-/**
- * Pull the account's saves, merge with this browser's, write back only where the account was further,
- * and push up only what differs. No-op when signed out. Safe to call repeatedly (deduped).
- */
 /** Resolves once no reconcile is running (also one that starts while waiting). */
 export async function reconcileSettled(): Promise<void> {
   while (reconcileInFlight) await reconcileInFlight.catch(() => undefined);
 }
 
+/**
+ * Pull the account's saves, merge with this browser's, write back only where the account was further,
+ * and push up only what differs. No-op when signed out. Safe to call repeatedly (deduped).
+ */
 export function reconcileNow(): Promise<void> {
   if (reconcileInFlight) return reconcileInFlight;
   reconcileInFlight = runReconcile().finally(() => {
