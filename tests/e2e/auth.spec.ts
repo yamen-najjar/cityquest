@@ -77,8 +77,12 @@ test('progress is mirrored to the account and restored on another device', { tag
     };
     localStorage.setItem('cityquest:progress:lost-manuscript', JSON.stringify(p));
   });
+  // Wait for the push to reach the account before the "other device" starts: the heading below comes from
+  // the local save, so it says nothing about the push (clearing too early made this test flaky).
+  const pushed = page.waitForResponse((r) => r.url().includes('/rest/v1/progress') && r.request().method() === 'POST');
   await page.goto('/en/dashboard');
   await expect(page.getByRole('heading', { name: 'The Lost Manuscript' }).first()).toBeVisible();
+  await pushed;
 
   // Simulate a fresh device: clear local storage. The reconcile on reload pulls the save back.
   await page.evaluate(() => localStorage.clear());
