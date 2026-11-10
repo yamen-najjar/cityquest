@@ -8,7 +8,7 @@
 import { useEffect, useState } from 'react';
 import type { Adventure } from '@/content/types';
 import { flushQueue, loadPack, refreshPack } from '@/lib/engine/answer-client';
-import { webglAvailable } from '../three/support';
+import { hardwareWebGL, webglAvailable } from '../three/support';
 
 const READY_PREFIX = 'cityquest:offline-ready:';
 
@@ -19,18 +19,32 @@ function scenesOf(a: Adventure) {
   return a.chapters.flatMap((c) => [c.scenes?.intro, c.scenes?.success]);
 }
 
+/** The same decision as use3D(): the saved choice, else whether there is a real GPU. */
+function wants3D(): boolean {
+  let pref: string | null = null;
+  try {
+    pref = window.localStorage.getItem('cityquest:3d');
+  } catch {
+    /* no saved choice */
+  }
+  return pref === 'on' ? webglAvailable() : pref !== 'off' && hardwareWebGL();
+}
+
 /** Loads the lazy chunks (map, scanner, 3D) and the 3D files the adventure uses, so the service worker sees them. */
 async function loadLazyParts(a: Adventure) {
   const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  const jobs: Promise<unknown>[] = [import('./RealMap'), import('./QrScanner')];
-  // 3D only where it can run, and not on a data-saver connection: its files are several megabytes.
-  if (webglAvailable() && !connection?.saveData) {
-    jobs.push(import('../three/Artifact3D'), import('../three/Lock3D'), import('../three/Map3D'), import('../three/cutscene/Cutscene3D'));
-    jobs.push(import('../three/cutscene/preload').then(async (m) => {
-      for (const scene of scenesOf(a)) m.preloadScene(scene);
-      // preloadScene is fire-and-forget; give the requests time to finish before the cache is checked.
-      await new Promise((r) => setTimeout(r, 4000));
-    }));
+  // The chunks are small and always loaded, so a player who switches 3D on later still has them. The 3D
+  // files are several megabytes: fetched only where the game would show 3D (see use3D), and not on a
+  // data-saver connection.
+  const jobs: Promise<unknown>[] = [import('./RealMap'), import('./QrScanner'), import('../three/Artifact3D'), import('../three/Lock3D'), import('../three/Map3D'), import('../three/cutscene/Cutscene3D')];
+  if (wants3D() && !connection?.saveData) {
+    jobs.push(
+      import('../three/cutscene/preload').then(async (m) => {
+        for (const scene of scenesOf(a)) m.preloadScene(scene);
+        // preloadScene is fire-and-forget; give the requests time to finish before the cache is checked.
+        await new Promise((r) => setTimeout(r, 4000));
+      }),
+    );
   }
   await Promise.allSettled(jobs);
 }

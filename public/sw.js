@@ -49,14 +49,24 @@ self.addEventListener('install', (event) => {
       // when nothing else is cached.
       const pages = await caches.open(PAGES);
       const statics = await caches.open(STATIC);
-      await Promise.allSettled(
-        LOCALES.map(async (locale) => {
-          const res = await fetch(offlineUrl(locale), { credentials: 'same-origin' });
-          if (!res.ok) return;
-          await pages.put(offlineUrl(locale), res.clone());
-          await cacheReferencedAssets(await res.text(), statics);
-        }),
-      );
+      // One language after the other: the pages share most of their files. Never let a slow network keep
+      // the worker from activating: after 20 s it starts anyway, with whatever is cached by then.
+      const precache = (async () => {
+        for (const locale of LOCALES) {
+          try {
+            const res = await fetch(offlineUrl(locale), { credentials: 'same-origin' });
+            if (!res.ok) {
+              await res.body?.cancel();
+              continue;
+            }
+            await pages.put(offlineUrl(locale), res.clone());
+            await cacheReferencedAssets(await res.text(), statics);
+          } catch {
+            /* that language's offline page is simply not available offline */
+          }
+        }
+      })();
+      await Promise.race([precache, new Promise((resolve) => setTimeout(resolve, 20000))]);
       await self.skipWaiting();
     })(),
   );
@@ -73,12 +83,17 @@ self.addEventListener('activate', (event) => {
 
 /** Caches the /_next/static files an HTML page (and its stylesheets) points at. */
 async function cacheReferencedAssets(html, cache) {
-  const urls = new Set(html.match(/\/_next\/static\/[^"'\\\s)<>]+/g) || []);
+  // In HTML a path may hold parentheses ("(site)"); in a stylesheet a url(...) ends at one.
+  const inHtml = /\/_next\/static\/[^"'\\\s<>]+/g;
+  const urls = new Set(html.match(inHtml) || []);
   for (const url of [...urls]) {
     if (!url.endsWith('.css')) continue;
     try {
       const res = await fetch(url);
-      if (!res.ok) continue;
+      if (!res.ok) {
+        await res.body?.cancel();
+        continue;
+      }
       await cache.put(url, res.clone());
       for (const m of (await res.text()).match(/\/_next\/static\/media\/[^"'\\\s)]+/g) || []) urls.add(m);
     } catch {
@@ -90,6 +105,7 @@ async function cacheReferencedAssets(html, cache) {
       if (await cache.match(url)) return;
       const res = await fetch(url);
       if (res.ok) await cache.put(url, res);
+      else await res.body?.cancel(); // an unread body keeps its connection busy
     }),
   );
 }
