@@ -9,6 +9,7 @@
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import type { Json } from '@/lib/supabase/database.types';
+import { clearOfflineData } from './answer-client';
 import { reconcile } from './merge';
 import { parseProgress, type Progress } from './progress';
 import { clearAllLocalProgress, localProgressStore, pendingRestarts } from './storage';
@@ -175,4 +176,5 @@ export async function signOutAndClear(): Promise<void> {
   pushTimers.clear();
   if (isSupabaseConfigured()) await sb().auth.signOut({ scope: 'local' });
   clearAllLocalProgress();
+  clearOfflineData(); // packs and queued answers belong to the account that is leaving
 }

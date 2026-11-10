@@ -14,6 +14,8 @@ export interface AnswerPack {
   salt: string;
   /** True for an adventure that must be bought: its correct offline answers are queued for the server. */
   paid: boolean;
+  /** The adventure's variant ids: a guess naming any other variant is refused, as the server refuses it. */
+  variants?: string[];
   /** Answer key ("chapter", "chapter@variant", "board:x", "lead:x", "recover", "report"…) → hashes. */
   keys: Record<string, string[]>;
   /** For case-report keys: the slot ids that must all be right (non-secret, but needed to count them). */
@@ -41,16 +43,23 @@ export const reportPart = (slot: string, option: string) => `${slot}=${option}`;
 
 /** The key a guess is graded against: "key@variant" where the pack has it, else "key" (as resolveGuess does). */
 export function packKeyFor(pack: AnswerPack, chapterId: string, variant: string | null | undefined): string | null {
-  if (variant && pack.keys[`${chapterId}@${variant}`]) return `${chapterId}@${variant}`;
-  return pack.keys[chapterId] ? chapterId : null;
+  // hasOwn: a chapter called "constructor" must not find Object.prototype's.
+  if (variant && Object.hasOwn(pack.keys, `${chapterId}@${variant}`)) return `${chapterId}@${variant}`;
+  return Object.hasOwn(pack.keys, chapterId) ? chapterId : null;
 }
+
+/** The longest answer the server accepts (check.server.ts); a longer one is refused there, so here too. */
+export const MAX_ANSWER_LENGTH = 200;
 
 /** Grades a guess against a pack, giving exactly the verdict the server's check route would give. */
 export async function gradeWithPack(pack: AnswerPack, chapterId: string, answer: string, variant?: string | null): Promise<Verdict | null> {
+  if (answer.length > MAX_ANSWER_LENGTH) return null;
+  // An unknown variant is an invalid request on the server, not a reason to fall back to the original.
+  if (variant && pack.variants && !pack.variants.includes(variant)) return null;
   const key = packKeyFor(pack, chapterId, variant);
   if (!key) return null;
   const hashes = new Set(pack.keys[key]);
-  const slots = pack.reports?.[key];
+  const slots = pack.reports && Object.hasOwn(pack.reports, key) ? pack.reports[key] : undefined;
   if (chapterId === 'report' && slots) {
     const given = decodeReport(answer);
     const right: string[] = [];

@@ -32,5 +32,5 @@ export async function buildAnswerPack(slug: string, salt = randomBytes(16).toStr
       keys[name] = await Promise.all(values.map((v) => hashValue(salt, name, v)));
     }
   }
-  return { version, salt, paid: !adventure.isDemo, keys, ...(Object.keys(reports).length ? { reports } : {}) };
+  return { version, salt, paid: !adventure.isDemo, variants: adventure.variants?.map((v) => v.id) ?? [], keys, ...(Object.keys(reports).length ? { reports } : {}) };
 }

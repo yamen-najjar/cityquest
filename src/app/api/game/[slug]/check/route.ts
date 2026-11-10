@@ -52,7 +52,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
   // the player at the next chapter), so this path is fail-closed.
   try {
     const authz = await authorizePaidAnswer(slug, guess.adventure, guess.chapterIndex);
-    if (!authz.ok) return NextResponse.json({ error: authz.error }, { status: authz.status });
+    if (!authz.ok) return NextResponse.json({ error: authz.error, ...(authz.firstUnsolved ? { firstUnsolved: authz.firstUnsolved } : {}) }, { status: authz.status });
 
     const { ok: _ok, ...verdict } = grade(guess);
     if (verdict.correct && !guess.board && !(await recordSolve(authz.userId, slug, guess.chapterId))) {

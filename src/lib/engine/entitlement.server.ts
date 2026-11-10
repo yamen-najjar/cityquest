@@ -17,7 +17,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export type AuthzResult =
   | { ok: true; userId: string }
-  | { ok: false; status: 401 | 403 | 503; error: string };
+  | { ok: false; status: 401 | 403 | 503; error: string; /** With 'previous chapter not solved': the first chapter the server has no solve for. */ firstUnsolved?: string };
 
 /** A paid adventure requires an account and a backend; a demo never does. */
 export function requiresEntitlement(adventure: Adventure): boolean {
@@ -74,8 +74,9 @@ export async function authorizePaidAnswer(
       .in('chapter_id', requiredIds);
     if (solErr) return { ok: false, status: 503, error: 'could not verify progress' };
     const solvedIds = new Set((solved ?? []).map((r) => r.chapter_id));
-    if (!requiredIds.every((id) => solvedIds.has(id))) {
-      return { ok: false, status: 403, error: 'previous chapter not solved' };
+    const firstUnsolved = requiredIds.find((id) => !solvedIds.has(id));
+    if (firstUnsolved) {
+      return { ok: false, status: 403, error: 'previous chapter not solved', firstUnsolved };
     }
   }
 
