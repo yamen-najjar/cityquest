@@ -95,6 +95,15 @@ body:has(.theme-site) {
   outline-offset: 3px;
   border-radius: 2px;
 }
+/* The header sticks to the top: focus moved by Tab must not end up underneath it. */
+html:has(.theme-site) {
+  scroll-padding-top: 84px;
+}
+
+/* The skip link moves focus to main; it is not a control, so it gets no ring. */
+.theme-site main:focus-visible {
+  outline: none;
+}
 .theme-site ::selection {
   background: rgba(242, 159, 58, 0.4);
 }
@@ -363,7 +372,8 @@ body:has(.theme-site) {
 .tp-mobile-menu__lang {
   padding-block: 8px 16px;
 }
-@media (min-width: 900px) {
+/* In em, not px: when the text is enlarged, the full header (which needs room) gives way to the menu button sooner. */
+@media (min-width: 56.25em) {
   .tp-nav {
     display: block;
   }

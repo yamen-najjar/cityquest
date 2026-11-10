@@ -270,7 +270,7 @@ export function ChapterView({
               <body>: the chapter's entrance animation (a transform) would otherwise pin it to the article. */}
           {!arrivalInView &&
             createPortal(
-              <div role="region" aria-label={t.checkpoint} className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/25 bg-navy/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:hidden">
+              <div role="region" aria-label={`${t.goToCheckpoint}: ${chapter.checkpoint.name[locale]}`} className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/25 bg-navy/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:hidden">
                 <div className="mx-auto flex max-w-3xl items-center gap-3">
                   <p className="min-w-0 flex-1 truncate text-sm">
                     <span className="text-gold" aria-hidden="true">

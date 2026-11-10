@@ -9,7 +9,7 @@ const FOCUSABLE =
 const stack: symbol[] = [];
 
 function visibleFocusables(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden');
+  return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.tabIndex >= 0 && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden');
 }
 
 /**
@@ -20,13 +20,16 @@ function visibleFocusables(root: HTMLElement): HTMLElement[] {
 export function useModal(ref: RefObject<HTMLElement | null>, onClose?: () => void) {
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
+  // Read while rendering, before the dialog's own autoFocus moves focus: this is the control to give focus back to.
+  const openerRef = useRef<Element | null | undefined>(undefined);
+  if (openerRef.current === undefined) openerRef.current = typeof document === 'undefined' ? null : document.activeElement;
 
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
     const id = Symbol('modal');
     stack.push(id);
-    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const opener = openerRef.current instanceof HTMLElement && openerRef.current !== document.body ? openerRef.current : null;
 
     // Focus lands inside the dialog even when no element asked for it (autoFocus runs before this).
     if (!root.contains(document.activeElement)) (visibleFocusables(root)[0] ?? root).focus();

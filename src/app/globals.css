@@ -46,6 +46,12 @@ body {
   border-radius: 6px;
 }
 
+/* The game's sticky top bar (and the "next step" bar at the bottom on phones) must not cover the focused control. */
+html:has(.game-bar) {
+  scroll-padding-top: 8.5rem;
+  scroll-padding-bottom: 5.5rem;
+}
+
 /* A radio hidden inside a styled card (sr-only): the card shows the keyboard focus the radio cannot. */
 .focus-card:has(:focus-visible) {
   outline: 2px solid var(--gold);

@@ -11,6 +11,8 @@ export default function NotFound() {
   const t = getDictionary(locale).notFound;
   return (
     <div className="container-cq flex min-h-[50vh] flex-col items-start justify-center py-20">
+      {/* The page title says what happened (React 19 moves it into the head). */}
+      <title>{`${t.title} · CityQuest`}</title>
       <p className="eyebrow">404</p>
       <h1 className="mt-3 font-display text-5xl font-semibold">{t.title}</h1>
       <p className="mt-4 text-ivory-dim">{t.text}</p>

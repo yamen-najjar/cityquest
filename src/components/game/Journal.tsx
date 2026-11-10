@@ -134,7 +134,7 @@ export function Journal({
           className="flex shrink-0 gap-1 overflow-x-auto overflow-y-hidden border-b border-white/10 px-3 py-2"
           tabClassName={(on) => `min-h-[44px] whitespace-nowrap rounded-full px-4 py-2 text-sm ${on ? 'bg-gold text-navy' : 'text-ivory-dim hover:text-ivory'}`}
         />
-        <div className="flex-1 overflow-y-auto p-5" role="tabpanel" id={panelId('journal')} aria-labelledby={tabId('journal', tab)}>
+        <div className="flex-1 scroll-pb-24 overflow-y-auto p-5" role="tabpanel" id={panelId('journal')} aria-labelledby={tabId('journal', tab)}>
           {tab === 'board' && <EvidenceBoard a={a} p={p} locale={locale} t={t} onDeduced={(questionId) => dispatch({ type: 'deduce', questionId })} />}
 
           {tab === 'leads' && <LeadsPanel a={a} p={p} locale={locale} t={t} dispatch={dispatch} onNotice={onNotice} />}

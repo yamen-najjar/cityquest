@@ -263,7 +263,7 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
   return (
     <div className="flex min-h-dvh flex-col">
       {/* Game bar */}
-      <header className="sticky top-0 z-30 border-b border-white/5 bg-navy/90 backdrop-blur">
+      <header className="game-bar sticky top-0 z-30 border-b border-white/5 bg-navy/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4">
           <Link href={`/${locale}/adventures/${a.slug}`} className="flex items-center gap-2 text-sm text-ivory-dim hover:text-ivory" aria-label={t.exit}>
             <LogoMark className="h-7 w-7" />
@@ -278,7 +278,6 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
               setMutedState(next);
               if (!next) unlockAudio();
             }}
-            aria-pressed={!muted}
             title={muted ? t.sound.off : t.sound.on}
             className={`flex h-9 w-9 items-center justify-center rounded-full border text-sm ${muted ? 'border-white/15 text-ivory-mute' : 'border-gold bg-gold/15 text-gold'}`}
           >
@@ -288,11 +287,10 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
           <button
             type="button"
             onClick={() => setThree(!three)}
-            aria-pressed={three}
             title={three ? t.threeD.on : t.threeD.off}
             className={`min-h-[36px] rounded-full border px-2.5 text-xs font-bold ${three ? 'border-gold bg-gold/15 text-gold' : 'border-white/15 text-ivory-mute'}`}
           >
-            {t.threeD.toggle}
+            <span aria-hidden="true">{t.threeD.toggle}</span>
             <span className="sr-only">{three ? t.threeD.on : t.threeD.off}</span>
           </button>
           <LanguageSwitcher locale={locale} label={languageLabel} />
@@ -314,29 +312,29 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
             {a.phone?.length ? (
               <button type="button" onClick={() => setPhoneOpen(true)} className="chip relative min-h-[36px] hover:border-gold/50" aria-haspopup="dialog">
                 <span aria-hidden="true">📱</span> {t.phone.open}
+                {unreadCount > 0 && ' '}
                 {unreadCount > 0 && <span className="rounded-full bg-danger px-1.5 text-[10px] font-bold text-white">{unreadCount}</span>}
               </button>
             ) : null}
             <button type="button" onClick={() => setJournalOpen(true)} className="chip min-h-[36px] hover:border-gold/50" aria-haspopup="dialog">
-              <span aria-hidden="true">📜</span> {t.journal.open}
+              <span aria-hidden="true">📜</span> {t.journal.open}{' '}
               <span className="rounded-full bg-gold px-1.5 text-[10px] font-bold text-navy">{p.inventory.length}</span>
             </button>
             <button
               type="button"
               onClick={() => setShowTimer((s) => !s)}
               className="chip min-h-[36px] tabular-nums hover:border-gold/50"
-              aria-pressed={timerOn}
               disabled={p.mode === 'expert'}
             >
-              {timerOn ? formatDuration(elapsed) : t.timer}
-              <span className="sr-only">{timerOn ? t.hideTimer : t.showTimer}</span>
+              <span aria-hidden="true">{timerOn ? formatDuration(elapsed) : t.timer}</span>
+              <span className="sr-only">{timerOn ? `${t.hideTimer} (${formatDuration(elapsed)})` : t.showTimer}</span>
             </button>
           </div>
         )}
         {p && !onStart && a.pursuit && !isFinished(p) && <PursuitMeter pursuit={a.pursuit} level={level} locale={locale} />}
       </header>
 
-      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-8">
+      <main id="main" tabIndex={-1} className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-8">
         {onStart || !p ? (
           <StartScreen
             a={a}
