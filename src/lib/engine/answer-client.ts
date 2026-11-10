@@ -85,7 +85,10 @@ export async function userIdWithFallback(read: () => Promise<string | null>, env
   const id = await read();
   try {
     if (id) env.storage?.setItem(LAST_USER_KEY, id);
-    else if (!env.isOnline()) return env.storage?.getItem(LAST_USER_KEY) ?? null;
+    // Online and signed out: the session really ended (the user left, or it was revoked), so the last
+    // user must not stand in for whoever uses the phone next.
+    else if (env.isOnline()) env.storage?.removeItem(LAST_USER_KEY);
+    else return env.storage?.getItem(LAST_USER_KEY) ?? null;
   } catch {
     /* storage unavailable */
   }
@@ -101,12 +104,15 @@ export async function userIdWithFallback(read: () => Promise<string | null>, env
 export async function rewindLocalSave(slug: string, chapterId: string): Promise<void> {
   try {
     const [{ getAdventure }, { localProgressStore, pendingRestarts }] = await Promise.all([import('@/content/adventures'), import('./storage')]);
+    const { reconcileNow, reconcileSettled } = await import('./sync');
+    // A reconcile that is already running has pulled the account's (ahead) copy and will write it over the
+    // device when it merges: let it finish first, then rewind, so nothing of ours is overwritten.
+    await reconcileSettled();
     const adventure = getAdventure(slug);
     const saved = localProgressStore.load(slug);
     if (!adventure || !saved) return;
     localProgressStore.save(rewindTo(saved, adventure.chapters.map((c) => c.id), chapterId));
     pendingRestarts.add(slug);
-    const { reconcileNow } = await import('./sync');
     void reconcileNow();
   } catch {
     /* the game screen rewinds its own copy too */
@@ -344,13 +350,13 @@ export async function checkAnswer(slug: string, body: CheckBody, env: Env = brow
   if (env.isOnline()) {
     try {
       // Whatever was solved offline reaches the server before this check, but never holds it up for long.
-      await Promise.race([flushQueue(slug, env), new Promise((resolve) => setTimeout(resolve, FLUSH_BUDGET_MS))]);
+      await Promise.race([flushQueue(slug, env).catch((): FlushResult => 'pending'), new Promise((resolve) => setTimeout(resolve, FLUSH_BUDGET_MS))]);
       let sent = await postCheck(env, slug, body);
       if (orderRefusal(sent)) {
         // The server lacks an earlier chapter. Usually only because the queue has not been sent yet (the
         // wait above ran out): finish that first, then ask again. Only when everything has been sent and a
         // fresh check is still refused does the game go back; the queue is owned by the flush, never cleared here.
-        const flushed = await flushQueue(slug, env);
+        const flushed = await flushQueue(slug, env).catch((): FlushResult => 'pending');
         if (flushed === 'diverged') return { status: 'failed', reason: 'diverged' };
         if (flushed === 'pending') return { status: 'failed', reason: 'network' };
         sent = await postCheck(env, slug, body);

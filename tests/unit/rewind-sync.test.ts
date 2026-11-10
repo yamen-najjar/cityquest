@@ -10,12 +10,18 @@ const ids = adventure.chapters.map((c) => c.id);
 
 /** An in-memory account: one table, the way sync.ts uses it. */
 const remote = new Map<string, unknown>();
+/** While set, the account's answer to a pull is held back (a reconcile that is under way). */
+let pullGate: Promise<void> | null = null;
 vi.mock('@/lib/supabase/config', () => ({ isSupabaseConfigured: () => true }));
 vi.mock('@/lib/supabase/client', () => ({
   createClient: () => ({
     auth: { getSession: async () => ({ data: { session: { user: { id: 'u1' } } } }) },
     from: () => ({
-      select: async () => ({ data: [...remote].map(([adventure, data]) => ({ adventure, data })), error: null }),
+      select: async () => {
+        const snapshot = [...remote].map(([adventure, data]) => ({ adventure, data }));
+        if (pullGate) await pullGate;
+        return { data: snapshot, error: null };
+      },
       upsert: async (row: { adventure: string; data: unknown }) => {
         remote.set(row.adventure, row.data);
         return { error: null };
@@ -27,6 +33,7 @@ vi.mock('@/lib/supabase/client', () => ({
 
 const local = new Map<string, string>();
 beforeEach(() => {
+  pullGate = null;
   remote.clear();
   local.clear();
   (globalThis as { window?: unknown }).window = {
@@ -79,5 +86,29 @@ describe('a rewound save and the account', () => {
     remote.set('lost-manuscript', ahead);
     await reconcileNow();
     expect(localProgressStore.load('lost-manuscript')!.solved).toHaveLength(3);
+  });
+
+  it('survives a reconcile that is already running when the game is taken back', async () => {
+    const { reconcileNow } = await import('@/lib/engine/sync');
+    const { localProgressStore } = await import('@/lib/engine/storage');
+    const { rewindLocalSave } = await import('@/lib/engine/answer-client');
+
+    const ahead = playedThrough(3);
+    localProgressStore.save(ahead);
+    remote.set('lost-manuscript', ahead);
+
+    let release: () => void = () => {};
+    pullGate = new Promise<void>((r) => (release = r));
+    const running = reconcileNow(); // e.g. the "online" event: it has pulled the account's ahead copy
+    await new Promise((r) => setTimeout(r, 0));
+    const rewinding = rewindLocalSave('lost-manuscript', ids[1]!);
+    await new Promise((r) => setTimeout(r, 0));
+    pullGate = null;
+    release();
+    await Promise.all([running, rewinding]);
+    await reconcileNow();
+
+    expect(localProgressStore.load('lost-manuscript')!.solved).toEqual([ids[0]]);
+    expect((remote.get('lost-manuscript') as Progress).solved).toEqual([ids[0]]);
   });
 });
