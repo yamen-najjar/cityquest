@@ -257,7 +257,7 @@ const en = {
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
     tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
-    offline: { ready: 'Ready for offline play: this adventure is on your device.', active: 'No reception: answers are checked on this device.', noPack: 'No reception, and this adventure isn’t on this device yet. Open it once with internet.' },
+    offline: { ready: 'Ready for offline play: this adventure is on your device.', active: 'No reception: answers are checked on this device.', noPack: 'No reception, and this adventure isn’t on this device yet. Open it once with internet.', diverged: 'Part of your offline progress could not be confirmed, so the game took you back a step. Solve that chapter again to continue.' },
     variant: { title: 'Another truth', text: 'You have solved this case before. Same city, same witnesses — but this time the clues may lead to someone else.' },
     junior: { label: 'For young detectives' },
     extras: {

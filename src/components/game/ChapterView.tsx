@@ -22,7 +22,7 @@ import { OrderStrips } from './puzzles/OrderStrips';
 import { Reveal } from './puzzles/Reveal';
 import { SymbolEquations } from './SymbolEquations';
 
-type Feedback = 'correct' | 'incorrect' | 'empty' | 'choose' | 'network' | 'nopack' | 'slow' | null;
+type Feedback = 'correct' | 'incorrect' | 'empty' | 'choose' | 'network' | 'nopack' | 'diverged' | 'slow' | null;
 export type HeadingRef = React.RefObject<HTMLHeadingElement | null>;
 
 export function ChapterView({
@@ -159,7 +159,7 @@ export function ChapterView({
         return;
       }
       if (res.status === 'failed') {
-        setFeedback(res.noPack ? 'nopack' : 'network');
+        setFeedback(res.reason);
         return;
       }
       const { correct } = res;
@@ -196,6 +196,7 @@ export function ChapterView({
     choose: t.chooseOne,
     network: t.networkError,
     nopack: t.offline.noPack,
+    diverged: t.offline.diverged,
     slow: t.tooFast,
   };
 

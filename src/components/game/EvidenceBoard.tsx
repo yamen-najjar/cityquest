@@ -12,7 +12,7 @@ import type { Progress } from '@/lib/engine/progress';
 import { ItemIcon } from './ItemIcon';
 import { initials } from './puzzles/Interrogation';
 
-type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack';
+type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack' | 'diverged';
 
 /**
  * The evidence board, a tab of the case journal. Open questions appear as the story reaches them; the team
@@ -149,7 +149,7 @@ function Investigation({
     try {
       const res = await checkAnswer(a.slug, { chapterId: `board:${q.id}`, answer: boardAnswer(person, pinned), variant: p.variant });
       if (res.status === 'slow') return setStatus('slow');
-      if (res.status === 'failed') return setStatus(res.noPack ? 'nopack' : 'network');
+      if (res.status === 'failed') return setStatus(res.reason);
       const { correct } = res;
       if (correct) {
         sfx('correct');
@@ -164,7 +164,7 @@ function Investigation({
     }
   }
 
-  const message = status === 'wrong' ? b.wrong : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : null;
+  const message = status === 'wrong' ? b.wrong : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : status === 'diverged' ? t.offline.diverged : null;
 
   return (
     <div className="space-y-5">

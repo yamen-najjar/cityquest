@@ -261,7 +261,7 @@ const nl: Dictionary = {
     emptyAnswer: 'Typ eerst een antwoord.',
     networkError: 'Je antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer het opnieuw.',
     tooFast: 'Te veel pogingen in korte tijd. Wacht even en probeer het dan opnieuw.',
-    offline: { ready: 'Klaar voor offline spelen: dit avontuur staat op je toestel.', active: 'Geen bereik: antwoorden worden op dit toestel gecontroleerd.', noPack: 'Geen bereik, en dit avontuur staat nog niet op dit toestel. Open het één keer met internet.' },
+    offline: { ready: 'Klaar voor offline spelen: dit avontuur staat op je toestel.', active: 'Geen bereik: antwoorden worden op dit toestel gecontroleerd.', noPack: 'Geen bereik, en dit avontuur staat nog niet op dit toestel. Open het één keer met internet.', diverged: 'Een deel van je offline voortgang kon niet worden bevestigd, daarom ben je een stap teruggezet. Los dat hoofdstuk opnieuw op om verder te gaan.' },
     variant: { title: 'Een andere waarheid', text: 'Je hebt deze zaak al eens opgelost. Dezelfde stad, dezelfde getuigen — maar deze keer leiden de sporen misschien naar iemand anders.' },
     junior: { label: 'Voor jonge speurders' },
     extras: {

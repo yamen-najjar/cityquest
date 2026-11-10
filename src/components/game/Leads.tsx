@@ -12,13 +12,13 @@ import type { Action, Progress } from '@/lib/engine/progress';
 import { CaseDocumentView } from './CaseFiles';
 import { OrderStrips } from './puzzles/OrderStrips';
 
-type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack';
+type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack' | 'diverged';
 
 /** Sends a lead's answer to the server, like every puzzle. */
 async function checkLead(slug: string, leadId: string, answer: string, variant: string | null): Promise<Status | 'correct'> {
   const res = await checkAnswer(slug, { chapterId: `lead:${leadId}`, answer, variant });
   if (res.status === 'slow') return 'slow';
-  if (res.status === 'failed') return res.noPack ? 'nopack' : 'network';
+  if (res.status === 'failed') return res.reason;
   return res.correct ? 'correct' : 'wrong';
 }
 
@@ -171,7 +171,7 @@ function LeadView({
     if (secret) onNotice(fmt(t.phone.secretFound, { name: secret.title[locale] }));
   };
 
-  const message = status === 'wrong' ? t.incorrect : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : null;
+  const message = status === 'wrong' ? t.incorrect : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : status === 'diverged' ? t.offline.diverged : null;
 
   return (
     <div className="space-y-5">

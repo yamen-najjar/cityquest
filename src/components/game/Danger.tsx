@@ -56,7 +56,7 @@ export function CaughtDialog({
   const item = p.seized ? a.items.find((i) => i.id === p.seized) : undefined;
   const [answer, setAnswer] = useState('');
   const [hints, setHints] = useState(0);
-  const [status, setStatus] = useState<'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack'>('idle');
+  const [status, setStatus] = useState<'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack' | 'diverged'>('idle');
   const name = pursuit.name[locale];
 
   async function submit(e: React.FormEvent) {
@@ -66,7 +66,7 @@ export function CaughtDialog({
     try {
       const res = await checkAnswer(a.slug, { chapterId: 'recover', answer, variant: p.variant });
       if (res.status === 'slow') return setStatus('slow');
-      if (res.status === 'failed') return setStatus(res.noPack ? 'nopack' : 'network');
+      if (res.status === 'failed') return setStatus(res.reason);
       const { correct } = res;
       if (correct) {
         sfx('item');
@@ -80,7 +80,7 @@ export function CaughtDialog({
     }
   }
 
-  const message = status === 'wrong' ? t.incorrect : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : null;
+  const message = status === 'wrong' ? t.incorrect : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : status === 'diverged' ? t.offline.diverged : null;
 
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center bg-black/80 sm:items-center sm:p-4">
