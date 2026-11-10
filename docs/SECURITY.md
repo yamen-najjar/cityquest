@@ -69,6 +69,27 @@ pack does not outlive the right to it.
   check as any request. Board, lead, report and recover answers are never recorded server-side, so they are
   never queued.
 
+**Shared devices and sign-out.** The pack and the queue are kept per adventure in `localStorage`, so they
+are tied to the account:
+
+- A paid pack is stored with the id of the user it was fetched for, and grades only for that user; signed
+  out, or as someone else, it counts as "no pack". Every queued answer carries the user id too. Only the
+  signed-in user's own entries are ever sent; another user's are discarded, and nothing is sent while signed
+  out.
+- `signOutAndClear` removes every `cityquest:pack:*` and `cityquest:queue:*` key and stops a flush that is
+  under way (`clearOfflineData`), so a paid pack does not stay usable after sign-out and the next player on
+  the browser cannot flush the previous player's answers.
+- The admin preview switches the whole offline layer off (`offlineSupport={false}`).
+
+**When the server refuses an offline solve.** A queued solve can be refused: the answer key changed since the
+pack was stored (a 200 with `correct: false`), the player no longer owns the adventure, or an earlier chapter
+never reached the server. Left alone, the device would be ahead of `solves` and every later online check would
+fail with 403 "previous chapter not solved". So the flush refreshes the pack first, and on a refusal drops the
+rest of the queue (later solves depend on the refused one) and takes the saved game back to the first chapter
+the server lacks (`rewindTo`; the 403 body names it as `firstUnsolved`). Notes and items are kept. The
+player sees a calm message that part of their offline progress could not be confirmed. The same happens
+when an online check meets that 403. A 401, 429, 5xx or network failure only keeps the queue for later.
+
 **The service worker** (`public/sw.js`) caches only the site's own static files, pages and media. It never
 handles `/api/*`, `/admin*`, `/auth`, `/account`, `/newsletter`, or any other origin (Supabase included), so
 no answer, token or personal page is stored by it. Map tiles are cached only after the player has viewed
