@@ -8,8 +8,18 @@ const FOCUSABLE =
 // Dialogs can stack (the item viewer opens over the journal): only the one on top reacts to Escape and Tab.
 const stack: symbol[] = [];
 
+/** An unchecked radio in a group that has a checked one is not a tab stop (the arrow keys reach it). */
+function skippedRadio(el: HTMLElement): boolean {
+  if (!(el instanceof HTMLInputElement) || el.type !== 'radio' || el.checked || !el.name) return false;
+  const group = el.form ?? el.getRootNode();
+  const peers = (group as ParentNode).querySelectorAll<HTMLInputElement>(`input[type="radio"][name="${CSS.escape(el.name)}"]`);
+  return Array.from(peers).some((r) => r.checked);
+}
+
 function visibleFocusables(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.tabIndex >= 0 && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden');
+  return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+    (el) => el.tabIndex >= 0 && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden' && !skippedRadio(el),
+  );
 }
 
 /**
@@ -68,7 +78,8 @@ export function useModal(ref: RefObject<HTMLElement | null>, onClose?: () => voi
       const at = stack.indexOf(id);
       if (at >= 0) stack.splice(at, 1);
       // Back to the control that opened the dialog, unless it is gone or focus has already moved on.
-      if (opener?.isConnected && (document.activeElement === document.body || root.contains(document.activeElement) || !document.activeElement)) opener.focus();
+      // A simulated unmount (React strict mode in development) leaves the dialog in place: nothing to hand back.
+      if (!root.isConnected && opener?.isConnected && (document.activeElement === document.body || root.contains(document.activeElement) || !document.activeElement)) opener.focus();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

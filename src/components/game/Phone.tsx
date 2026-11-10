@@ -151,7 +151,7 @@ export function Phone({
           )}
 
           {!doc && !page && tab === 'messages' && (
-            <ol className="space-y-4" aria-live="polite">
+            <ol className="space-y-4">
               {messages.length === 0 && <li className="text-sm text-ivory-dim">{t.phone.empty}</li>}
               {messages.map((m) => {
                 const name = senderName(a, m.from, locale, t);

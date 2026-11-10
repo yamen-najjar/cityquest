@@ -90,3 +90,61 @@ test('the game screen stays within a 320px phone in Arabic', async ({ page }) =>
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await noHorizontalScroll(page);
 });
+
+test('the journal tabs mirror their arrow keys in Arabic', async ({ page }) => {
+  await fresh(page, '/ar/play/lost-manuscript');
+  await page.locator('form button[type="submit"]').click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await page.locator('header button[aria-haspopup="dialog"]').last().click();
+  const tabs = page.getByRole('dialog').getByRole('tab');
+  await tabs.first().focus();
+  // Right to left: the next tab lies to the left.
+  await page.keyboard.press('ArrowLeft');
+  await expect(tabs.nth(1)).toBeFocused();
+  await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+  await page.keyboard.press('ArrowRight');
+  await expect(tabs.first()).toBeFocused();
+});
+
+test('hint and answer messages live in regions that exist before their text arrives', async ({ page }) => {
+  await fresh(page, '/en/play/lost-manuscript');
+  await page.getByRole('button', { name: 'Start the adventure' }).click();
+  await page.getByRole('button', { name: /Confirm manually|I am at the checkpoint/ }).click();
+  const puzzle = page.locator('section[aria-labelledby="puzzle-title"]');
+  const hints = puzzle.locator('div[aria-live="polite"]');
+  const feedback = puzzle.locator('#feedback');
+  await expect(hints).toBeAttached();
+  await expect(hints).toBeEmpty();
+  await expect(feedback).toHaveAttribute('role', 'status');
+  await expect(feedback).toBeEmpty();
+  await page.getByRole('button', { name: 'Show a hint' }).click();
+  await expect(hints).toContainText('Hint 1 of 3');
+  await page.getByRole('textbox', { name: /answer/i }).fill('bridge');
+  await page.getByRole('button', { name: 'Check answer' }).click();
+  await expect(feedback).toContainText('Not quite.');
+});
+
+test('the 3D item viewer stacks over the journal: Escape closes only the top dialog and focus goes back', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('cityquest:3d', 'on'));
+  await page.goto('/en/play/neckar-ring');
+  await page.evaluate(() => {
+    const now = Date.now();
+    const p = { version: 2, adventure: 'neckar-ring', mode: 'classic', chapter: 0, stage: 'puzzle', solved: [], inventory: ['cursed-ring'], hintsUsed: {}, wrongAttempts: {}, asked: {}, notes: '', deductions: [], choices: {}, caught: 0, relief: 0, seized: null, recovering: false, phoneRead: [], replies: {}, leadsSolved: [], secrets: [], reportPicks: {}, reportConfirmed: [], reportTries: 0, reportDone: null, variant: null, decision: null, team: { name: '', players: 2 }, startedAt: now, finishedAt: null, elapsedMs: 0, lastActiveAt: now };
+    localStorage.setItem('cityquest:progress:neckar-ring', JSON.stringify(p));
+    sessionStorage.setItem('cityquest:playing', 'neckar-ring');
+  });
+  await page.reload();
+  await page.getByRole('button', { name: /Journal/ }).click();
+  const journal = page.getByRole('dialog', { name: 'Case journal' });
+  await journal.getByRole('tab', { name: /Items/ }).click();
+  const view = journal.getByRole('button', { name: /View in 3D/ }).first();
+  await view.click();
+  const viewer = page.getByRole('dialog').filter({ has: page.locator('#viewer-title') });
+  await expect(viewer).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(viewer).toHaveCount(0);
+  await expect(journal).toBeVisible();
+  await expect(view).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(journal).toHaveCount(0);
+});

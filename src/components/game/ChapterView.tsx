@@ -215,11 +215,11 @@ export function ChapterView({
     <article className="animate-rise" aria-labelledby="chapter-title">
       <div className="flex items-start justify-between gap-3">
         <p className="eyebrow">{fmt(t.chapterOf, { n: index + 1, total })}</p>
-        <button type="button" onClick={readAloud} className="chip min-h-[44px] hover:border-gold/50" aria-pressed={reading}>
+        <button type="button" onClick={readAloud} className="chip min-h-[44px] hover:border-gold/50">
           <span aria-hidden="true">{reading ? '■' : '🔊'}</span> {reading ? t.sound.stop : t.sound.read}
         </button>
       </div>
-      <h1 id="chapter-title" ref={headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold leading-tight sm:text-5xl">
+      <h1 id="chapter-title" ref={p.stage === 'solved' ? undefined : headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold leading-tight sm:text-5xl">
         {chapter.title[locale]}
       </h1>
       {three && p.stage === 'travel' && chapter.scenes?.intro && (
@@ -482,7 +482,8 @@ export function ChapterView({
       {p.stage === 'solved' && (
         <section className="mt-10" aria-labelledby="solved-title">
           <div className="card border-gold/30 p-6">
-            <h2 id="solved-title" className="font-display text-3xl text-gold">
+            {/* Focus lands here, so "Correct!" is announced once, by the focus move. */}
+            <h2 id="solved-title" ref={headingRef} tabIndex={-1} className="font-display text-3xl text-gold">
               {t.correct}
             </h2>
             {three && chapter.scenes?.success && (
