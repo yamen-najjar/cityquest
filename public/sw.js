@@ -24,6 +24,9 @@ const ALL_CACHES = [STATIC, PAGES, MEDIA, TILES];
 const IGNORE_VARY = { ignoreVary: true };
 const LOCALES = ['de', 'en', 'nl', 'ar'];
 const NETWORK_TIMEOUT_MS = 3000;
+/** The worker's own background fetches (install, warm-up) give up after this, so a stalled one never blocks it. */
+const BACKGROUND_FETCH_TIMEOUT_MS = 20000;
+const background = (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(BACKGROUND_FETCH_TIMEOUT_MS) });
 const TILE_HOST = 'tile.openstreetmap.org';
 const MAX_TILES = 300;
 const TILE_MAX_AGE_MS = 14 * 24 * 3600 * 1000;
@@ -54,7 +57,7 @@ self.addEventListener('install', (event) => {
       const precache = (async () => {
         for (const locale of LOCALES) {
           try {
-            const res = await fetch(offlineUrl(locale), { credentials: 'same-origin' });
+            const res = await background(offlineUrl(locale), { credentials: 'same-origin' });
             if (!res.ok) {
               await res.body?.cancel();
               continue;
@@ -89,7 +92,7 @@ async function cacheReferencedAssets(html, cache) {
   for (const url of [...urls]) {
     if (!url.endsWith('.css')) continue;
     try {
-      const res = await fetch(url);
+      const res = await background(url);
       if (!res.ok) {
         await res.body?.cancel();
         continue;
@@ -103,7 +106,7 @@ async function cacheReferencedAssets(html, cache) {
   await Promise.allSettled(
     [...urls].map(async (url) => {
       if (await cache.match(url)) return;
-      const res = await fetch(url);
+      const res = await background(url);
       if (res.ok) await cache.put(url, res);
       else await res.body?.cancel(); // an unread body keeps its connection busy
     }),
@@ -271,7 +274,7 @@ async function warm({ page, urls }) {
   if (pageUrl.origin === self.location.origin && !PRIVATE_PATH.test(pageUrl.pathname)) {
     try {
       const pages = await caches.open(PAGES);
-      const res = await fetch(pageUrl.pathname, { headers: { Accept: 'text/html' } });
+      const res = await background(pageUrl.pathname, { headers: { Accept: 'text/html' } });
       if (res.ok && res.type === 'basic') {
         await pages.put(pageUrl.pathname, res.clone());
         await cacheReferencedAssets(await res.text(), await caches.open(STATIC));
@@ -296,7 +299,7 @@ async function warm({ page, urls }) {
       const cache = await caches.open(cacheName);
       let res = await cache.match(url.pathname + url.search, IGNORE_VARY);
       if (!res) {
-        res = await fetch(url.pathname + url.search);
+        res = await background(url.pathname + url.search);
         if (!cacheable(res)) throw new Error('not cacheable');
         await cache.put(url.pathname + url.search, res.clone());
         stats.cached++;

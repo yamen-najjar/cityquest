@@ -131,7 +131,13 @@ export function useOfflineSupport(a: Adventure): { offline: boolean; ready: bool
         const pack = loadPack(slug);
         if (!pack || cancelled) return;
         if (marker() === pack.version) return syncReady();
-        if (await warmUp(a)) {
+        // The worker may still be installing on the very first visit, or a request may stall: try a few times.
+        let warmed = false;
+        for (let attempt = 0; attempt < 3 && !warmed && !cancelled && online(); attempt++) {
+          if (attempt) await new Promise((r) => setTimeout(r, 3000 * attempt));
+          warmed = await warmUp(a);
+        }
+        if (warmed) {
           try {
             window.localStorage.setItem(READY_PREFIX + slug, pack.version);
           } catch {
