@@ -7,6 +7,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { sfx, speak, stopSpeaking } from '@/lib/audio';
+import { checkAnswer } from '@/lib/engine/answer-client';
 import { threatLevel, type Action, type Progress, gentle } from '@/lib/engine/progress';
 import { prefersReducedMotion } from '../three/support';
 import { DemoMap } from './DemoMap';
@@ -21,7 +22,7 @@ import { OrderStrips } from './puzzles/OrderStrips';
 import { Reveal } from './puzzles/Reveal';
 import { SymbolEquations } from './SymbolEquations';
 
-type Feedback = 'correct' | 'incorrect' | 'empty' | 'choose' | 'network' | 'slow' | null;
+type Feedback = 'correct' | 'incorrect' | 'empty' | 'choose' | 'network' | 'nopack' | 'slow' | null;
 export type HeadingRef = React.RefObject<HTMLHeadingElement | null>;
 
 export function ChapterView({
@@ -152,17 +153,16 @@ export function ChapterView({
     setChecking(true);
     setFeedback(null);
     try {
-      const res = await fetch(`/api/game/${a.slug}/check`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chapterId: chapter.id, answer: guess, variant: p.variant ?? undefined }),
-      });
-      if (res.status === 429) {
+      const res = await checkAnswer(a.slug, { chapterId: chapter.id, answer: guess, variant: p.variant });
+      if (res.status === 'slow') {
         setFeedback('slow');
         return;
       }
-      if (!res.ok) throw new Error(String(res.status));
-      const { correct } = (await res.json()) as { correct: boolean };
+      if (res.status === 'failed') {
+        setFeedback(res.noPack ? 'nopack' : 'network');
+        return;
+      }
+      const { correct } = res;
       if (correct) {
         setFeedback('correct');
         sfx(useLock ? 'unlock' : 'correct');
@@ -195,6 +195,7 @@ export function ChapterView({
     empty: t.emptyAnswer,
     choose: t.chooseOne,
     network: t.networkError,
+    nopack: t.offline.noPack,
     slow: t.tooFast,
   };
 

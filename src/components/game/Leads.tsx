@@ -6,27 +6,20 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { sfx, speak, stopSpeaking } from '@/lib/audio';
+import { checkAnswer } from '@/lib/engine/answer-client';
 import { confrontAnswer, timelineAnswer, visibleLeads } from '@/lib/engine/kit';
 import type { Action, Progress } from '@/lib/engine/progress';
 import { CaseDocumentView } from './CaseFiles';
 import { OrderStrips } from './puzzles/OrderStrips';
 
-type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network';
+type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack';
 
 /** Sends a lead's answer to the server, like every puzzle. */
 async function checkLead(slug: string, leadId: string, answer: string, variant: string | null): Promise<Status | 'correct'> {
-  try {
-    const res = await fetch(`/api/game/${slug}/check`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chapterId: `lead:${leadId}`, answer, variant: variant ?? undefined }),
-    });
-    if (res.status === 429) return 'slow';
-    if (!res.ok) return 'network';
-    return ((await res.json()) as { correct: boolean }).correct ? 'correct' : 'wrong';
-  } catch {
-    return 'network';
-  }
+  const res = await checkAnswer(slug, { chapterId: `lead:${leadId}`, answer, variant });
+  if (res.status === 'slow') return 'slow';
+  if (res.status === 'failed') return res.noPack ? 'nopack' : 'network';
+  return res.correct ? 'correct' : 'wrong';
 }
 
 /**
@@ -178,7 +171,7 @@ function LeadView({
     if (secret) onNotice(fmt(t.phone.secretFound, { name: secret.title[locale] }));
   };
 
-  const message = status === 'wrong' ? t.incorrect : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : null;
+  const message = status === 'wrong' ? t.incorrect : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : null;
 
   return (
     <div className="space-y-5">
