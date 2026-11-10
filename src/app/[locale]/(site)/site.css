@@ -84,10 +84,26 @@ body:has(.theme-site) {
   text-wrap: pretty;
 }
 
+/* Long compounds (Dutch, German) must wrap instead of pushing the page wider than a 320px screen. */
+:where(.theme-site) :is(h1, h2, h3, h4) {
+  /* Hyphenation is preferred, but not every browser has a dictionary: the wrap fallback always works. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
 .theme-site :focus-visible {
   outline: 2px solid var(--text);
   outline-offset: 3px;
   border-radius: 2px;
+}
+/* The header sticks to the top: focus moved by Tab must not end up underneath it. */
+html:has(.theme-site) {
+  scroll-padding-top: 84px;
+}
+
+/* The skip link moves focus to main; it is not a control, so it gets no ring. */
+.theme-site main:focus-visible {
+  outline: none;
 }
 .theme-site ::selection {
   background: rgba(242, 159, 58, 0.4);
@@ -357,7 +373,8 @@ body:has(.theme-site) {
 .tp-mobile-menu__lang {
   padding-block: 8px 16px;
 }
-@media (min-width: 900px) {
+/* In em, not px: when the text is enlarged, the full header (which needs room) gives way to the menu button sooner. */
+@media (min-width: 56.25em) {
   .tp-nav {
     display: block;
   }

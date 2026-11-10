@@ -136,7 +136,7 @@ export function StartScreen({
             <legend className="text-sm">{t.players}</legend>
             <div className="mt-2 flex gap-2">
               {Array.from({ length: MAX_TEAM }, (_, i) => i + 1).map((n) => (
-                <label key={n} className={`flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border text-sm font-semibold ${players === n ? 'border-gold bg-gold text-navy' : 'border-white/15'}`}>
+                <label key={n} className={`focus-card flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border text-sm font-semibold ${players === n ? 'border-gold bg-gold text-navy' : 'border-ivory-mute/65'}`}>
                   <input type="radio" name="players" value={n} checked={players === n} onChange={() => setPlayers(n)} className="sr-only" />
                   {n}
                 </label>
@@ -147,7 +147,7 @@ export function StartScreen({
             <legend className="text-sm">{t.modes.title}</legend>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {MODES.map((m) => (
-                <label key={m} className={`cursor-pointer rounded-xl border p-3 transition ${mode === m ? 'border-gold bg-gold/10' : 'border-white/15 hover:border-white/30'}`}>
+                <label key={m} className={`focus-card cursor-pointer rounded-xl border p-3 transition ${mode === m ? 'border-gold bg-gold/10' : 'border-ivory-mute/65 hover:border-ivory-mute'}`}>
                   <input type="radio" name="mode" value={m} checked={mode === m} onChange={() => setMode(m)} className="sr-only" />
                   <span className="block font-semibold">{t.modes[m].name}</span>
                   <span className="mt-1 block text-xs text-ivory-dim">{t.modes[m].text}</span>

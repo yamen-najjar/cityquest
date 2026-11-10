@@ -32,7 +32,7 @@
   }
 
   /* Contents */
-  .hm-contents { padding-block: clamp(72px, 10vw, 140px) clamp(64px, 8vw, 120px); display: grid; gap: 40px; }
+  .hm-contents { padding-block: clamp(72px, 10vw, 140px) clamp(64px, 8vw, 120px); display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .hm-contents h2 { font-size: var(--fs-h2); line-height: 1.05; letter-spacing: -0.02em; }
   .hm-contents__lead { margin-block-start: 20px; font-size: var(--fs-lead); line-height: 1.42; max-width: 34ch; color: var(--text); }
   .hm-index { list-style: none; margin: 0; padding: 0; border-block-start: 1px solid var(--rule-strong); }
@@ -81,7 +81,7 @@
   .hm-story--full figcaption { padding-inline: var(--gutter); }
   .hm-story--full .hm-story__frame { overflow: hidden; position: relative; }
   .hm-story--full .hm-story__frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(18,25,34,0.6) 0%, rgba(18,25,34,0.2) 30%, rgba(18,25,34,0) 50%), linear-gradient(to top, rgba(18,25,34,0.45), rgba(18,25,34,0) 40%); pointer-events: none; }
-  .hm-story--full .hm-story__body { margin-block-start: 36px; display: grid; gap: 0 72px; }
+  .hm-story--full .hm-story__body { margin-block-start: 36px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 72px; }
   @media (min-width: 900px) {
     .hm-story--full .hm-story__photo img { height: clamp(420px, 60vh, 620px); object-position: 50% 38%; }
     .hm-story--full .hm-story__body { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "head intro" "route meta"; margin-block-start: 48px; align-items: end; }
@@ -175,7 +175,7 @@
   @media (min-width: 900px) { .hm-news { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(48px, 7vw, 120px); } }
 
   /* Titles are long compounds in Dutch and German */
-  .hm-story__title, .hm-hero-title, .hm-index__title { hyphens: auto; overflow-wrap: break-word; }
+  .hm-story__title, .hm-hero-title, .hm-index__title { hyphens: auto; overflow-wrap: anywhere; }
 
   /* Right to left: the overlays and the reading direction mirror, the type loses its tight tracking */
   [dir='rtl'] .hm-he::before { background: linear-gradient(to left, rgba(18,25,34,0.9) 0%, rgba(18,25,34,0.62) 42%, rgba(18,25,34,0.1) 66%, rgba(18,25,34,0.45) 100%); }

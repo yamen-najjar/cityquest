@@ -97,11 +97,7 @@ export function CaseReportView({ a, p, locale, t, headingRef, dispatch }: { a: A
       </ol>
 
       <div className="sticky bottom-0 -mx-4 mt-8 border-t border-white/10 bg-navy/95 px-4 py-4 backdrop-blur">
-        {message && (
-          <p role="status" className={`mb-3 text-sm ${status === 'some' ? 'text-gold' : 'text-danger'}`}>
-            {message}
-          </p>
-        )}
+        <div role="status">{message && <p className={`mb-3 text-sm ${status === 'some' ? 'text-gold' : 'text-danger'}`}>{message}</p>}</div>
         <div className="flex flex-wrap items-center gap-3">
           <button type="button" className="btn-gold" disabled={status === 'checking'} onClick={file}>
             {status === 'checking' ? t.checking : r.file}

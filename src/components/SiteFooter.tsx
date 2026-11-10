@@ -6,6 +6,21 @@ import { RouteMark } from './Logo';
 export const legalDocs = ['impressum', 'privacy', 'terms', 'withdrawal', 'contact'] as const;
 export type LegalDoc = (typeof legalDocs)[number];
 
+/**
+ * A legal document's title. Outside German pages it ends in the German legal term in brackets
+ * ("Privacy policy (Datenschutzerklärung)"): that part is marked as German so screen readers pronounce it
+ * right, and as left to right so the brackets stay in place in Arabic.
+ */
+export function LegalTitle({ title }: { title: string }) {
+  const match = /^(.*?) \(([^()]+)\)$/.exec(title);
+  if (!match) return <>{title}</>;
+  return (
+    <>
+      {match[1]} (<span lang="de" dir="ltr">{match[2]}</span>)
+    </>
+  );
+}
+
 export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <footer className="tp-footer">
@@ -29,7 +44,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <ul className="tp-footer__links">
               {legalDocs.map((d) => (
                 <li key={d}>
-                  <Link href={`/${locale}/legal/${d}`}>{dict.legal.docs[d].title}</Link>
+                  <Link href={`/${locale}/legal/${d}`}><LegalTitle title={dict.legal.docs[d].title} /></Link>
                 </li>
               ))}
             </ul>

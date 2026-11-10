@@ -276,14 +276,14 @@ export default async function AdventurePage({ params }: Props) {
               </tbody>
             </table>
           </div>
-          <aside className="ad-price" aria-label={t.adventure.price}>
+          <div role="group" className="ad-price" aria-label={t.adventure.price}>
             <p className="ad-price__amount">{price}</p>
             <p className="ad-price__per">{fmt(t.adventure.pricePer, { max: a.teamSize.max })}</p>
             <p className="ad-price__note">{fmt(t.adventure.priceNote, { max: a.teamSize.max, vat: formatPrice(vatShare(a.priceCents), locale) }).replace(/(\d) %/, '$1\u00a0%')}</p>
             <p className="ad-price__note">{t.adventure.purchaseLater}</p>
             <PlayButton href={playHref} slug={a.slug} labels={playLabels} className="tp-btn" suffix={<Arrow />} />
             <p className="ad-price__note">{t.adventure.demoFree}</p>
-          </aside>
+          </div>
         </div>
       </section>
 

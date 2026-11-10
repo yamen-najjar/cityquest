@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import type { Person, Question } from '@/content/types';
 import type { Locale } from '@/i18n/config';
 import { speak } from '@/lib/audio';
@@ -34,8 +35,19 @@ export function Interrogation({
   labels: { ask: string; allAsked: string };
 }) {
   const open = questions.filter((q) => !asked.includes(q.id));
+  // The question just asked disappears from the list; focus moves on to the next one (or the section),
+  // so keyboard focus is not dropped on the page.
+  const root = useRef<HTMLElement>(null);
+  const seen = useRef(asked.length);
+  useEffect(() => {
+    if (asked.length > seen.current) {
+      const next = root.current?.querySelector<HTMLElement>('[data-question]');
+      (next ?? root.current)?.focus();
+    }
+    seen.current = asked.length;
+  }, [asked.length]);
   return (
-    <section className="rounded-2xl border border-white/10 bg-navy p-4" aria-label={person.name[locale]}>
+    <section ref={root} tabIndex={-1} className="rounded-2xl border border-white/10 bg-navy p-4" aria-label={person.name[locale]}>
       <div className="flex items-center gap-3">
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold/15 font-display text-xl text-gold" aria-hidden="true">
           {initials(person.name[locale])}
@@ -66,6 +78,7 @@ export function Interrogation({
                 <button
                   key={q.id}
                   type="button"
+                  data-question=""
                   className="rounded-xl border border-white/15 px-4 py-2.5 text-start text-sm hover:border-gold/60 hover:bg-gold/5"
                   onClick={() => {
                     onAsk(q.id);

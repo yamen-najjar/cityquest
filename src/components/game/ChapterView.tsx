@@ -215,11 +215,11 @@ export function ChapterView({
     <article className="animate-rise" aria-labelledby="chapter-title">
       <div className="flex items-start justify-between gap-3">
         <p className="eyebrow">{fmt(t.chapterOf, { n: index + 1, total })}</p>
-        <button type="button" onClick={readAloud} className="chip min-h-[32px] hover:border-gold/50" aria-pressed={reading}>
-          {reading ? `■ ${t.sound.stop}` : `🔊 ${t.sound.read}`}
+        <button type="button" onClick={readAloud} className="chip min-h-[44px] hover:border-gold/50">
+          <span aria-hidden="true">{reading ? '■' : '🔊'}</span> {reading ? t.sound.stop : t.sound.read}
         </button>
       </div>
-      <h1 id="chapter-title" ref={headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold leading-tight sm:text-5xl">
+      <h1 id="chapter-title" ref={p.stage === 'solved' ? undefined : headingRef} tabIndex={-1} className="mt-2 font-display text-4xl font-semibold leading-tight sm:text-5xl">
         {chapter.title[locale]}
       </h1>
       {three && p.stage === 'travel' && chapter.scenes?.intro && (
@@ -270,7 +270,7 @@ export function ChapterView({
               <body>: the chapter's entrance animation (a transform) would otherwise pin it to the article. */}
           {!arrivalInView &&
             createPortal(
-              <div className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/25 bg-navy/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:hidden">
+              <div role="region" aria-label={`${t.goToCheckpoint}: ${chapter.checkpoint.name[locale]}`} className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/25 bg-navy/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:hidden">
                 <div className="mx-auto flex max-w-3xl items-center gap-3">
                   <p className="min-w-0 flex-1 truncate text-sm">
                     <span className="text-gold" aria-hidden="true">
@@ -375,7 +375,7 @@ export function ChapterView({
                   open={opening}
                   labels={{ dial: t.threeD.dial, up: t.threeD.up, down: t.threeD.down, hint: t.threeD.lockHint }}
                 />
-                <button type="button" className="mt-2 text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(true)}>
+                <button type="button" className="mt-2 min-h-[32px] text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(true)}>
                   {t.threeD.typeCode}
                 </button>
               </div>
@@ -409,7 +409,7 @@ export function ChapterView({
                   aria-describedby="feedback"
                 />
                 {three && digits > 0 && (
-                  <button type="button" className="justify-self-start text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(false)}>
+                  <button type="button" className="min-h-[32px] justify-self-start text-xs text-ivory-mute underline underline-offset-2 hover:text-ivory" onClick={() => setTyping(false)}>
                     {t.threeD.useDials}
                   </button>
                 )}
@@ -431,12 +431,15 @@ export function ChapterView({
               <p className="text-xs text-ivory-mute">{t.expertNoHints}</p>
             ) : (
               <>
-                {puzzle.hints.slice(0, hintsShown).map((h, i) => (
-                  <div key={i} className={`rounded-xl border p-4 text-sm ${i === lastHint ? 'border-danger/40 bg-danger/5' : 'border-gold/25 bg-gold/[0.06]'}`}>
-                    <p className="text-xs font-semibold text-gold">{i === lastHint ? t.solutionLabel : fmt(t.hintLabel, { n: i + 1, total: puzzle.hints.length })}</p>
-                    <p className="mt-1 text-ivory">{h[locale]}</p>
-                  </div>
-                ))}
+                {/* A new hint is announced. While empty the wrapper leaves the flow, so it adds no spacing. */}
+                <div aria-live="polite" className="space-y-3 empty:absolute">
+                  {puzzle.hints.slice(0, hintsShown).map((h, i) => (
+                    <div key={i} className={`rounded-xl border p-4 text-sm ${i === lastHint ? 'border-danger/40 bg-danger/5' : 'border-gold/25 bg-gold/[0.06]'}`}>
+                      <p className="text-xs font-semibold text-gold">{i === lastHint ? t.solutionLabel : fmt(t.hintLabel, { n: i + 1, total: puzzle.hints.length })}</p>
+                      <p className="mt-1 text-ivory">{h[locale]}</p>
+                    </div>
+                  ))}
+                </div>
                 {hintsShown < puzzle.hints.length ? (
                   <>
                     {/* Two wrong answers: offer the help, and say what it costs. */}
@@ -479,7 +482,8 @@ export function ChapterView({
       {p.stage === 'solved' && (
         <section className="mt-10" aria-labelledby="solved-title">
           <div className="card border-gold/30 p-6">
-            <h2 id="solved-title" className="font-display text-3xl text-gold">
+            {/* Focus lands here, so "Correct!" is announced once, by the focus move. */}
+            <h2 id="solved-title" ref={headingRef} tabIndex={-1} className="font-display text-3xl text-gold">
               {t.correct}
             </h2>
             {three && chapter.scenes?.success && (
@@ -545,10 +549,10 @@ function WalkAudio({ lines, locale, t }: { lines: NonNullable<Chapter['walk']>; 
     <section className="mt-8 rounded-2xl border border-gold/25 bg-gold/[0.04] p-4" aria-labelledby="walk-title">
       <div className="flex items-center justify-between gap-3">
         <h2 id="walk-title" className="eyebrow">
-          🎧 {t.walk.title}
+          <span aria-hidden="true">🎧</span> {t.walk.title}
         </h2>
         <button type="button" className="btn-ghost min-h-[40px] px-4 py-1.5 text-sm" onClick={toggle}>
-          {playing ? `■ ${t.walk.stop}` : `▶ ${t.walk.play}`}
+          <span aria-hidden="true">{playing ? '■' : '▶'}</span> {playing ? t.walk.stop : t.walk.play}
         </button>
       </div>
       <div className="mt-3 space-y-1 font-display text-lg italic text-ivory-dim">

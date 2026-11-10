@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { legalDocs, type LegalDoc } from '@/components/SiteFooter';
+import { legalDocs, LegalTitle, type LegalDoc } from '@/components/SiteFooter';
 import { isLocale, locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionary';
 
@@ -26,7 +26,9 @@ export default async function LegalPage({ params }: Props) {
   return (
     <article className="container-cq max-w-3xl py-14">
       <span className="chip border-gold/40 text-gold">{t.placeholder}</span>
-      <h1 className="mt-4 font-display text-4xl font-semibold">{t.docs[doc].title}</h1>
+      <h1 className="mt-4 font-display text-4xl font-semibold">
+        <LegalTitle title={t.docs[doc].title} />
+      </h1>
       <p className="mt-6 rounded-2xl border border-gold/30 bg-gold/[0.07] p-5 text-sm text-ivory-dim" role="note">
         {t.notice}
       </p>

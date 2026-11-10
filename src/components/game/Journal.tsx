@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useModal } from '@/lib/use-modal';
+import { panelId, tabId, TabList } from './Tabs';
 import type { Adventure } from '@/content/types';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
@@ -73,11 +75,8 @@ export function Journal({
     };
   }, [onSaveNotes]);
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  const dialogRef = useRef<HTMLElement>(null);
+  useModal(dialogRef, onClose);
 
   const clues = a.chapters.filter((c) => p.solved.includes(c.id)).flatMap((c) => (c.clues ?? []).map((cl, i) => ({ key: `${c.id}-${i}`, chapter: c.title[locale], text: cl[locale] })));
   const people = a.people.filter((person) => reached(person.appears));
@@ -99,39 +98,43 @@ export function Journal({
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 sm:items-center sm:p-4" onClick={onClose}>
       <section
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby="journal-title"
         className="flex max-h-[88dvh] w-full max-w-2xl flex-col rounded-t-3xl border border-gold/25 bg-[#13100c] shadow-card sm:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
           <h2 id="journal-title" className="font-display text-2xl text-gold">
             {t.journal.title}
           </h2>
           <button type="button" className="btn-ghost min-h-[36px] px-3 py-1" onClick={onClose} autoFocus>
             {t.threeD.close}
           </button>
-        </header>
-        <nav className="flex shrink-0 gap-1 overflow-x-auto overflow-y-hidden border-b border-white/10 px-3 py-2" role="tablist">
-          {tabs.map((x) => (
-            <button
-              key={x.id}
-              type="button"
-              role="tab"
-              aria-selected={tab === x.id}
-              onClick={() => {
-                setTab(x.id);
-                sfx('page');
-              }}
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm ${tab === x.id ? 'bg-gold text-navy' : 'text-ivory-dim hover:text-ivory'}`}
-            >
-              {x.label}
-              {x.count !== undefined && <span className="ms-1.5 text-xs opacity-70">{x.count}</span>}
-            </button>
-          ))}
-        </nav>
-        <div className="flex-1 overflow-y-auto p-5" role="tabpanel">
+        </div>
+        <TabList
+          prefix="journal"
+          labelledBy="journal-title"
+          tabs={tabs.map((x) => ({
+            id: x.id,
+            label: (
+              <>
+                {x.label}
+                {x.count !== undefined && <span className="ms-1.5 text-xs opacity-70">{x.count}</span>}
+              </>
+            ),
+          }))}
+          value={tab}
+          onChange={(id) => {
+            if (id !== tab) sfx('page');
+            setTab(id);
+          }}
+          className="flex shrink-0 gap-1 overflow-x-auto overflow-y-hidden border-b border-white/10 px-3 py-2"
+          tabClassName={(on) => `min-h-[44px] whitespace-nowrap rounded-full px-4 py-2 text-sm ${on ? 'bg-gold text-navy' : 'text-ivory-dim hover:text-ivory'}`}
+        />
+        <div className="flex-1 scroll-pb-24 overflow-y-auto p-5" role="tabpanel" id={panelId('journal')} aria-labelledby={tabId('journal', tab)}>
           {tab === 'board' && <EvidenceBoard a={a} p={p} locale={locale} t={t} onDeduced={(questionId) => dispatch({ type: 'deduce', questionId })} />}
 
           {tab === 'leads' && <LeadsPanel a={a} p={p} locale={locale} t={t} dispatch={dispatch} onNotice={onNotice} />}
@@ -234,7 +237,7 @@ export function Journal({
                           </span>
                         </label>
                         {three && (
-                          <button type="button" className="mt-2 text-xs font-semibold text-gold hover:underline" aria-label={`${t.threeD.view}: ${it.name[locale]}`} onClick={() => onView(it.id)}>
+                          <button type="button" className="mt-2 inline-flex min-h-[32px] items-center text-xs font-semibold text-gold hover:underline" aria-label={`${t.threeD.view}: ${it.name[locale]}`} onClick={() => onView(it.id)}>
                             {t.threeD.view}
                           </button>
                         )}

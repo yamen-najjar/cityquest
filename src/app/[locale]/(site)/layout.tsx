@@ -19,10 +19,10 @@ export default async function SiteLayout({ children, params }: { children: React
   return (
     <div className={`theme-site ${groteskLatin.variable} ${groteskLatinExt.variable}`}>
       <SiteHeader locale={locale} nav={t.nav} />
-      <div className="tp-banner">
-        <p className="tp-wrap">{t.prototype.banner}</p>
-      </div>
-      <main id="main" className="flex-1">
+      <main id="main" tabIndex={-1} className="flex-1">
+        <div className="tp-banner">
+          <p className="tp-wrap">{t.prototype.banner}</p>
+        </div>
         {children}
       </main>
       <SiteFooter locale={locale} dict={t} />

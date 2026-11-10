@@ -45,8 +45,8 @@ test('navigation, search and filters work', async ({ page, isMobile }) => {
 
   await page.getByRole('link', { name: 'The Lost Manuscript' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('The Lost Manuscript');
-  await expect(page.locator('aside').getByText('€24.90')).toBeVisible();
-  await expect(page.locator('aside')).toContainText('incl. 19 % VAT (€3.98)');
+  await expect(page.locator('.ad-price').getByText('€24.90')).toBeVisible();
+  await expect(page.locator('.ad-price')).toContainText('incl. 19 % VAT (€3.98)');
   await noHorizontalScroll(page);
 });
 

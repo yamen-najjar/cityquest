@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useModal } from '@/lib/use-modal';
 import type { Adventure, Chapter } from '@/content/types';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
@@ -262,7 +263,7 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
   return (
     <div className="flex min-h-dvh flex-col">
       {/* Game bar */}
-      <header className="sticky top-0 z-30 border-b border-white/5 bg-navy/90 backdrop-blur">
+      <header className="game-bar sticky top-0 z-30 border-b border-white/5 bg-navy/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4">
           <Link href={`/${locale}/adventures/${a.slug}`} className="flex items-center gap-2 text-sm text-ivory-dim hover:text-ivory" aria-label={t.exit}>
             <LogoMark className="h-7 w-7" />
@@ -277,7 +278,6 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
               setMutedState(next);
               if (!next) unlockAudio();
             }}
-            aria-pressed={!muted}
             title={muted ? t.sound.off : t.sound.on}
             className={`flex h-9 w-9 items-center justify-center rounded-full border text-sm ${muted ? 'border-white/15 text-ivory-mute' : 'border-gold bg-gold/15 text-gold'}`}
           >
@@ -287,7 +287,6 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
           <button
             type="button"
             onClick={() => setThree(!three)}
-            aria-pressed={three}
             title={three ? t.threeD.on : t.threeD.off}
             className={`min-h-[36px] rounded-full border px-2.5 text-xs font-bold ${three ? 'border-gold bg-gold/15 text-gold' : 'border-white/15 text-ivory-mute'}`}
           >
@@ -297,8 +296,8 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
           <LanguageSwitcher locale={locale} label={languageLabel} />
         </div>
         {p && !onStart && (
-          <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 pb-3">
-            <ol className="flex flex-1 gap-1" aria-label={t.progress}>
+          <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 pb-3 max-[359px]:flex-wrap">
+            <ol className="flex flex-1 gap-1 max-[359px]:min-w-[6rem]" aria-label={t.progress}>
               {a.chapters.map((c, i) => {
                 const done = p.solved.includes(c.id);
                 return (
@@ -312,30 +311,30 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
             </ol>
             {a.phone?.length ? (
               <button type="button" onClick={() => setPhoneOpen(true)} className="chip relative min-h-[36px] hover:border-gold/50" aria-haspopup="dialog">
-                📱 {t.phone.open}
+                <span aria-hidden="true">📱</span> {t.phone.open}
+                {unreadCount > 0 && ' '}
                 {unreadCount > 0 && <span className="rounded-full bg-danger px-1.5 text-[10px] font-bold text-white">{unreadCount}</span>}
               </button>
             ) : null}
             <button type="button" onClick={() => setJournalOpen(true)} className="chip min-h-[36px] hover:border-gold/50" aria-haspopup="dialog">
-              📜 {t.journal.open}
+              <span aria-hidden="true">📜</span> {t.journal.open}{' '}
               <span className="rounded-full bg-gold px-1.5 text-[10px] font-bold text-navy">{p.inventory.length}</span>
             </button>
             <button
               type="button"
               onClick={() => setShowTimer((s) => !s)}
               className="chip min-h-[36px] tabular-nums hover:border-gold/50"
-              aria-pressed={timerOn}
               disabled={p.mode === 'expert'}
             >
-              {timerOn ? formatDuration(elapsed) : t.timer}
-              <span className="sr-only">{timerOn ? t.hideTimer : t.showTimer}</span>
+              <span aria-hidden="true">{timerOn ? formatDuration(elapsed) : t.timer}</span>
+              <span className="sr-only">{timerOn ? `${t.hideTimer} (${formatDuration(elapsed)})` : t.showTimer}</span>
             </button>
           </div>
         )}
         {p && !onStart && a.pursuit && !isFinished(p) && <PursuitMeter pursuit={a.pursuit} level={level} locale={locale} />}
       </header>
 
-      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-8">
+      <main id="main" tabIndex={-1} className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-8">
         {onStart || !p ? (
           <StartScreen
             a={a}
@@ -414,48 +413,9 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
         />
       )}
 
-      {viewed && (
-        <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-4 sm:items-center" onClick={() => setViewing(null)}>
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="viewer-title"
-            className="card w-full max-w-md p-5"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.key === 'Escape' && setViewing(null)}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <h2 id="viewer-title" className="font-display text-2xl">
-                {viewed.name[locale]}
-              </h2>
-              <button type="button" className="btn-ghost min-h-[36px] px-3 py-1" onClick={() => setViewing(null)} autoFocus>
-                {t.threeD.close}
-              </button>
-            </div>
-            <Artifact3D spec={viewed.model} label={viewed.name[locale]} className="mt-3 h-72 w-full bg-navy" />
-            <p className="mt-2 text-center text-xs text-ivory-mute">{t.threeD.drag}</p>
-            <p className="mt-3 text-sm text-ivory-dim">{viewed.description[locale]}</p>
-          </div>
-        </div>
-      )}
+      {viewed && <ItemViewer item={viewed} locale={locale} t={t} onClose={() => setViewing(null)} />}
 
-      {confirmRestart && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 sm:items-center">
-          <div role="alertdialog" aria-modal="true" aria-labelledby="restart-title" className="card w-full max-w-sm p-6">
-            <p id="restart-title" className="text-ivory">
-              {t.restartConfirm}
-            </p>
-            <div className="mt-5 flex justify-end gap-3">
-              <button type="button" className="btn-ghost" onClick={() => setConfirmRestart(false)} autoFocus>
-                {t.cancel}
-              </button>
-              <button type="button" className="btn-gold" onClick={restart}>
-                {t.confirm}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {confirmRestart && <RestartDialog t={t} onCancel={() => setConfirmRestart(false)} onConfirm={restart} />}
 
       <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex flex-col items-center gap-2 px-4">
         {toasts.map((x) => (
@@ -463,6 +423,52 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
             {x.text}
           </p>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/** The 3D look at one item, over the journal. */
+function ItemViewer({ item, locale, t, onClose }: { item: Adventure['items'][number]; locale: Locale; t: Dictionary['game']; onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useModal(ref, onClose);
+  return (
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-4 sm:items-center" onClick={onClose}>
+      <div ref={ref} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="viewer-title" className="card w-full max-w-md p-5" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-3">
+          <h2 id="viewer-title" className="font-display text-2xl">
+            {item.name[locale]}
+          </h2>
+          <button type="button" className="btn-ghost min-h-[36px] px-3 py-1" onClick={onClose} autoFocus>
+            {t.threeD.close}
+          </button>
+        </div>
+        <Artifact3D spec={item.model} label={item.name[locale]} className="mt-3 h-72 w-full bg-navy" />
+        <p className="mt-2 text-center text-xs text-ivory-mute">{t.threeD.drag}</p>
+        <p className="mt-3 text-sm text-ivory-dim">{item.description[locale]}</p>
+      </div>
+    </div>
+  );
+}
+
+/** "Start over?": Escape cancels, focus stays inside until answered, and returns to the button that asked. */
+function RestartDialog({ t, onCancel, onConfirm }: { t: Dictionary['game']; onCancel: () => void; onConfirm: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useModal(ref, onCancel);
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 sm:items-center">
+      <div ref={ref} tabIndex={-1} role="alertdialog" aria-modal="true" aria-labelledby="restart-title" className="card w-full max-w-sm p-6">
+        <p id="restart-title" className="text-ivory">
+          {t.restartConfirm}
+        </p>
+        <div className="mt-5 flex justify-end gap-3">
+          <button type="button" className="btn-ghost" onClick={onCancel} autoFocus>
+            {t.cancel}
+          </button>
+          <button type="button" className="btn-gold" onClick={onConfirm}>
+            {t.confirm}
+          </button>
+        </div>
       </div>
     </div>
   );

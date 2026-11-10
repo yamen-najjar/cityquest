@@ -115,7 +115,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             </div>
           </div>
           {heroOpening.person && (
-            <aside className="hm-he__msg" aria-label={fmt(t.home.messageAria, { name: heroOpening.person.name[locale] })}>
+            <div role="group" className="hm-he__msg" aria-label={fmt(t.home.messageAria, { name: heroOpening.person.name[locale] })}>
               <p className="hm-he__from">
                 <span className="hm-he__avatar" aria-hidden="true">{initials(heroOpening.person.name[locale])}</span>
                 <span className="hm-he__who">
@@ -125,7 +125,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               </p>
               <p className="hm-he__body">{heroOpening.quote}</p>
               <p className="hm-he__under">{heroOpening.after}</p>
-            </aside>
+            </div>
           )}
         </div>
         <CreditLine id={getPresentation(hero.slug).photo} template={credit} className="hm-he__credit" />
