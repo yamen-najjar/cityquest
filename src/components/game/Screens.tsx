@@ -63,12 +63,15 @@ export function StartScreen({
               age: a.minAge,
             })}
           </p>
-          {offlineReady && (
-            <p className="mt-2 text-xs text-ivory-mute" data-testid="offline-ready">
-              <span aria-hidden="true">✓ </span>
-              {t.offline.ready}
-            </p>
-          )}
+          {/* The space is kept while the line is not there yet, so it appearing never shifts the page. */}
+          <div className="mt-2 min-h-[1.25rem]">
+            {offlineReady && (
+              <p className="text-xs text-ivory-mute" data-testid="offline-ready">
+                <span aria-hidden="true">✓ </span>
+                {t.offline.ready}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
