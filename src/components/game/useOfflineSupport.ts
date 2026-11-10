@@ -7,7 +7,7 @@
 //   ready    – everything above is done on this device (a quiet line on the start screen)
 import { useEffect, useState } from 'react';
 import type { Adventure } from '@/content/types';
-import { flushQueue, loadPack, refreshPack } from '@/lib/engine/answer-client';
+import { flushQueue, loadUsablePack, refreshPack } from '@/lib/engine/answer-client';
 import { hardwareWebGL, webglAvailable } from '../three/support';
 
 const READY_PREFIX = 'cityquest:offline-ready:';
@@ -30,21 +30,22 @@ function wants3D(): boolean {
   return pref === 'on' ? webglAvailable() : pref !== 'off' && hardwareWebGL();
 }
 
-/** Loads the lazy chunks (map, scanner, 3D) and the 3D files the adventure uses, so the service worker sees them. */
+type Connection = { saveData?: boolean; effectiveType?: string };
+const connection = (): Connection | undefined => (navigator as Navigator & { connection?: Connection }).connection;
+
+/** Data saver on, or a 2G-class connection: only the pack and the page itself are fetched. */
+function lowData(): boolean {
+  const c = connection();
+  return !!c?.saveData || c?.effectiveType === 'slow-2g' || c?.effectiveType === '2g';
+}
+
+/** Loads the lazy chunks (map, scanner, 3D) and, where 3D is shown, the 3D files the adventure uses, so the service worker sees them. */
 async function loadLazyParts(a: Adventure) {
-  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
   // The chunks are small and always loaded, so a player who switches 3D on later still has them. The 3D
-  // files are several megabytes: fetched only where the game would show 3D (see use3D), and not on a
-  // data-saver connection.
+  // files are several megabytes: fetched only where the game would show 3D (see use3D).
   const jobs: Promise<unknown>[] = [import('./RealMap'), import('./QrScanner'), import('../three/Artifact3D'), import('../three/Lock3D'), import('../three/Map3D'), import('../three/cutscene/Cutscene3D')];
-  if (wants3D() && !connection?.saveData) {
-    jobs.push(
-      import('../three/cutscene/preload').then(async (m) => {
-        for (const scene of scenesOf(a)) m.preloadScene(scene);
-        // preloadScene is fire-and-forget; give the requests time to finish before the cache is checked.
-        await new Promise((r) => setTimeout(r, 4000));
-      }),
-    );
+  if (wants3D()) {
+    jobs.push(import('../three/cutscene/preload').then((m) => Promise.allSettled(scenesOf(a).map((scene) => m.preloadScene(scene)))));
   }
   await Promise.allSettled(jobs);
 }
@@ -92,19 +93,23 @@ async function warmUp(a: Adventure): Promise<boolean> {
   if (!worker) return false;
   // First the page and what it has loaded so far (the worker may have taken over after those loads), then
   // the lazy parts, then everything those added.
-  await askWorker(worker, seenUrls(a));
+  await askWorker(worker, lowData() ? [] : seenUrls(a));
+  if (lowData()) return true; // the pack and the page are on the device; the extras would cost data
   await loadLazyParts(a);
   const result = await askWorker(worker, seenUrls(a));
   window.__cqWarm = result;
   return result.ok;
 }
 
-export function useOfflineSupport(a: Adventure): { offline: boolean; ready: boolean } {
+/** `enabled: false` (the admin preview) does nothing at all: no pack, no queue, no caching. */
+export function useOfflineSupport(a: Adventure, enabled = true): { offline: boolean; ready: boolean; hasPack: boolean } {
   const slug = a.slug;
   const [offline, setOffline] = useState(false);
   const [ready, setReady] = useState(false);
+  const [hasPack, setHasPack] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
     let warming = false;
     setOffline(!online());
@@ -116,11 +121,13 @@ export function useOfflineSupport(a: Adventure): { offline: boolean; ready: bool
         return null;
       }
     };
-    const syncReady = () => {
-      const pack = loadPack(slug);
+    const syncReady = async () => {
+      const pack = await loadUsablePack(slug);
+      if (cancelled) return;
+      setHasPack(!!pack);
       setReady(!!pack && marker() === pack.version);
     };
-    syncReady();
+    void syncReady();
 
     async function prepare() {
       if (!online() || warming) return;
@@ -128,9 +135,10 @@ export function useOfflineSupport(a: Adventure): { offline: boolean; ready: bool
       try {
         await refreshPack(slug);
         void flushQueue(slug);
-        const pack = loadPack(slug);
+        const pack = await loadUsablePack(slug);
+        void syncReady();
         if (!pack || cancelled) return;
-        if (marker() === pack.version) return syncReady();
+        if (marker() === pack.version) return;
         // The worker may still be installing on the very first visit, or a request may stall: try a few times.
         let warmed = false;
         for (let attempt = 0; attempt < 3 && !warmed && !cancelled && online(); attempt++) {
@@ -143,7 +151,7 @@ export function useOfflineSupport(a: Adventure): { offline: boolean; ready: bool
           } catch {
             /* private mode: the line just does not show */
           }
-          if (!cancelled) syncReady();
+          void syncReady();
         }
       } finally {
         warming = false;
@@ -163,7 +171,7 @@ export function useOfflineSupport(a: Adventure): { offline: boolean; ready: bool
       window.removeEventListener('online', onOnline);
       window.removeEventListener('offline', onOffline);
     };
-  }, [a, slug]);
+  }, [a, slug, enabled]);
 
-  return { offline, ready };
+  return { offline: enabled && offline, ready, hasPack };
 }
