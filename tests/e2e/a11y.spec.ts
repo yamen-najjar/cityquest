@@ -26,9 +26,11 @@ test('every page names its language and direction, and a German legal term insid
 });
 
 test('long legal titles wrap instead of overflowing a phone screen', async ({ page }) => {
-  for (const [path, width] of [['/nl/legal/privacy', 390], ['/de/legal/terms', 320], ['/ar/legal/privacy', 320], ['/de', 320]] as const) {
+  for (const [path, width] of [['/nl/legal/privacy', 390], ['/de/legal/terms', 320], ['/ar/legal/privacy', 320], ['/de', 320], ['/nl', 320]] as const) {
     await page.setViewportSize({ width, height: 800 });
     await page.goto(path);
+    // Browsers without a hyphenation dictionary (CI Linux, some phones) must still wrap by the fallback alone.
+    await page.addStyleTag({ content: '*{hyphens:none !important}' });
     await noHorizontalScroll(page);
   }
 });
@@ -125,15 +127,20 @@ test('hint and answer messages live in regions that exist before their text arri
 });
 
 test('the 3D item viewer stacks over the journal: Escape closes only the top dialog and focus goes back', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('cityquest:3d', 'on'));
-  await page.goto('/en/play/neckar-ring');
-  await page.evaluate(() => {
+  // Seeded before any page script runs (once per tab), so the game opens straight into play on any machine.
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem('a11y-seeded')) return;
+    sessionStorage.setItem('a11y-seeded', '1');
+    localStorage.setItem('cityquest:3d', 'on');
     const now = Date.now();
     const p = { version: 2, adventure: 'neckar-ring', mode: 'classic', chapter: 0, stage: 'puzzle', solved: [], inventory: ['cursed-ring'], hintsUsed: {}, wrongAttempts: {}, asked: {}, notes: '', deductions: [], choices: {}, caught: 0, relief: 0, seized: null, recovering: false, phoneRead: [], replies: {}, leadsSolved: [], secrets: [], reportPicks: {}, reportConfirmed: [], reportTries: 0, reportDone: null, variant: null, decision: null, team: { name: '', players: 2 }, startedAt: now, finishedAt: null, elapsedMs: 0, lastActiveAt: now };
     localStorage.setItem('cityquest:progress:neckar-ring', JSON.stringify(p));
     sessionStorage.setItem('cityquest:playing', 'neckar-ring');
   });
-  await page.reload();
+  await page.goto('/en/play/neckar-ring');
+  // Should the start screen still show, continue the saved game from it.
+  const resume = page.getByRole('button', { name: /^Continue/ });
+  if (await resume.isVisible().catch(() => false)) await resume.click();
   await page.getByRole('button', { name: /Journal/ }).click();
   const journal = page.getByRole('dialog', { name: 'Case journal' });
   await journal.getByRole('tab', { name: /Items/ }).click();
