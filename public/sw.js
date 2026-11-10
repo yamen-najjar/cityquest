@@ -193,12 +193,18 @@ async function navigate(event, request) {
   const pages = await caches.open(PAGES);
   // Keyed by path and query: the catalogue and city pages differ by their filters.
   const key = url.pathname + url.search;
-  const network = fetch(request).then(async (res) => {
+  // The page is handed back first; storing it (and trimming) happens after, kept alive by waitUntil.
+  const network = fetch(request).then((res) => {
     if (res.ok && res.type === 'basic' && !res.redirected && !PRIVATE_PATH.test(url.pathname)) {
-      await pages.put(key, res.clone());
-      const locale = localeOf(url.pathname);
-      if (locale) await pages.put('/__locale', new Response(locale));
-      await trim(PAGES, MAX_PAGES);
+      const copy = res.clone();
+      event.waitUntil(
+        (async () => {
+          await pages.put(key, copy);
+          const locale = localeOf(url.pathname);
+          if (locale) await pages.put('/__locale', new Response(locale));
+          await trim(PAGES, MAX_PAGES);
+        })().catch(() => undefined),
+      );
     }
     return res;
   });
