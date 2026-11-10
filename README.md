@@ -41,7 +41,7 @@ account.
 | SEO: localised metadata, hreflang alternates, `sitemap.xml`, `robots.txt`, Open Graph image (PNG), JSON-LD (`TouristTrip`, no fake offers or ratings) | Working |
 | Accessibility: skip link, keyboard focus ring, focus moves to each new game step, live regions for feedback, screen-reader text for the symbol puzzle, reduced-motion support, 44 px touch targets | Working |
 | Legal pages: Impressum, Datenschutzerklärung, AGB, Widerrufsbelehrung, Kontakt | **Placeholders only.** The operator must supply and legally review them |
-| PWA | Web app manifest only. No service worker or offline mode yet |
+| **Offline play**: opening a game with reception stores an answer pack (salted hashes, never plain answers) and warms the caches, so after that a team can reload and keep solving without reception; a paid adventure's offline solves are queued and sent in order when reception returns. A hand-written service worker (`public/sw.js`, production builds only) caches the app, pages, photos and 3D files, and only the map tiles the team looked at. Installable (manifest with PNG and maskable icons, apple-touch-icon); no install prompt yet | Working, tested (Chrome); iOS untested |
 
 Not built yet, and the UI never pretends otherwise: accounts, purchases, the newsletter list (the form
 says plainly that nothing was saved), gift vouchers, real GPS / QR checkpoints, teams across devices,
@@ -118,6 +118,15 @@ tests/e2e/                         Playwright
   implementation. Phase 2 adds a Supabase one.
 - **Answer checking** (`lib/engine/check.server.ts`): already server-side. Phase 2 adds the
   entitlement check (has this player bought the adventure?) and chapter-order enforcement there.
+- **Offline play** (`lib/engine/answer-client.ts`, `answer-pack.ts`, `public/sw.js`): every answer check goes
+  through one helper. Online it posts to the check route, exactly as before. With no reception it grades
+  against the answer pack stored when the game was opened (`GET /api/game/[slug]/pack`: SHA-256 hashes
+  salted per response; a paid adventure's pack only for its owner) with the same normaliser, variants and
+  report grading as the server. Paid adventures queue their offline solves and flush them in order. The
+  service worker uses cache-first for `/_next/static`, network-first (3 s) with an offline page for pages,
+  stale-while-revalidate for photos and 3D files, viewed-only capped map tiles, and never touches `/api`,
+  `/admin`, auth or other origins. The threat model is in `docs/SECURITY.md`. To check by hand: `npx next
+  build && npx next start`, open a game, switch the browser to offline, reload.
 - **Checkpoints** declare their verification methods (`manual`, `gps`, `qr`). `manual` always stays
   available, so a bad GPS fix never blocks a player.
 - **Answer normalisation** forgives case, accents, umlauts, Arabic letter variants, the Arabic article,

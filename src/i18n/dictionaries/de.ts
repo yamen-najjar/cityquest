@@ -263,6 +263,7 @@ const de: Dictionary = {
     emptyAnswer: 'Gib zuerst eine Antwort ein.',
     networkError: 'Deine Antwort konnte nicht geprüft werden. Prüfe die Verbindung und versuch es erneut.',
     tooFast: 'Zu viele Versuche in kurzer Zeit. Warte einen Moment und versuche es dann noch einmal.',
+    offline: { ready: 'Bereit fürs Offline-Spielen: Dieses Abenteuer ist auf deinem Gerät.', active: 'Kein Empfang: Antworten werden auf diesem Gerät geprüft.', noPack: 'Kein Empfang, und dieses Abenteuer ist noch nicht auf diesem Gerät. Öffne es einmal mit Internet.', diverged: 'Ein Teil deines Offline-Fortschritts konnte nicht bestätigt werden, darum bist du einen Schritt zurückgesetzt worden. Löse dieses Kapitel noch einmal, um weiterzumachen.' },
     variant: { title: 'Eine andere Wahrheit', text: 'Du hast diesen Fall schon einmal gelöst. Dieselbe Stadt, dieselben Zeugen – doch diesmal führen die Spuren vielleicht zu jemand anderem.' },
     junior: { label: 'Für junge Detektive' },
     extras: {
@@ -643,6 +644,7 @@ const de: Dictionary = {
     text: 'Die gesuchte Seite gibt es nicht.',
     back: 'Zurück zum Start',
   },
+  offlinePage: { title: 'Du bist offline', text: 'Diese Seite ist noch nicht auf deinem Gerät. Seiten, die du schon geöffnet hast, funktionieren weiterhin. Ein Abenteuer, das du einmal mit Internet geöffnet hast, kannst du ohne Empfang spielen.', back: 'Zurück zum Anfang' },
 };
 
 export default de;

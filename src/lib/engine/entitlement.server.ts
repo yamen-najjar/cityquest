@@ -17,18 +17,19 @@ import { createClient } from '@/lib/supabase/server';
 
 export type AuthzResult =
   | { ok: true; userId: string }
-  | { ok: false; status: 401 | 403 | 503; error: string };
+  | { ok: false; status: 401 | 403 | 503; error: string; /** With 'previous chapter not solved': the first chapter the server has no solve for. */ firstUnsolved?: string };
 
 /** A paid adventure requires an account and a backend; a demo never does. */
 export function requiresEntitlement(adventure: Adventure): boolean {
   return !adventure.isDemo;
 }
 
-export async function authorizePaidAnswer(
-  slug: string,
-  adventure: Adventure,
-  chapterIndex: number,
-): Promise<AuthzResult> {
+/**
+ * Signed in and owns the adventure (a row in `entitlements`), nothing more. Fails closed: no backend,
+ * or a failed lookup, is a 503 rather than access. The answer pack uses this alone: downloading the pack
+ * is about owning the adventure, not about how far the player has got (offline play needs every chapter).
+ */
+export async function authorizeOwner(slug: string): Promise<AuthzResult> {
   // No service role configured → we cannot verify ownership, so fail closed rather than let a paid
   // puzzle be answered unverified.
   if (!isAdminConfigured()) return { ok: false, status: 503, error: 'account backend unavailable' };
@@ -49,6 +50,18 @@ export async function authorizePaidAnswer(
     .maybeSingle();
   if (entErr) return { ok: false, status: 503, error: 'could not verify access' };
   if (!entitlement) return { ok: false, status: 403, error: 'adventure not owned' };
+  return { ok: true, userId: user.id };
+}
+
+export async function authorizePaidAnswer(
+  slug: string,
+  adventure: Adventure,
+  chapterIndex: number,
+): Promise<AuthzResult> {
+  const owner = await authorizeOwner(slug);
+  if (!owner.ok) return owner;
+  const admin = createAdminClient();
+  const user = { id: owner.userId };
 
   // Order gating: every earlier chapter must be solved. One query, then a presence check.
   if (chapterIndex > 0) {
@@ -61,8 +74,9 @@ export async function authorizePaidAnswer(
       .in('chapter_id', requiredIds);
     if (solErr) return { ok: false, status: 503, error: 'could not verify progress' };
     const solvedIds = new Set((solved ?? []).map((r) => r.chapter_id));
-    if (!requiredIds.every((id) => solvedIds.has(id))) {
-      return { ok: false, status: 403, error: 'previous chapter not solved' };
+    const firstUnsolved = requiredIds.find((id) => !solvedIds.has(id));
+    if (firstUnsolved) {
+      return { ok: false, status: 403, error: 'previous chapter not solved', firstUnsolved };
     }
   }
 

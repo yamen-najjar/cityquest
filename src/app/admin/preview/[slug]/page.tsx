@@ -32,6 +32,7 @@ export default async function AdminPreview({ params }: { params: Promise<{ slug:
         t={t.game}
         achievements={t.achievements}
         languageLabel={t.nav.language}
+        offlineSupport={false}
       />
     </div>
   );

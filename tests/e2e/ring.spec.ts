@@ -7,7 +7,11 @@ test.beforeEach(async ({ page }) => {
 
 test('The Neckar Ring in expert mode: interrogation, torn strips, cipher wheel, the twist and three endings', async ({ page }) => {
   test.setTimeout(300_000);
-  await page.getByRole('radio', { name: /Expert/ }).check({ force: true });
+  // The page re-renders once while it loads (saved game, sync): a click that lands in between is lost, so
+  // choosing the mode is retried until it sticks.
+  await expect(async () => {
+    await page.getByRole('radio', { name: /Expert/ }).check({ force: true });
+  }).toPass({ timeout: 10_000 });
   await page.getByRole('button', { name: 'Start the adventure' }).click();
 
   // 1. The box: a cutscene that can be skipped, the pursuer far away, the timer always on

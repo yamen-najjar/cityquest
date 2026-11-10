@@ -9,14 +9,20 @@ Planned work, in rough order. Phase work has its own docs (`PHASE2.md`, `PHASE4.
   chapters, eight puzzle types, four languages, its own `arnhem-explorer` achievement and e2e. First Dutch
   city; `City.country` widened to `'DE' | 'NL'`; the in-game map note is now city-agnostic. (PR #5/#6)
 
+- **Offline play** — answer pack (salted hashes) so a phone grades answers without reception, an ordered
+  queue that catches the server up for paid adventures, a hand-written service worker (`public/sw.js`),
+  warm-up of the page, lazy chunks and 3D files, an offline page, PNG/maskable/apple-touch icons and a
+  proper manifest. See `SECURITY.md` ("Offline play") and the README.
+
 ## Now
 - Next adventure or city, when wanted — concept shown first before authoring, as always.
 
 ## Saved for later (chosen 2026-10-31)
 - **Accessibility (WCAG) + CSP** — a11y audit + fixes (keyboard, screen reader, contrast, RTL) and a real
   Content-Security-Policy (will need `worker-src blob:`, `connect-src`/`img-src` for the map tile host).
-- **PWA + mobile polish** — installable + offline (service worker, install prompt); Lighthouse / Core
-  Web Vitals.
+- **PWA + mobile polish** — installable and offline are done (see Done); still to do: an install-prompt
+  UI, Lighthouse / Core Web Vitals, background sync of the answer queue (not available on iOS), a
+  "download for offline" button with progress for the 3D files, an update toast when a new worker is ready.
 
 ## Last
 - **Phase 3 — Stripe purchases** — deliberately kept until the end, since the product shape may still

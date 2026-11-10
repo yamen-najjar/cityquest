@@ -9,6 +9,7 @@
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import type { Json } from '@/lib/supabase/database.types';
+import { clearOfflineData } from './answer-client';
 import { reconcile } from './merge';
 import { parseProgress, type Progress } from './progress';
 import { clearAllLocalProgress, localProgressStore, pendingRestarts } from './storage';
@@ -67,6 +68,11 @@ let firstReconcileResolve: (() => void) | null = null;
 const firstReconcile = new Promise<void>((resolve) => {
   firstReconcileResolve = resolve;
 });
+
+/** Resolves once no reconcile is running (also one that starts while waiting). */
+export async function reconcileSettled(): Promise<void> {
+  while (reconcileInFlight) await reconcileInFlight.catch(() => undefined);
+}
 
 /**
  * Pull the account's saves, merge with this browser's, write back only where the account was further,
@@ -175,4 +181,5 @@ export async function signOutAndClear(): Promise<void> {
   pushTimers.clear();
   if (isSupabaseConfigured()) await sb().auth.signOut({ scope: 'local' });
   clearAllLocalProgress();
+  clearOfflineData(); // packs and queued answers belong to the account that is leaving
 }

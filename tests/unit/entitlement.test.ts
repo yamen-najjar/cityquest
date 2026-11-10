@@ -108,7 +108,7 @@ describe('authorizePaidAnswer', () => {
 
   it('blocks skipping ahead when an earlier chapter is missing with 403', async () => {
     solvedRows = [{ chapter_id: 'c0' }]; // c1 not solved
-    expect(await authorizePaidAnswer('paid-tour', paid, 2)).toMatchObject({ ok: false, status: 403 });
+    expect(await authorizePaidAnswer('paid-tour', paid, 2)).toMatchObject({ ok: false, status: 403, firstUnsolved: 'c1' });
   });
 });
 

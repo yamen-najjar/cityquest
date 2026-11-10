@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { sfx } from '@/lib/audio';
+import { checkAnswer } from '@/lib/engine/answer-client';
 import type { Action, Progress } from '@/lib/engine/progress';
 import { encodeReport } from '@/lib/engine/report';
 import type { HeadingRef } from './ChapterView';
@@ -20,7 +21,7 @@ const TRIES_BEFORE_GIVING_UP = 3;
 export function CaseReportView({ a, p, locale, t, headingRef, dispatch }: { a: Adventure; p: Progress; locale: Locale; t: Dictionary['game']; headingRef: HeadingRef; dispatch: (action: Action) => void }) {
   const r = t.caseReport;
   const slots = a.report!.slots;
-  const [status, setStatus] = useState<'idle' | 'checking' | 'pick' | 'none' | 'some' | 'slow' | 'network'>('idle');
+  const [status, setStatus] = useState<'idle' | 'checking' | 'pick' | 'none' | 'some' | 'slow' | 'network' | 'nopack' | 'diverged'>('idle');
   const [lastCount, setLastCount] = useState(0);
   const complete = slots.every((s) => p.reportPicks[s.id]);
 
@@ -28,14 +29,10 @@ export function CaseReportView({ a, p, locale, t, headingRef, dispatch }: { a: A
     if (!complete) return setStatus('pick');
     setStatus('checking');
     try {
-      const res = await fetch(`/api/game/${a.slug}/check`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chapterId: 'report', answer: encodeReport(p.reportPicks), variant: p.variant ?? undefined }),
-      });
-      if (res.status === 429) return setStatus('slow');
-      if (!res.ok) throw new Error(String(res.status));
-      const { correct, confirmed = [] } = (await res.json()) as { correct: boolean; confirmed?: string[] };
+      const res = await checkAnswer(a.slug, { chapterId: 'report', answer: encodeReport(p.reportPicks), variant: p.variant });
+      if (res.status === 'slow') return setStatus('slow');
+      if (res.status === 'failed') return setStatus(res.reason);
+      const { correct, confirmed = [] } = res;
       dispatch({ type: 'reportResult', confirmed, solved: correct });
       if (correct) {
         sfx('unlock');
@@ -51,7 +48,7 @@ export function CaseReportView({ a, p, locale, t, headingRef, dispatch }: { a: A
   }
 
   const message =
-    status === 'pick' ? r.pick : status === 'none' ? r.none : status === 'some' ? fmt(r.some, { n: lastCount }) : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : null;
+    status === 'pick' ? r.pick : status === 'none' ? r.none : status === 'some' ? fmt(r.some, { n: lastCount }) : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : status === 'diverged' ? t.offline.diverged : null;
 
   return (
     <article className="animate-rise">

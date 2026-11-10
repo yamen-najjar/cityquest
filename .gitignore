@@ -1,6 +1,8 @@
-node_modules/
+# No trailing slash: also matches a node_modules symlink (used by git worktrees).
+node_modules
 .next/
-.next-e2e/
+# Any extra build folder made with NEXT_DIST_DIR (.next-e2e, .next-review, ...).
+.next-*/
 out/
 coverage/
 test-results/

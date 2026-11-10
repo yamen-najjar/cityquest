@@ -257,6 +257,7 @@ const en = {
     emptyAnswer: 'Type an answer first.',
     networkError: 'Your answer could not be checked. Check your connection and try again.',
     tooFast: 'Too many tries in a short time. Wait a moment, then try again.',
+    offline: { ready: 'Ready for offline play: this adventure is on your device.', active: 'No reception: answers are checked on this device.', noPack: 'No reception, and this adventure isn’t on this device yet. Open it once with internet.', diverged: 'Part of your offline progress could not be confirmed, so the game took you back a step. Solve that chapter again to continue.' },
     variant: { title: 'Another truth', text: 'You have solved this case before. Same city, same witnesses — but this time the clues may lead to someone else.' },
     junior: { label: 'For young detectives' },
     extras: {
@@ -636,6 +637,7 @@ const en = {
     status: 'Prototype — not yet a commercial offer.',
   },
   notFound: { title: 'This trail goes cold', text: 'The page you were looking for does not exist.', back: 'Back to the start' },
+  offlinePage: { title: 'You are offline', text: 'This page is not on your device yet. Pages you opened before still work. An adventure you opened once with internet can be played without reception.', back: 'Back to the start' },
 };
 
 export default en;

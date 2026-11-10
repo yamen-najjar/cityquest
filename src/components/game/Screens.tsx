@@ -22,6 +22,7 @@ export function StartScreen({
   locale,
   t,
   saved,
+  offlineReady,
   headingRef,
   onBegin,
   onRestart,
@@ -30,6 +31,7 @@ export function StartScreen({
   locale: Locale;
   t: Dictionary['game'];
   saved: Progress | null;
+  offlineReady: boolean;
   headingRef: HeadingRef;
   onBegin: (team: { name: string; players: number }, mode: Mode) => void;
   onRestart: () => void;
@@ -61,6 +63,15 @@ export function StartScreen({
               age: a.minAge,
             })}
           </p>
+          {/* The space is kept while the line is not there yet, so it appearing never shifts the page. */}
+          <div className="mt-2 min-h-[1.25rem]">
+            {offlineReady && (
+              <p className="text-xs text-ivory-mute" data-testid="offline-ready">
+                <span aria-hidden="true">✓ </span>
+                {t.offline.ready}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 

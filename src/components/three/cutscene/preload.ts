@@ -25,8 +25,9 @@ const ACTOR_MODELS: Partial<Record<ActorKind, ModelId>> = {
 };
 const FIGURES: ActorKind[] = ['old-woman', 'woman', 'man', 'girl'];
 
-export function preloadScene(scene: Scene | undefined) {
-  if (!scene) return;
+/** Starts fetching a scene's files; the promise settles when they have all arrived (or failed). */
+export function preloadScene(scene: Scene | undefined): Promise<unknown> {
+  if (!scene) return Promise.resolve();
   const set = SETS[scene.set];
   const jobs: Promise<unknown>[] = [hdri(set.hdri), ...set.surfaces.map((s) => surface(s)), ...set.models.map((m) => model(m))];
   for (const a of scene.actors) {
@@ -35,5 +36,5 @@ export function preloadScene(scene: Scene | undefined) {
     if (FIGURES.includes(a.kind)) jobs.push(surface('rough_linen'));
     if (a.kind === 'box') jobs.push(surface('dark_wooden_planks'));
   }
-  void Promise.allSettled(jobs);
+  return Promise.allSettled(jobs);
 }

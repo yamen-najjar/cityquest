@@ -6,12 +6,13 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionary';
 import { fmt } from '@/i18n/fmt';
 import { sfx } from '@/lib/audio';
+import { checkAnswer } from '@/lib/engine/answer-client';
 import { boardAnswer, evidenceCards, peopleMet, visibleQuestions, type EvidenceCard } from '@/lib/engine/board';
 import type { Progress } from '@/lib/engine/progress';
 import { ItemIcon } from './ItemIcon';
 import { initials } from './puzzles/Interrogation';
 
-type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network';
+type Status = 'idle' | 'checking' | 'wrong' | 'slow' | 'network' | 'nopack' | 'diverged';
 
 /**
  * The evidence board, a tab of the case journal. Open questions appear as the story reaches them; the team
@@ -146,14 +147,10 @@ function Investigation({
     if (!person || pinned.length !== 2) return;
     setStatus('checking');
     try {
-      const res = await fetch(`/api/game/${a.slug}/check`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chapterId: `board:${q.id}`, answer: boardAnswer(person, pinned), variant: p.variant ?? undefined }),
-      });
-      if (res.status === 429) return setStatus('slow');
-      if (!res.ok) throw new Error(String(res.status));
-      const { correct } = (await res.json()) as { correct: boolean };
+      const res = await checkAnswer(a.slug, { chapterId: `board:${q.id}`, answer: boardAnswer(person, pinned), variant: p.variant });
+      if (res.status === 'slow') return setStatus('slow');
+      if (res.status === 'failed') return setStatus(res.reason);
+      const { correct } = res;
       if (correct) {
         sfx('correct');
         onDeduced(q.id);
@@ -167,7 +164,7 @@ function Investigation({
     }
   }
 
-  const message = status === 'wrong' ? b.wrong : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : null;
+  const message = status === 'wrong' ? b.wrong : status === 'slow' ? t.tooFast : status === 'network' ? t.networkError : status === 'nopack' ? t.offline.noPack : status === 'diverged' ? t.offline.diverged : null;
 
   return (
     <div className="space-y-5">

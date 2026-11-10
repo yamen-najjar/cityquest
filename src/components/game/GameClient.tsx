@@ -24,7 +24,10 @@ import { Phone, senderName } from './Phone';
 import { Journal, combinedToast } from './Journal';
 import { Artifact3D } from './lazy';
 import { applyVariant, nextVariant } from '@/lib/engine/variant';
+import { DIVERGED_EVENT, type DivergedDetail } from '@/lib/engine/answer-client';
+import { rewindTo } from '@/lib/engine/rewind';
 import { Finale, PursuitMeter, Results, StartScreen } from './Screens';
+import { useOfflineSupport } from './useOfflineSupport';
 
 const PLAYING_KEY = 'cityquest:playing';
 
@@ -37,9 +40,11 @@ export interface GameProps {
   t: Dictionary['game'];
   achievements: Dictionary['achievements'];
   languageLabel: string;
+  /** false in the admin preview: no answer pack, no queue, no caching. */
+  offlineSupport?: boolean;
 }
 
-export function GameClient({ adventure: base, locale, cityName, t, achievements, languageLabel }: GameProps) {
+export function GameClient({ adventure: base, locale, cityName, t, achievements, languageLabel, offlineSupport: offlineEnabled = true }: GameProps) {
   const [loaded, setLoaded] = useState(false);
   const [p, setP] = useState<Progress | null>(null);
   // The truth the next new game tells: a replay of a solved case draws the next variant.
@@ -58,6 +63,8 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
   const headingRef = useRef<HTMLHeadingElement>(null);
   const ctx = useMemo(() => contextOf(a), [a]);
   const [three, setThree] = use3D();
+  // Gets the adventure ready for play without reception, and tells when there is none.
+  const offlineSupport = useOfflineSupport(base, offlineEnabled);
   const [viewing, setViewing] = useState<string | null>(null);
   // The save as last written, for writes that cannot wait for a render (the page being closed).
   const latest = useRef<Progress | null>(null);
@@ -218,6 +225,19 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
     window.setTimeout(() => setToasts((ts) => ts.filter((x) => x.id !== id)), 5000);
   }, []);
 
+  // The server did not know a solve made offline, and the saved game was taken back to that chapter:
+  // follow it on screen, calmly.
+  useEffect(() => {
+    const onDiverged = (e: Event) => {
+      const { slug, chapterId } = (e as CustomEvent<DivergedDetail>).detail;
+      if (slug !== base.slug) return;
+      setP((prev) => (prev ? rewindTo(prev, base.chapters.map((c) => c.id), chapterId) : prev));
+      toast(t.offline.diverged);
+    };
+    window.addEventListener(DIVERGED_EVENT, onDiverged);
+    return () => window.removeEventListener(DIVERGED_EVENT, onDiverged);
+  }, [base, t.offline.diverged, toast]);
+
   // Announce achievements the moment they are earned (not the ones a resumed game already had).
   useEffect(() => {
     if (!p) {
@@ -296,6 +316,11 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
           </button>
           <LanguageSwitcher locale={locale} label={languageLabel} />
         </div>
+        {offlineSupport.offline && offlineSupport.hasPack && (
+          <p role="status" className="border-t border-gold/20 bg-gold/10 px-4 py-1.5 text-center text-xs text-gold">
+            {t.offline.active}
+          </p>
+        )}
         {p && !onStart && (
           <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 pb-3">
             <ol className="flex flex-1 gap-1" aria-label={t.progress}>
@@ -342,6 +367,7 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
             locale={locale}
             t={t}
             saved={p}
+            offlineReady={offlineSupport.ready}
             headingRef={headingRef}
             onBegin={(team, mode) => {
               unlockAudio();

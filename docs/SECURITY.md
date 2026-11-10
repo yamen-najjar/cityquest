@@ -28,6 +28,74 @@ end, honestly.
 - The magic-link callback only redirects to a localized path on this origin.
 - The service-role key is only read in `server-only` modules.
 
+## Offline play: the answer pack (2026-11-10)
+
+Teams walk outdoors and lose reception, so a phone must be able to grade an answer itself. The decision:
+**answers are preloaded.** When a game is opened online, the phone downloads an *answer pack* for that
+adventure (`GET /api/game/[slug]/pack`) and grades with it when the check route cannot be reached
+(`lib/engine/answer-client.ts`). Online, nothing changes: the server's check route stays the authority.
+
+**What the pack contains.** No plain answers. For every key in `answers.server.ts` (chapters,
+`key@variant`, `board:*`, `lead:*`, `recover`) each accepted answer is stored as
+`SHA-256(salt \0 key \0 normalizeAnswer(answer))` in hex. The case report is graded slot by slot, so each
+`slot=option` of the key is hashed on its own (`report`, `report@variant`) and the browser reproduces
+`{correct, confirmed}` exactly. The salt is random per response; `version` is a hash of the adventure's
+answer key, so the stored pack is replaced when an answer changes. Server and browser share one hashing
+module (`answer-pack.ts`) and one normaliser, and a unit test grades every accepted and several wrong
+answers of every adventure both ways.
+
+**Who gets it.** A demo adventure: anyone (it is already open and stateless). A paid adventure: only a
+signed-in owner (a row in `entitlements`, *not* the chapter-order gate, because offline play needs every
+chapter); 401 / 403 otherwise, 503 when the backend cannot verify (fail closed). `Cache-Control: no-store`
+and the same in-memory rate limiter as the check route. A refusal also deletes a pack stored earlier, so a
+pack does not outlive the right to it.
+
+**What this does not protect against (accepted).**
+
+- A hash deters spoilers, not a determined cheater. Short answers (a four-digit code, a choice id, one of a
+  few dozen words) can be brute-forced from the pack in milliseconds, offline, with no rate limit. Anyone
+  can also read the pack's hashes and the (public) normaliser. The player who does this only spoils their
+  own game; the attacker gets no other player's progress and no server state.
+- For a **paid** adventure the pack means a buyer can read every answer from their own device. They could
+  already do so by guessing against the server; the server's order gating and guess limits no longer bind
+  them. Someone who buys and shares the answers shares them either way.
+- The pack is *not* a way around a purchase: it is served only to owners. But once a buyer has it, they can
+  hand the file on. Salting per response makes copies traceable in principle (not built).
+- Offline answers on a paid adventure are applied on the device and **queued** (slug, chapter, answer,
+  variant, in `localStorage`). When reception returns, the queue is sent in order through the normal check
+  route, so `solves` catches up. A 4xx (refused: not owned, out of order) drops that entry and logs it, the
+  player keeps the progress on their device; 5xx, 429 and network failures keep the queue. The server's
+  `solves` therefore only ever contains answers it has itself accepted; a forged queue entry gets the same
+  check as any request. Board, lead, report and recover answers are never recorded server-side, so they are
+  never queued.
+
+**Shared devices and sign-out.** The pack and the queue are kept per adventure in `localStorage`, so they
+are tied to the account:
+
+- A paid pack is stored with the id of the user it was fetched for, and grades only for that user; signed
+  out, or as someone else, it counts as "no pack". Every queued answer carries the user id too. Only the
+  signed-in user's own entries are ever sent; another user's are discarded, and nothing is sent while signed
+  out.
+- `signOutAndClear` removes every `cityquest:pack:*` and `cityquest:queue:*` key and stops a flush that is
+  under way (`clearOfflineData`), so a paid pack does not stay usable after sign-out and the next player on
+  the browser cannot flush the previous player's answers.
+- The admin preview switches the whole offline layer off (`offlineSupport={false}`).
+
+**When the server refuses an offline solve.** A queued solve can be refused: the answer key changed since the
+pack was stored (a 200 with `correct: false`), the player no longer owns the adventure, or an earlier chapter
+never reached the server. Left alone, the device would be ahead of `solves` and every later online check would
+fail with 403 "previous chapter not solved". So the flush refreshes the pack first, and on a refusal drops the
+rest of the queue (later solves depend on the refused one) and takes the saved game back to the first chapter
+the server lacks (`rewindTo`; the 403 body names it as `firstUnsolved`). Notes and items are kept. The
+player sees a calm message that part of their offline progress could not be confirmed. The same happens
+when an online check meets that 403. A 401, 429, 5xx or network failure only keeps the queue for later.
+
+**The service worker** (`public/sw.js`) caches only the site's own static files, pages and media. It never
+handles `/api/*`, `/admin*`, `/auth`, `/account`, `/newsletter`, or any other origin (Supabase included), so
+no answer, token or personal page is stored by it. Map tiles are cached only after the player has viewed
+them (at most 300, never prefetched, as the OpenStreetMap tile policy requires). The pack and the queue live
+in `localStorage`: readable by any script on this origin, which is why the CSP work in "Still open" matters.
+
 ## Still open
 
 1. **Publishing from the admin console has no public effect.** The toggle writes `adventure_state`, but the public catalogue and play pages read the `status` in the content files only. Left untouched on purpose in this pass (publishing is out of scope for now); it needs a decision on whether public pages should read the database.
@@ -36,3 +104,4 @@ end, honestly.
 4. **A full CSP** (scripts, styles, `connect-src` for Supabase and the map tiles) needs nonces for Next's inline scripts; it is a separate piece of work.
 5. **Restarting on one device while another device still holds the old game:** if that device syncs later, it pushes the old (further) game back. Fixing that needs a "run id" on saves. It is rare, and noted for the sync design.
 6. **Accessibility** was not part of this pass beyond the existing dialog focus and RTL handling; a dedicated audit (focus traps in the journal and the restart dialog, contrast) is still to do.
+7. **Offline packs are brute-forceable by their owner** (see "Offline play" above). If a paid adventure ever needs real protection against answer sharing, the options are fewer accepted answers per puzzle, a slow hash (PBKDF2/scrypt, cheap for a long phrase and no help for four digits), or online-only for the finale. Decided against for now.
