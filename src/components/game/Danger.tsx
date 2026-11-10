@@ -123,26 +123,20 @@ export function CaughtDialog({
                 dir="auto"
               />
             </label>
-            <p role="status" className="sr-only">
+            <p role="status" className="text-sm text-danger empty:absolute">
               {message}
             </p>
-            {message && (
-              <p aria-hidden="true" className="text-sm text-danger">
-                {message}
-              </p>
-            )}
             <button type="submit" className="btn-gold" disabled={status === 'checking'}>
               {status === 'checking' ? t.checking : t.submit}
             </button>
             {/* Free hints here: the catch was the price already. */}
-            <p role="status" className="sr-only">
-              {hints > 0 ? caught.recover.hints[hints - 1]?.[locale] : ''}
-            </p>
-            {caught.recover.hints.slice(0, hints).map((h, i) => (
-              <p key={i} className="rounded-xl border border-gold/25 bg-gold/[0.06] p-3 text-sm text-ivory">
-                {h[locale]}
-              </p>
-            ))}
+            <div aria-live="polite" className="grid gap-3 empty:absolute">
+              {caught.recover.hints.slice(0, hints).map((h, i) => (
+                <p key={i} className="rounded-xl border border-gold/25 bg-gold/[0.06] p-3 text-sm text-ivory">
+                  {h[locale]}
+                </p>
+              ))}
+            </div>
             {hints < caught.recover.hints.length && (
               <button type="button" className="btn-ghost" onClick={() => setHints((n) => n + 1)}>
                 {hints ? t.nextHint : t.hint}

@@ -40,11 +40,11 @@ export function EvidenceBoard({
   // Opening or leaving a question starts the panel from the top, not halfway down the last view.
   const top = useRef<HTMLDivElement>(null);
   // Keyboard and screen reader users land on the new view instead of on a button that no longer exists.
-  const mounted = useRef(false);
+  const previous = useRef(active);
   useEffect(() => {
     top.current?.closest('[role="tabpanel"]')?.scrollTo({ top: 0 });
-    if (mounted.current) top.current?.focus({ preventScroll: true });
-    mounted.current = true;
+    if (previous.current !== active) top.current?.focus({ preventScroll: true });
+    previous.current = active;
   }, [active]);
 
   if (!questions.length) {

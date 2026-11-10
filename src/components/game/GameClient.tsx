@@ -296,8 +296,8 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
           <LanguageSwitcher locale={locale} label={languageLabel} />
         </div>
         {p && !onStart && (
-          <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 pb-3">
-            <ol className="flex flex-1 gap-1" aria-label={t.progress}>
+          <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-2 px-4 pb-3">
+            <ol className="flex min-w-[6rem] flex-1 gap-1" aria-label={t.progress}>
               {a.chapters.map((c, i) => {
                 const done = p.solved.includes(c.id);
                 return (
@@ -416,6 +416,11 @@ export function GameClient({ adventure: base, locale, cityName, t, achievements,
       {viewed && <ItemViewer item={viewed} locale={locale} t={t} onClose={() => setViewing(null)} />}
 
       {confirmRestart && <RestartDialog t={t} onCancel={() => setConfirmRestart(false)} onConfirm={restart} />}
+
+      {/* The answer form (and its "Correct!" message) is replaced by the next step; this keeps the news announced. */}
+      <p role="status" className="sr-only">
+        {p && !onStart && p.stage === 'solved' && chapter ? t.correct : ''}
+      </p>
 
       <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex flex-col items-center gap-2 px-4">
         {toasts.map((x) => (

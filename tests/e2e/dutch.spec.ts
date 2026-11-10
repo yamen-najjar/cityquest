@@ -25,5 +25,5 @@ test('the game in Dutch: the Dutch cipher, a Dutch answer and the journal', asyn
   // The adventure page and its price in Dutch formatting.
   await page.goto('/nl/adventures/neckar-ring');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('De ring van de Neckar');
-  await expect(page.locator('aside').getByText('€ 34,90')).toBeVisible();
+  await expect(page.locator('.ad-price').getByText('€ 34,90')).toBeVisible();
 });

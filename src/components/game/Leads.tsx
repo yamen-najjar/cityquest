@@ -52,11 +52,11 @@ export function LeadsPanel({
   const [active, setActive] = useState<string | null>(null);
   const top = useRef<HTMLDivElement>(null);
   // Keyboard and screen reader users land on the new view instead of on a button that no longer exists.
-  const mounted = useRef(false);
+  const previous = useRef(active);
   useEffect(() => {
     top.current?.closest('[role="tabpanel"]')?.scrollTo({ top: 0 });
-    if (mounted.current) top.current?.focus({ preventScroll: true });
-    mounted.current = true;
+    if (previous.current !== active) top.current?.focus({ preventScroll: true });
+    previous.current = active;
   }, [active]);
   const current = leads.find((l) => l.id === active && !p.leadsSolved.includes(l.id));
   if (current) {
@@ -298,14 +298,13 @@ function LeadView({
       )}
 
       <div className="space-y-2">
-        <p className="sr-only" role="status">
-          {hints > 0 ? lead.hints[hints - 1]?.[locale] : ''}
-        </p>
-        {lead.hints.slice(0, hints).map((h, i) => (
-          <p key={i} className="rounded-xl border border-gold/25 bg-gold/[0.06] p-3 text-sm text-ivory">
-            {h[locale]}
-          </p>
-        ))}
+        <div aria-live="polite" className="space-y-2 empty:absolute">
+          {lead.hints.slice(0, hints).map((h, i) => (
+            <p key={i} className="rounded-xl border border-gold/25 bg-gold/[0.06] p-3 text-sm text-ivory">
+              {h[locale]}
+            </p>
+          ))}
+        </div>
         {hints < lead.hints.length && (
           <button type="button" className="btn-ghost" onClick={() => setHints((n) => n + 1)}>
             {hints ? t.nextHint : t.hint}

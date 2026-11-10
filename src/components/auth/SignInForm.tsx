@@ -75,7 +75,7 @@ export function SignInForm({ locale, t }: { locale: Locale; t: Dictionary['accou
         placeholder={t.emailPlaceholder}
         aria-invalid={status === 'error' || undefined}
         aria-describedby={error ? 'signin-error' : undefined}
-        className="mt-2 w-full rounded-xl border border-white/10 bg-navy-800 px-4 py-3 text-ivory outline-none focus:border-gold"
+        className="mt-2 w-full rounded-xl border border-ivory-mute/65 bg-navy-800 px-4 py-3 text-ivory focus:border-gold"
         dir="ltr"
       />
       {error && (

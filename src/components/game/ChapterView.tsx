@@ -431,12 +431,15 @@ export function ChapterView({
               <p className="text-xs text-ivory-mute">{t.expertNoHints}</p>
             ) : (
               <>
-                {puzzle.hints.slice(0, hintsShown).map((h, i) => (
-                  <div key={i} className={`rounded-xl border p-4 text-sm ${i === lastHint ? 'border-danger/40 bg-danger/5' : 'border-gold/25 bg-gold/[0.06]'}`}>
-                    <p className="text-xs font-semibold text-gold">{i === lastHint ? t.solutionLabel : fmt(t.hintLabel, { n: i + 1, total: puzzle.hints.length })}</p>
-                    <p className="mt-1 text-ivory">{h[locale]}</p>
-                  </div>
-                ))}
+                {/* A new hint is announced. While empty the wrapper leaves the flow, so it adds no spacing. */}
+                <div aria-live="polite" className="space-y-3 empty:absolute">
+                  {puzzle.hints.slice(0, hintsShown).map((h, i) => (
+                    <div key={i} className={`rounded-xl border p-4 text-sm ${i === lastHint ? 'border-danger/40 bg-danger/5' : 'border-gold/25 bg-gold/[0.06]'}`}>
+                      <p className="text-xs font-semibold text-gold">{i === lastHint ? t.solutionLabel : fmt(t.hintLabel, { n: i + 1, total: puzzle.hints.length })}</p>
+                      <p className="mt-1 text-ivory">{h[locale]}</p>
+                    </div>
+                  ))}
+                </div>
                 {hintsShown < puzzle.hints.length ? (
                   <>
                     {/* Two wrong answers: offer the help, and say what it costs. */}
@@ -472,12 +475,6 @@ export function ChapterView({
                 )}
               </>
             )}
-          {/* A hint that appears is announced; the cards themselves stay plain content. */}
-          <p className="sr-only" role="status">
-            {hintsShown > 0 && puzzle.hints[hintsShown - 1]
-              ? `${hintsShown - 1 === lastHint ? t.solutionLabel : fmt(t.hintLabel, { n: hintsShown, total: puzzle.hints.length })}: ${puzzle.hints[hintsShown - 1]![locale]}`
-              : ''}
-          </p>
           </div>
         </section>
       )}
