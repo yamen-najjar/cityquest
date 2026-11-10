@@ -1,5 +1,6 @@
 // The shared answer helper: online-first, local grading offline, and the queue of offline solves.
 import { beforeEach, describe, expect, it } from 'vitest';
+import { authEventAction } from '@/lib/engine/sync-events';
 import { checkAnswer, clearOfflineData, userIdWithFallback, flushQueue, loadPack, loadQueue, loadUsablePack, refreshPack, type Env } from '@/lib/engine/answer-client';
 import { buildAnswerPack } from '@/lib/engine/answer-pack.server';
 import type { AnswerPack } from '@/lib/engine/answer-pack';
@@ -392,5 +393,32 @@ describe('the user id offline', () => {
     env.online = false;
     clearOfflineData(env);
     expect(await userIdWithFallback(async () => null, env)).toBeNull();
+  });
+
+  it('forgets the last user as soon as an online read finds nobody (a revoked session), so the next person never inherits it', async () => {
+    const { env } = makeEnv({ online: true });
+    await userIdWithFallback(async () => 'u1', env);
+    await userIdWithFallback(async () => null, env); // online: the session is really gone
+    env.online = false;
+    expect(await userIdWithFallback(async () => null, env)).toBeNull();
+  });
+
+  it('a signed-out auth event, however it came about, clears the packs and queues', () => {
+    expect(authEventAction('SIGNED_OUT', false)).toBe('clear-offline');
+    expect(authEventAction('SIGNED_IN', true)).toBe('reconcile');
+    expect(authEventAction('INITIAL_SESSION', true)).toBe('reconcile');
+    expect(authEventAction('INITIAL_SESSION', false)).toBeNull(); // a signed-out page load
+    expect(authEventAction('TOKEN_REFRESHED', true)).toBeNull();
+  });
+});
+
+describe('an unexpected flush failure', () => {
+  it('does not turn an online check into local grading', async () => {
+    const { env, store } = makeEnv({ respond: () => json({ correct: false }) });
+    storePack(store, 'lost-manuscript', demoPack);
+    const broken = { ...env, getUserId: async () => { throw new Error('boom'); } };
+    store.set('cityquest:queue:lost-manuscript', JSON.stringify([{ chapterId: 'x', answer: 'y', variant: null, userId: 'u1' }]));
+    // The server's answer ("wrong") stands; a local grade of "tower" would have said correct.
+    expect(await checkAnswer('lost-manuscript', { chapterId: 'message', answer: 'tower' }, broken)).toEqual({ status: 'ok', correct: false, offline: false });
   });
 });

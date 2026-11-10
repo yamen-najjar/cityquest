@@ -5,6 +5,8 @@
 // on first load for an already-signed-in player, the moment a player signs in, and when the network
 // comes back after being offline.
 import { useEffect } from 'react';
+import { clearOfflineData } from '@/lib/engine/answer-client';
+import { authEventAction } from '@/lib/engine/sync-events';
 import { reconcileNow } from '@/lib/engine/sync';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
@@ -15,8 +17,9 @@ export function ProgressSync() {
     try {
       const supabase = createClient();
       const { data } = supabase.auth.onAuthStateChange((event, session) => {
-        if (!session) return;
-        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') void reconcileNow();
+        const action = authEventAction(event, !!session);
+        if (action === 'clear-offline') clearOfflineData();
+        if (action === 'reconcile') void reconcileNow();
       });
       const onOnline = () => void reconcileNow();
       window.addEventListener('online', onOnline);
